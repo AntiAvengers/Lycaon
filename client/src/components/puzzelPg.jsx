@@ -59,7 +59,7 @@ const PuzzelPg = () => {
         setCanMoveSprite(scene.scene.key !== "MainMenu");
     };
     return (
-        <div>
+        <div id="app">
             <h1>Puzzles</h1>
             <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             <div>

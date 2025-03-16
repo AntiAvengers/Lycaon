@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignInPg from "./components/signInPg.jsx";
 import HomePg from "./components/homePg.jsx";
@@ -7,7 +6,7 @@ import NotFoundPg from "./components/NFP.jsx";
 
 const App = () => {
     return (
-        <div id="app">
+        <div id="app" >
             <Router>
                 <Routes>
                     <Route path="/" element={<HomePg />} />
