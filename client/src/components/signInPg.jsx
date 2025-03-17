@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 
 const SignInPg = () => {
     return (
-        <div className="h-1/2 flex flex-col justify-evenly">
+        <div className="h-screen flex flex-col justify-center items-center">
             <h1 className="text-center" style={{ fontSize: "5rem" }}>
                 Suikle
             </h1>
             <section 
             style={{backgroundColor:"#FBBB26"}}
-            className="h-2/3 flex flex-col justify-between items-center p-3 rounded">
+            className="h-1/3 flex flex-col justify-evenly items-center p-3 rounded">
                 <input
                     className="p-3 rounded"
                     style={{ fontSize: "18px" }}
