@@ -1,3 +1,4 @@
+/* ./src/styles.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +6,8 @@
 body {
     margin: 0;
     padding: 0;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #FCF4E7; 
+    color: #140e28;
+    background-color: #fcf4e7;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -50,3 +51,4 @@ body {
         color: rgba(255, 255, 255, 0.3);
     }
 }
+
