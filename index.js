@@ -1,11 +1,10 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const routes = require("./routes");
 
 const database = require('./database/firebaseConfig.js');
 
-app.get('/', function (req, res) {
-    console.log(database);
-    res.send("Hello World")
-})
+const app = express();
+
+app.use(routes);
 
 app.listen(3000)
