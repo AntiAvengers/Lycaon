@@ -63,10 +63,9 @@ const Header = () => {
     return (
         <header className="sticky top-0 w-full bg-white py-4 px-6 z-50 flex flex-row justify-between shadow-md">
             {/* Left Section: Menu and Logo */}
-            <section className="flex flex-row justify-between items-center">
+            <section className="flex flex-row justify-center gap-4 items-center">
                 <div ref={menuRef} className="relative">
                     <MenuIcon
-                        style={{ marginRight: "16px" }}
                         fontSize="large"
                         className="cursor-pointer"
                         edge="start"
@@ -130,8 +129,7 @@ const Header = () => {
 
             {/* Right Section: Currency, Wallet, Profile */}
             <section
-                style={{ width: "38%" }}
-                className="max-w-md flex flex-row justify-between items-center"
+                className="max-w-md flex flex-row justify-center gap-4 items-center"
             >
                 <InGameCurrencyTracker />
                 <SuiWallet />
