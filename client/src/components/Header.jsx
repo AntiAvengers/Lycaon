@@ -13,7 +13,7 @@ const Header = () => {
 
     const handleClick = () => {
         setOpen((prev) => !prev);
-        console.log("Dropdown toggled");
+        console.log("Dropdown menu header clicked");
     };
 
     // Close dropdown on route change
@@ -84,19 +84,19 @@ const Header = () => {
                 </div>
                 <Link
                     to="/home"
-                    className="flex flex-row items-center text-3xl font-semibold"
+                    className="flex flex-row items-center text-2xl sm:text-3xl font-semibold"
                 >
                     <img
                         src="assets/star.png"
                         alt="Key Icon"
-                        className="w-8 h-8 mr-3"
+                        className="w-7 h-7 sm:w-8 sm:h-8 mr-3"
                     />
                     Suikle
                 </Link>
             </section>
 
             {/* Right Section: Currency, Wallet, Profile */}
-            <section className="w-2/6 flex flex-row justify-between items-center">
+            <section style={{width:"38%"}} className="max-w-md flex flex-row justify-between items-center">
                 <InGameCurrencyTracker />
                 <SuiWallet />
                 <Link to="/user-profile" aria-label="Go to User Profile">
