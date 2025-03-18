@@ -11,7 +11,7 @@ const InGameCurrencyTracker = () => {
                     />
                 </li>
                 <li className="flex items-center">
-                    Pages{" "}
+                    Pages
                     <img
                         src="assets/star.png"
                         alt="Pages Icon"
@@ -19,7 +19,7 @@ const InGameCurrencyTracker = () => {
                     />
                 </li>
                 <li className="flex items-center">
-                    Shards{" "}
+                    Shards
                     <img
                         src="assets/star.png"
                         alt="Shards Icon"
