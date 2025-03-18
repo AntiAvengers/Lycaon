@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
-import InGameCurrencyTracker from "./inGameCurrencyTracker.jsx";
-import SuiWallet from "./SuiWallet.jsx";
+import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
+import SuiWallet from "./headerComp/suiWallet.jsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button } from "@mui/material";

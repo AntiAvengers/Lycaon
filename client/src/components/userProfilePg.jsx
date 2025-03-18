@@ -1,4 +1,4 @@
-const UserProfile = () => {
+const UserProfilePg = () => {
     return (
         <div>
             <h1>User Profile</h1>
@@ -6,4 +6,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default UserProfilePg;

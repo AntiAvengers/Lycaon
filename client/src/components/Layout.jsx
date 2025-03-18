@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "./header";
+import Header from "./header.jsx";
 
 const Layout = ({ children }) => {
     const location = useLocation();
