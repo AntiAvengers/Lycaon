@@ -3,15 +3,32 @@ import { Scene } from "phaser";
 
 export class MainMenu extends Scene {
     logoTween;
+    background;
+    logo;
+    startButton;
 
     constructor() {
         super("MainMenu");
     }
 
     create() {
-        this.add.image(512, 384, "background");
+        // Dynamically set background image size
+        this.background = this.add
+            .image(
+                this.cameras.main.width / 2,
+                this.cameras.main.height / 2,
+                "background"
+            )
+            .setOrigin(0.5);
 
-        this.logo = this.add.image(512, 300, "logo").setDepth(100);
+        // Dynamically position logo at the center of the screen
+        this.logo = this.add
+            .image(
+                this.cameras.main.width / 2,
+                this.cameras.main.height * 0.4,
+                "logo"
+            )
+            .setDepth(100);
 
         // this.add.text(512, 460, 'Main Menu', {
         //     fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -20,33 +37,60 @@ export class MainMenu extends Scene {
         // }).setDepth(100).setOrigin(0.5);
 
         // Create interactive "Start Game" button
-        const startButton = this.add
-            .text(512, 460, "Start Game", {
-                fontFamily: "Arial Black",
-                fontSize: 38,
-                color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
-            })
+        this.startButton = this.add
+            .text(
+                this.cameras.main.width / 2,
+                this.cameras.main.height * 0.75,
+                "Start Game",
+                {
+                    fontFamily: "Arial Black",
+                    fontSize: 38,
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 8,
+                    align: "center",
+                }
+            )
             .setDepth(100)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true }); // Make text interactive and show hand cursor
 
         // Change scene on button click
-        startButton.on("pointerdown", () => {
+        this.startButton.on("pointerdown", () => {
             this.changeScene();
         });
 
         // Visual feedback: hover effect
-        startButton.on("pointerover", () => {
-            startButton.setStyle({ color: "#ffcc00" }); // Change color on hover
+        this.startButton.on("pointerover", () => {
+            this.startButton.setStyle({ color: "#ffcc00" }); // Change color on hover
         });
-        startButton.on("pointerout", () => {
-            startButton.setStyle({ color: "#ffffff" }); // Revert color on mouse out
+        this.startButton.on("pointerout", () => {
+            this.startButton.setStyle({ color: "#ffffff" }); // Revert color on mouse out
         });
 
+        // Event to notify scene readiness
         EventBus.emit("current-scene-ready", this);
+
+        // Listen for window resize events to update UI elements
+        this.scale.on("resize", this.resize, this);
+    }
+
+    // Method to handle resizing
+    resize(gameSize) {
+        const { width, height } = gameSize;
+
+        // Adjust background, logo, and button positions on resize
+        if (this.background) {
+            this.background.setPosition(width / 2, height / 2); // Keep background centered
+        }
+
+        if (this.logo) {
+            this.logo.setPosition(width / 2, height * 0.4); // Center logo based on new window size
+        }
+
+        if (this.startButton) {
+            this.startButton.setPosition(width / 2, height * 0.75); // Center the Start button
+        }
     }
 
     changeScene() {
@@ -58,7 +102,7 @@ export class MainMenu extends Scene {
         this.scene.start("Game");
 
         // Notify React that the scene changed
-        EventBus.emit("scene-changed", "Game"); 
+        EventBus.emit("scene-changed", "Game");
     }
 
     moveLogo(reactCallback) {

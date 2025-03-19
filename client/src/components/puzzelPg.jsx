@@ -67,12 +67,36 @@ const PuzzelPg = () => {
         return () => EventBus.off("scene-changed", handleSceneChange);
     }, []);
 
+    // Handle window resizing and trigger Phaser to resize its canvas
+    useEffect(() => {
+        const handleResize = () => {
+            const game = phaserRef.current.game;
+            if (game) {
+                // Resize the Phaser game canvas dynamically on window resize
+                game.scale.resize(window.innerWidth, window.innerHeight);
+                // Refresh the scale manager to apply the changes
+                game.scale.refresh(); 
+            }
+        };
+
+        // Add event listener for window resize
+        window.addEventListener("resize", handleResize);
+
+        // Initial resize on component mount
+        handleResize(); // Ensure the game canvas is resized initially
+
+        // Cleanup on component unmount
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-col sm:flex-row sm:mx-8">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
             <section className="flex flex-col justify-center items-center">
                 <h1 className="text-4xl font-semibold my-4">Puzzles</h1>
-                <section className="flex flex-row justify-center items-center">
+                <section className="flex flex-col">
                     <PhaserGame
                         ref={phaserRef}
                         currentActiveScene={currentScene}
@@ -112,7 +136,7 @@ const PuzzelPg = () => {
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section>
+            <section className="w-full flex flex-col justify-center items-center gap-6">
                 <div>Showcase</div>
                 <div>High Score</div>
                 <div>Leaderboard</div>
