@@ -48,7 +48,7 @@ const PuzzelPg = () => {
     return (
         <div className="flex w-full flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto min-h-full">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
-            <section className="flex flex-col justify-center items-center flex-grow">
+            <section className="w-fit flex flex-col justify-center items-center px-4">
                 <h1 className="text-4xl font-semibold my-4">Puzzles</h1>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>

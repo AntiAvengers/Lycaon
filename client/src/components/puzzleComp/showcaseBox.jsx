@@ -1,6 +1,6 @@
 const ShowcaseBox = () => {
     return (
-        <div className="w-full border-2 border-solid p-1" >Showcase</div>
+        <div className="w-32 h-32 border-2 border-solid p-1" >Showcase</div>
     )
 };
 
