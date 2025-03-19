@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "./header.jsx";
+import Footer from "./footer.jsx";
 
 const Layout = ({ children }) => {
     const location = useLocation();
@@ -9,9 +10,10 @@ const Layout = ({ children }) => {
     const isSignInPage = location.pathname === "/";
 
     return (
-        <div>
+        <div className="min-h-screen">
             {!isSignInPage && <Header />}
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
+            {!isSignInPage && <Footer />}
         </div>
     );
 };

@@ -2,6 +2,10 @@ import { useRef, useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus.js";
 import { PhaserGame } from "../game/PhaserGame.jsx";
 
+import ShowcaseBox from "./puzzleComp/showcaseBox.jsx";
+import HighscoreBox from "./puzzleComp/highScoreBox.jsx";
+import LeaderboardBox from "./puzzleComp/leaderBoardBox.jsx";
+
 const PuzzelPg = () => {
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef();
@@ -37,23 +41,23 @@ const PuzzelPg = () => {
         window.addEventListener("resize", handleResize);
 
         handleResize();
-        
+
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     return (
-        <div className="flex flex-col sm:flex-row sm:mx-8">
+        <div className="min-h-full flex flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
-            <section className="flex flex-col justify-center items-center">
+            <section className="flex flex-col justify-center items-center flex-grow">
                 <h1 className="text-4xl font-semibold my-4">Puzzles</h1>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section className="w-full flex flex-col justify-center items-center gap-6">
-                <div>Showcase</div>
-                <div>High Score</div>
-                <div>Leaderboard</div>
+            <section className="w-auto flex flex-col justify-center items-center gap-6 m-2 sm:m-8 flex-grow">
+                <ShowcaseBox />
+                <HighscoreBox />
+                <LeaderboardBox />
             </section>
         </div>
     );
