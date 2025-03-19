@@ -10,9 +10,9 @@ const Layout = ({ children }) => {
     const isSignInPage = location.pathname === "/";
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
             {!isSignInPage && <Header />}
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow pb-4">{children}</main>
             {!isSignInPage && <Footer />}
         </div>
     );
