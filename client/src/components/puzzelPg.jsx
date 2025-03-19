@@ -1,62 +1,20 @@
 import { useRef, useState, useEffect } from "react";
 import { EventBus } from "../game/EventBus.js";
-
-import Phaser from "phaser";
 import { PhaserGame } from "../game/PhaserGame.jsx";
 
 const PuzzelPg = () => {
-    // The sprite can only be moved in the MainMenu Scene
-    const [canMoveSprite, setCanMoveSprite] = useState(true);
-
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef();
-    const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
     const [currentSceneKey, setCurrentSceneKey] = useState("MainMenu");
 
-    const changeScene = () => {
-        const scene = phaserRef.current.scene;
-        if (scene && scene.scene.key !== "Game") {
-            scene.changeScene();
-        }
-    };
-
-    const moveSprite = () => {
-        const scene = phaserRef.current.scene;
-        if (scene && scene.scene.key === "MainMenu") {
-            // Get the update logo position
-            scene.moveLogo(({ x, y }) => {
-                setSpritePosition({ x, y });
-            });
-        }
-    };
-
-    const addSprite = () => {
-        const scene = phaserRef.current.scene;
-        if (scene) {
-            // Add more stars
-            const x = Phaser.Math.Between(64, scene.scale.width - 64);
-            const y = Phaser.Math.Between(64, scene.scale.height - 64);
-            //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
-            const star = scene.add.sprite(x, y, "star");
-            //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
-            //  You could, of course, do this from within the Phaser Scene code, but this is just an example
-            //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
-            scene.add.tween({
-                targets: star,
-                duration: 500 + Math.random() * 1000,
-                alpha: 0,
-                yoyo: true,
-                repeat: -1,
-            });
-        }
-    };
-
-    // Event emitted from the PhaserGame component
+    // Update current scene state
     const currentScene = (scene) => {
-        setCurrentSceneKey(scene.scene.key);
-        setCanMoveSprite(scene.scene.key !== "MainMenu");
+        if (scene.scene.key !== currentSceneKey) {
+            setCurrentSceneKey(scene.scene.key);
+        }
     };
 
+    // Listen for scene change events via EventBus
     useEffect(() => {
         const handleSceneChange = (sceneName) => {
             console.log(`Switched to scene: ${sceneName}`);
@@ -65,30 +23,22 @@ const PuzzelPg = () => {
 
         EventBus.on("scene-changed", handleSceneChange);
         return () => EventBus.off("scene-changed", handleSceneChange);
-    }, []);
+    }, [currentSceneKey]);
 
-    // Handle window resizing and trigger Phaser to resize its canvas
+    // Handle dynamic Phaser canvas resizing
     useEffect(() => {
         const handleResize = () => {
-            const game = phaserRef.current.game;
-            if (game) {
-                // Resize the Phaser game canvas dynamically on window resize
+            const game = phaserRef.current?.game;
+            if (game && game.isRunning) {
                 game.scale.resize(window.innerWidth, window.innerHeight);
-                // Refresh the scale manager to apply the changes
-                game.scale.refresh(); 
             }
         };
 
-        // Add event listener for window resize
         window.addEventListener("resize", handleResize);
 
-        // Initial resize on component mount
-        handleResize(); // Ensure the game canvas is resized initially
-
-        // Cleanup on component unmount
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
+        handleResize();
+        
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     return (
@@ -96,43 +46,7 @@ const PuzzelPg = () => {
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
             <section className="flex flex-col justify-center items-center">
                 <h1 className="text-4xl font-semibold my-4">Puzzles</h1>
-                <section className="flex flex-col">
-                    <PhaserGame
-                        ref={phaserRef}
-                        currentActiveScene={currentScene}
-                    />
-                    <div>
-                        <div>
-                            <button
-                                className="button"
-                                onClick={changeScene}
-                                disabled={currentSceneKey === "Game"}
-                            >
-                                {currentSceneKey === "Game"
-                                    ? "In Game"
-                                    : "Start Game"}
-                            </button>
-                        </div>
-                        <div>
-                            <button
-                                disabled={canMoveSprite}
-                                className="button"
-                                onClick={moveSprite}
-                            >
-                                Toggle Movement
-                            </button>
-                        </div>
-                        <div>
-                            Sprite Position:
-                            <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                        </div>
-                        <div>
-                            <button className="button" onClick={addSprite}>
-                                Add New Sprite
-                            </button>
-                        </div>
-                    </div>
-                </section>
+                <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}

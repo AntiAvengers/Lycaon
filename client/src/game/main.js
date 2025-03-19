@@ -13,8 +13,8 @@ const ASPECT_RATIO = 16 / 16;
 
 const config = {
     type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight, // Set height to full screen height
+    // width: window.innerWidth,
+    // height: window.innerHeight, // Set height to full screen height
     parent: "game-container", // Parent container for the game
     backgroundColor: "#028af8",
     scale: {
@@ -28,40 +28,9 @@ const config = {
 const StartGame = (parent) => {
     const game = new Phaser.Game({ ...config, parent });
 
-    // const handleResize = () => {
-    //     const isMobile = window.innerWidth <= 768; // Mobile devices have smaller screens
-
-    //     let newWidth, newHeight;
-
-    //     if (isMobile) {
-    //         // On mobile, make the canvas fill the full screen (both width and height)
-    //         newWidth = window.innerWidth;
-    //         newHeight = window.innerHeight;
-    //     } else {
-    //         // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
-    //         newWidth = window.innerWidth * 0.6;
-    //         newHeight = newWidth / ASPECT_RATIO;
-
-    //         // If the new height exceeds the screen height, use the full screen height
-    //         if (newHeight > window.innerHeight) {
-    //             newHeight = window.innerHeight;
-    //             newWidth = newHeight * ASPECT_RATIO;
-    //         }
-    //     }
-
-    //     // Resize the Phaser game canvas
-    //     game.scale.resize(newWidth, newHeight);
-    //     // game.scale.refresh(); // Refresh the scale manager to apply the changes
-
-    //     // Update the parent container's size (optional)
-    //     const container = document.getElementById("game-container");
-    //     if (container) {
-    //         container.style.width = `${newWidth}px`;
-    //         container.style.height = `${newHeight}px`;
-    //     }
-    // };
-
     const handleResize = () => {
+        if (!game || !game.scale || !game.isRunning) return; // Guard against null access
+
         const isMobile = window.innerWidth <= 768; // Mobile devices have smaller screens
 
         let newWidth, newHeight;
@@ -82,9 +51,18 @@ const StartGame = (parent) => {
             }
         }
 
-        // Resize the Phaser game canvas
-        game.scale.resize(newWidth, newHeight);
-        game.scale.refresh(); // Refresh the scale manager to apply the changes
+        // Ensure the game is active before resizing
+        if (game.scale) {
+            // Resize the Phaser game canvas
+            game.scale.resize(newWidth, newHeight);
+            game.scale.refresh(); // Refresh the scale manager to apply the changes
+        }
+
+        // Safely access the active scene and update UI
+        const activeScene = game.scene.getScenes(true)[0];
+        if (activeScene && typeof activeScene.resize === "function") {
+            activeScene.resize({ width: newWidth, height: newHeight });
+        }
 
         // Update the parent container's size (optional)
         const container = document.getElementById("game-container");
@@ -94,11 +72,31 @@ const StartGame = (parent) => {
         }
     };
 
+    // Ensure resizing happens after scene creation
+    game.events.once("ready", handleResize);
+
     // Add event listener for window resize
     window.addEventListener("resize", handleResize);
 
-    // Perform an initial resize when the game is created
-    handleResize();
+    // Perform an initial resize after a short delay to ensure Phaser initializes
+    setTimeout(() => {
+        if (game && game.isRunning) {
+            handleResize();
+        }
+    }, 100);
+
+    // // Perform an initial resize when the game is created
+    // handleResize();
+
+    // Cleanup on unmount
+    const cleanup = () => {
+        window.removeEventListener("resize", handleResize);
+        game.destroy(true);
+    };
+
+    if (parent instanceof HTMLElement) {
+        parent.addEventListener("unmount", cleanup);
+    }
 
     return game;
 };

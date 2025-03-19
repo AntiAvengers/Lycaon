@@ -12,45 +12,32 @@ export class MainMenu extends Scene {
     }
 
     create() {
+        const { width, height } = this.scale;
+
         // Dynamically set background image size
         this.background = this.add
-            .image(
-                this.cameras.main.width / 2,
-                this.cameras.main.height / 2,
-                "background"
-            )
-            .setOrigin(0.5);
+            .image(width / 2, height / 2, "background")
+            .setOrigin(0.5)
+            .setDisplaySize(width, height);
 
-        // Dynamically position logo at the center of the screen
+        // Dynamically position logo at the center
         this.logo = this.add
-            .image(
-                this.cameras.main.width / 2,
-                this.cameras.main.height * 0.4,
-                "logo"
-            )
+            .image(width / 2, height * 0.4, "logo")
             .setDepth(100);
 
-        // this.add.text(512, 460, 'Main Menu', {
-        //     fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-        //     stroke: '#000000', strokeThickness: 8,
-        //     align: 'center'
-        // }).setDepth(100).setOrigin(0.5);
+        // Responsive font size based on screen width
+        const fontSize = Math.min(width * 0.08, 48); // Max font size of 48px
 
         // Create interactive "Start Game" button
         this.startButton = this.add
-            .text(
-                this.cameras.main.width / 2,
-                this.cameras.main.height * 0.75,
-                "Start Game",
-                {
-                    fontFamily: "Arial Black",
-                    fontSize: 38,
-                    color: "#ffffff",
-                    stroke: "#000000",
-                    strokeThickness: 8,
-                    align: "center",
-                }
-            )
+            .text(width / 2, height * 0.75, "Start Game", {
+                fontFamily: "Arial Black",
+                fontSize: `${fontSize}px`,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
             .setDepth(100)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true }); // Make text interactive and show hand cursor
@@ -73,24 +60,27 @@ export class MainMenu extends Scene {
 
         // Listen for window resize events to update UI elements
         this.scale.on("resize", this.resize, this);
+
+        // Clean up listeners on scene shutdown
+        this.events.once("shutdown", this.cleanup, this);
     }
 
     // Method to handle resizing
     resize(gameSize) {
+        if (!this.scene.isActive() || !gameSize) return;
+
         const { width, height } = gameSize;
 
-        // Adjust background, logo, and button positions on resize
-        if (this.background) {
-            this.background.setPosition(width / 2, height / 2); // Keep background centered
-        }
+        // Resize and reposition elements
+        this.background
+            ?.setPosition(width / 2, height / 2)
+            .setDisplaySize(width, height);
+        this.logo?.setPosition(width / 2, height * 0.4);
+        this.startButton?.setPosition(width / 2, height * 0.75);
 
-        if (this.logo) {
-            this.logo.setPosition(width / 2, height * 0.4); // Center logo based on new window size
-        }
-
-        if (this.startButton) {
-            this.startButton.setPosition(width / 2, height * 0.75); // Center the Start button
-        }
+        // Adjust font size responsively
+        const fontSize = Math.min(width * 0.08, 48);
+        this.startButton.setStyle({ fontSize: `${fontSize}px` });
     }
 
     changeScene() {
@@ -99,35 +89,19 @@ export class MainMenu extends Scene {
             this.logoTween = null;
         }
 
-        this.scene.start("Game");
-
-        // Notify React that the scene changed
-        EventBus.emit("scene-changed", "Game");
+        if (this.scene.isActive("MainMenu")) {
+            this.scene.start("Game");
+            // Notify React that the scene changed
+            EventBus.emit("scene-changed", "Game");
+        }
     }
 
-    moveLogo(reactCallback) {
+    // Clean up listeners and references
+    cleanup() {
+        this.scale.off("resize", this.resize, this);
         if (this.logoTween) {
-            if (this.logoTween.isPlaying()) {
-                this.logoTween.pause();
-            } else {
-                this.logoTween.play();
-            }
-        } else {
-            this.logoTween = this.tweens.add({
-                targets: this.logo,
-                x: { value: 750, duration: 3000, ease: "Back.easeInOut" },
-                y: { value: 80, duration: 1500, ease: "Sine.easeOut" },
-                yoyo: true,
-                repeat: -1,
-                onUpdate: () => {
-                    if (reactCallback) {
-                        reactCallback({
-                            x: Math.floor(this.logo.x),
-                            y: Math.floor(this.logo.y),
-                        });
-                    }
-                },
-            });
+            this.logoTween.stop();
+            this.logoTween = null;
         }
     }
 }
