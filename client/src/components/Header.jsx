@@ -8,7 +8,6 @@ import { Button } from "@mui/material";
 
 const Header = () => {
     const [open, setOpen] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
     const location = useLocation(); // Track the current route
@@ -22,19 +21,8 @@ const Header = () => {
             setMessage("You are already on the Puzzles page!");
             setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
         } else {
-            setShowPopup(true);
+            navigate("/puzzles");
         }
-    };
-
-    // Confirm navigation to the Puzzle Page
-    const confirmNavigation = () => {
-        setShowPopup(false);
-        navigate("/puzzles");
-    };
-
-    // Close the Popup
-    const closePopup = () => {
-        setShowPopup(false);
     };
 
     const handleClick = () => {
@@ -128,40 +116,13 @@ const Header = () => {
             </section>
 
             {/* Right Section: Currency, Wallet, Profile */}
-            <section
-                className="max-w-md flex flex-row justify-center gap-4 items-center"
-            >
+            <section className="max-w-md flex flex-row justify-center gap-4 items-center">
                 <InGameCurrencyTracker />
                 <SuiWallet />
                 <Link to="/user-profile" aria-label="Go to User Profile">
                     <AccountCircleIcon fontSize="large" />
                 </Link>
             </section>
-
-            {/* Popup for Puzzle Link Confirmation */}
-            {showPopup && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm text-center">
-                        <h2 className="text-xl font-semibold mb-4">
-                            Are you sure you want to start the puzzle?
-                        </h2>
-                        <div className="flex flex-col sm:flex-row justify-center gap-4 text-xl sm:text-base">
-                            <button
-                                onClick={confirmNavigation}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
-                                Yes, Start Puzzle
-                            </button>
-                            <button
-                                onClick={closePopup}
-                                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                            >
-                                No, Stay Here
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Already on PuzzlePage Message */}
             {message && (
