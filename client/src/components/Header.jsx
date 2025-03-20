@@ -8,6 +8,9 @@ import { Button } from "@mui/material";
 
 const Header = () => {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [countdown, setCountdown] = useState(3);
+    const [revealedWord, setRevealedWord] = useState("");
     const [message, setMessage] = useState("");
 
     const location = useLocation(); // Track the current route
@@ -21,7 +24,27 @@ const Header = () => {
             setMessage("You are already on the Puzzles page!");
             setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
         } else {
-            navigate("/puzzles");
+            setLoading(true);
+            setCountdown(3); // Reset countdown
+            setRevealedWord("");
+
+            let timer = 3;
+            const interval = setInterval(() => {
+                timer -= 1;
+                setCountdown(timer);
+                if (timer === 0) {
+                    clearInterval(interval);
+                    // Pause before revealing the word
+                    setTimeout(() => {
+                        setRevealedWord("Random Game"); // Reveal word
+                        setTimeout(() => {
+                            navigate("/puzzles"); // Navigate after reveal
+                            setLoading(false);
+                            setRevealedWord("");
+                        }, 2000); // Reveal for 2 seconds
+                    }, 1400); // Pause for 1.5sec before reveal
+                }
+            }, 1000); // Countdown every second
         }
     };
 
@@ -124,9 +147,44 @@ const Header = () => {
                 </Link>
             </section>
 
+            {/* Loading Page */}
+            {loading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 animate-fade-in">
+                    <div className="text-white flex flex-col justify-center items-center gap-8 px-4">
+                        {/* Loading Message */}
+                        {!revealedWord && (
+                            <h1 className="text-3xl sm:text-5xl font-bold animate-glow text-center leading-snug">
+                                Randomizing <br className="sm:hidden" />{" "}
+                                Puzzle...
+                            </h1>
+                        )}
+                        {/* Countdown Display */}
+                        <span
+                            className={`text-5xl sm:text-7xl font-extrabold animate-pulse ${
+                                countdown === 1
+                                    ? "text-red-400"
+                                    : countdown === 2
+                                    ? "text-yellow-400"
+                                    : "text-green-400"
+                            }`}
+                        >
+                            {revealedWord || countdown}
+                        </span>
+
+                        {/* Progress Bar */}
+                        <div className="w-full max-w-xs sm:max-w-md h-4 bg-gray-700 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-blue-500 transition-all duration-1000"
+                                style={{ width: `${(countdown / 3) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Already on PuzzlePage Message */}
             {message && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-sm">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-md text-center text-xl sm:text-2xl">
                     {message}
                 </div>
             )}
