@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "./header.jsx";
+import SoundControl from "./soundControl.jsx";
 import Footer from "./footer.jsx";
 
 const Layout = ({ children }) => {
@@ -12,7 +13,8 @@ const Layout = ({ children }) => {
     return (
         <div className="min-h-screen flex flex-col">
             {!isSignInPage && <Header />}
-            <main className="flex flex-grow pb-4">{children}</main>
+            <main className="flex flex-grow">{children}</main>
+            <SoundControl />
             {!isSignInPage && <Footer />}
         </div>
     );
