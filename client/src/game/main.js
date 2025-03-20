@@ -9,7 +9,7 @@ import { Preloader } from "./scenes/Preloader";
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 
 // Define the aspect ratio of the game
-const ASPECT_RATIO = 16 / 9;
+const ASPECT_RATIO = 3 / 2;
 
 const config = {
     type: Phaser.AUTO,
@@ -38,15 +38,15 @@ const StartGame = (parent) => {
         if (isMobile) {
             // On mobile, make the canvas fill the full screen (both width and height)
             newWidth = window.innerWidth;
-            newHeight = window.innerHeight * 0.5;
+            newHeight = window.innerHeight;
         } else {
             // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
-            newWidth = window.innerWidth * 0.6;
+            newWidth = window.innerWidth * 0.55;
             newHeight = newWidth / ASPECT_RATIO;
 
             // If the new height exceeds the screen height, use the full screen height
-            if (newHeight > window.innerHeight * 1) {
-                newHeight = window.innerHeight * 1;
+            if (newHeight > window.innerHeight) {
+                newHeight = window.innerHeight;
                 newWidth = newHeight * ASPECT_RATIO;
             }
         }

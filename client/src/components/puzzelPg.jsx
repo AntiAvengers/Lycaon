@@ -54,7 +54,7 @@ const PuzzelPg = () => {
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section className="w-auto flex flex-col justify-center items-center gap-6 m-2 sm:m-8 flex-grow">
+            <section className="w-auto flex flex-col justify-center items-center gap-6 m-2 sm:m-4 flex-grow">
                 <ShowcaseBox />
                 <HighscoreBox />
                 <LeaderboardBox />

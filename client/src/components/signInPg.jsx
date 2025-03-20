@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const SignInPg = () => {
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6">
+        <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6">
             <h1
                 className="text-center sm:text-6xl md:text-7xl font-bold mb-8"
                 style={{ fontSize: "5rem" }}
