@@ -14,7 +14,9 @@ const Layout = ({ children }) => {
         <div className="min-h-screen flex flex-col">
             {!isSignInPage && <Header />}
             <main className="flex flex-grow">{children}</main>
-            <SoundControl />
+            <div className="hidden md:block">
+                {!isSignInPage && <SoundControl />}
+            </div>
             {!isSignInPage && <Footer />}
         </div>
     );
