@@ -2,12 +2,7 @@ const dictionary = require('../utils/dictionary');
 const words = dictionary.load();
 
 function generate_puzzle(num_of_letters = 7, count = 0) {
-    // if(num_of_letters < 4) {
-    //     console.log("minimum number of letters should be 4! Setting value to 4");
-    //     num_of_letters = 4;
-    // }
-
-    if(count >= 25) throw new Error('Possible Infinite Loop?');
+    if(count >= 25) throw new Error('WORD-PUZZLE: Possible Infinite Loop?');
 
     const all_vowels = ["a", "e", "i", "o", "u"];
     const all_consonants = ["b", "c", 'd', 'f', 'g', 'h', 'j', 'k', 
@@ -56,7 +51,6 @@ function get_validity(letters) {
         }
     }
 
-    // valid_words = valid_words.sort((a,b) => a.count > b.count ? -1 : 1);
     const true_words = valid_words
         .filter(obj => obj.count >= dictionary.get_score_cutoff());    
     
@@ -70,7 +64,7 @@ function get_validity(letters) {
 
 module.exports = function(req, res) {
     try {
-        res.status(200).json(generate_puzzle(7));
+        res.status(200).json(generate_puzzle());
     } catch(err) {
         console.error(err);
     }
