@@ -26,7 +26,7 @@ const SoundConrol = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-start mx-8 my-2">
+        <div className="flex flex-col justify-center items-start mx-8 my-4">
             {/* Audio Element */}
             <audio ref={audioRef} src="your-sound-file.mp3" preload="auto" />
 
@@ -36,31 +36,18 @@ const SoundConrol = () => {
                 <button onClick={toggleMute} className="text-black">
                     {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
                 </button>
-                <div className="w-48">
-                    <Slider
-                        size="small"
-                        min={0}
-                        max={1}
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        valueLabelDisplay="auto"
-                        valueLabelFormat={(value) =>
-                            `${Math.round(value * 100)}%`
-                        }
-                        step={0.01}
-                        aria-label="Volume Control"
-                    />
-                </div>
-                {/* <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
+                <Slider
+                    size="small"
+                    min={0}
+                    max={1}
                     value={volume}
                     onChange={handleVolumeChange}
-                    className="w-48"
-                /> */}
-                {/* <span className="text-lg">{Math.round(volume * 100)}%</span> */}
+                    valueLabelDisplay="auto"
+                    valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
+                    step={0.01}
+                    aria-label="Volume Control"
+                    sx={{ width: 125 , color:"black"}}
+                />
             </div>
         </div>
     );
