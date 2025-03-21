@@ -48,21 +48,44 @@ export class Game extends Scene {
     }
 
     changeScene() {
-        this.scene.start("GameOver");
+        this.scene.stop("Game"); // Ensure Game scene is stopped
+        this.scene.start("AnagramInstruc");
     }
 
     resize({ width, height }) {
-        // Ensure canvas does not overflow the viewport
-        const newWidth = Math.min(width, window.innerWidth);
-        const newHeight = Math.min(height, window.innerHeight);
+        // Avoid redundant resize calls
+        if (this.lastWidth === width && this.lastHeight === height) return;
 
-        // Resize the background and center it
-        this.background.setPosition(newWidth / 2, newHeight / 2);
-        this.background.setDisplaySize(newWidth, newHeight);
+        try {
+            // Store last width and height to compare on next resize
+            this.lastWidth = width;
+            this.lastHeight = height;
 
-        // Update text position and responsiveness
-        this.infoText.setPosition(newWidth / 2, newHeight / 2);
-        this.infoText.setFontSize(Math.min(newWidth * 0.05, 38));
+            // Ensure canvas does not overflow the viewport
+            const newWidth = Math.min(width, window.innerWidth);
+            const newHeight = Math.min(height, window.innerHeight);
+
+            // Resize the background and center it
+            this.background.setPosition(newWidth / 2, newHeight / 2);
+            this.background.setDisplaySize(newWidth, newHeight);
+
+            // Update text position and responsiveness
+            this.infoText.setPosition(newWidth / 2, newHeight / 2);
+            this.infoText.setFontSize(Math.min(newWidth * 0.05, 38));
+        } catch (e) {
+            console.error("Resize error: ", e);
+        }
+    }
+
+    shutdown() {
+        // Destroy any objects that may persist after scene change
+        if (this.background) {
+            this.background.destroy();
+        }
+        if (this.infoText) {
+            this.infoText.destroy();
+        }
+        this.scale.off("resize", this.resize, this); // Ensure resize listener is cleaned up
     }
 }
 

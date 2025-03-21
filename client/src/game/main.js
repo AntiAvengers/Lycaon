@@ -1,5 +1,6 @@
 import { Boot } from "./scenes/Boot";
 import { Game } from "./scenes/Game";
+import { AnagramInstruc } from "./scenes/AnagramInstruc";
 import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import Phaser from "phaser";
@@ -9,7 +10,7 @@ import { Preloader } from "./scenes/Preloader";
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 
 // Define the aspect ratio of the game
-const ASPECT_RATIO = 3 / 2;
+const ASPECT_RATIO = 4 / 3;
 
 const config = {
     type: Phaser.AUTO,
@@ -22,7 +23,7 @@ const config = {
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
     },
-    scene: [Boot, Preloader, MainMenu, Game, GameOver],
+    scene: [Boot, Preloader, MainMenu, Game, AnagramInstruc ,GameOver],
 };
 
 const StartGame = (parent) => {
@@ -41,7 +42,7 @@ const StartGame = (parent) => {
             newHeight = window.innerHeight;
         } else {
             // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
-            newWidth = window.innerWidth * 0.6;
+            newWidth = window.innerWidth * 0.55;
             newHeight = newWidth / ASPECT_RATIO;
 
             // If the new height exceeds the screen height, use the full screen height
@@ -71,6 +72,39 @@ const StartGame = (parent) => {
             container.style.height = `${newHeight}px`;
         }
     };
+
+    // const handleResize = () => {
+    //     if (!game || !game.scale || !game.isRunning) return;
+
+    //     const { innerWidth: width, innerHeight: height } = window;
+
+    //     // Calculate new dimensions based on the defined ASPECT_RATIO
+    //     let newWidth = width;
+    //     let newHeight = width / ASPECT_RATIO;
+
+    //     // Ensure the height does not exceed screen height
+    //     if (newHeight > height) {
+    //         newHeight = height;
+    //         newWidth = newHeight * ASPECT_RATIO;
+    //     }
+
+    //     // Resize the game canvas
+    //     game.scale.resize(newWidth, newHeight);
+    //     game.scale.refresh();
+
+    //     // Resize active scene if it has a custom resize method
+    //     const activeScene = game.scene.getScenes(true)[0];
+    //     if (activeScene?.resize) {
+    //         activeScene.resize({ width: newWidth, height: newHeight });
+    //     }
+
+    //     // Update the game container's size
+    //     const container = document.getElementById("game-container");
+    //     if (container) {
+    //         container.style.width = `${newWidth}px`;
+    //         container.style.height = `${newHeight}px`;
+    //     }
+    // };
 
     // Ensure resizing happens after scene creation
     game.events.once("ready", handleResize);
