@@ -30,14 +30,17 @@ function generate_puzzle(max_num = 10) {
         equation.unshift(RNG(max_num));
     }
     
-    equation.push(eval(equation.join("")))
+    const output = {
+        numbers: equation.filter(str => !REF_operators.includes(str)),
+        output: eval(equation.join(""))
+    }
 
-    return equation.filter(str => !REF_operators.includes(str));
+    return output;
 }
 
 module.exports = function(req, res) {
     try {
-        res.status(200).json({ data: generate_puzzle() });
+        res.status(200).json(generate_puzzle());
     } catch(err) {
         console.error(err);
     }
