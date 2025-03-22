@@ -1,7 +1,4 @@
-/* ./src/styles.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 body {
     margin: 0;
