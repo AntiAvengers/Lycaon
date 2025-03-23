@@ -84,10 +84,7 @@ const Header = () => {
                         aria-label="Open Menu"
                     />
                     {open && (
-                        <ul
-                            className="absolute left-0 mt-2 shadow-lg rounded-lg p-4 space-y-2"
-                            style={{ backgroundColor: "#F2F0EF" }}
-                        >
+                        <ul className="absolute left-0 mt-2 shadow-lg rounded-lg p-4 space-y-2 bg-[#F2F0EF]">
                             {[
                                 {
                                     to: "/puzzles",
@@ -111,10 +108,7 @@ const Header = () => {
                                         }
                                     >
                                         <Button
-                                            style={{
-                                                width: "200px",
-                                                color: "#140e28",
-                                            }}
+                                            className="w-[200px] !text-[#140e02]"
                                             aria-label={`Navigate to ${item.label}`}
                                         >
                                             {item.label}
@@ -149,7 +143,7 @@ const Header = () => {
 
             {/* Loading Page */}
             {loading && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 animate-fade-in">
+                <div className="fixed inset-0 flex items-center justify-center bg-black opacity-50 z-50 animate-fade-in">
                     <div className="text-white flex flex-col justify-center items-center gap-8 px-4">
                         {/* Loading Message */}
                         {!revealedWord && (
@@ -172,7 +166,10 @@ const Header = () => {
                         </span>
 
                         {/* Progress Bar */}
-                        <div className="w-full max-w-xs sm:max-w-md h-4 bg-gray-700 rounded-full overflow-hidden">
+                        <div
+                            className="w-full max-w-xs sm:max-w-md h-4 bg-[#6C757D] rounded-full overflow-hidden"
+                            dir="rtl"
+                        >
                             <div
                                 className="h-full bg-blue-500 transition-all duration-1000"
                                 style={{ width: `${(countdown / 3) * 100}%` }}
