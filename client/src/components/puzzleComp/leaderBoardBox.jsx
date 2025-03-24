@@ -1,8 +1,7 @@
 const LeaderboardBox = () => {
     return (
         <div
-            className="w-full h-64 border-2 border-solid p-1 flex flex-col items-center"
-            style={{ backgroundColor: "#F2F0EF" }}
+            className="w-full h-64 bg-[#76D8FF] p-1 flex flex-col items-center"
         >
             <h1 className="text-2xl my-3">Leaderboard</h1>
             <ul className="flex flex-col gap-2">

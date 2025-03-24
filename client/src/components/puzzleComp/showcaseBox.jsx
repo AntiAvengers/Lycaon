@@ -1,10 +1,7 @@
 const ShowcaseBox = () => {
     return (
-        <div className="w-full h-64 border-2 border-solid p-1">
-            <ul
-                className="h-full flex flex-row justify-evenly items-center"
-                style={{ backgroundColor: "#F2F0EF" }}
-            >
+        <div className="w-full h-64 p-1">
+            <ul className="h-full bg-[#76D8FF] flex flex-row justify-evenly items-center">
                 {[
                     { src: "assets/star.png", label: "creature1" },
                     { src: "assets/star.png", label: "creature2" },
@@ -14,8 +11,7 @@ const ShowcaseBox = () => {
                         <img
                             src="assets/star.png"
                             alt={creature.label}
-                            style={{width:"10vw", height:"10vw"}}
-                            className="max-w-16 max-h-16 min-w-10 min-h-10 object-contain"
+                            className="w-[10vw] h-[10vh] max-w-16 max-h-16 min-w-10 min-h-10 object-contain"
                         />
                     </li>
                 ))}
