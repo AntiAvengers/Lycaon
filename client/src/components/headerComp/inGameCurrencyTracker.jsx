@@ -40,8 +40,7 @@ const InGameCurrencyTracker = () => {
             {/* Dropdown Menu (Mobile) */}
             {open && (
                 <ul
-                    className="absolute right-0 top-full mt-2 bg-white shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden"
-                    style={{ backgroundColor: "#F2F0EF" }}
+                    className="absolute right-0 top-full mt-2 bg-[#F2F0EF] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden"
                 >
                     <li className="flex justify-center items-center">
                         Key
@@ -59,7 +58,7 @@ const InGameCurrencyTracker = () => {
                             className="w-6 h-6 ml-2"
                         />
                     </li>
-                    <li className="flex  justify-center items-center">
+                    <li className="flex justify-center items-center">
                         Shards
                         <img
                             src="assets/star.png"
