@@ -23,7 +23,7 @@ const App = () => {
                 <Route path="/sprites-collection" element={<Layout><SpritesCollectionPg /></Layout>} />
                 <Route path="/merchant" element={<Layout><MerchantPg /></Layout>} />
                 <Route path="/market" element={<Layout><MarketPg /></Layout>} />
-                <Route path="*" element={<NotFoundPg />} />
+                <Route path="*" element={<Layout><NotFoundPg /></Layout>} />
                 </Routes>
             </Router>
         </div>

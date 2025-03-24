@@ -26,7 +26,7 @@ const SoundConrol = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-start mx-8 my-4">
+        <div className="flex justify-start items-center mx-8 my-4">
             {/* Audio Element */}
             <audio ref={audioRef} src="your-sound-file.mp3" preload="auto" />
 
