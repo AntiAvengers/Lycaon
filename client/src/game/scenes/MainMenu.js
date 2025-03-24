@@ -90,9 +90,9 @@ export class MainMenu extends Scene {
         }
 
         if (this.scene.isActive("MainMenu")) {
-            this.scene.start("Game");
+            this.scene.start("AnagramInstruc");
             // Notify React that the scene changed
-            EventBus.emit("scene-changed", "Game");
+            EventBus.emit("scene-changed", "AnagramInstruc");
         }
     }
 

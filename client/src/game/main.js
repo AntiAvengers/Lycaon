@@ -1,10 +1,10 @@
 import { Boot } from "./scenes/Boot";
-import { Game } from "./scenes/Game";
-import { AnagramInstruc } from "./scenes/AnagramInstruc";
-import { GameOver } from "./scenes/GameOver";
-import { MainMenu } from "./scenes/MainMenu";
+import { AnagramGame } from "./scenes/AnagramGame.js";
+import { AnagramInstruc } from "./scenes/AnagramInstruc.js";
+import { GameOver } from "./scenes/GameOver.js";
+import { MainMenu } from "./scenes/MainMenu.js";
 import Phaser from "phaser";
-import { Preloader } from "./scenes/Preloader";
+import { Preloader } from "./scenes/Preloader.js";
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -20,7 +20,7 @@ const config = {
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
     },
-    scene: [Boot, Preloader, MainMenu, Game, AnagramInstruc, GameOver],
+    scene: [Boot, Preloader, MainMenu, AnagramInstruc, AnagramGame, GameOver],
     pixelArt: true, // Ensures pixel-perfect scaling (optional for pixel art)
     roundPixels: true, // Rounds pixels for smoother rendering (optional)
 };

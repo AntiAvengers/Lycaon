@@ -236,15 +236,10 @@ export class AnagramInstruc extends Scene {
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
-
-        // Clean up listeners on scene shutdown
-        this.events.once("shutdown", () => {
-            this.scale.off("resize", this.resize, this);
-        });
     }
     changeScene() {
         this.scene.stop("AnagramInstruc"); // Clean up current scene
-        this.scene.start("GameOver");
+        this.scene.start("AnagramGame");
     }
 
     resize({ width, height }) {
