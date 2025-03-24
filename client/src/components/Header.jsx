@@ -143,8 +143,10 @@ const Header = () => {
 
             {/* Loading Page */}
             {loading && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black opacity-50 z-50 animate-fade-in">
-                    <div className="text-white flex flex-col justify-center items-center gap-8 px-4">
+                <div className="fixed inset-0 flex items-center justify-center z-50 animate-fade-in">
+                    {/* Transparent Overlay */}
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="relative text-white flex flex-col justify-center items-center gap-8 px-4">
                         {/* Loading Message */}
                         {!revealedWord && (
                             <h1 className="text-3xl sm:text-5xl font-bold animate-glow text-center leading-snug">
