@@ -48,13 +48,13 @@ const PuzzelPg = () => {
     return (
         <div className="flex w-full flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto min-h-full">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
-            <section className="w-fit flex flex-col justify-center items-center px-4">
-                <h1 className="text-4xl font-semibold my-4">Puzzles</h1>
+            <section className="flex flex-col justify-between items-center my-4">
+                <h1 className="text-4xl font-semibold my-4 flex-1 flex items-center justify-center">Puzzles</h1>
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section className="w-auto flex flex-col justify-center items-center gap-3 m-2 sm:m-4 flex-grow">
+            <section className="w-auto flex flex-col justify-between items-center gap-3 m-2 sm:m-4 flex-grow">
                 <ShowcaseBox />
                 <HighscoreBox />
                 <LeaderboardBox />

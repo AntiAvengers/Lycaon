@@ -1,7 +1,7 @@
 const ShowcaseBox = () => {
     return (
-        <div className="w-full h-64 p-1">
-            <ul className="h-full bg-[#76D8FF] flex flex-row justify-evenly items-center">
+        <div className="w-full h-64 p-1 bg-[#76D8FF]">
+            <ul className="h-full flex flex-row justify-evenly items-center">
                 {[
                     { src: "assets/star.png", label: "creature1" },
                     { src: "assets/star.png", label: "creature2" },

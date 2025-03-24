@@ -14,16 +14,15 @@ const ASPECT_RATIO = 4 / 3;
 
 const config = {
     type: Phaser.AUTO,
-    // width: window.innerWidth,
-    // height: window.innerHeight, // Set height to full screen height
     parent: "game-container", // Parent container for the game
     backgroundColor: "#028af8",
     scale: {
-        // mode: Phaser.Scale.FIT, // Automatically resize to fit
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
     },
-    scene: [Boot, Preloader, MainMenu, Game, AnagramInstruc ,GameOver],
+    scene: [Boot, Preloader, MainMenu, Game, AnagramInstruc, GameOver],
+    pixelArt: true, // Ensures pixel-perfect scaling (optional for pixel art)
+    roundPixels: true, // Rounds pixels for smoother rendering (optional)
 };
 
 const StartGame = (parent) => {
@@ -44,11 +43,13 @@ const StartGame = (parent) => {
             // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
             newWidth = window.innerWidth * 0.55;
             newHeight = newWidth / ASPECT_RATIO;
+            // newHeight = (newWidth * 3) / 4;
 
             // If the new height exceeds the screen height, use the full screen height
             if (newHeight > window.innerHeight) {
                 newHeight = window.innerHeight;
                 newWidth = newHeight * ASPECT_RATIO;
+                // newWidth = (newHeight * 4) / 3;
             }
         }
 
@@ -73,44 +74,12 @@ const StartGame = (parent) => {
         }
     };
 
-    // const handleResize = () => {
-    //     if (!game || !game.scale || !game.isRunning) return;
-
-    //     const { innerWidth: width, innerHeight: height } = window;
-
-    //     // Calculate new dimensions based on the defined ASPECT_RATIO
-    //     let newWidth = width;
-    //     let newHeight = width / ASPECT_RATIO;
-
-    //     // Ensure the height does not exceed screen height
-    //     if (newHeight > height) {
-    //         newHeight = height;
-    //         newWidth = newHeight * ASPECT_RATIO;
-    //     }
-
-    //     // Resize the game canvas
-    //     game.scale.resize(newWidth, newHeight);
-    //     game.scale.refresh();
-
-    //     // Resize active scene if it has a custom resize method
-    //     const activeScene = game.scene.getScenes(true)[0];
-    //     if (activeScene?.resize) {
-    //         activeScene.resize({ width: newWidth, height: newHeight });
-    //     }
-
-    //     // Update the game container's size
-    //     const container = document.getElementById("game-container");
-    //     if (container) {
-    //         container.style.width = `${newWidth}px`;
-    //         container.style.height = `${newHeight}px`;
-    //     }
-    // };
-
     // Ensure resizing happens after scene creation
     game.events.once("ready", handleResize);
 
     // Add event listener for window resize
     window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
 
     // Perform an initial resize after a short delay to ensure Phaser initializes
     setTimeout(() => {
@@ -125,6 +94,7 @@ const StartGame = (parent) => {
     // Cleanup on unmount
     const cleanup = () => {
         window.removeEventListener("resize", handleResize);
+        window.removeEventListener("orientationchange", handleResize);
         game.destroy(true);
     };
 
