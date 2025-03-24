@@ -16,17 +16,45 @@ export class AnagramInstruc extends Scene {
     create() {
         this.cameras.main.setBackgroundColor(0xf2f0ef);
 
-        this.infoText = this.add
+        this.titleBG = this.add
+            .rectangle(
+                this.scale.width / 2, // Center horizontally
+                0, // Touch the top
+                this.scale.width,
+                Math.min(this.scale.height * 0.15, 200), // Height of the button
+                0xadb5bd
+            )
+            .setOrigin(0.5, 0) // Center horizontally, ancho at top
+            .setDepth(99); // Make sure the background is behind the text
+
+        this.titleText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2, // Slightly above the center for better spacing
-                "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
+                this.scale.height + Math.min(this.scale.height * 0.15, 200) / 2, // Vertically center text within rectangle
+                "Anagrams",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 20), // Responsive font size
+                    fontFamily: "Arial Black",
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.instrucText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.25,
+                "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.6 },
+                    lineSpacing: 5, // Adjust line spacing here
                 }
             )
             .setOrigin(0.5)
@@ -34,8 +62,8 @@ export class AnagramInstruc extends Scene {
 
         this.warningIcon = this.add
             .image(
-                this.scale.width / 2 - 240, // Position the icon to the left of the text
-                this.scale.height / 2 + 70, // Position below the info text
+                this.scale.width / 2 - 240,
+                this.scale.height * 0.4,
                 "warningIconTexture"
             )
             .setOrigin(0.5)
@@ -43,12 +71,12 @@ export class AnagramInstruc extends Scene {
 
         this.warningText = this.add
             .text(
-                this.scale.width / 2, // Position the text to the right of the icon
-                this.scale.height / 2 + 70, // Position below the info text
+                this.scale.width / 2,
+                this.scale.height * 0.4,
                 "Note: Not all words formed will be vaild answers.",
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 20), // Responsive font size
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -57,12 +85,87 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        
+        this.helpText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.5,
+                "Do you want help?",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.pressBtnText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.55,
+                "Press these buttons!",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.helpIcon = this.add
+            .image(
+                this.scale.width / 2 - 20,
+                this.scale.height * 0.63,
+                "helpIcon"
+            )
+            .setOrigin(0.5)
+            .setScale(0.5); // Resize the icon if needed
+
+        this.helpIconText = this.add
+            .text(this.scale.width / 2 + 20, this.scale.height * 0.63, "Help", {
+                fontFamily: "Arial",
+                fontSize: Math.min(this.scale.width * 0.05, 20),
+                color: "#000000",
+                align: "center",
+                wordWrap: { width: this.scale.width * 0.8 },
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.hintsIcon = this.add
+            .image(
+                this.scale.width / 2 - 20,
+                this.scale.height * 0.72,
+                "hintsIcon"
+            )
+            .setOrigin(0.5)
+            .setScale(0.5);
+
+        this.hintsIconText = this.add
+            .text(
+                this.scale.width / 2 + 20,
+                this.scale.height * 0.72,
+                "Hints",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
 
         this.startGameBtnBackground = this.add
             .rectangle(
                 this.scale.width / 2,
-                this.scale.height * 0.75,
+                this.scale.height * 0.85,
                 Math.min(this.scale.width * 0.25, 200), // Width of the button
                 Math.min(this.scale.height * 0.1, 40), // Height of the button
                 0xadb5bd
@@ -72,9 +175,9 @@ export class AnagramInstruc extends Scene {
             .setInteractive({ useHandCursor: true }); // Make the background interactive
 
         this.startGameBtn = this.add
-            .text(this.scale.width / 2, this.scale.height * 0.75, "Start", {
+            .text(this.scale.width / 2, this.scale.height * 0.85, "Start", {
                 fontFamily: "Arial",
-                fontSize: Math.min(this.scale.width * 0.05, 25), // Responsive font size
+                fontSize: Math.min(this.scale.width * 0.05, 25),
                 color: "#000000",
                 align: "center",
             })
@@ -140,7 +243,7 @@ export class AnagramInstruc extends Scene {
         });
     }
     changeScene() {
-        this.scene.stop("Game"); // Clean up current scene
+        this.scene.stop("AnagramInstruc"); // Clean up current scene
         this.scene.start("GameOver");
     }
 
@@ -154,7 +257,7 @@ export class AnagramInstruc extends Scene {
         try {
             // Ensure objects exist before updating their positions
             if (
-                !this.infoText ||
+                !this.instrucText ||
                 !this.startGameBtn ||
                 !this.startGameBtnBackground
             ) {
@@ -164,22 +267,43 @@ export class AnagramInstruc extends Scene {
                 return;
             }
 
-            // Resize the infoText position and font size
-            this.infoText.setPosition(width / 2, height / 2 - 50);
-            this.infoText.setFontSize(Math.min(width * 0.05, 20));
+            this.titleBG.setPosition(width / 2, 0);
+            this.titleBG.setSize(width, Math.min(height * 0.15, 200));
 
-            // Update warning icon position
-            this.warningIcon.setPosition(width / 2 - 240, height / 2 + 70);
+            this.titleText.setPosition(
+                width / 2,
+                Math.min(this.scale.height * 0.15, 200) / 2
+            );
+            this.titleText.setFontSize(Math.min(width * 0.05, 35));
 
-            // Update warning text position
-            this.warningText.setPosition(width / 2, height / 2 + 70);
-            this.warningText.setFontSize(Math.min(width * 0.05, 20)); // Adjust font size based on width
+            this.instrucText.setPosition(width / 2, height * 0.25);
+            this.instrucText.setFontSize(Math.min(width * 0.05, 20));
 
-            // Resize the startGameBtn position and font size
-            this.startGameBtn.setPosition(width / 2, height * 0.75);
+            this.warningIcon.setPosition(width / 2 - 240, height * 0.4);
+
+            this.warningText.setPosition(width / 2, height * 0.4);
+            this.warningText.setFontSize(Math.min(width * 0.05, 20));
+
+            this.helpText.setPosition(width / 2, height * 0.5);
+            this.helpText.setFontSize(Math.min(width * 0.05, 20));
+
+            this.pressBtnText.setPosition(width / 2, height * 0.55);
+            this.pressBtnText.setFontSize(Math.min(width * 0.05, 20));
+
+            this.helpIcon.setPosition(width / 2 - 20, height * 0.63);
+
+            this.helpIconText.setPosition(width / 2 + 20, height * 0.63);
+            this.helpIconText.setFontSize(Math.min(width * 0.05, 20));
+
+            this.hintsIcon.setPosition(width / 2 - 20, height * 0.72);
+
+            this.hintsIconText.setPosition(width / 2 + 20, height * 0.72);
+            this.hintsIconText.setFontSize(Math.min(width * 0.05, 20));
+
+            this.startGameBtn.setPosition(width / 2, height * 0.85);
             this.startGameBtn.setFontSize(Math.min(width * 0.05, 25));
 
-            this.startGameBtnBackground.setPosition(width / 2, height * 0.75);
+            this.startGameBtnBackground.setPosition(width / 2, height * 0.85);
             this.startGameBtnBackground.setSize(
                 Math.min(width * 0.25, 200),
                 Math.min(height * 0.1, 40)

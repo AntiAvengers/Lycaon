@@ -15,7 +15,6 @@ export class Game extends Scene {
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setAlpha(0.5);
 
-        // Add centered text with stroke and depth for layering
         this.infoText = this.add
             .text(
                 this.scale.width / 2,
