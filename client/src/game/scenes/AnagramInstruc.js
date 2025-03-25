@@ -16,6 +16,8 @@ export class AnagramInstruc extends Scene {
     create() {
         this.cameras.main.setBackgroundColor(0xf2f0ef);
 
+        //----------------------------------------------------------
+
         this.titleBG = this.add
             .rectangle(
                 this.scale.width / 2, // Center horizontally
@@ -137,31 +139,6 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        // this.hintsIcon = this.add
-        //     .image(
-        //         this.scale.width / 2 - 20,
-        //         this.scale.height * 0.72,
-        //         "hintsIcon"
-        //     )
-        //     .setOrigin(0.5)
-        //     .setScale(0.5);
-
-        // this.hintsIconText = this.add
-        //     .text(
-        //         this.scale.width / 2 + 20,
-        //         this.scale.height * 0.72,
-        //         "Hints",
-        //         {
-        //             fontFamily: "Arial",
-        //             fontSize: Math.min(this.scale.width * 0.05, 20),
-        //             color: "#000000",
-        //             align: "center",
-        //             wordWrap: { width: this.scale.width * 0.8 },
-        //         }
-        //     )
-        //     .setOrigin(0.5)
-        //     .setDepth(100);
-
         this.startGameBtnBackground = this.add
             .rectangle(
                 this.scale.width / 2,
@@ -185,7 +162,8 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        // Create the popup but hide it initially
+        //----------------------------------------------------------
+
         this.popupBg = this.add
             .rectangle(
                 this.scale.width / 2,
@@ -201,7 +179,7 @@ export class AnagramInstruc extends Scene {
         this.popupText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 - 50,
+                this.scale.height / 2 - 40,
                 "One key will be used. Continue?",
                 {
                     fontFamily: "Arial",
@@ -209,6 +187,7 @@ export class AnagramInstruc extends Scene {
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: 250 },
+                    lineSpacing: 17,
                 }
             )
             .setOrigin(0.5)
@@ -218,7 +197,7 @@ export class AnagramInstruc extends Scene {
         this.yesButton = this.add
             .rectangle(
                 this.scale.width / 2 - 60,
-                this.scale.height / 2 + 50,
+                this.scale.height / 2 + 40,
                 80,
                 40,
                 0x00ff00
@@ -231,7 +210,7 @@ export class AnagramInstruc extends Scene {
         this.yesText = this.add
             .text(
                 this.scale.width / 2 - 60,
-                this.scale.height / 2 + 50,
+                this.scale.height / 2 + 40,
                 "Yes",
                 {
                     fontFamily: "Arial",
@@ -246,7 +225,7 @@ export class AnagramInstruc extends Scene {
         this.noButton = this.add
             .rectangle(
                 this.scale.width / 2 + 60,
-                this.scale.height / 2 + 50,
+                this.scale.height / 2 + 40,
                 80,
                 40,
                 0xff0000
@@ -257,7 +236,7 @@ export class AnagramInstruc extends Scene {
             .setVisible(false);
 
         this.noText = this.add
-            .text(this.scale.width / 2 + 60, this.scale.height / 2 + 50, "No", {
+            .text(this.scale.width / 2 + 60, this.scale.height / 2 + 40, "No", {
                 fontFamily: "Arial",
                 fontSize: Math.min(this.scale.width * 0.05, 25),
                 color: "#000000",
@@ -266,7 +245,6 @@ export class AnagramInstruc extends Scene {
             .setDepth(202)
             .setVisible(false);
 
-        // Yes button: Go to next scene
         this.yesButton.on("pointerdown", () => {
             this.changeScene();
         });
@@ -275,7 +253,6 @@ export class AnagramInstruc extends Scene {
             this.changeScene();
         });
 
-        // No button: Close popup
         this.noButton.on("pointerdown", () => {
             this.hidePopup();
         });
@@ -291,6 +268,8 @@ export class AnagramInstruc extends Scene {
         this.startGameBtnBackground.on("pointerdown", () => {
             this.showPopup();
         });
+
+        //----------------------------------------------------------
 
         // Helper function for hover effect and animation
         const buttonHoverEffect = (isHovering) => {
@@ -326,6 +305,8 @@ export class AnagramInstruc extends Scene {
 
         this.startGameBtn.on("pointerover", () => buttonHoverEffect(true));
         this.startGameBtn.on("pointerout", () => buttonHoverEffect(false));
+
+        //----------------------------------------------------------
 
         this.input.keyboard?.on("keydown-SPACE", () => this.showPopup());
 
@@ -410,11 +391,6 @@ export class AnagramInstruc extends Scene {
             this.helpIconText.setPosition(width / 2 + 20, height * 0.71);
             this.helpIconText.setFontSize(Math.min(width * 0.05, 20));
 
-            // this.hintsIcon.setPosition(width / 2 - 20, height * 0.72);
-
-            // this.hintsIconText.setPosition(width / 2 + 20, height * 0.72);
-            // this.hintsIconText.setFontSize(Math.min(width * 0.05, 20));
-
             this.startGameBtn.setPosition(width / 2, height * 0.85);
             this.startGameBtn.setFontSize(Math.min(width * 0.05, 25));
 
@@ -427,19 +403,19 @@ export class AnagramInstruc extends Scene {
             this.popupBg.setPosition(width / 2, height / 2);
             this.popupBg.setSize(300, 200);
 
-            this.popupText.setPosition(width / 2, height / 2 - 50);
+            this.popupText.setPosition(width / 2, height / 2 - 40);
             this.popupText.setFontSize(Math.min(width * 0.05, 25));
 
-            this.yesButton.setPosition(width / 2 - 60, height / 2 + 50);
+            this.yesButton.setPosition(width / 2 - 60, height / 2 + 40);
             this.yesButton.setSize(80, 40);
 
-            this.yesText.setPosition(width / 2 - 60, height / 2 + 50);
+            this.yesText.setPosition(width / 2 - 60, height / 2 + 40);
             this.yesText.setFontSize(Math.min(width * 0.05, 25));
 
-            this.noButton.setPosition(width / 2 + 60, height / 2 + 50);
+            this.noButton.setPosition(width / 2 + 60, height / 2 + 40);
             this.noButton.setSize(80, 40);
 
-            this.noText.setPosition(width / 2 + 60, height / 2 + 50);
+            this.noText.setPosition(width / 2 + 60, height / 2 + 40);
             this.noText.setFontSize(Math.min(width * 0.05, 25));
 
             // Update camera viewport to match the new width/height
