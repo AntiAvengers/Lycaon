@@ -89,21 +89,6 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.add
-            .text(
-                this.scale.width / 2,
-                this.scale.height * 0.8,
-                "Type a word and press Enter",
-                {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
-                    color: "#000000",
-                    align: "center",
-                }
-            )
-            .setOrigin(0.5)
-            .setDepth(100);
-
         //----------------------------------------------------------
 
         this.startTimer();
@@ -114,7 +99,8 @@ export class AnagramGame extends Scene {
         this.inputField.style.position = "absolute";
 
         // Set input dimensions
-        this.inputField.style.width = "200px";
+        const inputWidth = 200;
+        this.inputField.style.width = `${inputWidth}px`;
         this.inputField.style.height = "45px";
         this.inputField.style.fontSize = "35px";
         this.inputField.style.zIndex = "1000";
@@ -131,6 +117,8 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
+        this.scale.on("resize", this.updateInputPosition, this);
+
         // Listen for screen resizing
         this.scale.on("resize", this.resize, this);
 
@@ -138,10 +126,6 @@ export class AnagramGame extends Scene {
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
-
-        // Trigger scene change on click or keypress
-        this.input.on("pointerdown", () => this.changeScene());
-        this.input.keyboard?.on("keydown-SPACE", () => this.changeScene());
     }
 
     handleWordSubmit() {
@@ -179,9 +163,9 @@ export class AnagramGame extends Scene {
             canvasRect.left + (canvasRect.width - inputWidth) / 2
         }px`;
 
-        // Position vertically at 75% of the canvas height
+        // Position vertically the canvas height
         this.inputField.style.top = `${
-            canvasRect.top + canvasRect.height * 0.90
+            canvasRect.top + canvasRect.height * 0.90 - this.inputField.offsetHeight / 2
         }px`;
     }
 
@@ -217,12 +201,8 @@ export class AnagramGame extends Scene {
 
     timeIsUp() {
         console.log("Time's up!");
-        this.scene.start("GameOver"); // Change scene when time runs out
-    }
-
-    changeScene() {
         this.scene.stop("AnagramGame"); // Ensure Game scene is stopped
-        this.scene.start("GameOver");
+        this.scene.start("GameOver"); // Change scene when time runs out
     }
 
     resize({ width, height }) {
@@ -252,6 +232,15 @@ export class AnagramGame extends Scene {
                 Math.min(this.scale.height * 0.15, 200) / 2
             );
             this.anagramText.setFontSize(Math.min(width * 0.05, 35));
+
+            this.timerText.setPosition(width / 2, height * 0.25);
+            this.timerText.setFontSize(Math.min(width * 0.05, 25));
+
+            this.wordDisplay.setPosition(width / 2, height * 0.38);
+            this.wordDisplay.setFontSize(Math.min(width * 0.05, 25));
+
+            this.wordCountText.setPosition(width / 2, height * 0.55);
+            this.wordCountText.setFontSize(Math.min(width * 0.05, 25));
 
             // Update input position dynamically
             this.updateInputPosition();
