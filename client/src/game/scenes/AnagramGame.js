@@ -2,8 +2,13 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
 export class AnagramGame extends Scene {
+    lastWidth = null;
+    lastHeight = null;
+
     constructor() {
         super("AnagramGame");
+        this.timerText = null;
+        this.remainingTime = 30;
     }
 
     preload() {
@@ -12,6 +17,8 @@ export class AnagramGame extends Scene {
 
     create() {
         this.cameras.main.setBackgroundColor(0xf2f0ef);
+
+        //----------------------------------------------------------
 
         this.anagramBG = this.add
             .rectangle(
@@ -40,6 +47,27 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
+        this.timerText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.28,
+                this.formatTime(this.remainingTime),
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    color: "#000000",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        //----------------------------------------------------------
+
+        this.startTimer();
+
+        //----------------------------------------------------------
+
         // Listen for screen resizing
         this.scale.on("resize", this.resize, this);
 
@@ -51,6 +79,41 @@ export class AnagramGame extends Scene {
         // Trigger scene change on click or keypress
         this.input.on("pointerdown", () => this.changeScene());
         this.input.keyboard?.on("keydown-SPACE", () => this.changeScene());
+    }
+
+    startTimer() {
+        this.time.addEvent({
+            delay: 1000, // 1 second (1000 ms)
+            callback: this.updateTimer,
+            callbackScope: this,
+            loop: true, // Repeat the event
+        });
+    }
+
+    updateTimer() {
+        this.remainingTime--;
+
+        // Update the timer display in MM:SS format
+        this.timerText.setText(this.formatTime(this.remainingTime));
+
+        if (this.remainingTime <= 0) {
+            this.timeIsUp();
+        }
+    }
+
+    formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secondsPart = seconds % 60;
+
+        // Pad with leading zeros if needed
+        return `${String(minutes).padStart(2, "0")}:${String(
+            secondsPart
+        ).padStart(2, "0")}`;
+    }
+
+    timeIsUp() {
+        console.log("Time's up!");
+        this.scene.start("GameOver"); // Change scene when time runs out
     }
 
     changeScene() {
