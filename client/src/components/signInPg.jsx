@@ -9,7 +9,6 @@ const SignInPg = () => {
                 <h1 className="text-center text-4xl sm:text-6xl md:text-5xl font-medium">
                     Suikle
                 </h1>
-
                 <Link
                     to="/home"
                     className="w-full flex flex-row justify-center items-center gap-3 bg-[#4285F4] rounded px-4 py-3 text-white hover:shadow-lg active:scale-90 active:shadow-innertransition transform duration-200 cursor-pointer"
@@ -17,7 +16,6 @@ const SignInPg = () => {
                     <GoogleIcon />
                     <button>Continue with Google</button>
                 </Link>
-
                 <Link
                     to="/home"
                     className="w-full flex flex-row justify-center items-center gap-3 bg-[#4285F4] rounded px-4 py-3 text-white hover:shadow-lg active:scale-90 active:shadow-innertransition transform duration-200 cursor-pointer"
@@ -25,13 +23,11 @@ const SignInPg = () => {
                     <WalletIcon />
                     <button>Connect Wallet</button>
                 </Link>
-
-                <div className="w-full flex items-center my-4">
+                <div className="w-full flex items-center my-2">
                     <div className="flex-grow border-t border-gray-300"></div>
                     <span className="mx-4 text-gray-500">OR</span>
                     <div className="flex-grow border-t border-gray-300"></div>
                 </div>
-
                 <input
                     className="w-full p-3 rounded border-1 border-gray-300 shadow-sm text-[18px] bg-white"
                     type="text"
@@ -48,6 +44,12 @@ const SignInPg = () => {
                 >
                     <button>Sign In</button>
                 </Link>
+                <p>
+                    {"Don't have an account? "}
+                    <Link className="text-[#4285F4] hover:underline">
+                        Sign-Up
+                    </Link>
+                </p>{" "}
             </section>
         </form>
     );
