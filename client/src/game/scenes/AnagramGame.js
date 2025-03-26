@@ -354,7 +354,8 @@ export class AnagramGame extends Scene {
     timeIsUp() {
         console.log("Time's up!");
         this.time.removeAllEvents();
-        this.scene.stop("AnagramGame"); // Ensure Game scene is stopped
+        this.scene.stop("AnagramGame"); // Ensure Game scene is 
+        this.destroyInput(); // Call destroyInput to remove the input field
         this.scene.start("GameOver"); // Change scene when time runs out
     }
 
