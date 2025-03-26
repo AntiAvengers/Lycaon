@@ -89,6 +89,17 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
+        this.errorMessage = this.add
+            .text(this.scale.width / 2, this.scale.height * 0.63, "", {
+                fontFamily: "Arial",
+                fontSize: Math.min(this.scale.width * 0.05, 25),
+                color: "#ff0000",
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100)
+            .setAlpha(0); // Start hidden
+
         this.clearBG = this.add
             .rectangle(
                 this.scale.width / 2 - 100,
@@ -239,14 +250,39 @@ export class AnagramGame extends Scene {
         EventBus.emit("current-scene-ready", this);
     }
 
+    showErrorMessage(message) {
+        // Reset any ongoing tween
+        if (this.errorMessageTween) {
+            this.errorMessageTween.remove();
+        }
+
+        // Set the new error message and make it visible
+        this.errorMessage.setText(message).setAlpha(1);
+
+        // Start the new fade-out tween
+        this.errorMessageTween = this.tweens.add({
+            targets: this.errorMessage,
+            alpha: 0, // Fade out after 2 seconds
+            duration: 2000,
+            ease: "Power2",
+            delay: 2000, // Delay the fade-out for 2 seconds
+        });
+    }
+
     handleWordSubmit() {
         const enteredWord = this.inputField.value.trim();
 
-        // Ensure the input only contains alphabetic characters, treat upper and lower as the same
-        const cleanWord = enteredWord.replace(/[^a-zA-Z]/g, "").toLowerCase();
-
-        if (cleanWord && !this.wordList.includes(cleanWord)) {
-            this.wordList.push(cleanWord);
+        // Check for invalid characters (anything other than letters)
+        if (!/^[a-zA-Z]+$/.test(enteredWord)) {
+            this.showErrorMessage("Invalid word. Use letters only.");
+        } else if (
+            this.wordList.some(
+                (word) => word.toLowerCase() === enteredWord.toLowerCase()
+            )
+        ) {
+            this.showErrorMessage("Word already found!");
+        } else {
+            this.wordList.push(enteredWord);
             this.updateWordDisplay();
         }
 
@@ -358,6 +394,9 @@ export class AnagramGame extends Scene {
 
             this.wordCountText.setPosition(width / 2, height * 0.55);
             this.wordCountText.setFontSize(Math.min(width * 0.05, 25));
+
+            this.errorMessage.setPosition(width / 2, height * 0.63);
+            this.errorMessage.setFontSize(Math.min(width * 0.05, 25));
 
             this.clearBG.setPosition(width / 2 - 100, height * 0.85);
             this.clearBG.setSize(
