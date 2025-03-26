@@ -122,7 +122,8 @@ export class AnagramGame extends Scene {
                 this.scale.width / 2 + 100,
                 this.scale.height * 0.85,
                 Math.min(this.scale.width * 0.25, 200), // Width of the button
-                Math.min(this.scale.height * 0.1, 40) // Height of the button
+                Math.min(this.scale.height * 0.1, 40), // Height of the button
+                0xadb5bd
             )
             .setOrigin(0.5)
             .setDepth(99)
@@ -191,23 +192,39 @@ export class AnagramGame extends Scene {
             });
         };
 
+        // Apply hover effect to clear button
         this.clearBG.on("pointerover", () =>
             buttonHoverEffect(this.clearBtn, this.clearBG, true)
         );
         this.clearBG.on("pointerout", () =>
             buttonHoverEffect(this.clearBtn, this.clearBG, false)
         );
+        this.clearBtn.on("pointerover", () =>
+            buttonHoverEffect(this.clearBtn, this.clearBG, true)
+        );
+        this.clearBtn.on("pointerout", () =>
+            buttonHoverEffect(this.clearBtn, this.clearBG, false)
+        );
 
+        // Apply hover effect to submit button
         this.submitBG.on("pointerover", () =>
             buttonHoverEffect(this.submitBtn, this.submitBG, true)
         );
         this.submitBG.on("pointerout", () =>
             buttonHoverEffect(this.submitBtn, this.submitBG, false)
         );
+        this.submitBtn.on("pointerover", () =>
+            buttonHoverEffect(this.submitBtn, this.submitBG, true)
+        );
+        this.submitBtn.on("pointerout", () =>
+            buttonHoverEffect(this.submitBtn, this.submitBG, false)
+        );
 
-        this.clearBG.on("pointerdown", () => this.destroyInput());
-
+        // Button click functionality
+        this.clearBG.on("pointerdown", () => (this.inputField.value = ""));
+        this.clearBtn.on("pointerdown", () => (this.inputField.value = ""));
         this.submitBG.on("pointerdown", () => this.handleWordSubmit());
+        this.submitBtn.on("pointerdown", () => this.handleWordSubmit());
 
         //----------------------------------------------------------
 
