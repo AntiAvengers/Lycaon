@@ -10,6 +10,7 @@ export class AnagramGame extends Scene {
         this.timerText = null;
         this.remainingTime = 30;
         this.wordList = [];
+        this.inputText = "";
     }
 
     preload() {
@@ -100,6 +101,32 @@ export class AnagramGame extends Scene {
             .setDepth(100)
             .setAlpha(0); // Start hidden
 
+        this.inputBG = this.add
+            .rectangle(
+                this.scale.width / 2,
+                this.scale.height * 0.72,
+                Math.min(this.scale.width * 0.4, 300),
+                Math.min(this.scale.height * 0.1, 45),
+                0xd8e2dc
+            )
+            .setOrigin(0.5)
+            .setDepth(99);
+
+        this.inputField = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.72,
+                "Enter Word",
+                {
+                    fontFamily: "Arial",
+                    color: "#000000",
+                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
         this.clearBG = this.add
             .rectangle(
                 this.scale.width / 2 - 100,
@@ -160,29 +187,21 @@ export class AnagramGame extends Scene {
 
         this.startTimer();
 
-        // Create an invisible input field
-        this.inputField = document.createElement("input");
-        this.inputField.type = "text";
-        this.inputField.style.position = "absolute";
-
-        // Set input dimensions
-        const inputWidth = 200;
-        this.inputField.style.width = `${inputWidth}px`;
-        this.inputField.style.height = "45px";
-        this.inputField.style.fontSize = "35px";
-        this.inputField.style.zIndex = "1000";
-
-        this.inputField.style.borderBottom = "2px solid #adb5bd";
-        this.inputField.placeholder = "Enter Word";
-
-        // Append input field to the game container
-        this.game.canvas.parentNode.appendChild(this.inputField);
-
-        // Position the input field dynamically
-        this.updateInputPosition();
-
-        // Listen for Enter key to submit the word
-        this.input.keyboard.on("keydown-ENTER", () => this.handleWordSubmit());
+        // Listen to key events (this handles the text input)
+        this.input.keyboard.on("keydown", (event) => {
+            // If the Enter key is pressed, submit the word
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default behavior
+                console.log("Enter pressed! Submitting...");
+                this.handleWordSubmit();
+            } else if (event.key === "Backspace") {
+                this.inputText = this.inputText.slice(0, -1); // Remove last character
+                this.updateInputField();
+            } else if (/^[a-zA-Z]$/.test(event.key)) {
+                this.inputText += event.key; // Append character to inputText
+                this.updateInputField();
+            }
+        });
 
         //----------------------------------------------------------
 
@@ -232,14 +251,22 @@ export class AnagramGame extends Scene {
         );
 
         // Button click functionality
-        this.clearBG.on("pointerdown", () => (this.inputField.value = ""));
-        this.clearBtn.on("pointerdown", () => (this.inputField.value = ""));
+        this.clearBG.on("pointerdown", () => {
+            if (this.inputField) {
+                this.inputField.setText("");
+                this.inputText = "";
+            }
+        });
+        this.clearBtn.on("pointerdown", () => {
+            if (this.inputField) {
+                this.inputField.setText("");
+                this.inputText = "";
+            }
+        });
         this.submitBG.on("pointerdown", () => this.handleWordSubmit());
         this.submitBtn.on("pointerdown", () => this.handleWordSubmit());
 
         //----------------------------------------------------------
-
-        this.scale.on("resize", this.updateInputPosition, this);
 
         // Listen for screen resizing
         this.scale.on("resize", this.resize, this);
@@ -269,8 +296,12 @@ export class AnagramGame extends Scene {
         });
     }
 
+    updateInputField() {
+        this.inputField.setText(this.inputText); // Update the input text display
+    }
+
     handleWordSubmit() {
-        const enteredWord = this.inputField.value.trim();
+        const enteredWord = this.inputText.trim();
 
         // Check for invalid characters (anything other than letters)
         if (!/^[a-zA-Z]+$/.test(enteredWord)) {
@@ -287,38 +318,14 @@ export class AnagramGame extends Scene {
         }
 
         // Clear input field
-        this.inputField.value = "";
-    }
-
-    destroyInput() {
-        // Clean up the input field when changing scenes
-        this.inputField.remove();
+        this.inputText = "";
+        this.updateInputField();
     }
 
     updateWordDisplay() {
         // Update word display and word count
         this.wordDisplay.setText(`${this.wordList.join(", ")}`);
         this.wordCountText.setText(`${this.wordList.length} Words Found`);
-    }
-
-    updateInputPosition() {
-        if (!this.inputField) return;
-
-        // Get the canvas position in the viewport
-        const canvasRect = this.game.canvas.getBoundingClientRect();
-
-        // Center horizontally within the canvas
-        const inputWidth = 200;
-        this.inputField.style.left = `${
-            canvasRect.left + (canvasRect.width - inputWidth) / 2
-        }px`;
-
-        // Position vertically the canvas height
-        this.inputField.style.top = `${
-            canvasRect.top +
-            canvasRect.height * 0.9 -
-            this.inputField.offsetHeight / 2
-        }px`;
     }
 
     startTimer() {
@@ -354,8 +361,7 @@ export class AnagramGame extends Scene {
     timeIsUp() {
         console.log("Time's up!");
         this.time.removeAllEvents();
-        this.scene.stop("AnagramGame"); // Ensure Game scene is 
-        this.destroyInput(); // Call destroyInput to remove the input field
+        this.scene.stop("AnagramGame"); // Ensure Game scene is
         this.scene.start("GameOver"); // Change scene when time runs out
     }
 
@@ -378,52 +384,68 @@ export class AnagramGame extends Scene {
                 return;
             }
 
-            this.anagramBG.setPosition(width / 2, 0);
-            this.anagramBG.setSize(width, Math.min(height * 0.15, 200));
+            this.anagramBG
+                .setPosition(width / 2, 0)
+                .setSize(width, Math.min(height * 0.15, 200));
 
-            this.anagramText.setPosition(
-                width / 2,
-                Math.min(this.scale.height * 0.15, 200) / 2
-            );
-            this.anagramText.setFontSize(Math.min(width * 0.05, 35));
+            this.anagramText
+                .setPosition(
+                    width / 2,
+                    Math.min(this.scale.height * 0.15, 200) / 2
+                )
+                .setFontSize(Math.min(width * 0.05, 35));
 
-            this.timerText.setPosition(width / 2, height * 0.25);
-            this.timerText.setFontSize(Math.min(width * 0.05, 25));
+            this.timerText
+                .setPosition(width / 2, height * 0.25)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.wordDisplay.setPosition(width / 2, height * 0.38);
-            this.wordDisplay.setFontSize(Math.min(width * 0.05, 25));
+            this.wordDisplay
+                .setPosition(width / 2, height * 0.38)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.wordCountText.setPosition(width / 2, height * 0.55);
-            this.wordCountText.setFontSize(Math.min(width * 0.05, 25));
+            this.wordCountText
+                .setPosition(width / 2, height * 0.55)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.errorMessage.setPosition(width / 2, height * 0.63);
-            this.errorMessage.setFontSize(Math.min(width * 0.05, 25));
+            this.errorMessage
+                .setPosition(width / 2, height * 0.63)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.clearBG.setPosition(width / 2 - 100, height * 0.85);
-            this.clearBG.setSize(
-                Math.min(this.scale.width * 0.25, 200),
-                Math.min(this.scale.height * 0.1, 40)
-            );
+            this.inputBG
+                .setPosition(width / 2, height * 0.72)
+                .setSize(
+                    Math.min(this.scale.width * 0.4, 300),
+                    Math.min(this.scale.height * 0.1, 45)
+                );
 
-            this.clearBtn.setPosition(width / 2 - 100, height * 0.85);
-            this.clearBtn.setFontSize(Math.min(width * 0.05, 25));
+            this.inputField
+                .setPosition(this.scale.width / 2, this.scale.height * 0.72)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.submitBG.setPosition(width / 2 + 100, height * 0.85);
-            this.submitBG.setSize(
-                Math.min(this.scale.width * 0.25, 200),
-                Math.min(this.scale.height * 0.1, 40)
-            );
+            this.clearBG
+                .setPosition(width / 2 - 100, height * 0.85)
+                .setSize(
+                    Math.min(this.scale.width * 0.25, 200),
+                    Math.min(this.scale.height * 0.1, 40)
+                );
 
-            this.submitBtn.setPosition(width / 2 + 100, height * 0.85);
-            this.submitBtn.setSize(
-                Math.min(this.scale.width * 0.25, 200),
-                Math.min(this.scale.height * 0.1, 40)
-            );
+            this.clearBtn
+                .setPosition(width / 2 - 100, height * 0.85)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            // Update input position dynamically
-            if (this.inputField) {
-                this.updateInputPosition();
-            }
+            this.submitBG
+                .setPosition(width / 2 + 100, height * 0.85)
+                .setSize(
+                    Math.min(this.scale.width * 0.25, 200),
+                    Math.min(this.scale.height * 0.1, 40)
+                );
+
+            this.submitBtn
+                .setPosition(width / 2 + 100, height * 0.85)
+                .setSize(
+                    Math.min(this.scale.width * 0.25, 200),
+                    Math.min(this.scale.height * 0.1, 40)
+                );
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);

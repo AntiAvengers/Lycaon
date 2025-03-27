@@ -10,7 +10,7 @@ import { Preloader } from "./scenes/Preloader.js";
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 
 // Define the aspect ratio of the game
-const ASPECT_RATIO = 4 / 3;
+const ASPECT_RATIO = 1/1;
 
 const config = {
     type: Phaser.AUTO,

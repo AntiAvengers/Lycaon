@@ -21,7 +21,7 @@ const SignInPg = () => {
                     className="w-full flex flex-row justify-center items-center gap-3 bg-[#4285F4] rounded px-4 py-3 text-white hover:shadow-lg active:scale-90 active:shadow-innertransition transform duration-200 cursor-pointer"
                 >
                     <WalletIcon />
-                    <button>Connect Wallet</button>
+                    <button>Connect to Sui Wallet</button>
                 </Link>
                 <div className="w-full flex items-center my-2">
                     <div className="flex-grow border-t border-gray-300"></div>
