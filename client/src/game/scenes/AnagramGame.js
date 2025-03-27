@@ -8,7 +8,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30;
+        this.remainingTime = 5;
         this.wordList = [];
         this.inputText = "";
     }
@@ -116,7 +116,7 @@ export class AnagramGame extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height * 0.72,
-                "Enter Word",
+                "Start Typing!",
                 {
                     fontFamily: "Arial",
                     color: "#000000",
@@ -198,8 +198,13 @@ export class AnagramGame extends Scene {
                 this.inputText = this.inputText.slice(0, -1); // Remove last character
                 this.updateInputField();
             } else if (/^[a-zA-Z]$/.test(event.key)) {
-                this.inputText += event.key; // Append character to inputText
-                this.updateInputField();
+                if (this.inputText.length < 8) {
+                    this.inputText += event.key; // Append character to inputText
+                    this.updateInputField();
+                } else {
+                    // Show message when trying to type more than 8 characters
+                    this.showErrorMessage("Maximum 8 letters allowed!");
+                }
             }
         });
 
@@ -344,6 +349,9 @@ export class AnagramGame extends Scene {
         this.timerText.setText(this.formatTime(this.remainingTime));
 
         if (this.remainingTime <= 0) {
+            // Change the timer text color to red
+            this.timerText.setColor("#ff0000");
+
             this.timeIsUp();
         }
     }
@@ -360,9 +368,24 @@ export class AnagramGame extends Scene {
 
     timeIsUp() {
         console.log("Time's up!");
+
+        // Store the remaining time in the global registry
+        this.registry.set("remainingTime", this.remainingTime);
+
+        // Storing word count
+        this.registry.set("wordCount", this.wordList.length);
+        
         this.time.removeAllEvents();
-        this.scene.stop("AnagramGame"); // Ensure Game scene is
-        this.scene.start("GameOver"); // Change scene when time runs out
+
+        this.tweens.add({
+            targets: this.timerText,
+            alpha: 0, // Fade out the timer
+            duration: 1000,
+            onComplete: () => {
+                this.scene.stop("AnagramGame"); // Stop the current scene
+                this.scene.start("GameOver"); // Start the GameOver scene
+            },
+        });
     }
 
     resize({ width, height }) {
@@ -452,10 +475,6 @@ export class AnagramGame extends Scene {
         } catch (e) {
             console.error("Resize error: ", e);
         }
-    }
-
-    destroy() {
-        this.destroyInput();
     }
 }
 
