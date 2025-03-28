@@ -409,16 +409,28 @@ export class AnagramGame extends Scene {
             this.errorMessageTween.remove();
         }
 
-        // Set the new error message and make it visible
-        this.errorMessage.setText(message).setAlpha(1);
+        // Ensure the error message is visible and reset position
+        this.errorMessage.setText(message).setAlpha(1).setVisible(true);
 
         // Start the new fade-out tween
         this.errorMessageTween = this.tweens.add({
             targets: this.errorMessage,
-            alpha: 0, // Fade out after 2 seconds
-            duration: 2000,
-            ease: "Power2",
-            delay: 2000, // Delay the fade-out for 2 seconds
+            x: this.errorMessage.x + 10, // Move slightly right
+            yoyo: true, // Move back
+            repeat: 4, // Number of shakes
+            duration: 50, // Speed of each shake
+            onComplete: () => {
+                this.tweens.add({
+                    targets: this.errorMessage,
+                    alpha: 0, //fade out
+                    duration: 1000,
+                    ease: "Power2",
+                    onComplete: () => {
+                        this.errorMessage.setVisible(false); // Hide it after fading
+                        this.errorMessage.alpha = 1; // Reset alpha for future use
+                    },
+                });
+            },
         });
     }
 
@@ -472,7 +484,7 @@ export class AnagramGame extends Scene {
             loop: true,
         });
     }
-    
+
     // updateTimer() {
     //     this.remainingTime--;
 
