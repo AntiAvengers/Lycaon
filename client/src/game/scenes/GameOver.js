@@ -67,26 +67,31 @@ export class GameOver extends Scene {
             .setDepth(100);
 
         this.timesUpText = this.add
-            .text(this.scale.width / 2, this.scale.height * 0.4, "Time's up!", {
-                fontFamily: "Arial Black",
-                fontSize: Math.min(this.scale.width * 0.05, 25), // Responsive font size
-                color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
-                wordWrap: { width: this.scale.width * 0.8 },
-            })
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.45,
+                "Time's up!",
+                {
+                    fontFamily: "Arial Black",
+                    fontSize: Math.min(this.scale.width * 0.08, 55), // Responsive font size
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 8,
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
             .setOrigin(0.5)
             .setDepth(100);
 
         this.wordCount = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.5,
+                this.scale.height * 0.65,
                 `You found ${wordCount} words!`,
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25), // Responsive font size
+                    fontSize: Math.min(this.scale.width * 0.06, 35), // Responsive font size
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -95,6 +100,61 @@ export class GameOver extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
+        this.backBG = this.add
+            .rectangle(
+                this.scale.width / 2,
+                this.scale.height * 0.8,
+                Math.min(this.scale.width * 0.3, 300), // Width of the button
+                Math.min(this.scale.height * 0.1, 40), // Height of the button
+                0xadb5bd
+            )
+            .setOrigin(0.5)
+            .setDepth(99)
+            .setInteractive({ useHandCursor: true });
+
+        this.backBtn = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.8,
+                "Go Back Home",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    color: "#000000",
+                    align: "center",
+                }
+            )
+            .setDepth(100)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+
+        //----------------------------------------------------------
+
+        const buttonHoverEffect = (isHovering) => {
+            const textColor = isHovering ? "#ffcc00" : "#000000";
+            const backgroundColor = isHovering ? 0xcccccc : 0xadb5bd;
+            const scaleValue = isHovering ? 1.05 : 1;
+
+            this.backBtn.setStyle({
+                color: textColor,
+            });
+
+            this.backBG.setFillStyle(backgroundColor);
+
+            this.tweens.add({
+                targets: [this.backBtn, this.backBG],
+                scaleX: scaleValue,
+                scaleY: scaleValue,
+                duration: 200,
+                ease: "Power1",
+            });
+        };
+
+        this.backBG.on("pointover", () => buttonHoverEffect(true));
+        this.backBG.on("pointover", () => buttonHoverEffect(false));
+
+        this.backBtn.on("pointerover", () => buttonHoverEffect(true));
+        this.backBtn.on("pointerout", () => buttonHoverEffect(false));
         //----------------------------------------------------------
 
         // Listen for screen resizing
@@ -154,12 +214,23 @@ export class GameOver extends Scene {
                 .setFontSize(Math.min(width * 0.05, 25));
 
             this.timesUpText
-                .setPosition(width / 2, height * 0.4)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setPosition(width / 2, height * 0.45)
+                .setFontSize(Math.min(width * 0.08, 55));
 
             this.wordCount
-                .setPosition(width / 2, height * 0.5)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setPosition(width / 2, height * 0.65)
+                .setFontSize(Math.min(width * 0.06, 35));
+
+            this.backBG
+                .setPosition(width / 2, height * 0.8)
+                .setSize(
+                    Math.min(this.scale.width * 0.3, 300),
+                    Math.min(this.scale.height * 0.1, 40)
+                );
+
+            this.backBtn
+                .setPosition(width / 2, height * 0.8)
+                .setFontSize(Math.min(width * 0.06, 25));
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);
