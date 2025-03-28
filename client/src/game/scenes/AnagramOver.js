@@ -19,6 +19,10 @@ export class AnagramOver extends Scene {
 
         const wordCount = this.registry.get("wordCount");
 
+        const pageReward = this.calculatePages(wordCount);
+
+        console.log("Total Pages:", pageReward);
+
         this.cameras.main.setBackgroundColor(0xf2f0ef);
 
         //----------------------------------------------------------
@@ -73,7 +77,7 @@ export class AnagramOver extends Scene {
                 "Time's up!",
                 {
                     fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.08, 55), // Responsive font size
+                    fontSize: Math.min(this.scale.width * 0.08, 50), // Responsive font size
                     color: "#ffffff",
                     stroke: "#000000",
                     strokeThickness: 8,
@@ -87,11 +91,27 @@ export class AnagramOver extends Scene {
         this.wordCount = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.65,
+                this.scale.height * 0.60,
                 `You found ${wordCount} words!`,
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.06, 35), // Responsive font size
+                    fontSize: Math.min(this.scale.width * 0.05, 25), // Responsive font size
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.rewardsText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height * 0.7,
+                `You are rewarded with ${pageReward} pages!`,
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 30), // Responsive font size
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -171,10 +191,13 @@ export class AnagramOver extends Scene {
         //----------------------------------------------------------
 
         this.scale.on("resize", (size) => {
-            if (this.lastWidth !== size.width || this.lastHeight !== size.height) {
+            if (
+                this.lastWidth !== size.width ||
+                this.lastHeight !== size.height
+            ) {
                 this.resize(size);
             }
-        });        
+        });
 
         // Resize once on creation to ensure proper positioning
         this.resize({ width: this.scale.width, height: this.scale.height });
@@ -188,6 +211,18 @@ export class AnagramOver extends Scene {
         return `${String(minutes).padStart(2, "0")}:${String(
             secondsPart
         ).padStart(2, "0")}`;
+    }
+
+    calculatePages(wordCount) {
+        if (wordCount === 0) {
+            return 0;
+        } else if (wordCount <= 5) {
+            return 1;
+        } else if (wordCount <= 10) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 
     resize({ width, height }) {
@@ -223,11 +258,15 @@ export class AnagramOver extends Scene {
 
             this.timesUpText
                 .setPosition(width / 2, height * 0.45)
-                .setFontSize(Math.min(width * 0.08, 55));
+                .setFontSize(Math.min(width * 0.08, 50));
 
             this.wordCount
-                .setPosition(width / 2, height * 0.65)
-                .setFontSize(Math.min(width * 0.06, 35));
+                .setPosition(width / 2, height * 0.6)
+                .setFontSize(Math.min(width * 0.05, 25));
+
+            this.rewardsText
+                .setPosition(width / 2, height * 0.7)
+                .setFontSize(Math.min(width * 0.05, 30));
 
             this.backBG
                 .setPosition(width / 2, height * 0.8)
