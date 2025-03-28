@@ -1,7 +1,7 @@
 import { Boot } from "./scenes/Boot";
 import { AnagramGame } from "./scenes/AnagramGame.js";
 import { AnagramInstruc } from "./scenes/AnagramInstruc.js";
-import { GameOver } from "./scenes/GameOver.js";
+import { AnagramOver } from "./scenes/AnagramOver.js";
 import { MainMenu } from "./scenes/MainMenu.js";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader.js";
@@ -10,7 +10,7 @@ import { Preloader } from "./scenes/Preloader.js";
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 
 // Define the aspect ratio of the game
-const ASPECT_RATIO = 1/1;
+const ASPECT_RATIO = 1 / 1;
 
 const config = {
     type: Phaser.AUTO,
@@ -20,7 +20,14 @@ const config = {
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
     },
-    scene: [Boot, Preloader, MainMenu, AnagramInstruc, AnagramGame, GameOver],
+    scene: [
+        Boot,
+        Preloader,
+        MainMenu,
+        AnagramInstruc,
+        AnagramGame,
+        AnagramOver,
+    ],
     pixelArt: true, // Ensures pixel-perfect scaling (optional for pixel art)
     roundPixels: true, // Rounds pixels for smoother rendering (optional)
 };

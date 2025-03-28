@@ -46,7 +46,7 @@ const PuzzelPg = () => {
     }, []);
 
     return (
-        <div className="flex w-full flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto max-h-screen">
+        <div className="flex w-full flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto min-h-screen">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
             <section className="flex flex-col justify-center items-center my-4">
                 <h1 className="text-4xl font-semibold my-4 flex items-center justify-center">Puzzles</h1>

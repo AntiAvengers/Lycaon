@@ -8,7 +8,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 5;
+        this.remainingTime = 10;
         this.wordList = [];
         this.inputText = "";
     }
@@ -183,6 +183,76 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
+        this.helpIcon = this.add
+            .image(this.scale.width / 2, this.scale.height * 0.95, "helpIcon")
+            .setOrigin(0.5)
+            .setScale(0.5) // Resize the icon if needed
+            .setDepth(100)
+            .setInteractive({ useHandCursor: true });
+
+        //----------------------------------------------------------
+
+        this.popupBg = this.add
+            .rectangle(
+                this.scale.width / 2,
+                this.scale.height / 2,
+                400,
+                300,
+                0xffffff
+            )
+            .setOrigin(0.5)
+            .setDepth(200)
+            .setVisible(false);
+
+        this.popupText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height / 2 - 40,
+                "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: 350 },
+                    lineSpacing: 5,
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(201)
+            .setVisible(false);
+
+        this.closeBtn = this.add
+            .rectangle(
+                this.scale.width / 2,
+                this.scale.height / 2 + 70,
+                80,
+                40,
+                0x00ff00
+            )
+            .setOrigin(0.5)
+            .setDepth(201)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(false);
+
+        this.closeText = this.add
+            .text(this.scale.width / 2, this.scale.height / 2 + 70, "Back", {
+                fontFamily: "Arial",
+                fontSize: Math.min(this.scale.width * 0.05, 25),
+                color: "#000000",
+            })
+            .setOrigin(0.5)
+            .setDepth(202)
+            .setVisible(false);
+
+        this.closeBtn.on("pointerdown", () => {
+            this.hidePopup();
+        });
+
+        this.closeText.on("pointerdown", () => {
+            this.hidePopup();
+        });
+
         //----------------------------------------------------------
 
         this.startTimer();
@@ -273,16 +343,64 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
+        this.helpIcon.on("pointerover", () => {
+            this.helpIcon.setTint(0xcccccc); // Darken on hover
+            this.helpIcon.setScale(0.8); // Slightly increase size
+        });
+
+        this.helpIcon.on("pointerout", () => {
+            this.helpIcon.clearTint(); // Remove tint
+            this.helpIcon.setScale(0.5); // Reset size
+        });
+
+        // Click event
+        this.helpIcon.on("pointerdown", () => {
+            console.log("Button clicked!");
+            this.showPopup();
+        });
+
+        //----------------------------------------------------------
+
         this.scale.on("resize", (size) => {
-            if (this.lastWidth !== size.width || this.lastHeight !== size.height) {
+            if (
+                this.lastWidth !== size.width ||
+                this.lastHeight !== size.height
+            ) {
                 this.resize(size);
             }
-        });   
+        });
 
         // Resize once on creation to ensure proper positioning
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
+    }
+
+    showPopup() {
+        this.popupBg.setVisible(true);
+        this.popupText.setVisible(true);
+        this.closeBtn.setVisible(true);
+        this.closeText.setVisible(true);
+
+        // Pause timer
+        if (this.timerEvent) {
+            this.timerEvent.paused = true;
+        }
+    }
+
+    hidePopup() {
+        this.popupBg.setVisible(false);
+        this.popupText.setVisible(false);
+        this.closeBtn.setVisible(false);
+        this.closeText.setVisible(false);
+
+        // Resume timer and manually check if time is up
+        if (this.timerEvent) {
+            this.timerEvent.paused = false;
+            if (this.remainingTime <= 0) {
+                this.timeIsUp(); // Manually call timeIsUp if time has already run out
+            }
+        }
     }
 
     showErrorMessage(message) {
@@ -337,27 +455,37 @@ export class AnagramGame extends Scene {
     }
 
     startTimer() {
-        this.time.addEvent({
-            delay: 1000, // 1 second (1000 ms)
-            callback: this.updateTimer,
+        this.timerEvent = this.time.addEvent({
+            delay: 1000, // 1 second
+            callback: () => {
+                if (this.remainingTime > 0) {
+                    this.remainingTime--;
+                    this.timerText.setText(this.formatTime(this.remainingTime));
+                } else {
+                    // Change the color before calling timeIsUp
+                    this.timerText.setColor("#ff0000");
+                    this.timeIsUp(); // Call timeIsUp when the timer hits 0
+                    this.timerEvent.remove(); // Remove the timer event to stop it
+                }
+            },
             callbackScope: this,
-            loop: true, // Repeat the event
+            loop: true,
         });
     }
+    
+    // updateTimer() {
+    //     this.remainingTime--;
 
-    updateTimer() {
-        this.remainingTime--;
+    //     // Update the timer display in MM:SS format
+    //     this.timerText.setText(this.formatTime(this.remainingTime));
 
-        // Update the timer display in MM:SS format
-        this.timerText.setText(this.formatTime(this.remainingTime));
+    //     if (this.remainingTime <= 0) {
+    //         // Change the timer text color to red
+    //         this.timerText.setColor("#ff0000");
 
-        if (this.remainingTime <= 0) {
-            // Change the timer text color to red
-            this.timerText.setColor("#ff0000");
-
-            this.timeIsUp();
-        }
-    }
+    //         this.timeIsUp();
+    //     }
+    // }
 
     formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
@@ -386,7 +514,7 @@ export class AnagramGame extends Scene {
             duration: 1000,
             onComplete: () => {
                 this.scene.stop("AnagramGame"); // Stop the current scene
-                this.scene.start("GameOver"); // Start the GameOver scene
+                this.scene.start("AnagramOver"); // Start the GameOver scene
             },
         });
     }
@@ -472,6 +600,22 @@ export class AnagramGame extends Scene {
                     Math.min(this.scale.width * 0.25, 200),
                     Math.min(this.scale.height * 0.1, 40)
                 );
+
+            this.helpIcon.setPosition(width / 2, height * 0.95);
+
+            this.popupBg.setPosition(width / 2, height / 2).setSize(400, 300);
+
+            this.popupText
+                .setPosition(width / 2, height / 2 - 40)
+                .setFontSize(Math.min(width * 0.05, 25));
+
+            this.closeBtn
+                .setPosition(width / 2, height / 2 + 70)
+                .setSize(80, 40);
+
+            this.closeText
+                .setPosition(width / 2, height / 2 + 70)
+                .setFontSize(Math.min(width * 0.05, 25));
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);

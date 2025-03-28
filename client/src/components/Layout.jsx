@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
             {!isSignInPage && <Header />}
             <main className="flex flex-grow">{children}</main>
             <div className="hidden md:block">
-                {!isSignInPage && <SoundControl />}
+                {!isSignInPage &&<SoundControl />}
             </div>
             {!isSignInPage && <Footer />}
         </div>

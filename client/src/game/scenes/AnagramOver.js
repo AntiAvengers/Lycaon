@@ -1,12 +1,12 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
-export class GameOver extends Scene {
+export class AnagramOver extends Scene {
     lastWidth = null;
     lastHeight = null;
 
     constructor() {
-        super("GameOver");
+        super("AnagramOver");
     }
 
     preload() {
