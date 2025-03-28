@@ -116,7 +116,7 @@ export class GameOver extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height * 0.8,
-                "Go Back Home",
+                "Back to Home",
                 {
                     fontFamily: "Arial",
                     fontSize: Math.min(this.scale.width * 0.05, 25),
@@ -135,14 +135,19 @@ export class GameOver extends Scene {
             const backgroundColor = isHovering ? 0xcccccc : 0xadb5bd;
             const scaleValue = isHovering ? 1.05 : 1;
 
-            this.backBtn.setStyle({
-                color: textColor,
-            });
-
+            this.backBtn.setStyle({ color: textColor });
             this.backBG.setFillStyle(backgroundColor);
 
             this.tweens.add({
-                targets: [this.backBtn, this.backBG],
+                targets: this.backBtn,
+                scaleX: scaleValue,
+                scaleY: scaleValue,
+                duration: 200,
+                ease: "Power1",
+            });
+
+            this.tweens.add({
+                targets: this.backBG,
                 scaleX: scaleValue,
                 scaleY: scaleValue,
                 duration: 200,
@@ -150,24 +155,31 @@ export class GameOver extends Scene {
             });
         };
 
-        this.backBG.on("pointover", () => buttonHoverEffect(true));
-        this.backBG.on("pointover", () => buttonHoverEffect(false));
+        this.backBG.on("pointerover", () => buttonHoverEffect(true));
+        this.backBG.on("pointerout", () => buttonHoverEffect(false));
 
         this.backBtn.on("pointerover", () => buttonHoverEffect(true));
         this.backBtn.on("pointerout", () => buttonHoverEffect(false));
+
+        [this.backBG, this.backBtn].forEach((btn) => {
+            btn.setInteractive({ useHandCursor: true });
+            btn.on("pointerdown", () => {
+                window.location.href = "/home";
+            });
+        });
+
         //----------------------------------------------------------
 
-        // Listen for screen resizing
-        this.scale.on("resize", this.resize, this);
+        this.scale.on("resize", (size) => {
+            if (this.lastWidth !== size.width || this.lastHeight !== size.height) {
+                this.resize(size);
+            }
+        });        
 
         // Resize once on creation to ensure proper positioning
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
-
-        // Trigger scene change on click or keypress
-        this.input.on("pointerdown", () => this.changeScene());
-        this.input.keyboard?.on("keydown-SPACE", () => this.changeScene());
     }
 
     formatTime(seconds) {
@@ -178,10 +190,6 @@ export class GameOver extends Scene {
         ).padStart(2, "0")}`;
     }
 
-    changeScene() {
-        this.scene.stop("GameOver");
-        this.scene.start("MainMenu");
-    }
     resize({ width, height }) {
         // Avoid redundant resize calls
         if (this.lastWidth === width && this.lastHeight === height) return;

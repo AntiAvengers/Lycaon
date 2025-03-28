@@ -310,7 +310,14 @@ export class AnagramInstruc extends Scene {
 
         this.input.keyboard?.on("keydown-SPACE", () => this.showPopup());
 
-        this.scale.on("resize", this.resize, this);
+        this.scale.on("resize", (size) => {
+            if (
+                this.lastWidth !== size.width ||
+                this.lastHeight !== size.height
+            ) {
+                this.resize(size);
+            }
+        });
 
         // Resize once on creation to ensure proper positioning
         this.resize({ width: this.scale.width, height: this.scale.height });

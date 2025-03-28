@@ -273,8 +273,11 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
-        // Listen for screen resizing
-        this.scale.on("resize", this.resize, this);
+        this.scale.on("resize", (size) => {
+            if (this.lastWidth !== size.width || this.lastHeight !== size.height) {
+                this.resize(size);
+            }
+        });   
 
         // Resize once on creation to ensure proper positioning
         this.resize({ width: this.scale.width, height: this.scale.height });
@@ -374,7 +377,7 @@ export class AnagramGame extends Scene {
 
         // Storing word count
         this.registry.set("wordCount", this.wordList.length);
-        
+
         this.time.removeAllEvents();
 
         this.tweens.add({
