@@ -31,9 +31,9 @@ const SoundConrol = () => {
             <audio ref={audioRef} src="your-sound-file.mp3" preload="auto" />
 
             {/* Volume Control Slider */}
-            <div className="flex justify-center items-center gap-2">
+            <div className="bg-[#242C53] w-[173.3px] h-[26px] flex justify-center items-center gap-[5px] rounded-[30px] px-[10px] py-[4px]">
                 {/* Mute Button */}
-                <button onClick={toggleMute} className="text-black">
+                <button onClick={toggleMute} className="text-[#FCF4E7]">
                     {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
                 </button>
                 <Slider
@@ -46,7 +46,7 @@ const SoundConrol = () => {
                     valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
                     step={0.01}
                     aria-label="Volume Control"
-                    sx={{ width: 125 , color:"black"}}
+                    sx={{ width: 122.3, color: "#FCF4E7" }}
                 />
             </div>
         </div>
