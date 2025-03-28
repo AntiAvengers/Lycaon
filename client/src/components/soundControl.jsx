@@ -33,8 +33,15 @@ const SoundConrol = () => {
             {/* Volume Control Slider */}
             <div className="bg-[#242C53] w-[173.3px] h-[26px] flex justify-center items-center gap-[5px] rounded-[30px] px-[10px] py-[4px]">
                 {/* Mute Button */}
-                <button onClick={toggleMute} className="text-[#FCF4E7]">
-                    {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+                <button
+                    onClick={toggleMute}
+                    className="text-[#FCF4E7] flex justify-center items-center"
+                >
+                    {isMuted ? (
+                        <VolumeOffIcon sx={{ width: 26, height: 18 }} />
+                    ) : (
+                        <VolumeUpIcon sx={{ width: 26, height: 18 }} />
+                    )}
                 </button>
                 <Slider
                     size="small"

@@ -39,9 +39,7 @@ const InGameCurrencyTracker = () => {
 
             {/* Dropdown Menu (Mobile) */}
             {open && (
-                <ul
-                    className="absolute right-0 top-full mt-2 bg-[#F2F0EF] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden"
-                >
+                <ul className="absolute right-0 top-full mt-2 bg-[#F2F0EF] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden text-black">
                     <li className="flex justify-center items-center">
                         Key
                         <img
@@ -70,29 +68,29 @@ const InGameCurrencyTracker = () => {
             )}
 
             {/* Visible List (Desktop & Larger) */}
-            <ul className="hidden md:flex space-x-6">
+            <ul className="hidden md:flex space-x-[10px] text-[21px]">
                 <li className="flex items-center">
-                    Key
+                    2
                     <img
                         src="assets/star.png"
                         alt="Key Icon"
-                        className="w-6 h-6 ml-2"
+                        className="w-[25px] h-[25px] ml-[5px]"
                     />
                 </li>
                 <li className="flex items-center">
-                    Pages
+                    5
                     <img
                         src="assets/star.png"
                         alt="Pages Icon"
-                        className="w-6 h-6 ml-2"
+                        className="w-[25px] h-[25px] ml-[5px]"
                     />
                 </li>
                 <li className="flex items-center">
-                    Shards
+                    2000
                     <img
                         src="assets/star.png"
                         alt="Shards Icon"
-                        className="w-6 h-6 ml-2"
+                        className="w-[25px] h-[25px] ml-[5px]"
                     />
                 </li>
             </ul>
