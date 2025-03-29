@@ -1,10 +1,8 @@
 const HighscoreBox = () => {
     return (
-        <div
-            className="w-full h-36 bg-[#76D8FF] border-solid p-1 flex flex-col justify-center items-center gap-2"
-        >
-            <h1 className="text-2xl">Your High Score</h1>
-            <span className="text-5xl font-semibold">Score</span>
+        <div className="w-full h-[81px] p-1 bg-[#FCF4E7]/45 border-1 border-[#FCF4E7] flex flex-col justify-between items-center ">
+            <h1 className="text-[21px]">Your High Score</h1>
+            <span className="text-[24px]">Score</span>
         </div>
     );
 };

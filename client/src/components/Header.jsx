@@ -72,7 +72,7 @@ const Header = () => {
     }, [handleOutsideClick]);
 
     return (
-        <header className="sticky top-0 sm:top-[15px] z-50 text-[#FCF4E7] flex justify-center items-center">
+        <header className="sticky top-0 z-50 sm:h-[75px] text-[#FCF4E7] flex justify-center items-center">
             <div className="w-[1255px] max-w-full h-[55px] bg-[#0D1641] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
                 {/* Left Section: Menu and Logo */}
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">

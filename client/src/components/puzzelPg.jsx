@@ -46,15 +46,14 @@ const PuzzelPg = () => {
     }, []);
 
     return (
-        <div className="flex w-full flex-col sm:flex-row sm:mx-8 max-w-screen mx-auto min-h-screen">
+        <div className="w-full sm:w-[1320.5px] sm:h-[648.06px] flex flex-col sm:flex-row sm:mx-4 justify-center gap-[10px] sm:gap-[20px]">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
-            <section className="flex flex-col justify-center items-center my-4">
-                <h1 className="text-4xl font-semibold my-4 flex items-center justify-center">Puzzles</h1>
+            <section className="flex justify-center items-center">
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
             {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section className="w-auto flex flex-col justify-between items-center gap-3 m-2 sm:m-4 flex-grow">
+            <section className="w-auto sm:w-[441px] sm:h-[648.06px] flex flex-col justify-center items-center gap-[17px] mx-2 mb-2 sm:m-0">
                 <ShowcaseBox />
                 <HighscoreBox />
                 <LeaderboardBox />

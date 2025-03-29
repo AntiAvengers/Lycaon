@@ -10,7 +10,7 @@ import { Preloader } from "./scenes/Preloader.js";
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 
 // Define the aspect ratio of the game
-const ASPECT_RATIO = 1 / 1;
+const ASPECT_RATIO = 4 / 3;
 
 const config = {
     type: Phaser.AUTO,
@@ -48,7 +48,7 @@ const StartGame = (parent) => {
             newHeight = window.innerHeight;
         } else {
             // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
-            newWidth = window.innerWidth * 0.55;
+            newWidth = window.innerWidth * 0.58;
             newHeight = newWidth / ASPECT_RATIO;
             // newHeight = (newWidth * 3) / 4;
 
