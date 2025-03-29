@@ -132,7 +132,7 @@ const Header = () => {
                             alt="Key Icon"
                             className="w-7 h-7 sm:w-[40px] sm:h-[40px] mr-[15px]"
                         />
-                        Suikle
+                        Lycaon
                     </Link>
                 </section>
 

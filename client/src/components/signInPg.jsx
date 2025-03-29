@@ -7,7 +7,7 @@ const SignInPg = () => {
         <form className="min-h-screen w-full flex justify-center items-center px-4 sm:px-6">
             <section className="min-w-full sm:max-w-md md:max-w-xl sm:min-w-sm flex flex-col justify-evenly items-center p-6 sm:p-8 gap-4 rounded-lg shadow-lg bg-[#F8F9FA]">
                 <h1 className="text-center text-4xl sm:text-6xl md:text-5xl font-medium">
-                    Suikle
+                    Lycaon
                 </h1>
                 <Link
                     to="/home"

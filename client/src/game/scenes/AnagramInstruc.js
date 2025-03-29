@@ -14,7 +14,7 @@ export class AnagramInstruc extends Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor(0xf2f0ef);
+        this.cameras.main.setBackgroundColor(0xfcf4e7);
 
         //----------------------------------------------------------
 
@@ -23,8 +23,8 @@ export class AnagramInstruc extends Scene {
                 this.scale.width / 2, // Center horizontally
                 0, // Touch the top
                 this.scale.width,
-                Math.min(this.scale.height * 0.15, 200), // Height of the button
-                0xadb5bd
+                Math.min(this.scale.height * 0.15, 100),
+                0x4a63e4
             )
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
@@ -32,12 +32,12 @@ export class AnagramInstruc extends Scene {
         this.titleText = this.add
             .text(
                 this.scale.width / 2,
-                Math.min(this.scale.height * 0.15, 200) / 2, // Vertically center text within rectangle
+                Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
                 "Anagrams",
                 {
                     fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.05, 35),
-                    color: "#000000",
+                    fontSize: Math.min(this.scale.width * 0.05, 40),
+                    color: "#FFFFFF",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
                 }
@@ -52,7 +52,7 @@ export class AnagramInstruc extends Scene {
                 "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    fontSize: Math.min(this.scale.width * 0.06, 20),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.6 },
@@ -370,60 +370,73 @@ export class AnagramInstruc extends Scene {
                 return;
             }
 
-            this.titleBG.setPosition(width / 2, 0);
-            this.titleBG.setSize(width, Math.min(height * 0.15, 200));
+            this.titleBG
+                .setPosition(width / 2, 0)
+                .setSize(width, Math.min(height * 0.15, 100));
 
-            this.titleText.setPosition(
-                width / 2,
-                Math.min(this.scale.height * 0.15, 200) / 2
-            );
-            this.titleText.setFontSize(Math.min(width * 0.05, 35));
+            this.titleText
+                .setPosition(
+                    width / 2,
+                    Math.min(this.scale.height * 0.15, 100) / 2
+                )
+                .setFontSize(Math.min(width * 0.06, 40));
 
-            this.instrucText.setPosition(width / 2, height * 0.28);
-            this.instrucText.setFontSize(Math.min(width * 0.05, 20));
+            this.instrucText
+                .setPosition(width / 2, height * 0.28)
+                .setFontSize(Math.min(width * 0.06, 20));
 
             this.warningIcon.setPosition(width / 2 - 240, height * 0.45);
 
-            this.warningText.setPosition(width / 2, height * 0.45);
-            this.warningText.setFontSize(Math.min(width * 0.05, 20));
+            this.warningText
+                .setPosition(width / 2, height * 0.45)
+                .setFontSize(Math.min(width * 0.05, 20));
 
-            this.helpText.setPosition(width / 2, height * 0.55);
-            this.helpText.setFontSize(Math.min(width * 0.05, 20));
+            this.helpText
+                .setPosition(width / 2, height * 0.55)
+                .setFontSize(Math.min(width * 0.05, 20));
 
-            this.pressBtnText.setPosition(width / 2, height * 0.62);
-            this.pressBtnText.setFontSize(Math.min(width * 0.05, 20));
+            this.pressBtnText
+                .setPosition(width / 2, height * 0.62)
+                .setFontSize(Math.min(width * 0.05, 20));
 
             this.helpIcon.setPosition(width / 2 - 20, height * 0.71);
 
-            this.helpIconText.setPosition(width / 2 + 20, height * 0.71);
-            this.helpIconText.setFontSize(Math.min(width * 0.05, 20));
+            this.helpIconText
+                .setPosition(width / 2 + 20, height * 0.71)
+                .setFontSize(Math.min(width * 0.05, 20));
 
-            this.startGameBtn.setPosition(width / 2, height * 0.85);
-            this.startGameBtn.setFontSize(Math.min(width * 0.05, 25));
+            this.startGameBtn
+                .setPosition(width / 2, height * 0.85)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.startGameBtnBackground.setPosition(width / 2, height * 0.85);
-            this.startGameBtnBackground.setSize(
-                Math.min(width * 0.25, 200),
-                Math.min(height * 0.1, 40)
-            );
+            this.startGameBtnBackground
+                .setPosition(width / 2, height * 0.85)
+                .setSize(
+                    Math.min(width * 0.25, 200),
+                    Math.min(height * 0.1, 40)
+                );
 
-            this.popupBg.setPosition(width / 2, height / 2);
-            this.popupBg.setSize(300, 200);
+            this.popupBg.setPosition(width / 2, height / 2).setSize(300, 200);
 
-            this.popupText.setPosition(width / 2, height / 2 - 40);
-            this.popupText.setFontSize(Math.min(width * 0.05, 25));
+            this.popupText
+                .setPosition(width / 2, height / 2 - 40)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.yesButton.setPosition(width / 2 - 60, height / 2 + 40);
-            this.yesButton.setSize(80, 40);
+            this.yesButton
+                .setPosition(width / 2 - 60, height / 2 + 40)
+                .setSize(80, 40);
 
-            this.yesText.setPosition(width / 2 - 60, height / 2 + 40);
-            this.yesText.setFontSize(Math.min(width * 0.05, 25));
+            this.yesText
+                .setPosition(width / 2 - 60, height / 2 + 40)
+                .setFontSize(Math.min(width * 0.05, 25));
 
-            this.noButton.setPosition(width / 2 + 60, height / 2 + 40);
-            this.noButton.setSize(80, 40);
+            this.noButton
+                .setPosition(width / 2 + 60, height / 2 + 40)
+                .setSize(80, 40);
 
-            this.noText.setPosition(width / 2 + 60, height / 2 + 40);
-            this.noText.setFontSize(Math.min(width * 0.05, 25));
+            this.noText
+                .setPosition(width / 2 + 60, height / 2 + 40)
+                .setFontSize(Math.min(width * 0.05, 25));
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);
