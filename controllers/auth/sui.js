@@ -13,9 +13,12 @@ function check_account(address) {
 
     const new_user = {
         [hashed]: {
+            name: "",
             logged_in: false,
             wallet_ID: address,
-            highest_score: 0
+            highest_score: 0,
+            new_account: false,
+            last_login: Date.now(),
         }
     }
 
@@ -23,39 +26,31 @@ function check_account(address) {
     users.once("value", snapshot => {
         if(!snapshot.val()) {
             users.set(new_user);
-            return generate_UUID(req, res);
         }
-
-        if(!snapshot.val()[hashed]) {
+        else if(!snapshot.val()[hashed]) {
             users.push(new_user);
         }
     });
-}
 
-function login(req, res) {
-    const { address } = req.body;
-    check_account(address);
-
-    const users = database.ref('users');
-    users.once("value", snapshot => {
-        if(!snapshot.val()[hashed]) {
-            users.push(new_user);
-        }
-    });
+    console.log('. . .', address, 'has logged in!');
 }
 
 function generate_UUID(req, res) {
-    const { address } = req.params;
+    //Step 0: Connect React App w/ Sui Wallet through @mysten/dapp-kit (Responsibility of FrontEnd)
+    const { address } = req.body;
+    if(!address) {
+        res.json({ error: "Missing Property in request body: Wallet Address, perhaps wallet is not connected!"})
+    }
 
-    if(!address) return res.status(400).json({error: 'Wallet address missing from request parameters!' });
-
+    //Step 1: Generate UUID message for Client w/ Sui Wallet to sign to prove ownership of wallet
     const UUID = crypto.randomUUID();
     Users_UUID.set(address, UUID);
 
     res.json({ UUID });
 }
 
-async function connect(req, res) {
+async function login(req, res) {
+    //Step 2: Client signs message, sends bytes + signature back encoded via Base64
     const { address, bytes, message, signature } = req.body;
 
     if(!address || !bytes || !message || !signature) {
@@ -63,46 +58,44 @@ async function connect(req, res) {
     }
 
     const UUID_message = Users_UUID.get(address);
-    console.log(Users_UUID);
 
     if(!UUID_message || UUID_message !== message) {
         return res.status(401).json({ error: "Invalid or Expired UUID Message"});
     }
 
+    //Step 3: Signature verified using Sui's built-in signature verification.
+    // . . . If it doesn't match, will throw an error on the server hence the try-catch block
     try {
         const is_verified = await verifyPersonalMessageSignature(
             fromBase64(bytes),
             signature, 
+            process.env.MODE == "DEVELOPMENT" ? 
             { 
                 address: address, 
                 client: new SuiGraphQLClient({
                     url: 'https://sui-testnet.mystenlabs.com/graphql',
                 }),
-            }
+            } : { address: address }
         );
+
         Users_UUID.delete(address);
 
-        /*
-            * Have to check the auto connect feature in wallet. Will they have to sign in their wallet everytime?
-            (cont.) Wallet Sign-in => JWT Issuance (there might be a disconnect between JWT session vs Wallet Session)
-            1) Wallet is confirmed to be User's
-            2) Issue JWT
-            3) If new acc -> generate new user in firebase (perhaps during the JWT code)
-            4)  otherwise continue     
-        */
+        //Step 4: Checks on firebase if user account exists (tied to Sui Wallet Address)
+        // . . . otherwise initializes data in firebase for new user
+        check_account(address);
+
+        //Step 5: Issue a JWT
+
         const result = "You have succesfully logged in";
-        res.json({ result });
+        res.status(200).json({ result });
     } catch(err) {
         console.log(err);
         res.status(500).json({ error: err });
     }
 }
 
-
-
 module.exports = {
-    connect,
-    generate_UUID,
     check_account,
-    login
+    generate_UUID,
+    login,
 } 

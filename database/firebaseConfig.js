@@ -10,6 +10,14 @@ admin.initializeApp({
   databaseURL: process.env.DATABASE_URL,
 });
 
+//DEV MODE - Resets database everytime server is restarted
+if(process.env.MODE == "DEVELOPMENT") {
+  const initial_data = {
+    users: {}
+  }
+  admin.database().ref('/').set(initial_data);
+}
+
 // Export the database reference
 module.exports = {
   database: admin.database()
