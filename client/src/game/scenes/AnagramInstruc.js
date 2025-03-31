@@ -1,6 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
+import { AudioManager } from "../AudioManager";
+
 export class AnagramInstruc extends Scene {
     background;
     titleBG;
@@ -30,6 +32,7 @@ export class AnagramInstruc extends Scene {
 
     preload() {
         console.log("AnagramInstruc scene preloading");
+        this.audioManager = new AudioManager(this);
     }
 
     create() {
@@ -41,33 +44,35 @@ export class AnagramInstruc extends Scene {
 
         //----------------------------------------------------------
 
-        // Play background music (looping)
-        this.bgMusic = this.sound.add("gameMusic");
-        this.bgMusic.play({ loop: true }); // Loop the background music
+        this.audioManager.create();
 
-        this.bgMusicPosition = 0;
-        this.isMuted = false;
+        // // Play background music (looping)
+        // this.bgMusic = this.sound.add("gameMusic");
+        // this.bgMusic.play({ loop: true }); // Loop the background music
 
-        // Ensure that the button image is added after it is loaded
-        this.muteButton = this.add
-            .image(20, this.scale.height - 20, "star")
-            .setOrigin(0.5)
-            .setScale(0.5)
-            .setInteractive();
+        // this.bgMusicPosition = 0;
+        // this.isMuted = false;
 
-        // Mute/unmute button click event
-        this.muteButton.on("pointerdown", () => {
-            if (this.isMuted) {
-                // Unmute the music and resume from where it left off
-                this.bgMusic.play({ loop: true, seek: this.bgMusicPosition });
-                this.isMuted = false;
-            } else {
-                // Mute the music and store the current position
-                this.bgMusicPosition = this.bgMusic.seek || 0; // Check if seek exists, else fallback to 0
-                this.bgMusic.stop();
-                this.isMuted = true;
-            }
-        });
+        // // Ensure that the button image is added after it is loaded
+        // this.muteButton = this.add
+        //     .image(20, this.scale.height - 20, "star")
+        //     .setOrigin(0.5)
+        //     .setScale(0.5)
+        //     .setInteractive();
+
+        // // Mute/unmute button click event
+        // this.muteButton.on("pointerdown", () => {
+        //     if (this.isMuted) {
+        //         // Unmute the music and resume from where it left off
+        //         this.bgMusic.play({ loop: true, seek: this.bgMusicPosition });
+        //         this.isMuted = false;
+        //     } else {
+        //         // Mute the music and store the current position
+        //         this.bgMusicPosition = this.bgMusic.seek || 0; // Check if seek exists, else fallback to 0
+        //         this.bgMusic.stop();
+        //         this.isMuted = true;
+        //     }
+        // });
 
         //----------------------------------------------------------
 
@@ -397,10 +402,11 @@ export class AnagramInstruc extends Scene {
     }
 
     update() {
-        // Continuously update the position while music is playing
-        if (!this.isMuted) {
-            this.bgMusicPosition = this.bgMusic.seek || 0;
-        }
+        // // Continuously update the position while music is playing
+        // if (!this.isMuted) {
+        //     this.bgMusicPosition = this.bgMusic.seek || 0;
+        // }
+        this.audioManager.update();
     }
 
     changeScene() {
@@ -500,7 +506,8 @@ export class AnagramInstruc extends Scene {
                 .setPosition(width / 2 + 60, height / 2 + 40)
                 .setFontSize(Math.min(width * 0.05, 25));
 
-            this.muteButton.setPosition(20, height - 20);
+            // // Set position of the mute button
+            // this.muteButton.setPosition(20, this.scene.scale.height - 20);
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);
