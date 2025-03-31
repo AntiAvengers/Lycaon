@@ -2,13 +2,31 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
 export class AnagramGame extends Scene {
+    anagramBG;
+    anagramText;
+    timerText;
+    wordDisplay;
+    wordCountText;
+    errorMessage;
+    inputBG;
+    inputField;
+    clearBG;
+    clearBtn;
+    submitBG;
+    submitBtn;
+    helpIcon;
+    popupBg;
+    popupText;
+    closeBtn;
+    closeText;
+
     lastWidth = null;
     lastHeight = null;
 
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30;
+        this.remainingTime = 5;
         this.wordList = [];
         this.inputText = "";
     }

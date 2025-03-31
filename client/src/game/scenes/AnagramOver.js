@@ -23,8 +23,11 @@ export class AnagramOver extends Scene {
 
         console.log("Total Pages:", pageReward);
 
-        this.cameras.main.setBackgroundColor(0xf2f0ef);
-
+        this.background = this.add
+            .image(this.scale.width / 2, this.scale.height / 2, "background")
+            .setOrigin(0.5)
+            .setAlpha(0.75)
+            .setDisplaySize(this.scale.width, this.scale.height);
         //----------------------------------------------------------
 
         this.anagramBG = this.add
@@ -32,20 +35,21 @@ export class AnagramOver extends Scene {
                 this.scale.width / 2, // Center horizontally
                 0, // Touch the top
                 this.scale.width,
-                Math.min(this.scale.height * 0.15, 200), // Height of the button
-                0xadb5bd
+                Math.min(this.scale.height * 0.15, 100), // Height of the button
+                0x4a63e4
             )
+            .setAlpha(0.65)
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
 
         this.anagramText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height + Math.min(this.scale.height * 0.15, 200) / 2, // Vertically center text within rectangle
+                this.scale.height + Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
                 "E  I  T  S  P  E  R",
                 {
-                    fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.05, 35),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.08, 65),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -54,7 +58,6 @@ export class AnagramOver extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        // Set up your timer display here, using the `remainingTime` retrieved
         this.timerText = this.add
             .text(
                 this.scale.width / 2,
@@ -62,7 +65,7 @@ export class AnagramOver extends Scene {
                 this.formatTime(remainingTime),
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontSize: Math.min(this.scale.width * 0.08, 65),
                     color: "#ff0000",
                     align: "center",
                 }
@@ -91,7 +94,7 @@ export class AnagramOver extends Scene {
         this.wordCount = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.60,
+                this.scale.height * 0.6,
                 `You found ${wordCount} words!`,
                 {
                     fontFamily: "Arial",
@@ -126,7 +129,7 @@ export class AnagramOver extends Scene {
                 this.scale.height * 0.8,
                 Math.min(this.scale.width * 0.3, 300), // Width of the button
                 Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0xadb5bd
+                0x4a63e4
             )
             .setOrigin(0.5)
             .setDepth(99)
@@ -140,7 +143,7 @@ export class AnagramOver extends Scene {
                 {
                     fontFamily: "Arial",
                     fontSize: Math.min(this.scale.width * 0.05, 25),
-                    color: "#000000",
+                    color: "#ffffff",
                     align: "center",
                 }
             )
@@ -151,8 +154,8 @@ export class AnagramOver extends Scene {
         //----------------------------------------------------------
 
         const buttonHoverEffect = (isHovering) => {
-            const textColor = isHovering ? "#ffcc00" : "#000000";
-            const backgroundColor = isHovering ? 0xcccccc : 0xadb5bd;
+            const textColor = isHovering ? "#000000" : "#ffffff";
+            const backgroundColor = isHovering ? 0xffffff : 0x4a63e4;
             const scaleValue = isHovering ? 1.05 : 1;
 
             this.backBtn.setStyle({ color: textColor });
@@ -241,20 +244,24 @@ export class AnagramOver extends Scene {
                 return;
             }
 
+            this.background
+                .setPosition(width / 2, height / 2)
+                .setDisplaySize(width, height);
+
             this.anagramBG
                 .setPosition(width / 2, 0)
-                .setSize(width, Math.min(height * 0.15, 200));
+                .setSize(width, Math.min(height * 0.15, 100));
 
             this.anagramText
                 .setPosition(
                     width / 2,
-                    Math.min(this.scale.height * 0.15, 200) / 2
+                    Math.min(this.scale.height * 0.15, 100) / 2
                 )
-                .setFontSize(Math.min(width * 0.05, 35));
+                .setFontSize(Math.min(width * 0.08, 65));
 
             this.timerText
                 .setPosition(width / 2, height * 0.25)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setFontSize(Math.min(width * 0.08, 65));
 
             this.timesUpText
                 .setPosition(width / 2, height * 0.45)

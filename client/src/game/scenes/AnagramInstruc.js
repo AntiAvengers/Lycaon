@@ -301,9 +301,7 @@ export class AnagramInstruc extends Scene {
             const scaleValue = isHovering ? 1.05 : 1; // Scale up on hover, scale back to original when not
 
             // Update text color
-            this.startGameBtn.setStyle({
-                color: textColor,
-            });
+            this.startGameBtn.setStyle({ color: textColor });
 
             // Update background color
             this.startGameBtnBackground.setFillStyle(backgroundColor);
