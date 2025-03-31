@@ -2,6 +2,15 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
 export class AnagramOver extends Scene {
+    anagramBG;
+    anagramText;
+    timerText;
+    timesUpText;
+    wordCount;
+    rewardsText;
+    backBG;
+    backBtn;
+
     lastWidth = null;
     lastHeight = null;
 

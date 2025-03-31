@@ -149,7 +149,7 @@ export class AnagramGame extends Scene {
                 "Start Typing!",
                 {
                     fontFamily: "Arial",
-                    color: "#000000",
+                    color: "#CFCFCF",
                     fontSize: Math.min(this.scale.width * 0.05, 25),
                     align: "center",
                 }
@@ -466,6 +466,13 @@ export class AnagramGame extends Scene {
 
     updateInputField() {
         this.inputField.setText(this.inputText); // Update the input text display
+
+        // Change text color to black when the user starts typing
+        if (this.inputText.length > 0) {
+            this.inputField.setStyle({ color: "#000000" });
+        } else {
+            this.inputField.setStyle({ color: "#CFCFCF" }); // Grey when empty
+        }
     }
 
     handleWordSubmit() {
