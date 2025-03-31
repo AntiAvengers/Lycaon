@@ -8,7 +8,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 10;
+        this.remainingTime = 30;
         this.wordList = [];
         this.inputText = "";
     }
@@ -18,7 +18,11 @@ export class AnagramGame extends Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor(0xf2f0ef);
+        this.background = this.add
+            .image(this.scale.width / 2, this.scale.height / 2, "background")
+            .setOrigin(0.5)
+            .setAlpha(0.75)
+            .setDisplaySize(this.scale.width, this.scale.height);
 
         //----------------------------------------------------------
 
@@ -27,21 +31,22 @@ export class AnagramGame extends Scene {
                 this.scale.width / 2, // Center horizontally
                 0, // Touch the top
                 this.scale.width,
-                Math.min(this.scale.height * 0.15, 200), // Height of the button
-                0xadb5bd
+                Math.min(this.scale.height * 0.15, 100), // Height of the button
+                0x4a63e4
             )
+            .setAlpha(0.65)
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
 
         this.anagramText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height + Math.min(this.scale.height * 0.15, 200) / 2, // Vertically center text within rectangle
+                this.scale.height + Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
                 "E  I  T  S  P  E  R",
                 {
-                    fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.05, 35),
-                    color: "#000000",
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.08, 65),
+                    color: "#FFFFFF",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
                 }
@@ -56,7 +61,7 @@ export class AnagramGame extends Scene {
                 this.formatTime(this.remainingTime),
                 {
                     fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontSize: Math.min(this.scale.width * 0.08, 65),
                     color: "#000000",
                     align: "center",
                 }
@@ -105,12 +110,19 @@ export class AnagramGame extends Scene {
             .rectangle(
                 this.scale.width / 2,
                 this.scale.height * 0.72,
-                Math.min(this.scale.width * 0.4, 300),
+                Math.min(this.scale.width * 0.4, 200),
                 Math.min(this.scale.height * 0.1, 45),
-                0xd8e2dc
+                0xffffff
             )
             .setOrigin(0.5)
             .setDepth(99);
+
+        // Create the bottom border if it doesn't exist
+        if (!this.bottomBorder) {
+            this.bottomBorder = this.add.graphics();
+            this.bottomBorder.lineStyle(2, 0x000000, 1); // Black line, 2px thickness
+            this.bottomBorder.setDepth(100); // Ensure it's above the rectangle
+        }
 
         this.inputField = this.add
             .text(
@@ -131,9 +143,9 @@ export class AnagramGame extends Scene {
             .rectangle(
                 this.scale.width / 2 - 100,
                 this.scale.height * 0.85,
-                Math.min(this.scale.width * 0.25, 200), // Width of the button
+                Math.min(this.scale.width * 0.25, 150), // Width of the button
                 Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0xadb5bd
+                0xcfcfcf
             )
             .setOrigin(0.5)
             .setDepth(99)
@@ -159,9 +171,9 @@ export class AnagramGame extends Scene {
             .rectangle(
                 this.scale.width / 2 + 100,
                 this.scale.height * 0.85,
-                Math.min(this.scale.width * 0.25, 200), // Width of the button
+                Math.min(this.scale.width * 0.25, 150), // Width of the button
                 Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0xadb5bd
+                0x4a63e4
             )
             .setOrigin(0.5)
             .setDepth(99)
@@ -175,7 +187,7 @@ export class AnagramGame extends Scene {
                 {
                     fontFamily: "Arial",
                     fontSize: Math.min(this.scale.width * 0.05, 25),
-                    color: "#000000",
+                    color: "#ffffff",
                     align: "center",
                 }
             )
@@ -184,7 +196,7 @@ export class AnagramGame extends Scene {
             .setInteractive({ useHandCursor: true });
 
         this.helpIcon = this.add
-            .image(this.scale.width / 2, this.scale.height * 0.95, "helpIcon")
+            .image(this.scale.width / 2, this.scale.height * 0.95, "star")
             .setOrigin(0.5)
             .setScale(0.5) // Resize the icon if needed
             .setDepth(100)
@@ -281,12 +293,12 @@ export class AnagramGame extends Scene {
         //----------------------------------------------------------
 
         const buttonHoverEffect = (button, background, isHovering) => {
-            const textColor = isHovering ? "#ffcc00" : "#000000";
-            const backgroundColor = isHovering ? 0xcccccc : 0xadb5bd;
+            // const textColor = isHovering ? "#ffcc00" : "#000000";
+            // const backgroundColor = isHovering ? 0xcfcfcf : 0xadb5bd;
             const scaleValue = isHovering ? 1.05 : 1;
 
-            button.setStyle({ color: textColor });
-            background.setFillStyle(backgroundColor);
+            // button.setStyle({ color: textColor });
+            // background.setFillStyle(backgroundColor);
 
             this.tweens.add({
                 targets: [button, background],
@@ -550,20 +562,24 @@ export class AnagramGame extends Scene {
                 return;
             }
 
+            this.background
+                .setPosition(width / 2, height / 2)
+                .setDisplaySize(width, height);
+
             this.anagramBG
                 .setPosition(width / 2, 0)
-                .setSize(width, Math.min(height * 0.15, 200));
+                .setSize(width, Math.min(height * 0.15, 100));
 
             this.anagramText
                 .setPosition(
                     width / 2,
                     Math.min(this.scale.height * 0.15, 200) / 2
                 )
-                .setFontSize(Math.min(width * 0.05, 35));
+                .setFontSize(Math.min(width * 0.08, 65));
 
             this.timerText
                 .setPosition(width / 2, height * 0.25)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setFontSize(Math.min(width * 0.08, 65));
 
             this.wordDisplay
                 .setPosition(width / 2, height * 0.38)
@@ -580,9 +596,26 @@ export class AnagramGame extends Scene {
             this.inputBG
                 .setPosition(width / 2, height * 0.72)
                 .setSize(
-                    Math.min(this.scale.width * 0.4, 300),
+                    Math.min(this.scale.width * 0.4, 200),
                     Math.min(this.scale.height * 0.1, 45)
                 );
+
+            // Get updated rectangle dimensions
+            const rectWidth = this.inputBG.width;
+            const rectHeight = this.inputBG.height;
+
+            // Redraw the bottom border line to match the resized rectangle
+            this.bottomBorder.clear(); // Clear the previous line
+            this.bottomBorder.lineStyle(2, 0x000000, 1); // Set line style
+            this.bottomBorder.moveTo(
+                this.inputBG.x - rectWidth / 2, // Left edge of the rectangle
+                this.inputBG.y + rectHeight / 2 // Bottom edge of the rectangle
+            );
+            this.bottomBorder.lineTo(
+                this.inputBG.x + rectWidth / 2, // Right edge of the rectangle
+                this.inputBG.y + rectHeight / 2 // Same y position
+            );
+            this.bottomBorder.strokePath();
 
             this.inputField
                 .setPosition(this.scale.width / 2, this.scale.height * 0.72)
@@ -591,7 +624,7 @@ export class AnagramGame extends Scene {
             this.clearBG
                 .setPosition(width / 2 - 100, height * 0.85)
                 .setSize(
-                    Math.min(this.scale.width * 0.25, 200),
+                    Math.min(this.scale.width * 0.25, 150),
                     Math.min(this.scale.height * 0.1, 40)
                 );
 
@@ -602,7 +635,7 @@ export class AnagramGame extends Scene {
             this.submitBG
                 .setPosition(width / 2 + 100, height * 0.85)
                 .setSize(
-                    Math.min(this.scale.width * 0.25, 200),
+                    Math.min(this.scale.width * 0.25, 150),
                     Math.min(this.scale.height * 0.1, 40)
                 );
 

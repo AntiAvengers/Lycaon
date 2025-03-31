@@ -2,6 +2,25 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
 export class AnagramInstruc extends Scene {
+    background;
+    titleBG;
+    titleText;
+    instrucText;
+    warningIcon;
+    warningText;
+    helpText;
+    pressBtnText;
+    helpIcon;
+    pressBtn2Text;
+    startGameBtnBackground;
+    startGameBtn;
+    popupBg;
+    popupText;
+    yesButton;
+    yesText;
+    noButton;
+    noText;
+
     lastWidth = null;
     lastHeight = null;
 
@@ -14,8 +33,6 @@ export class AnagramInstruc extends Scene {
     }
 
     create() {
-        // this.cameras.main.setBackgroundColor(0xfcf4e7);
-
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setOrigin(0.5)
@@ -32,6 +49,7 @@ export class AnagramInstruc extends Scene {
                 Math.min(this.scale.height * 0.15, 100),
                 0x4a63e4
             )
+            .setAlpha(0.65)
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
 
@@ -69,11 +87,7 @@ export class AnagramInstruc extends Scene {
             .setDepth(100);
 
         this.warningIcon = this.add
-            .image(
-                this.scale.width / 2 - 240,
-                this.scale.height * 0.45,
-                "warningIconTexture"
-            )
+            .image(this.scale.width / 2 - 240, this.scale.height * 0.45, "star")
             .setOrigin(0.5)
             .setScale(0.5); // Resize the icon if needed
 
@@ -154,7 +168,7 @@ export class AnagramInstruc extends Scene {
                 this.scale.height * 0.85,
                 Math.min(this.scale.width * 0.25, 200), // Width of the button
                 Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0xadb5bd
+                0x4a63e4
             )
             .setOrigin(0.5)
             .setDepth(99) // Make sure the background is behind the text
@@ -164,7 +178,7 @@ export class AnagramInstruc extends Scene {
             .text(this.scale.width / 2, this.scale.height * 0.85, "Start", {
                 fontFamily: "Arial",
                 fontSize: Math.min(this.scale.width * 0.05, 25),
-                color: "#000000",
+                color: "#ffffff",
                 align: "center",
             })
             .setDepth(100)
@@ -282,8 +296,8 @@ export class AnagramInstruc extends Scene {
 
         // Helper function for hover effect and animation
         const buttonHoverEffect = (isHovering) => {
-            const textColor = isHovering ? "#ffcc00" : "#000000"; // Text color change on hover
-            const backgroundColor = isHovering ? 0xcccccc : 0xadb5bd; // Background color change on hover
+            const textColor = isHovering ? "#000000" : "#ffffff"; // Text color change on hover
+            const backgroundColor = isHovering ? 0xffffff : 0x4a63e4; // Background color change on hover
             const scaleValue = isHovering ? 1.05 : 1; // Scale up on hover, scale back to original when not
 
             // Update text color
