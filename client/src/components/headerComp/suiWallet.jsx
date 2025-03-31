@@ -35,7 +35,9 @@ const SuiWallet = () => {
                     alt="Key Icon"
                     className="w-[25px] h-[25px]"
                 />
-                <h1 className="text-[21px]" >1000 SUI</h1>
+                <div className="flex items-center h-[25px]">
+                    <h1 className="text-[21px]">1000 SUI</h1>
+                </div>
             </section>
 
             {/* Button for Mobile */}

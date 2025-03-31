@@ -15,7 +15,8 @@ const ASPECT_RATIO = 4 / 3;
 const config = {
     type: Phaser.AUTO,
     parent: "game-container", // Parent container for the game
-    backgroundColor: "#028af8",
+    backgroundColor: "rgba(0,0,0,0)", // Fully transparent
+    transparent: true, // This makes the canvas transparent
     scale: {
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game

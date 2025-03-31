@@ -14,7 +14,13 @@ export class AnagramInstruc extends Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor(0xfcf4e7);
+        // this.cameras.main.setBackgroundColor(0xfcf4e7);
+
+        this.background = this.add
+            .image(this.scale.width / 2, this.scale.height / 2, "background")
+            .setOrigin(0.5)
+            .setAlpha(0.75)
+            .setDisplaySize(this.scale.width, this.scale.height);
 
         //----------------------------------------------------------
 
@@ -33,10 +39,10 @@ export class AnagramInstruc extends Scene {
             .text(
                 this.scale.width / 2,
                 Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
-                "Anagrams",
+                "A n a g r a m s",
                 {
-                    fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.05, 40),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.08, 65),
                     color: "#FFFFFF",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -105,15 +111,14 @@ export class AnagramInstruc extends Scene {
 
         this.pressBtnText = this.add
             .text(
-                this.scale.width / 2,
+                this.scale.width / 2 - 55,
                 this.scale.height * 0.62,
-                "Press these buttons!",
+                "Press the",
                 {
                     fontFamily: "Arial",
                     fontSize: Math.min(this.scale.width * 0.05, 20),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.8 },
                 }
             )
             .setOrigin(0.5)
@@ -121,21 +126,25 @@ export class AnagramInstruc extends Scene {
 
         this.helpIcon = this.add
             .image(
-                this.scale.width / 2 - 20,
-                this.scale.height * 0.71,
-                "helpIcon"
+                this.pressBtnText.width / 2 + 10,
+                this.scale.height * 0.62,
+                "star"
             )
-            .setOrigin(0.5)
+            .setDepth(100)
             .setScale(0.5); // Resize the icon if needed
 
-        this.helpIconText = this.add
-            .text(this.scale.width / 2 + 20, this.scale.height * 0.71, "Help", {
-                fontFamily: "Arial",
-                fontSize: Math.min(this.scale.width * 0.05, 20),
-                color: "#000000",
-                align: "center",
-                wordWrap: { width: this.scale.width * 0.8 },
-            })
+        this.pressBtn2Text = this.add
+            .text(
+                this.scale.width / 2 + 70,
+                this.scale.height * 0.62,
+                "for help!",
+                {
+                    fontFamily: "Arial",
+                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    color: "#000000",
+                    align: "center",
+                }
+            )
             .setOrigin(0.5)
             .setDepth(100);
 
@@ -370,6 +379,10 @@ export class AnagramInstruc extends Scene {
                 return;
             }
 
+            this.background
+                .setPosition(width / 2, height / 2)
+                .setDisplaySize(width, height);
+
             this.titleBG
                 .setPosition(width / 2, 0)
                 .setSize(width, Math.min(height * 0.15, 100));
@@ -379,7 +392,7 @@ export class AnagramInstruc extends Scene {
                     width / 2,
                     Math.min(this.scale.height * 0.15, 100) / 2
                 )
-                .setFontSize(Math.min(width * 0.06, 40));
+                .setFontSize(Math.min(width * 0.08, 65));
 
             this.instrucText
                 .setPosition(width / 2, height * 0.28)
@@ -396,13 +409,13 @@ export class AnagramInstruc extends Scene {
                 .setFontSize(Math.min(width * 0.05, 20));
 
             this.pressBtnText
-                .setPosition(width / 2, height * 0.62)
+                .setPosition(width / 2 - 55, height * 0.62)
                 .setFontSize(Math.min(width * 0.05, 20));
 
-            this.helpIcon.setPosition(width / 2 - 20, height * 0.71);
+            this.helpIcon.setPosition(width / 2 + 10, height * 0.62);
 
-            this.helpIconText
-                .setPosition(width / 2 + 20, height * 0.71)
+            this.pressBtn2Text
+                .setPosition(width / 2 + 70, height * 0.62)
                 .setFontSize(Math.min(width * 0.05, 20));
 
             this.startGameBtn
