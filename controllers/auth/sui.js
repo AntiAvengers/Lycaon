@@ -5,6 +5,9 @@ const { verifyPersonalMessageSignature } = require('@mysten/sui/verify');
 const { SuiGraphQLClient } = require('@mysten/sui/graphql');
 
 const { database } = require('../../database/firebaseConfig');
+const { generateToken, verifyToken } = require('./jwt');
+
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 const Users_UUID = new Map();
 
@@ -85,9 +88,11 @@ async function login(req, res) {
         check_account(address);
 
         //Step 5: Issue a JWT
+        const user = { address };  // User object (could be expanded with other data)
+        const accessToken = generateToken(user, ACCESS_TOKEN_SECRET, '30m');  // Access token for authentication
+        const refreshToken = generateToken(user, REFRESH_TOKEN_SECRET, '7d');  // Refresh token for long-term sessions
 
-        const result = "You have succesfully logged in";
-        res.status(200).json({ result });
+        res.status(200).json({ accessToken, refreshToken });
     } catch(err) {
         console.log(err);
         res.status(500).json({ error: err });
