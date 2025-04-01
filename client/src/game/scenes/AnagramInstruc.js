@@ -401,13 +401,9 @@ export class AnagramInstruc extends Scene {
         this.noText.setVisible(false);
     }
 
-    update() {
-        // // Continuously update the position while music is playing
-        // if (!this.isMuted) {
-        //     this.bgMusicPosition = this.bgMusic.seek || 0;
-        // }
-        this.audioManager.update();
-    }
+    // update() {
+    //     this.audioManager.update();
+    // }
 
     changeScene() {
         this.scene.stop("AnagramInstruc"); // Clean up current scene

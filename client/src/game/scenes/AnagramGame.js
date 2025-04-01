@@ -1,6 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
+import { AudioManager } from "../AudioManager";
+
 export class AnagramGame extends Scene {
     anagramBG;
     anagramText;
@@ -26,13 +28,14 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 5;
+        this.remainingTime = 60;
         this.wordList = [];
         this.inputText = "";
     }
 
     preload() {
         console.log("AnagramGame scene preloading");
+        this.audioManager = new AudioManager(this);
     }
 
     create() {
@@ -41,6 +44,10 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5)
             .setAlpha(0.75)
             .setDisplaySize(this.scale.width, this.scale.height);
+
+        //----------------------------------------------------------
+
+        this.audioManager.create();
 
         //----------------------------------------------------------
 

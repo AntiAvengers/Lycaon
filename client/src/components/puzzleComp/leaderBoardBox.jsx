@@ -17,7 +17,7 @@ const LeaderboardBox = () => {
                                         {highScorer.name}
                                     </p>
                                 </li>
-                                <li className="w-[90px] flex flex-row justify-between">
+                                <li className="w-[90px] flex flex-row justify-between text-[35px]">
                                     <p className="w-[25px] text-center">
                                         {highScorer.score}
                                     </p>

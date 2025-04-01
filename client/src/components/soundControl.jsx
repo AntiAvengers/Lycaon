@@ -1,37 +1,91 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import Slider from "@mui/material/Slider";
 
-const SoundConrol = () => {
+const SoundControl = () => {
     const audioRef = useRef(null); // Reference to the audio element
     const [isMuted, setIsMuted] = useState(false); // State for mute status
     const [volume, setVolume] = useState(1); // State for volume level
+    const [prevVolume, setPrevVolume] = useState(1); // Store previous volume before muting
+    const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
+
+    // Memoize the enableAudio function to prevent unnecessary re-creations
+    const enableAudio = useCallback(() => {
+        if (audioRef.current && !hasInteracted) {
+            audioRef.current.muted = false;
+            audioRef.current.volume = volume;
+            audioRef.current
+                .play()
+                .catch((err) => console.log("Play failed:", err));
+            setHasInteracted(true);
+            setIsMuted(false);
+        }
+    }, [hasInteracted, volume]);
+
+    // Effect for setting up the interaction listeners
+    useEffect(() => {
+        // Event listeners to trigger audio play after user interaction
+        const events = ["click", "keydown", "touchstart"];
+        events.forEach((event) => {
+            document.addEventListener(event, enableAudio, { once: true });
+        });
+
+        // Cleanup event listeners on unmount or dependency change
+        return () => {
+            events.forEach((event) => {
+                document.removeEventListener(event, enableAudio);
+            });
+        };
+    }, [enableAudio]); // Dependency on enableAudio to keep it updated
 
     // Toggle mute/unmute
     const toggleMute = () => {
-        setIsMuted((prev) => !prev);
+        if (!isMuted) {
+            setPrevVolume(volume);
+            setVolume(0);
+        } else {
+            setVolume(prevVolume);
+        }
+
+        setIsMuted(!isMuted);
+
         if (audioRef.current) {
             audioRef.current.muted = !audioRef.current.muted;
+            if (!audioRef.current.muted && audioRef.current.paused) {
+                audioRef.current.play();
+            }
         }
     };
 
     // Adjust volume
-    const handleVolumeChange = (e) => {
-        const newVolume = e.target.value;
-        setVolume(newVolume);
+    const handleVolumeChange = (_, newValue) => {
+        setVolume(newValue);
+        setIsMuted(newValue === 0);
+
         if (audioRef.current) {
-            audioRef.current.volume = newVolume;
+            audioRef.current.volume = newValue;
+            audioRef.current.muted = newValue === 0;
+            if (newValue > 0 && audioRef.current.paused) {
+                audioRef.current.play();
+            }
         }
     };
 
     return (
         <div className="h-[45px] flex justify-start items-center mx-8">
             {/* Audio Element */}
-            <audio ref={audioRef} src="your-sound-file.mp3" preload="auto" />
+            <audio
+                ref={audioRef}
+                src="assets/sounds/mesmerizing-song-of-the-wood-thrush-156669.mp3"
+                preload="auto"
+                loop
+                muted // Autoplay requires initial mute
+                autoPlay
+            />
 
             {/* Volume Control Slider */}
-            <div className="bg-[#242C53] w-[173.3px] h-[26px] flex justify-center items-center gap-[5px] rounded-[30px] px-[10px] py-[4px]">
+            <div className="bg-[#242C53] w-[173.3px] h-[26px] flex justify-center items-center gap-[10px] rounded-[30px] px-[10px] py-[4px]">
                 {/* Mute Button */}
                 <button
                     onClick={toggleMute}
@@ -60,5 +114,5 @@ const SoundConrol = () => {
     );
 };
 
-export default SoundConrol;
+export default SoundControl;
 
