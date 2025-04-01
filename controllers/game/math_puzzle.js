@@ -38,10 +38,12 @@ function generate_puzzle(max_num = 10) {
     return output;
 }
 
-module.exports = function(req, res) {
-    try {
-        res.status(200).json(generate_puzzle());
-    } catch(err) {
-        console.error(err);
+module.exports = {
+    create: (req, res) => {
+        try {
+            res.status(200).json(generate_puzzle());
+        } catch(err) {
+            console.error(err);
+        }
     }
 }

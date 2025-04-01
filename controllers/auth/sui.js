@@ -4,7 +4,8 @@ const { fromBase64 } = require('@mysten/sui/utils');
 const { verifyPersonalMessageSignature } = require('@mysten/sui/verify');
 const { SuiGraphQLClient } = require('@mysten/sui/graphql');
 
-const { database } = require('../../database/firebaseConfig');
+const { database, schema } = require('../../database/firebaseConfig');
+const { default_user, default_game_session } = schema;
 const { generateToken, verifyToken } = require('./jwt');
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
@@ -12,18 +13,37 @@ const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const Users_UUID = new Map();
 
 function check_account(address) {
+    // const new_user = {
+    //     [hashed]: {
+    //         profile_name: "",
+    //         wallet_id: address,
+    //         keys: 0,
+    //         shards: 0,
+    //         pages: 0,
+    //         highest_score: {
+    //             game_type: "",
+    //             score: 0
+    //         },
+    //         last_login: Date.now(),
+    //     }
+    // }
+
+    // const new_game_session = {
+    //     [hashed]: {
+    //         game_type: "",
+    //         puzzle_data: [],
+    //         validate_on_client: false,
+    //         valid_answers: [],
+    //         submitted_answers: [],
+    //         key_used: false
+    //     }
+    // }
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
-    const new_user = {
-        [hashed]: {
-            name: "",
-            logged_in: false,
-            wallet_ID: address,
-            highest_score: 0,
-            new_account: false,
-            last_login: Date.now(),
-        }
-    }
+    const new_user = { [hashed]: default_user };
+    const new_game_session = { [hashed]: default_game_session };
+
+    console.log(default_user); 
 
     const users = database.ref('users');
     users.once("value", snapshot => {
@@ -31,7 +51,17 @@ function check_account(address) {
             users.set(new_user);
         }
         else if(!snapshot.val()[hashed]) {
-            users.push(new_user);
+            users.push(default_user);
+        }
+    });
+
+    const game_sessions = database.ref('game_session');
+    game_sessions.once("value", snapshot => {
+        if(!snapshot.val()) {
+            game_sessions.set(new_game_session);
+        }
+        else if(!snapshot.val()[hashed]) {
+            game_sessions.push(default_game_session);
         }
     });
 
