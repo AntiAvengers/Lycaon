@@ -41,19 +41,26 @@ const SoundControl = () => {
 
     // Toggle mute/unmute
     const toggleMute = () => {
-        if (!isMuted) {
+        if (isMuted) {
+            // Restore previous volume when unmuting
+            setVolume(prevVolume || 1); // Use stored volume or default to 1
+        } else {
+            // Store current volume before muting
             setPrevVolume(volume);
             setVolume(0);
-        } else {
-            setVolume(prevVolume);
         }
 
         setIsMuted(!isMuted);
 
         if (audioRef.current) {
             audioRef.current.muted = !audioRef.current.muted;
-            if (!audioRef.current.muted && audioRef.current.paused) {
-                audioRef.current.play();
+
+            if (!audioRef.current.muted) {
+                // Restore volume and resume playing if needed
+                audioRef.current.volume = prevVolume || 1;
+                if (audioRef.current.paused) {
+                    audioRef.current.play();
+                }
             }
         }
     };
@@ -80,7 +87,7 @@ const SoundControl = () => {
                 src="assets/sounds/mesmerizing-song-of-the-wood-thrush-156669.mp3"
                 preload="auto"
                 loop
-                muted // Autoplay requires initial mute
+                muted={isMuted} // Mute based on the isMuted state
                 autoPlay
             />
 

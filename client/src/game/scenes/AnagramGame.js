@@ -1,8 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
-import { AudioManager } from "../AudioManager";
-
 export class AnagramGame extends Scene {
     anagramBG;
     anagramText;
@@ -35,7 +33,6 @@ export class AnagramGame extends Scene {
 
     preload() {
         console.log("AnagramGame scene preloading");
-        this.audioManager = new AudioManager(this);
     }
 
     create() {
@@ -47,9 +44,6 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
-        this.audioManager.create();
-
-        //----------------------------------------------------------
 
         this.anagramBG = this.add
             .rectangle(

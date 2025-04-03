@@ -51,13 +51,11 @@ const StartGame = (parent) => {
             // On larger screens, we use 60% of the screen width and adjust the height based on the aspect ratio
             newWidth = window.innerWidth * 0.58;
             newHeight = newWidth / ASPECT_RATIO;
-            // newHeight = (newWidth * 3) / 4;
 
             // If the new height exceeds the screen height, use the full screen height
             if (newHeight > window.innerHeight) {
                 newHeight = window.innerHeight;
                 newWidth = newHeight * ASPECT_RATIO;
-                // newWidth = (newHeight * 4) / 3;
             }
         }
 

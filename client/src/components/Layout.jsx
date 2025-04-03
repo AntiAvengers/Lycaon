@@ -7,15 +7,19 @@ import SoundControl from "./soundControl.jsx";
 const Layout = ({ children }) => {
     const location = useLocation();
 
-    // Check if the current route is the SignIn page
     const isSignInPage = location.pathname === "/";
+    const isPuzzlePage = location.pathname === "/puzzles";
 
     return (
         <div className="min-h-screen flex flex-col">
             {!isSignInPage && <Header />}
-            <main className="flex flex-grow justify-center items-center">{children}</main>
+            <main className="flex flex-grow justify-center items-center">
+                {children}
+            </main>
             <div className="hidden md:block">
-                {!isSignInPage &&<SoundControl />}
+                {!isSignInPage && !isPuzzlePage && (
+                    <SoundControl />
+                )}
             </div>
             {/* {!isSignInPage && <Footer />} */}
         </div>

@@ -11,9 +11,18 @@ export class MainMenu extends Scene {
         super("MainMenu");
     }
 
+    preload() {
+        console.log("AnagramInstruc scene preloading");
+    }
+
     create() {
         const { width, height } = this.scale;
 
+        //----------------------------------------------------------
+
+
+        //----------------------------------------------------------
+        
         // Dynamically set background image size
         this.background = this.add
             .image(width / 2, height / 2, "background")

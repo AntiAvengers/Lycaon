@@ -67,4 +67,3 @@ export class AudioManager {
     //     this.muteButton.setPosition(20, this.scene.scale.height - 20);
     // }
 }
-
