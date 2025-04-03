@@ -17,6 +17,11 @@ const Header = () => {
     const navigate = useNavigate();
     const menuRef = useRef(null); // Reference for the menu
 
+    const handleHomeClick = () => {
+        navigate("/home"); // Navigate to home
+        window.location.reload(); // Force a page reload
+    };
+
     // Show the confirmation popup or message
     const handlePuzzleClick = (e) => {
         e.preventDefault();
@@ -123,9 +128,9 @@ const Header = () => {
                             </ul>
                         )}
                     </div>
-                    <Link
-                        to="/home"
-                        className="flex flex-row items-center text-2xl sm:text-[24px] font-semibold"
+                    <button
+                        onClick={handleHomeClick}
+                        className="flex flex-row items-center text-2xl sm:text-[24px] font-semibold cursor-pointer"
                     >
                         <img
                             src="assets/star.png"
@@ -133,7 +138,7 @@ const Header = () => {
                             className="w-7 h-7 sm:w-[40px] sm:h-[40px] mr-[15px]"
                         />
                         Lycaon
-                    </Link>
+                    </button>
                 </section>
 
                 {/* Right Section: Currency, Wallet, Profile */}

@@ -1,6 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
+import { AudioManager } from "../AudioManager";
+
 export class MainMenu extends Scene {
     logoTween;
     background;
@@ -20,9 +22,28 @@ export class MainMenu extends Scene {
 
         //----------------------------------------------------------
 
+        // Ensure AudioManager is instantiated and persistent
+        if (!this.sys.game.audioManager) {
+            this.sys.game.audioManager = new AudioManager(this); // Create AudioManager only once
+        }
+
+        this.audioManager = this.sys.game.audioManager;
+        this.audioManager.create(); // Initialize audio
+
+        // Create the mute button in the scene
+        if (!this.muteButton) {
+            this.muteButton = this.add
+                .image(20, this.scale.height - 20, "star")
+                .setOrigin(0.5)
+                .setScale(0.5)
+                .setInteractive()
+                .setDepth(200);
+
+            this.muteButton.on("pointerdown", () => this.toggleMute());
+        }
 
         //----------------------------------------------------------
-        
+
         // Dynamically set background image size
         this.background = this.add
             .image(width / 2, height / 2, "background")
@@ -92,6 +113,19 @@ export class MainMenu extends Scene {
         this.startButton.setStyle({ fontSize: `${fontSize}px` });
     }
 
+    toggleMute() {
+        this.audioManager.toggleMute();
+        if (this.audioManager.isMuted) {
+            this.muteButton.setAlpha(0.5); // Dim the button if muted
+        } else {
+            this.muteButton.setAlpha(1); // Brighten the button if not muted
+        }
+    }
+
+    update() {
+        this.audioManager.update(); // Update the audio state (e.g., background music position)
+    }
+
     changeScene() {
         if (this.logoTween) {
             this.logoTween.stop();
@@ -99,6 +133,7 @@ export class MainMenu extends Scene {
         }
 
         if (this.scene.isActive("MainMenu")) {
+            this.scene.stop("MainMenu");
             this.scene.start("AnagramInstruc");
             // Notify React that the scene changed
             EventBus.emit("scene-changed", "AnagramInstruc");

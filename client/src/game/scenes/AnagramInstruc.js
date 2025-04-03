@@ -1,6 +1,8 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
+import { AudioManager } from "../AudioManager";
+
 export class AnagramInstruc extends Scene {
     background;
     titleBG;
@@ -41,6 +43,25 @@ export class AnagramInstruc extends Scene {
 
         //----------------------------------------------------------
 
+        // Ensure AudioManager is instantiated and persistent
+        if (!this.sys.game.audioManager) {
+            this.sys.game.audioManager = new AudioManager(this); // Create AudioManager only once
+        }
+
+        this.audioManager = this.sys.game.audioManager;
+        this.audioManager.create(); // Initialize audio
+
+        // Create the mute button in the scene
+        if (!this.muteButton) {
+            this.muteButton = this.add
+                .image(20, this.scale.height - 20, "star")
+                .setOrigin(0.5)
+                .setScale(0.5)
+                .setInteractive()
+                .setDepth(200);
+
+            this.muteButton.on("pointerdown", () => this.toggleMute());
+        }
 
         //----------------------------------------------------------
 
@@ -369,6 +390,19 @@ export class AnagramInstruc extends Scene {
         this.noText.setVisible(false);
     }
 
+    toggleMute() {
+        this.audioManager.toggleMute();
+        if (this.audioManager.isMuted) {
+            this.muteButton.setAlpha(0.5); // Dim the button if muted
+        } else {
+            this.muteButton.setAlpha(1); // Brighten the button if not muted
+        }
+    }
+
+    update() {
+        this.audioManager.update(); // Update the audio state (e.g., background music position)
+    }
+
     changeScene() {
         this.scene.stop("AnagramInstruc"); // Clean up current scene
         this.scene.start("AnagramGame");
@@ -465,9 +499,6 @@ export class AnagramInstruc extends Scene {
             this.noText
                 .setPosition(width / 2 + 60, height / 2 + 40)
                 .setFontSize(Math.min(width * 0.05, 25));
-
-            // // Set position of the mute button
-            // this.muteButton.setPosition(20, this.scene.scale.height - 20);
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);
