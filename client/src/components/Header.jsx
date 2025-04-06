@@ -2,9 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Button } from "@mui/material";
 
 const Header = () => {
     const [open, setOpen] = useState(false);
@@ -78,50 +76,52 @@ const Header = () => {
 
     return (
         <header className="sticky top-0 z-50 sm:h-[75px] text-[#FCF4E7] flex justify-center items-center">
-            <div className="w-[1255px] max-w-full h-[55px] bg-[#0D1641] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
+            <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
                 {/* Left Section: Menu and Logo */}
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
                     <div ref={menuRef} className="relative">
-                        <MenuIcon
-                            fontSize="large"
-                            className="cursor-pointer"
-                            edge="start"
-                            onClick={handleClick}
-                            aria-label="Open Menu"
-                        />
+                        {open ? (
+                            <img
+                                src="assets/icons/closeBtn.svg"
+                                alt="Currency Icon"
+                                className="w-[40px] h-[40px]"
+                                onClick={handleClick}
+                            />
+                        ) : (
+                            <img
+                                src="assets/icons/openBtn.svg"
+                                alt="Currency Icon"
+                                className="w-[40px] h-[40px]"
+                                onClick={handleClick}
+                            />
+                        )}
                         {open && (
-                            <ul className="absolute left-0 mt-2 shadow-lg rounded-lg p-4 space-y-2 bg-[#F2F0EF]">
+                            <ul className="absolute w-[136px] sm:w-[255px] h-auto -left-[24px] sm:left-0 mt-[7px] shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
                                 {[
+                                    { to: "/home", label: "Home" },
                                     {
                                         to: "/puzzles",
                                         label: "Puzzles",
                                         action: handlePuzzleClick,
                                     },
-                                    {
-                                        to: "/sprite-book",
-                                        label: "Sprite Book",
-                                    },
-                                    {
-                                        to: "/sprites-collection",
-                                        label: "Sprites Collection",
-                                    },
-                                    { to: "/merchant", label: "Merchant" },
+                                    { to: "/fountain", label: "Fountain" },
+                                    { to: "/collection", label: "Collection" },
+                                    { to: "/trove", label: "Trove" },
                                     { to: "/market", label: "Market" },
                                 ].map((item) => (
-                                    <li key={item.to}>
+                                    <li
+                                        key={item.to}
+                                        className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex items-center pl-[20px] sm:pl-[36px] pr-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:shadow-none transition-hover duration-200"
+                                    >
                                         <Link
+                                            className="text-start text-[26px] text-[#FCF4E7]"
                                             to={item.to}
                                             onClick={
                                                 item.action ||
                                                 (() => setOpen(false))
                                             }
                                         >
-                                            <Button
-                                                className="w-[200px] !text-[#140e02]"
-                                                aria-label={`Navigate to ${item.label}`}
-                                            >
-                                                {item.label}
-                                            </Button>
+                                            {item.label}
                                         </Link>
                                     </li>
                                 ))}
@@ -130,7 +130,7 @@ const Header = () => {
                     </div>
                     <button
                         onClick={handleHomeClick}
-                        className="flex flex-row items-center text-2xl sm:text-[24px] font-semibold cursor-pointer"
+                        className="flex flex-row items-center text-[24px] sm:text-[40px] cursor-pointer"
                     >
                         <img
                             src="assets/star.png"

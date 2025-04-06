@@ -31,7 +31,7 @@ const SuiWallet = () => {
             {/* Display Text on Larger Screens */}
             <section className="hidden h-full sm:flex sm:flex-row items-center px-[17px] gap-[10px]">
                 <img
-                    src="assets/star.png"
+                    src="assets/icons/Sui.png"
                     alt="Key Icon"
                     className="w-[25px] h-[25px]"
                 />

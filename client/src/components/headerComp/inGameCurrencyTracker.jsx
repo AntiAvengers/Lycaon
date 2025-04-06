@@ -39,11 +39,11 @@ const InGameCurrencyTracker = () => {
 
             {/* Dropdown Menu (Mobile) */}
             {open && (
-                <ul className="absolute right-0 top-full mt-2 bg-[#F2F0EF] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden text-black">
+                <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden">
                     <li className="flex justify-center items-center">
                         Key
                         <img
-                            src="assets/star.png"
+                            src="assets/icons/key.svg"
                             alt="Key Icon"
                             className="w-6 h-6 ml-2"
                         />
@@ -51,7 +51,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-center items-center">
                         Pages
                         <img
-                            src="assets/star.png"
+                            src="assets/icons/scroll.svg"
                             alt="Pages Icon"
                             className="w-6 h-6 ml-2"
                         />
@@ -59,7 +59,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-center items-center">
                         Shards
                         <img
-                            src="assets/star.png"
+                            src="assets/icons/shard.svg"
                             alt="Shards Icon"
                             className="w-6 h-6 ml-2"
                         />
@@ -72,7 +72,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     2
                     <img
-                        src="assets/star.png"
+                        src="assets/icons/key.svg"
                         alt="Key Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />
@@ -80,7 +80,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     5
                     <img
-                        src="assets/star.png"
+                        src="assets/icons/scroll.svg"
                         alt="Pages Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />
@@ -88,7 +88,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     2000
                     <img
-                        src="assets/star.png"
+                        src="assets/icons/shard.svg"
                         alt="Shards Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />
