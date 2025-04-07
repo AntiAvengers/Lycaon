@@ -16,7 +16,13 @@ body {
     background-color: #b1a7a6;
     background: url("assets/mainBG.png") no-repeat center center fixed;
     background-size: cover;
-    font-family: "CustomFont", Arial, Helvetica, sans-serif;}
+    font-family: "CustomFont", Arial, Helvetica, sans-serif;
+}
+
+body.puzzle-bg {
+    background: url("assets/bg/puzzlePgBG.svg") no-repeat center center fixed;
+    background-size: cover;
+}
 
 #app {
     width: 100%;

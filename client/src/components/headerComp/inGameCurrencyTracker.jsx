@@ -33,50 +33,50 @@ const InGameCurrencyTracker = () => {
                 <img
                     src="assets/star.png"
                     alt="Currency Icon"
-                    className="w-6 h-6"
+                    className="w-[30px] h-[30px]"
                 />
             </button>
 
             {/* Dropdown Menu (Mobile) */}
             {open && (
                 <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-[20px] space-y-2 w-[136px] md:hidden">
-                    <li className="flex justify-evenly items-center">
+                    <li className="flex justify-evenly items-center text-[25px]">
                         2
                         <img
                             src="assets/icons/key.svg"
                             alt="Key Icon"
-                            className="w-6 h-6 ml-2"
+                            className="w-[25px] h-[25px] ml-2"
                         />
                     </li>
-                    <li className="flex justify-evenly items-center">
+                    <li className="flex justify-evenly items-center text-[25px]">
                         5
                         <img
                             src="assets/icons/scroll.svg"
                             alt="Pages Icon"
-                            className="w-6 h-6 ml-2"
+                            className="w-[25px] h-[25px] ml-2"
                         />
                     </li>
-                    <li className="flex justify-evenly items-center">
+                    <li className="flex justify-evenly items-center text-[25px]">
                         2000
                         <img
                             src="assets/icons/shard.svg"
                             alt="Shards Icon"
-                            className="w-6 h-6 ml-2"
+                            className="w-[25px] h-[25px] ml-2"
                         />
                     </li>
-                    <li className="flex justify-evenly items-center">
+                    <li className="flex justify-evenly items-center text-[25px]">
                         1000
                         <img
                             src="assets/icons/sui-logo.svg"
                             alt="Shards Icon"
-                            className="w-6 h-6 ml-2"
+                            className="w-[25px] h-[25px] ml-2"
                         />
                     </li>
                 </ul>
             )}
 
             {/* Visible List (Desktop & Larger) */}
-            <ul className="hidden md:flex space-x-[10px] text-[21px]">
+            <ul className="hidden md:flex space-x-[10px] text-[25px]">
                 <li className="flex items-center">
                     2
                     <img

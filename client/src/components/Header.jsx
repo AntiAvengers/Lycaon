@@ -71,7 +71,7 @@ const Header = () => {
                                 open ? "closeBtn" : "openBtn"
                             }.svg`}
                             alt="Toggle Menu"
-                            className="w-[40px] h-[40px] cursor-pointer"
+                            className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] cursor-pointer"
                             onClick={toggleDropdown}
                         />
                         {open && (
@@ -97,12 +97,12 @@ const Header = () => {
                     </div>
                     <button
                         onClick={handleHomeClick}
-                        className="flex items-center text-[24px] sm:text-[40px] cursor-pointer"
+                        className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
                     >
                         <img
                             src="assets/star.png"
                             alt="Key Icon"
-                            className="w-7 h-7 sm:w-[40px] sm:h-[40px] mr-[15px]"
+                            className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] mr-[15px]"
                         />
                         Lycaon
                     </button>

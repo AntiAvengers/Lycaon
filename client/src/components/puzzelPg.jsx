@@ -45,8 +45,15 @@ const PuzzelPg = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    useEffect(() => {
+        document.body.classList.add("puzzle-bg");
+        return () => {
+            document.body.classList.remove("puzzle-bg");
+        };
+    }, []);
+
     return (
-        <div className="w-full sm:w-[1320.5px] sm:h-[648.06px] flex flex-col sm:flex-row sm:mx-4 justify-center gap-[10px] sm:gap-[20px]">
+        <div className="w-full sm:w-[1320.5px] sm:h-[648.06px] mb-[20px] flex flex-col sm:flex-row sm:mx-4 justify-center gap-[10px] sm:gap-[20px]">
             {/* Left Side of PuzzlePg - (Titel + Phaser) */}
             <section className="flex justify-center items-center">
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
