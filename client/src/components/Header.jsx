@@ -142,7 +142,7 @@ const Header = () => {
                 </section>
 
                 {/* Right Section: Currency, Wallet, Profile */}
-                <section className="flex flex-row gap-[14px] items-center">
+                <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
                     <Link to="/user-profile" aria-label="Go to User Profile">

@@ -39,27 +39,35 @@ const InGameCurrencyTracker = () => {
 
             {/* Dropdown Menu (Mobile) */}
             {open && (
-                <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-4 space-y-2 w-40 md:hidden">
-                    <li className="flex justify-center items-center">
-                        Key
+                <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-[20px] space-y-2 w-[136px] md:hidden">
+                    <li className="flex justify-evenly items-center">
+                        2
                         <img
                             src="assets/icons/key.svg"
                             alt="Key Icon"
                             className="w-6 h-6 ml-2"
                         />
                     </li>
-                    <li className="flex justify-center items-center">
-                        Pages
+                    <li className="flex justify-evenly items-center">
+                        5
                         <img
                             src="assets/icons/scroll.svg"
                             alt="Pages Icon"
                             className="w-6 h-6 ml-2"
                         />
                     </li>
-                    <li className="flex justify-center items-center">
-                        Shards
+                    <li className="flex justify-evenly items-center">
+                        2000
                         <img
                             src="assets/icons/shard.svg"
+                            alt="Shards Icon"
+                            className="w-6 h-6 ml-2"
+                        />
+                    </li>
+                    <li className="flex justify-evenly items-center">
+                        1000
+                        <img
+                            src="assets/icons/sui-logo.svg"
                             alt="Shards Icon"
                             className="w-6 h-6 ml-2"
                         />
