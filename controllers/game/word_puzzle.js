@@ -25,12 +25,21 @@ function generate_puzzle(num_of_letters = 7, count = 0) {
         const randomIndex = Math.floor(Math.random() * (i + 1));
         [puzzle[i], puzzle[randomIndex]] = [puzzle[randomIndex], puzzle[i]];
     }
+
+    //Checks validity of Word puzzle
+    const check = get_validity(puzzle);
+
     const output = {
         data: puzzle,
-        num_of_generations: count,
-        validity: get_validity(puzzle)
+        solution: check.valid_words,
+        validate_on_client: false, //Server will check answers
+        meta: {
+            is_valid: check.is_valid,
+            num_of_generations: count,
+            true_words: check.length
+        }
     }
-    return output.validity.is_valid ? output : generate_puzzle(num_of_letters, (count+1));
+    return output.meta.is_valid ? output : generate_puzzle(num_of_letters, (count+1));
 }
 
 function get_validity(letters) {
@@ -68,6 +77,6 @@ function check_answer(req, res) {
 }
 
 module.exports = {
-    // generate,
+    generate_puzzle,
     check_answer 
 }

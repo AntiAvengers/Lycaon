@@ -2,7 +2,7 @@ function RNG(max) {
     return Math.floor((Math.random() * max) + 1);
 }
 
-function generate_puzzle(max_num = 10) {
+function generate(max_num = 10) {
     const REF_operators = ["+", "-", "*", "/"];
     const all_operators = ["+", "-", "*", "/"];
 
@@ -29,21 +29,35 @@ function generate_puzzle(max_num = 10) {
         equation.unshift(operators[i]);
         equation.unshift(RNG(max_num));
     }
-    
+
     const output = {
-        numbers: equation.filter(str => !REF_operators.includes(str)),
-        output: eval(equation.join(""))
+        data: {
+            LHS: equation.filter(str => !REF_operators.includes(str)),
+            RHS:  eval(equation.join(""))
+        },
+        validate_on_client: true, //Client will check answers / solutions
+    }
+
+    return output;
+}
+
+function generate_puzzle(num = 20) {
+    const data = [];
+
+    for(let i = 0; i < num; i++) {
+        const chunk = generate()
+        data.push(chunk.data);
+    }
+
+    const output = {
+        data,
+        validate_on_client: true
     }
 
     return output;
 }
 
 module.exports = {
-    create: (req, res) => {
-        try {
-            res.status(200).json(generate_puzzle());
-        } catch(err) {
-            console.error(err);
-        }
-    }
+    generate,
+    generate_puzzle
 }
