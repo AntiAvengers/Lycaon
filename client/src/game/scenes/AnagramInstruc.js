@@ -110,22 +110,17 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.warningIcon = this.add
-            .image(this.scale.width / 2 - 290, this.scale.height * 0.43, "warning")
-            .setOrigin(0.5)
-            .setScale(1); // Resize the icon if needed
-
         this.warningText = this.add
             .text(
                 this.scale.width / 2,
                 this.scale.height * 0.5,
-                "Note: Not all words formed are valid answers. If you leave mid-game after using a key, you'll lose it and must start over.",
+                "⚠ Note: Not all words formed are valid answers. If you leave mid-game after using a key, you'll lose it and must start over.",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.06, 35),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.80 },
+                    wordWrap: { width: this.scale.width * 0.8 },
                     lineSpacing: 10,
                 }
             )
@@ -139,7 +134,7 @@ export class AnagramInstruc extends Scene {
                 "Do you want help?",
                 {
                     fontFamily: "CustomFont",
-                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -150,12 +145,12 @@ export class AnagramInstruc extends Scene {
 
         this.pressBtnText = this.add
             .text(
-                this.scale.width / 2 - 55,
+                this.scale.width / 2 - 75,
                 this.scale.height * 0.7,
                 "Press the",
                 {
                     fontFamily: "CustomFont",
-                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
                     color: "#000000",
                     align: "center",
                 }
@@ -164,11 +159,7 @@ export class AnagramInstruc extends Scene {
             .setDepth(100);
 
         this.helpIcon = this.add
-            .image(
-                this.pressBtnText.width / 2 + 10,
-                this.scale.height * 0.7,
-                "help"
-            )
+            .image(this.pressBtnText.width / 2, this.scale.height * 0.7, "help")
             .setDepth(100)
             .setScale(1); // Resize the icon if needed
 
@@ -179,7 +170,7 @@ export class AnagramInstruc extends Scene {
                 "for help!",
                 {
                     fontFamily: "CustomFont",
-                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
                     color: "#000000",
                     align: "center",
                 }
@@ -187,22 +178,49 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.startGameBtnBackground = this.add
-            .rectangle(
-                this.scale.width / 2,
-                this.scale.height * 0.85,
-                Math.min(this.scale.width * 0.25, 200), // Width of the button
-                Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0x4a63e4
+        const btnWidth = Math.min(this.scale.width * 0.25, 200);
+        const btnHeight = Math.min(this.scale.height * 0.1, 40);
+        const radius = 5;
+        const x = this.scale.width / 2;
+        const y = this.scale.height * 0.9;
+
+        // Shadow using Graphics with rounded corners
+        this.shadow = this.add.graphics();
+        this.shadow.fillStyle(0x000000, 0.3); // semi-transparent black
+        this.shadow
+            .fillRoundedRect(
+                x - btnWidth / 2 + 4,
+                y - btnHeight / 2 + 4,
+                btnWidth,
+                btnHeight,
+                radius
             )
+            .setDepth(98);
+
+        // Button background
+        this.graphics = this.add.graphics();
+        this.graphics.fillStyle(0x4a63e4, 1); // Default color
+        this.graphics
+            .fillRoundedRect(
+                x - btnWidth / 2,
+                y - btnHeight / 2,
+                btnWidth,
+                btnHeight,
+                radius
+            )
+            .setDepth(99);
+
+        // Invisible hit area for interaction
+        this.startGameBtnBackground = this.add
+            .rectangle(x, y, btnWidth, btnHeight) // Setting color of the button
             .setOrigin(0.5)
-            .setDepth(99) // Make sure the background is behind the text
-            .setInteractive({ useHandCursor: true }); // Make the background interactive
+            .setInteractive({ useHandCursor: true })
+            .setDepth(100);
 
         this.startGameBtn = this.add
-            .text(this.scale.width / 2, this.scale.height * 0.85, "Start", {
-                fontFamily: "Arial",
-                fontSize: Math.min(this.scale.width * 0.05, 25),
+            .text(x, y, "Start", {
+                fontFamily: "CustomFont",
+                fontSize: Math.min(this.scale.width * 0.05, 40),
                 color: "#ffffff",
                 align: "center",
             })
@@ -319,38 +337,63 @@ export class AnagramInstruc extends Scene {
 
         //----------------------------------------------------------
 
-        // Helper function for hover effect and animation
-        const buttonHoverEffect = (isHovering) => {
-            const textColor = isHovering ? "#000000" : "#ffffff"; // Text color change on hover
-            const backgroundColor = isHovering ? 0xffffff : 0x4a63e4; // Background color change on hover
-            const scaleValue = isHovering ? 1.05 : 1; // Scale up on hover, scale back to original when not
+        const drawButton = (color = 0x4a63e4, offsetY = 0) => {
+            this.graphics.clear();
+            this.graphics.fillStyle(color, 1);
+            this.graphics.fillRoundedRect(
+                x - btnWidth / 2,
+                y - btnHeight / 2 + offsetY,
+                btnWidth,
+                btnHeight,
+                radius
+            );
 
-            // Update text color
-            this.startGameBtn.setStyle({ color: textColor });
-
-            // Update background color
-            this.startGameBtnBackground.setFillStyle(backgroundColor);
-
-            // Apply scaling animation to both the button text and background
-            this.tweens.add({
-                targets: [this.startGameBtn, this.startGameBtnBackground],
-                scaleX: scaleValue,
-                scaleY: scaleValue,
-                duration: 200,
-                ease: "Power1", // Smooth easing
-            });
+            // Move the text accordingly
+            this.startGameBtn.setPosition(x, y + offsetY); // Keep the text centered with the button
         };
 
-        // Apply hover effect on both the background and text on hover and out
-        this.startGameBtnBackground.on("pointerover", () =>
-            buttonHoverEffect(true)
-        );
-        this.startGameBtnBackground.on("pointerout", () =>
-            buttonHoverEffect(false)
-        );
+        // Initial draw
+        drawButton();
 
-        this.startGameBtn.on("pointerover", () => buttonHoverEffect(true));
-        this.startGameBtn.on("pointerout", () => buttonHoverEffect(false));
+        // Hover effect (for both button and text)
+        const onHover = () => {
+            drawButton(0x1d329f); // Hover color
+        };
+
+        const offHover = () => {
+            drawButton(0x4a63e4); // Default color
+            this.shadow.setVisible(true);
+        };
+
+        // Apply hover effect to both the background and the text
+        this.startGameBtnBackground.on("pointerover", onHover);
+        this.startGameBtn.on("pointerover", onHover);
+
+        // Hover out effect
+        this.startGameBtnBackground.on("pointerout", offHover);
+        this.startGameBtn.on("pointerout", offHover);
+
+        // Press down effect
+        this.startGameBtnBackground.on("pointerdown", () => {
+            drawButton(0x1d329f, 2); // Pressed color + offset
+            this.shadow.setVisible(false);
+        });
+
+        this.startGameBtn.on("pointerdown", () => {
+            drawButton(0x1d329f, 2); // Pressed color + offset
+            this.shadow.setVisible(false);
+        });
+
+        // Release effect
+        this.startGameBtnBackground.on("pointerup", () => {
+            drawButton(0x1d329f); // Reset to hover color
+            this.shadow.setVisible(true);
+        });
+
+        this.startGameBtn.on("pointerup", () => {
+            drawButton(0x1d329f); // Reset to hover color
+            this.shadow.setVisible(true);
+        });
 
         //----------------------------------------------------------
 
@@ -401,6 +444,14 @@ export class AnagramInstruc extends Scene {
     }
 
     update() {
+        // Only update button position if the size has changed
+        if (
+            this.lastWidth !== this.scale.width ||
+            this.lastHeight !== this.scale.height
+        ) {
+            this.resize({ width: this.scale.width, height: this.scale.height });
+        }
+
         this.audioManager.update(); // Update the audio state (e.g., background music position)
     }
 
@@ -451,36 +502,39 @@ export class AnagramInstruc extends Scene {
                 .setPosition(width / 2, height * 0.28)
                 .setFontSize(Math.min(width * 0.06, 35));
 
-            this.warningIcon.setPosition(width / 2 - 290, height * 0.43);
-
             this.warningText
                 .setPosition(width / 2, height * 0.5)
-                .setFontSize(Math.min(width * 0.06, 35));
+                .setFontSize(Math.min(width * 0.05, 35));
 
             this.helpText
                 .setPosition(width / 2, height * 0.64)
-                .setFontSize(Math.min(width * 0.05, 20));
+                .setFontSize(Math.min(width * 0.05, 35));
 
             this.pressBtnText
-                .setPosition(width / 2 - 55, height * 0.7)
-                .setFontSize(Math.min(width * 0.05, 20));
+                .setPosition(width / 2 - 75, height * 0.7)
+                .setFontSize(Math.min(width * 0.05, 35));
 
-            this.helpIcon.setPosition(width / 2 + 10, height * 0.7);
+            this.helpIcon.setPosition(width / 2, height * 0.7);
 
             this.pressBtn2Text
                 .setPosition(width / 2 + 70, height * 0.7)
-                .setFontSize(Math.min(width * 0.05, 20));
+                .setFontSize(Math.min(width * 0.05, 35));
 
-            this.startGameBtn
-                .setPosition(width / 2, height * 0.85)
-                .setFontSize(Math.min(width * 0.05, 25));
+            // Dynamically adjust button's position based on the screen size
+            const btnWidth = Math.min(width * 0.25, 200);
+            const btnHeight = Math.min(height * 0.1, 40);
+            const x = width / 2;
+            const y = height * 0.9;
 
+            // Invisible hit area for interaction
             this.startGameBtnBackground
-                .setPosition(width / 2, height * 0.85)
-                .setSize(
-                    Math.min(width * 0.25, 200),
-                    Math.min(height * 0.1, 40)
-                );
+                .setPosition(x, y)
+                .setSize(btnWidth, btnHeight);
+
+            // Update button's text position accordingly
+            this.startGameBtn
+                .setPosition(x, y)
+                .setFontSize(Math.min(width * 0.05, 40));
 
             this.popupBg.setPosition(width / 2, height / 2).setSize(300, 200);
 
