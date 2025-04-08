@@ -178,6 +178,36 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
+        this.rewardInfo = this.add
+            .text(this.scale.width / 2 - 80, this.scale.height * 0.79, "1  x", {
+                fontFamily: "CustomFont",
+                fontSize: Math.min(this.scale.width * 0.05, 35),
+                color: "#000000",
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.keyIcon = this.add
+            .image(this.scale.width / 2 - 25, this.scale.height * 0.79, "key")
+            .setDepth(100)
+            .setScale(2);
+
+        this.rewardInfo2 = this.add
+            .text(
+                this.scale.width / 2 + 60,
+                this.scale.height * 0.79,
+                "required",
+                {
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
+                    color: "#000000",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100);
+
         const btnWidth = Math.min(this.scale.width * 0.25, 200);
         const btnHeight = Math.min(this.scale.height * 0.1, 40);
         const radius = 5;
@@ -518,6 +548,16 @@ export class AnagramInstruc extends Scene {
 
             this.pressBtn2Text
                 .setPosition(width / 2 + 70, height * 0.7)
+                .setFontSize(Math.min(width * 0.05, 35));
+
+            this.rewardInfo
+                .setPosition(width / 2 - 80, height * 0.79)
+                .setFontSize(Math.min(width * 0.05, 35));
+
+            this.keyIcon.setPosition(width / 2 - 25, height * 0.79);
+
+            this.rewardInfo2
+                .setPosition(width / 2 + 60, height * 0.79)
                 .setFontSize(Math.min(width * 0.05, 35));
 
             // Dynamically adjust button's position based on the screen size
