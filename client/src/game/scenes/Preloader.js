@@ -34,6 +34,11 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'logo.png');
         this.load.image('star', 'star.png');
+        this.load.image('warning', '/icons/warning.svg')
+        this.load.image('help', '/icons/help.svg')
+        this.load.image('key', '/icons/key.svg')
+        this.load.image('scroll', '/icons/scroll.svg')
+        this.load.image('reward-bg', '/bg/reward-bg.svg')
         
         this.load.audio('gameMusic', '/sounds/spookymagic-7050.mp3')
     }
@@ -44,6 +49,6 @@ export class Preloader extends Scene
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MainMenu');
+        this.scene.start('AnagramInstruc');
     }
 }

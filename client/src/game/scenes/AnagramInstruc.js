@@ -54,7 +54,7 @@ export class AnagramInstruc extends Scene {
         // Create the mute button in the scene
         if (!this.muteButton) {
             this.muteButton = this.add
-                .image(20, this.scale.height - 20, "star")
+                .image(this.scale.width - 30, this.scale.height - 30, "star")
                 .setOrigin(0.5)
                 .setScale(0.5)
                 .setInteractive()
@@ -70,18 +70,18 @@ export class AnagramInstruc extends Scene {
                 this.scale.width / 2, // Center horizontally
                 0, // Touch the top
                 this.scale.width,
-                Math.min(this.scale.height * 0.15, 100),
+                Math.min(this.scale.height * 0.12, 100),
                 0x4a63e4
             )
-            .setAlpha(0.65)
+            .setAlpha(0.85)
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
 
         this.titleText = this.add
             .text(
                 this.scale.width / 2,
-                Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
-                "A n a g r a m s",
+                Math.min(this.scale.height * 0.12, 100) / 2, // Vertically center text within rectangle
+                "A N A G R A M S",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.08, 65),
@@ -99,33 +99,34 @@ export class AnagramInstruc extends Scene {
                 this.scale.height * 0.28,
                 "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.06, 20),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.06, 35),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.6 },
-                    lineSpacing: 5, // Adjust line spacing here
+                    wordWrap: { width: this.scale.width * 0.7 },
+                    lineSpacing: 10,
                 }
             )
             .setOrigin(0.5)
             .setDepth(100);
 
         this.warningIcon = this.add
-            .image(this.scale.width / 2 - 240, this.scale.height * 0.45, "star")
+            .image(this.scale.width / 2 - 290, this.scale.height * 0.43, "warning")
             .setOrigin(0.5)
-            .setScale(0.5); // Resize the icon if needed
+            .setScale(1); // Resize the icon if needed
 
         this.warningText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.45,
-                "Note: Not all words formed will be vaild answers.",
+                this.scale.height * 0.5,
+                "Note: Not all words formed are valid answers. If you leave mid-game after using a key, you'll lose it and must start over.",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 20),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.06, 35),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.8 },
+                    wordWrap: { width: this.scale.width * 0.80 },
+                    lineSpacing: 10,
                 }
             )
             .setOrigin(0.5)
@@ -134,10 +135,10 @@ export class AnagramInstruc extends Scene {
         this.helpText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.55,
+                this.scale.height * 0.64,
                 "Do you want help?",
                 {
-                    fontFamily: "Arial",
+                    fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.05, 20),
                     color: "#000000",
                     align: "center",
@@ -150,10 +151,10 @@ export class AnagramInstruc extends Scene {
         this.pressBtnText = this.add
             .text(
                 this.scale.width / 2 - 55,
-                this.scale.height * 0.62,
+                this.scale.height * 0.7,
                 "Press the",
                 {
-                    fontFamily: "Arial",
+                    fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.05, 20),
                     color: "#000000",
                     align: "center",
@@ -165,19 +166,19 @@ export class AnagramInstruc extends Scene {
         this.helpIcon = this.add
             .image(
                 this.pressBtnText.width / 2 + 10,
-                this.scale.height * 0.62,
-                "star"
+                this.scale.height * 0.7,
+                "help"
             )
             .setDepth(100)
-            .setScale(0.5); // Resize the icon if needed
+            .setScale(1); // Resize the icon if needed
 
         this.pressBtn2Text = this.add
             .text(
                 this.scale.width / 2 + 70,
-                this.scale.height * 0.62,
+                this.scale.height * 0.7,
                 "for help!",
                 {
-                    fontFamily: "Arial",
+                    fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.05, 20),
                     color: "#000000",
                     align: "center",
@@ -404,8 +405,11 @@ export class AnagramInstruc extends Scene {
     }
 
     changeScene() {
-        this.scene.stop("AnagramInstruc"); // Clean up current scene
-        this.scene.start("AnagramGame");
+        if (this.scene.isActive("AnagramInstruc")) {
+            this.scene.stop("AnagramInstruc");
+            this.scene.start("AnagramGame");
+            EventBus.emit("scene-changed", "AnagramGame");
+        }
     }
 
     resize({ width, height }) {
@@ -434,37 +438,37 @@ export class AnagramInstruc extends Scene {
 
             this.titleBG
                 .setPosition(width / 2, 0)
-                .setSize(width, Math.min(height * 0.15, 100));
+                .setSize(width, Math.min(height * 0.12, 100));
 
             this.titleText
                 .setPosition(
                     width / 2,
-                    Math.min(this.scale.height * 0.15, 100) / 2
+                    Math.min(this.scale.height * 0.12, 100) / 2
                 )
                 .setFontSize(Math.min(width * 0.08, 65));
 
             this.instrucText
                 .setPosition(width / 2, height * 0.28)
-                .setFontSize(Math.min(width * 0.06, 20));
+                .setFontSize(Math.min(width * 0.06, 35));
 
-            this.warningIcon.setPosition(width / 2 - 240, height * 0.45);
+            this.warningIcon.setPosition(width / 2 - 290, height * 0.43);
 
             this.warningText
-                .setPosition(width / 2, height * 0.45)
-                .setFontSize(Math.min(width * 0.05, 20));
+                .setPosition(width / 2, height * 0.5)
+                .setFontSize(Math.min(width * 0.06, 35));
 
             this.helpText
-                .setPosition(width / 2, height * 0.55)
+                .setPosition(width / 2, height * 0.64)
                 .setFontSize(Math.min(width * 0.05, 20));
 
             this.pressBtnText
-                .setPosition(width / 2 - 55, height * 0.62)
+                .setPosition(width / 2 - 55, height * 0.7)
                 .setFontSize(Math.min(width * 0.05, 20));
 
-            this.helpIcon.setPosition(width / 2 + 10, height * 0.62);
+            this.helpIcon.setPosition(width / 2 + 10, height * 0.7);
 
             this.pressBtn2Text
-                .setPosition(width / 2 + 70, height * 0.62)
+                .setPosition(width / 2 + 70, height * 0.7)
                 .setFontSize(Math.min(width * 0.05, 20));
 
             this.startGameBtn
@@ -499,6 +503,8 @@ export class AnagramInstruc extends Scene {
             this.noText
                 .setPosition(width / 2 + 60, height / 2 + 40)
                 .setFontSize(Math.min(width * 0.05, 25));
+
+            this.muteButton.setPosition(width - 30, height - 30);
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);

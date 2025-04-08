@@ -1,8 +1,7 @@
 import { Boot } from "./scenes/Boot";
-import { AnagramGame } from "./scenes/AnagramGame.js";
 import { AnagramInstruc } from "./scenes/AnagramInstruc.js";
+import { AnagramGame } from "./scenes/AnagramGame.js";
 import { AnagramOver } from "./scenes/AnagramOver.js";
-import { MainMenu } from "./scenes/MainMenu.js";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader.js";
 
@@ -21,14 +20,7 @@ const config = {
         mode: Phaser.Scale.RESIZE, // Use RESIZE mode for dynamic scaling
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
     },
-    scene: [
-        Boot,
-        Preloader,
-        MainMenu,
-        AnagramInstruc,
-        AnagramGame,
-        AnagramOver,
-    ],
+    scene: [Boot, Preloader, AnagramInstruc, AnagramGame, AnagramOver],
     pixelArt: true, // Ensures pixel-perfect scaling (optional for pixel art)
     roundPixels: true, // Rounds pixels for smoother rendering (optional)
 };
