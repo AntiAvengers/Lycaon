@@ -96,7 +96,7 @@ export class AnagramInstruc extends Scene {
         this.instrucText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.28,
+                this.scale.height * 0.26,
                 "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
                     fontFamily: "CustomFont",
@@ -113,7 +113,7 @@ export class AnagramInstruc extends Scene {
         this.warningText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.5,
+                this.scale.height * 0.48,
                 "⚠ Note: Not all words formed are valid answers. If you leave mid-game after using a key, you'll lose it and must start over.",
                 {
                     fontFamily: "CustomFont",
@@ -130,7 +130,7 @@ export class AnagramInstruc extends Scene {
         this.helpText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.64,
+                this.scale.height * 0.62,
                 "Do you want help?",
                 {
                     fontFamily: "CustomFont",
@@ -259,35 +259,83 @@ export class AnagramInstruc extends Scene {
             .setInteractive({ useHandCursor: true });
 
         //----------------------------------------------------------
-
-        this.popupBg = this.add
-            .rectangle(
-                this.scale.width / 2,
-                this.scale.height / 2,
-                300,
-                200,
-                0xffffff
+        // Shadow layer
+        this.popupShadow = this.add.graphics();
+        this.popupShadow
+            .fillStyle(0x000000, 0.3) // black with opacity
+            .fillRoundedRect(
+                this.scale.width / 2 - 175 + 5, // slight x offset
+                this.scale.height / 2 + 100 + 5, // slight y offset
+                this.scale.width * 0.4,
+                this.scale.height * 0.3,
+                10
             )
-            .setOrigin(0.5)
+            .setDepth(199) // behind the main popup
+            .setVisible(false);
+
+        this.popupBg = this.add.graphics();
+        this.popupBg
+            .lineStyle(2, 0x000000, 1)
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(
+                this.scale.width / 2 - 175,
+                this.scale.height / 2 + 100,
+                this.scale.width * 0.4,
+                this.scale.height * 0.3,
+                10
+            )
+            .strokeRoundedRect(
+                this.scale.width / 2 - 175,
+                this.scale.height / 2 + 100,
+                this.scale.width * 0.4,
+                this.scale.height * 0.3,
+                20
+            )
             .setDepth(200)
             .setVisible(false);
 
         this.popupText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 - 40,
-                "One key will be used. Continue?",
+                this.scale.height / 2 + 140,
+                "Use 1 key to start the game?",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: 250 },
-                    lineSpacing: 17,
+                    wordWrap: { width: this.scale.width * 0.8 },
                 }
             )
             .setOrigin(0.5)
             .setDepth(201)
+            .setVisible(false);
+
+        this.popupRewardText = this.add
+            .text(
+                this.scale.width / 2 - 40,
+                this.scale.height / 2 + 190,
+                "1  x",
+                {
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.06, 45),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.8 },
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(202)
+            .setVisible(false);
+
+        this.popupkeyIcon = this.add
+            .image(
+                this.scale.width / 2 + 30,
+                this.scale.height / 2 + 190,
+                "key"
+            )
+            .setDepth(203)
+            .setScale(2.5)
             .setVisible(false);
 
         this.yesButton = this.add
@@ -299,7 +347,7 @@ export class AnagramInstruc extends Scene {
                 0x00ff00
             )
             .setOrigin(0.5)
-            .setDepth(201)
+            .setDepth(204)
             .setInteractive({ useHandCursor: true })
             .setVisible(false);
 
@@ -315,7 +363,7 @@ export class AnagramInstruc extends Scene {
                 }
             )
             .setOrigin(0.5)
-            .setDepth(202)
+            .setDepth(205)
             .setVisible(false);
 
         this.noButton = this.add
@@ -327,7 +375,7 @@ export class AnagramInstruc extends Scene {
                 0xff0000
             )
             .setOrigin(0.5)
-            .setDepth(201)
+            .setDepth(206)
             .setInteractive({ useHandCursor: true })
             .setVisible(false);
 
@@ -338,7 +386,7 @@ export class AnagramInstruc extends Scene {
                 color: "#000000",
             })
             .setOrigin(0.5)
-            .setDepth(202)
+            .setDepth(207)
             .setVisible(false);
 
         this.yesButton.on("pointerdown", () => {
@@ -446,8 +494,11 @@ export class AnagramInstruc extends Scene {
 
     // Show popup function
     showPopup() {
+        this.popupShadow.setVisible(true);
         this.popupBg.setVisible(true);
         this.popupText.setVisible(true);
+        this.popupRewardText.setVisible(true);
+        this.popupkeyIcon.setVisible(true);
         this.yesButton.setVisible(true);
         this.yesText.setVisible(true);
         this.noButton.setVisible(true);
@@ -456,8 +507,11 @@ export class AnagramInstruc extends Scene {
 
     // Hide popup function
     hidePopup() {
+        this.popupShadow.setVisible(false);
         this.popupBg.setVisible(false);
         this.popupText.setVisible(false);
+        this.popupRewardText.setVisible(false);
+        this.popupkeyIcon.setVisible(false);
         this.yesButton.setVisible(false);
         this.yesText.setVisible(false);
         this.noButton.setVisible(false);
@@ -529,15 +583,15 @@ export class AnagramInstruc extends Scene {
                 .setFontSize(Math.min(width * 0.08, 65));
 
             this.instrucText
-                .setPosition(width / 2, height * 0.28)
+                .setPosition(width / 2, height * 0.26)
                 .setFontSize(Math.min(width * 0.06, 35));
 
             this.warningText
-                .setPosition(width / 2, height * 0.5)
+                .setPosition(width / 2, height * 0.48)
                 .setFontSize(Math.min(width * 0.05, 35));
 
             this.helpText
-                .setPosition(width / 2, height * 0.64)
+                .setPosition(width / 2, height * 0.62)
                 .setFontSize(Math.min(width * 0.05, 35));
 
             this.pressBtnText
@@ -576,11 +630,43 @@ export class AnagramInstruc extends Scene {
                 .setPosition(x, y)
                 .setFontSize(Math.min(width * 0.05, 40));
 
-            this.popupBg.setPosition(width / 2, height / 2).setSize(300, 200);
+            this.popupShadow.clear();
+            this.popupShadow.fillStyle(0x000000, 0.3);
+            this.popupShadow.fillRoundedRect(
+                width / 2 - 175 + 5,
+                height / 2 + 100 + 5,
+                width * 0.4,
+                height * 0.3,
+                10
+            );
+
+            this.popupBg.clear();
+            this.popupBg.fillStyle(0xffffff, 1);
+            this.popupBg.fillRoundedRect(
+                width / 2 - 175,
+                height / 2 + 100,
+                width * 0.4,
+                height * 0.3,
+                10
+            );
+            this.popupBg.lineStyle(2, 0x000000, 1);
+            this.popupBg.strokeRoundedRect(
+                width / 2 - 175,
+                height / 2 + 100,
+                width * 0.4,
+                height * 0.3,
+                10
+            );
 
             this.popupText
-                .setPosition(width / 2, height / 2 - 40)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setPosition(width / 2, height / 2 + 140)
+                .setFontSize(Math.min(width * 0.05, 30));
+
+            this.popupRewardText
+                .setPosition(width / 2 - 40, height / 2 + 190)
+                .setFontSize(Math.min(width * 0.06, 45));
+
+            this.popupkeyIcon.setPosition(width / 2 + 30, height / 2 + 190);
 
             this.yesButton
                 .setPosition(width / 2 - 60, height / 2 + 40)
