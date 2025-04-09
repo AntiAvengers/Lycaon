@@ -338,72 +338,106 @@ export class AnagramInstruc extends Scene {
             .setScale(2.5)
             .setVisible(false);
 
-        this.yesButton = this.add
-            .rectangle(
-                this.scale.width / 2 - 60,
-                this.scale.height / 2 + 40,
-                80,
-                40,
-                0x00ff00
+        const confirmWidth = Math.min(this.scale.width * 0.25, 200);
+        const confirmHeight = Math.min(this.scale.height * 0.1, 40);
+
+        this.confirmShadow = this.add.graphics();
+        this.confirmShadow
+            .fillStyle(0x000000, 0.3)
+            .fillRoundedRect(
+                this.scale.width / 2 - 100 + 4, // slight x offset
+                this.scale.height / 2 + 230 + 4, // slight y offset
+                confirmWidth,
+                confirmHeight,
+                5
             )
-            .setOrigin(0.5)
-            .setDepth(204)
-            .setInteractive({ useHandCursor: true })
+            .setDepth(204) // behind the main popup
             .setVisible(false);
 
-        this.yesText = this.add
+        this.confirmBg = this.add.graphics();
+        const drawConfirmBg = (color = 0x4a63e4, offsetX = 0, offsetY = 0) => {
+            this.confirmBg.clear();
+            this.confirmBg
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + offsetX,
+                    this.scale.height / 2 + 230 + offsetY,
+                    confirmWidth,
+                    confirmHeight,
+                    5
+                )
+                .setDepth(205);
+        };
+
+        drawConfirmBg();
+        this.confirmBg.setVisible(false); // Only hide once here
+
+        this.confirmZone = this.add
+            .zone(
+                this.scale.width / 2 - 100,
+                this.scale.height / 2 + 230,
+                confirmWidth,
+                confirmHeight
+            )
+            .setOrigin(0)
+            .setDepth(206)
+            .setVisible(false)
+            .setInteractive({ useHandCursor: true });
+
+        this.confirmText = this.add
             .text(
-                this.scale.width / 2 - 60,
-                this.scale.height / 2 + 40,
-                "Yes",
+                this.scale.width / 2,
+                this.scale.height / 2 + 250,
+                "Confirm",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
-                    color: "#000000",
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
+                    color: "#ffffff",
+                    align: "center",
                 }
             )
             .setOrigin(0.5)
-            .setDepth(205)
-            .setVisible(false);
-
-        this.noButton = this.add
-            .rectangle(
-                this.scale.width / 2 + 60,
-                this.scale.height / 2 + 40,
-                80,
-                40,
-                0xff0000
-            )
-            .setOrigin(0.5)
-            .setDepth(206)
+            .setDepth(207)
             .setInteractive({ useHandCursor: true })
             .setVisible(false);
 
-        this.noText = this.add
-            .text(this.scale.width / 2 + 60, this.scale.height / 2 + 40, "No", {
-                fontFamily: "Arial",
-                fontSize: Math.min(this.scale.width * 0.05, 25),
-                color: "#000000",
+        // Add press down effect
+        this.confirmZone
+            .on("pointerover", () => {
+                drawConfirmBg(0x16296c);
             })
-            .setOrigin(0.5)
-            .setDepth(207)
-            .setVisible(false);
+            .on("pointerdown", () => {
+                drawConfirmBg(0x16296c, 4, 4); // darker press color
+                this.confirmText.setY(this.scale.height / 2 + 252);
+                this.changeScene();
+            })
+            .on("pointerup", () => {
+                drawConfirmBg(0x4a63e4); // back to original
+                this.confirmText.setY(this.scale.height / 2 + 250);
+            })
+            .on("pointerout", () => {
+                drawConfirmBg(0x4a63e4); // reset color if mouse leaves
+                this.confirmText.setY(this.scale.height / 2 + 250);
+            });
 
-        this.yesButton.on("pointerdown", () => {
-            this.changeScene();
-        });
-
-        this.yesText.on("pointerdown", () => {
-            this.changeScene();
-        });
-
-        this.noButton.on("pointerdown", () => {
-            this.hidePopup();
-        });
-
-        this.noText.on("pointerdown", () => {
-            this.hidePopup();
-        });
+        // Optional: same for text click too
+        this.confirmText
+            .on("pointerover", () => {
+                drawConfirmBg(0x16296c);
+            })
+            .on("pointerdown", () => {
+                drawConfirmBg(0x16296c, 4, 4);
+                this.confirmText.setY(this.scale.height / 2 + 252);
+                this.changeScene();
+            })
+            .on("pointerup", () => {
+                drawConfirmBg(0x4a63e4);
+                this.confirmText.setY(this.scale.height / 2 + 250);
+            })
+            .on("pointerout", () => {
+                drawConfirmBg(0x4a63e4);
+                this.confirmText.setY(this.scale.height / 2 + 250);
+            });
 
         this.startGameBtn.on("pointerdown", () => {
             this.showPopup();
@@ -499,23 +533,10 @@ export class AnagramInstruc extends Scene {
         this.popupText.setVisible(true);
         this.popupRewardText.setVisible(true);
         this.popupkeyIcon.setVisible(true);
-        this.yesButton.setVisible(true);
-        this.yesText.setVisible(true);
-        this.noButton.setVisible(true);
-        this.noText.setVisible(true);
-    }
-
-    // Hide popup function
-    hidePopup() {
-        this.popupShadow.setVisible(false);
-        this.popupBg.setVisible(false);
-        this.popupText.setVisible(false);
-        this.popupRewardText.setVisible(false);
-        this.popupkeyIcon.setVisible(false);
-        this.yesButton.setVisible(false);
-        this.yesText.setVisible(false);
-        this.noButton.setVisible(false);
-        this.noText.setVisible(false);
+        this.confirmShadow.setVisible(true);
+        this.confirmBg.setVisible(true);
+        this.confirmZone.setVisible(true);
+        this.confirmText.setVisible(true);
     }
 
     toggleMute() {
@@ -668,21 +689,36 @@ export class AnagramInstruc extends Scene {
 
             this.popupkeyIcon.setPosition(width / 2 + 30, height / 2 + 190);
 
-            this.yesButton
-                .setPosition(width / 2 - 60, height / 2 + 40)
-                .setSize(80, 40);
+            const confirmWidth = Math.min(this.scale.width * 0.25, 200);
+            const confirmHeight = Math.min(this.scale.height * 0.1, 40);
 
-            this.yesText
-                .setPosition(width / 2 - 60, height / 2 + 40)
-                .setFontSize(Math.min(width * 0.05, 25));
+            this.confirmShadow.clear();
+            this.confirmShadow.fillStyle(0x000000, 0.3);
+            this.confirmShadow.fillRoundedRect(
+                this.scale.width / 2 - 100 + 4, // slight x offset
+                this.scale.height / 2 + 230 + 4, // slight y offset
+                confirmWidth,
+                confirmHeight,
+                5
+            );
 
-            this.noButton
-                .setPosition(width / 2 + 60, height / 2 + 40)
-                .setSize(80, 40);
+            this.confirmBg.clear();
+            this.confirmBg.fillStyle(0x4a63e4, 1);
+            this.confirmBg.fillRoundedRect(
+                this.scale.width / 2 - 100,
+                this.scale.height / 2 + 230,
+                confirmWidth,
+                confirmHeight,
+                5
+            );
 
-            this.noText
-                .setPosition(width / 2 + 60, height / 2 + 40)
-                .setFontSize(Math.min(width * 0.05, 25));
+            this.confirmZone
+                .setPosition(width / 2 - 100, height / 2 + 230)
+                .setSize(confirmWidth, confirmHeight);
+
+            this.confirmText
+                .setPosition(width / 2, height / 2 + 250)
+                .setFontSize(Math.min(width * 0.05, 35));
 
             this.muteButton.setPosition(width - 30, height - 30);
 
