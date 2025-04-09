@@ -5,23 +5,32 @@ import { AudioManager } from "../AudioManager";
 
 export class AnagramInstruc extends Scene {
     background;
+    audioManager;
+    muteButton;
     titleBG;
     titleText;
     instrucText;
-    warningIcon;
     warningText;
     helpText;
     pressBtnText;
     helpIcon;
     pressBtn2Text;
-    startGameBtnBackground;
-    startGameBtn;
+    rewardInfo;
+    keyIcon;
+    rewardInfo2;
+    startShadow;
+    startBG;
+    startZone;
+    startText;
+    popupShadow;
     popupBg;
     popupText;
-    yesButton;
-    yesText;
-    noButton;
-    noText;
+    popupRewardText;
+    popupkeyIcon;
+    confirmShadow;
+    confirmBg;
+    confirmZone;
+    confirmText;
 
     lastWidth = null;
     lastHeight = null;
@@ -159,7 +168,7 @@ export class AnagramInstruc extends Scene {
             .setDepth(100);
 
         this.helpIcon = this.add
-            .image(this.pressBtnText.width / 2, this.scale.height * 0.7, "help")
+            .image(this.scale.width / 2, this.scale.height * 0.7, "help")
             .setDepth(100)
             .setScale(1); // Resize the icon if needed
 
@@ -208,63 +217,105 @@ export class AnagramInstruc extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        const btnWidth = Math.min(this.scale.width * 0.25, 200);
-        const btnHeight = Math.min(this.scale.height * 0.1, 40);
-        const radius = 5;
-        const x = this.scale.width / 2;
-        const y = this.scale.height * 0.9;
+        //----------------------------------------------------------
 
-        // Shadow using Graphics with rounded corners
-        this.shadow = this.add.graphics();
-        this.shadow.fillStyle(0x000000, 0.3); // semi-transparent black
-        this.shadow
+        const startWidth = Math.min(this.scale.width * 0.25, 200);
+        const startHeight = Math.min(this.scale.height * 0.1, 40);
+
+        this.startShadow = this.add.graphics();
+        this.startShadow
+            .fillStyle(0x000000, 0.3)
             .fillRoundedRect(
-                x - btnWidth / 2 + 4,
-                y - btnHeight / 2 + 4,
-                btnWidth,
-                btnHeight,
-                radius
+                this.scale.width / 2 - 100 + 4,
+                this.scale.height * 0.87 + 4,
+                startWidth,
+                startHeight,
+                5
             )
             .setDepth(98);
 
-        // Button background
-        this.graphics = this.add.graphics();
-        this.graphics.fillStyle(0x4a63e4, 1); // Default color
-        this.graphics
-            .fillRoundedRect(
-                x - btnWidth / 2,
-                y - btnHeight / 2,
-                btnWidth,
-                btnHeight,
-                radius
+        this.startBG = this.add.graphics();
+        const drawStartBg = (color = 0x4a63e4, offsetX = 0, offsetY = 0) => {
+            this.startBG.clear();
+            this.startBG
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + offsetX,
+                    this.scale.height * 0.87 + offsetY,
+                    startWidth,
+                    startHeight,
+                    5
+                )
+                .setDepth(99);
+        };
+
+        drawStartBg();
+
+        this.startZone = this.add
+            .zone(
+                this.scale.width / 2 - 100,
+                this.scale.height * 0.87,
+                startWidth,
+                startHeight
             )
-            .setDepth(99);
+            .setOrigin(0)
+            .setDepth(100)
+            .setInteractive({ useHandCursor: true });
 
-        // Invisible hit area for interaction
-        this.startGameBtnBackground = this.add
-            .rectangle(x, y, btnWidth, btnHeight) // Setting color of the button
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(100);
-
-        this.startGameBtn = this.add
-            .text(x, y, "Start", {
+        this.startText = this.add
+            .text(this.scale.width / 2, this.scale.height * 0.9, "Start", {
                 fontFamily: "CustomFont",
                 fontSize: Math.min(this.scale.width * 0.05, 40),
                 color: "#ffffff",
                 align: "center",
             })
-            .setDepth(100)
             .setOrigin(0.5)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true });
 
+        this.startZone
+            .on("pointerover", () => {
+                drawStartBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawStartBg(0x4a63e4); // Default color
+                this.startText.setY(this.scale.height * 0.9);
+            })
+            .on("pointerdown", () => {
+                drawStartBg(0x16296c, 4, 4); // Pressed color + offset
+                this.startText.setY(this.scale.height * 0.9 + 2);
+                this.showPopup();
+            })
+            .on("pointerup", () => {
+                drawStartBg(0x4a63e4); // Reset to hover color
+                this.startText.setY(this.scale.height * 0.9);
+            });
+
+        this.startText
+            .on("pointerover", () => {
+                drawStartBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawStartBg(0x4a63e4); // Default color
+                this.startText.setY(this.scale.height * 0.9);
+            })
+            .on("pointerdown", () => {
+                drawStartBg(0x16296c, 4, 4); // Pressed color + offset
+                this.startText.setY(this.scale.height * 0.9 + 2);
+                this.showPopup();
+            })
+            .on("pointerup", () => {
+                drawStartBg(0x4a63e4); // Reset to hover color
+                this.startText.setY(this.scale.height * 0.9);
+            });
+
         //----------------------------------------------------------
-        // Shadow layer
+
         this.popupShadow = this.add.graphics();
         this.popupShadow
             .fillStyle(0x000000, 0.3) // black with opacity
             .fillRoundedRect(
-                this.scale.width / 2 - 175 + 5, // slight x offset
+                this.scale.width / 2 - 170 + 5, // slight x offset
                 this.scale.height / 2 + 100 + 5, // slight y offset
                 this.scale.width * 0.4,
                 this.scale.height * 0.3,
@@ -278,18 +329,18 @@ export class AnagramInstruc extends Scene {
             .lineStyle(2, 0x000000, 1)
             .fillStyle(0xffffff, 1)
             .fillRoundedRect(
-                this.scale.width / 2 - 175,
+                this.scale.width / 2 - 170,
                 this.scale.height / 2 + 100,
                 this.scale.width * 0.4,
                 this.scale.height * 0.3,
                 10
             )
             .strokeRoundedRect(
-                this.scale.width / 2 - 175,
+                this.scale.width / 2 - 170,
                 this.scale.height / 2 + 100,
                 this.scale.width * 0.4,
                 this.scale.height * 0.3,
-                20
+                10
             )
             .setDepth(200)
             .setVisible(false);
@@ -439,74 +490,6 @@ export class AnagramInstruc extends Scene {
                 this.confirmText.setY(this.scale.height / 2 + 250);
             });
 
-        this.startGameBtn.on("pointerdown", () => {
-            this.showPopup();
-        });
-
-        this.startGameBtnBackground.on("pointerdown", () => {
-            this.showPopup();
-        });
-
-        //----------------------------------------------------------
-
-        const drawButton = (color = 0x4a63e4, offsetY = 0) => {
-            this.graphics.clear();
-            this.graphics.fillStyle(color, 1);
-            this.graphics.fillRoundedRect(
-                x - btnWidth / 2,
-                y - btnHeight / 2 + offsetY,
-                btnWidth,
-                btnHeight,
-                radius
-            );
-
-            // Move the text accordingly
-            this.startGameBtn.setPosition(x, y + offsetY); // Keep the text centered with the button
-        };
-
-        // Initial draw
-        drawButton();
-
-        // Hover effect (for both button and text)
-        const onHover = () => {
-            drawButton(0x1d329f); // Hover color
-        };
-
-        const offHover = () => {
-            drawButton(0x4a63e4); // Default color
-            this.shadow.setVisible(true);
-        };
-
-        // Apply hover effect to both the background and the text
-        this.startGameBtnBackground.on("pointerover", onHover);
-        this.startGameBtn.on("pointerover", onHover);
-
-        // Hover out effect
-        this.startGameBtnBackground.on("pointerout", offHover);
-        this.startGameBtn.on("pointerout", offHover);
-
-        // Press down effect
-        this.startGameBtnBackground.on("pointerdown", () => {
-            drawButton(0x1d329f, 2); // Pressed color + offset
-            this.shadow.setVisible(false);
-        });
-
-        this.startGameBtn.on("pointerdown", () => {
-            drawButton(0x1d329f, 2); // Pressed color + offset
-            this.shadow.setVisible(false);
-        });
-
-        // Release effect
-        this.startGameBtnBackground.on("pointerup", () => {
-            drawButton(0x1d329f); // Reset to hover color
-            this.shadow.setVisible(true);
-        });
-
-        this.startGameBtn.on("pointerup", () => {
-            drawButton(0x1d329f); // Reset to hover color
-            this.shadow.setVisible(true);
-        });
-
         //----------------------------------------------------------
 
         this.input.keyboard?.on("keydown-SPACE", () => this.showPopup());
@@ -635,49 +618,72 @@ export class AnagramInstruc extends Scene {
                 .setPosition(width / 2 + 60, height * 0.79)
                 .setFontSize(Math.min(width * 0.05, 35));
 
-            // Dynamically adjust button's position based on the screen size
-            const btnWidth = Math.min(width * 0.25, 200);
-            const btnHeight = Math.min(height * 0.1, 40);
-            const x = width / 2;
-            const y = height * 0.9;
+            //----------------------------------------------------------
 
-            // Invisible hit area for interaction
-            this.startGameBtnBackground
-                .setPosition(x, y)
-                .setSize(btnWidth, btnHeight);
+            const startWidth = Math.min(width * 0.25, 200);
+            const startHeight = Math.min(height * 0.1, 40);
 
-            // Update button's text position accordingly
-            this.startGameBtn
-                .setPosition(x, y)
+            this.startShadow.clear();
+            this.startShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + 4,
+                    this.scale.height * 0.87 + 4,
+                    startWidth,
+                    startHeight,
+                    5
+                );
+
+            this.startBG.clear();
+            this.startBG
+                .fillStyle(0x4a63e4, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100,
+                    this.scale.height * 0.87,
+                    startWidth,
+                    startHeight,
+                    5
+                );
+
+            this.startZone
+                .setPosition(width / 2 - 100, height * 0.87)
+                .setSize(startWidth, startHeight);
+
+            this.startText
+                .setPosition(width / 2, height * 0.9)
                 .setFontSize(Math.min(width * 0.05, 40));
 
+            //----------------------------------------------------------
+
             this.popupShadow.clear();
-            this.popupShadow.fillStyle(0x000000, 0.3);
-            this.popupShadow.fillRoundedRect(
-                width / 2 - 175 + 5,
-                height / 2 + 100 + 5,
-                width * 0.4,
-                height * 0.3,
-                10
-            );
+            this.popupShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    width / 2 - 170 + 5,
+                    height / 2 + 100 + 5,
+                    width * 0.4,
+                    height * 0.3,
+                    10
+                );
 
             this.popupBg.clear();
-            this.popupBg.fillStyle(0xffffff, 1);
-            this.popupBg.fillRoundedRect(
-                width / 2 - 175,
-                height / 2 + 100,
-                width * 0.4,
-                height * 0.3,
-                10
-            );
-            this.popupBg.lineStyle(2, 0x000000, 1);
-            this.popupBg.strokeRoundedRect(
-                width / 2 - 175,
-                height / 2 + 100,
-                width * 0.4,
-                height * 0.3,
-                10
-            );
+            this.popupBg
+                .fillStyle(0xffffff, 1)
+                .fillRoundedRect(
+                    width / 2 - 170,
+                    height / 2 + 100,
+                    width * 0.4,
+                    height * 0.3,
+                    10
+                )
+                .lineStyle(2, 0x000000, 1)
+                .strokeRoundedRect(
+                    width / 2 - 170,
+                    height / 2 + 100,
+                    width * 0.4,
+                    height * 0.3,
+                    10
+                );
 
             this.popupText
                 .setPosition(width / 2, height / 2 + 140)
@@ -689,28 +695,32 @@ export class AnagramInstruc extends Scene {
 
             this.popupkeyIcon.setPosition(width / 2 + 30, height / 2 + 190);
 
+            //----------------------------------------------------------
+
             const confirmWidth = Math.min(this.scale.width * 0.25, 200);
             const confirmHeight = Math.min(this.scale.height * 0.1, 40);
 
             this.confirmShadow.clear();
-            this.confirmShadow.fillStyle(0x000000, 0.3);
-            this.confirmShadow.fillRoundedRect(
-                this.scale.width / 2 - 100 + 4, // slight x offset
-                this.scale.height / 2 + 230 + 4, // slight y offset
-                confirmWidth,
-                confirmHeight,
-                5
-            );
+            this.confirmShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + 4,
+                    this.scale.height / 2 + 230 + 4,
+                    confirmWidth,
+                    confirmHeight,
+                    5
+                );
 
             this.confirmBg.clear();
-            this.confirmBg.fillStyle(0x4a63e4, 1);
-            this.confirmBg.fillRoundedRect(
-                this.scale.width / 2 - 100,
-                this.scale.height / 2 + 230,
-                confirmWidth,
-                confirmHeight,
-                5
-            );
+            this.confirmBg
+                .fillStyle(0x4a63e4, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100,
+                    this.scale.height / 2 + 230,
+                    confirmWidth,
+                    confirmHeight,
+                    5
+                );
 
             this.confirmZone
                 .setPosition(width / 2 - 100, height / 2 + 230)
@@ -719,6 +729,8 @@ export class AnagramInstruc extends Scene {
             this.confirmText
                 .setPosition(width / 2, height / 2 + 250)
                 .setFontSize(Math.min(width * 0.05, 35));
+
+            //----------------------------------------------------------
 
             this.muteButton.setPosition(width - 30, height - 30);
 
