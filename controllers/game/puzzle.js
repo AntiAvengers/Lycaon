@@ -16,7 +16,7 @@ const random = async () => {
     const i = Math.floor(Math.random() * puzzles.length);
 
     const output = {
-        puzzle: puzzles[i].split("_")[0],
+        puzzle: puzzles[i].split(".")[0],
         controller: require(`./${puzzles[i]}`)
     }
 
@@ -52,13 +52,13 @@ const load = async (req, res) => {
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     if(!address) {
-        res.sendStatus(403).json({ Error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
+        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
     }
 
     const session = database.ref('game_session');
     const snapshot = await session.orderByKey().equalTo(hashed).once("value");
     if(!snapshot.val()) {
-        res.sendStatus(403);
+        res.status(403).json({ error: 'game_session does not exist for user'});
     }
 
     const { key_used } = snapshot.val();
@@ -72,12 +72,135 @@ const load = async (req, res) => {
     res.status(200).json({puzzle: snapshot.val()});
 }
 
-const validate = (req, res) => {
+const check_answer = async (req, res) => {
+    const { address, answer } = req.body;
+    
+    if(!answer) {
+        res.status(403).json({ error: 'Missing "answer" parameter in request body'});
+    } else if(!address) {
+        res.status(403).json({ error: 'Missing "address" (wallet address) parameter in request body'});
+    }
 
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+
+    const session = database.ref('game_session');
+    const snapshot = await session.orderByKey().equalTo(hashed).once("value");
+    if(!snapshot.val()) {
+        res.status(403).json({ error: 'game_session does not exist for user'});
+    }
+
+    const { valid_answers } = snapshot.val();
+    const refined_answer = answer.toLowerCase().trim();
+    if(valid_answers.includes(refined_answer)) {
+        const new_answers = snapshot.val().submitted_answers;
+        new_answers.push(refined);
+
+        const new_score = snapshot.val().score + 1;
+
+        await database.ref(`game_session/${hashed}`).update({
+            submitted_answers: new_answers,
+            score: new_score
+        });
+
+        return res.status(200).json({ result: true });
+    }
+    return res.status(200).json({ result: false });
+}
+
+const finish = async (req, res) => {
+    const { address } = req.body;
+
+    if(!address) {
+        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
+    }
+
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+
+    const output = {
+        player: {},
+        leaderboard: {}
+    };
+
+    //update user high score in database
+    const user = database.ref('user');
+    const session = database.ref('game_session');
+    const session_snapshot = await user.orderByKey().equalTo(hashed).once("value");
+    const user_snapshot = await session.orderByKey().equalTo(hashed).once("value");
+    const { highest_score } = user_snapshot.val();
+    const { game_type, score } = session_snapshot.val();
+    
+    if(game_type == highest_score.game_type) {
+        if(score > highest_score.score) {
+            output.player.high_score_beaten = true;
+            output.player.score = score;
+
+            database.ref(`user/${hashed}`).update({
+                highest_score: {
+                    game_type: game_type,
+                    score: score
+                }
+            });
+        }
+    }
+
+    //update global leaderboard
+    const leaderboard = database.ref('leaderboard');
+    const game_leaderboard = await leaderboard.equalTo(game_type).once("value");
+
+    const leaderboard_output = {profile_name, score}
+    if(!game_leaderboard.val()) {
+        //First player to make it into the leaderboard
+        const array = [{profile_name, score}];
+        database.ref(`leaderboard/${game_type}`).update([leaderboard_output]);
+    } else {
+        const original = game_leaderboard.val();
+        const array = game_leaderboard.val();
+        array.push(leaderboard_output)
+        array.sort((a,b) => a.score > b.score ? -1 : 1);
+        const new_leaderboard = array.slice(0,5);
+        database.ref(`leaderboard/${game_type}`).update(new_leaderboard);
+
+        for(let i = 0; i < new_leaderboard.length; i++) {
+            //If the new leaderboard has a new entry (5 entries vs 4 entries)
+            if(!original[i]) {
+                output.leaderboard.high_score_beaten = true;
+                break;
+            }
+            //If the new leaderboard is not the same as the original
+            if(original[i].profile_name !== new_leaderboard[i].profile_name
+                || original[i].score !== new_leaderboard[i].score) {
+                output.leaderboard.high_score_beaten = true;
+                break;
+            }
+        }
+        if(!output.leaderboard.high_score_beaten) {
+            output.leaderboard.high_score_beaten = false;
+        }
+    }
+
+    //update scroll rewards in database
+    const game_rules = database.ref(`game_rules/${game_type}`);
+    const game_rules_snapshot = await game_rules.once('value');
+    const { scoring } = game_rules_snapshot;
+    for(let i = 0; i < scoring.length; i++) {
+        const { score: requirement, reward } = scoring[i];
+        if(output.player.score >= requirement) {
+            output.player.reward = reward;
+            user.update({ pages: user_snapshot.pages + 1 });
+            break;
+        }
+    }
+
+    //regenerate puzzle
+    generate(hashed);
+
+    return output;
 }
 
 module.exports = {
     random,
     generate,
-    load
+    load,
+    check_answer,
+    finish
 }

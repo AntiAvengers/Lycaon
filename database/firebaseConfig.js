@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -9,14 +11,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: process.env.DATABASE_URL,
 });
-
-//DEV MODE - Resets database everytime server is restarted
-if(process.env.MODE == "DEVELOPMENT") {
-  const initial_data = {
-    users: {}
-  }
-  admin.database().ref('/').set(initial_data);
-}
 
 //Defaults for Data Structures
 const default_user = {
@@ -38,8 +32,77 @@ const default_game_session = {
   validate_on_client: false,
   valid_answers: [-1],
   submitted_answers: [-1],
+  score: 0,
   key_used: false
 }
+
+const default_leaderboard = {
+  word_puzzle: [{ profile_name: 'Lycaon', score: -1 }]
+}
+
+//Game rules
+const default_game_rules = {
+  word_puzzle: {
+    scoring: [
+      { score: 10, reward: 3 },
+      { score: 6, reward: 2 },
+      { score: 3, reward: 1 },
+      { score: 0, reward: 0 }
+    ]
+  }
+}
+
+const db = admin.database().ref("/");
+db.once('value', async snapshot => {
+  const data = snapshot.val();
+
+  if(!data) {
+    console.log('. . . Initializing Leaderboard in Database');
+    console.log('. . . Initializing Game Rules in Database');
+    console.log('. . . Initializing Users in Database');
+    console.log('. . . Initializing User Collections in Database');
+    await db.set({
+      users: { _init: true },
+      collections: { _init: true },
+      leaderboard: default_leaderboard,
+      game_rules: default_game_rules
+    });
+    return;
+  }
+
+  if(!data.leaderboard) {
+    console.log('. . . Initializing Leaderboard in Database');
+    await db.update({ leaderboard: default_leaderboard });
+  }
+
+  if(!data.game_rules) {
+    console.log('. . . Initializing Game Rules in Database');
+    await db.update({ game_rules: default_game_rules})
+  }
+
+  if(!data.users) {
+    console.log('. . . Initializing Users in Database');
+    await db.update({ users: { _init: true }});
+  }
+
+  if(!data.collections) {
+    console.log('. . . Initializing User Collections in Database');
+    await db.update({ collections: { _init: true }});
+  }
+}).then(() => {
+  //DEV MODE - Resets database everytime server is restarted
+  if(process.env.MODE == "DEVELOPMENT") {
+    console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
+    db.set({
+      users: { _init: true },
+      collections: { _init: true },
+      leaderboard: default_leaderboard,
+      game_rules: default_game_rules
+    });
+  } 
+});
+
+
 
 // Export the database reference
 module.exports = {

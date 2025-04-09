@@ -31,7 +31,8 @@ function generate_puzzle(num_of_letters = 7, count = 0) {
 
     const output = {
         data: puzzle,
-        solution: check.valid_words,
+        solution: check.valid_words
+            .map(word => word.toLowerCase().trim()),
         validate_on_client: false, //Server will check answers
         meta: {
             is_valid: check.is_valid,
@@ -67,13 +68,6 @@ function get_validity(letters) {
         length: true_words.length
     }
     return output;
-}
-
-function check_answer(req, res) {
-    const { word } = req.body;
-
-    const response = valid_words
-    res.json ({ response });
 }
 
 module.exports = {
