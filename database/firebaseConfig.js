@@ -40,6 +40,16 @@ const default_leaderboard = {
   word_puzzle: [{ profile_name: 'Lycaon', score: -1 }]
 }
 
+const default_collection = {
+  nickname: "",
+  type: "",
+  rarity: "",
+  age: 0,
+  hunger: 10,
+  traits: [],
+  minted_ID: null
+}
+
 //Game rules
 const default_game_rules = {
   word_puzzle: {
@@ -53,7 +63,7 @@ const default_game_rules = {
 }
 
 const db = admin.database().ref("/");
-db.once('value', async snapshot => {
+db.once('value', snapshot => {
   const data = snapshot.val();
 
   if(!data) {
@@ -61,33 +71,32 @@ db.once('value', async snapshot => {
     console.log('. . . Initializing Game Rules in Database');
     console.log('. . . Initializing Users in Database');
     console.log('. . . Initializing User Collections in Database');
-    await db.set({
+    return db.set({
       users: { _init: true },
       collections: { _init: true },
       leaderboard: default_leaderboard,
       game_rules: default_game_rules
     });
-    return;
   }
 
   if(!data.leaderboard) {
     console.log('. . . Initializing Leaderboard in Database');
-    await db.update({ leaderboard: default_leaderboard });
+    db.update({ leaderboard: default_leaderboard });
   }
 
   if(!data.game_rules) {
     console.log('. . . Initializing Game Rules in Database');
-    await db.update({ game_rules: default_game_rules})
+    db.update({ game_rules: default_game_rules})
   }
 
   if(!data.users) {
     console.log('. . . Initializing Users in Database');
-    await db.update({ users: { _init: true }});
+    db.update({ users: { _init: true }});
   }
 
   if(!data.collections) {
     console.log('. . . Initializing User Collections in Database');
-    await db.update({ collections: { _init: true }});
+    db.update({ collections: { _init: true }});
   }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
@@ -107,5 +116,5 @@ db.once('value', async snapshot => {
 // Export the database reference
 module.exports = {
   database: admin.database(),
-  schema: { default_user, default_game_session }
+  schema: { default_user, default_game_session, default_collection }
 }
