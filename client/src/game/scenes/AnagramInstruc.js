@@ -492,8 +492,6 @@ export class AnagramInstruc extends Scene {
 
         //----------------------------------------------------------
 
-        this.input.keyboard?.on("keydown-SPACE", () => this.showPopup());
-
         this.scale.on("resize", (size) => {
             if (
                 this.lastWidth !== size.width ||
@@ -507,6 +505,9 @@ export class AnagramInstruc extends Scene {
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
+
+        // Clean up listeners on scene shutdown
+        this.events.once("shutdown", this.cleanup, this);
     }
 
     // Show popup function
@@ -526,8 +527,10 @@ export class AnagramInstruc extends Scene {
         this.audioManager.toggleMute();
         if (this.audioManager.isMuted) {
             this.muteButton.setAlpha(0.5); // Dim the button if muted
+            this.registry.set("isMuted", true); // Save mute state to registry
         } else {
             this.muteButton.setAlpha(1); // Brighten the button if not muted
+            this.registry.set("isMuted", false); // Save unmute state to registry
         }
     }
 
@@ -544,6 +547,10 @@ export class AnagramInstruc extends Scene {
     }
 
     changeScene() {
+        // Save the mute state to the registry before changing the scene
+        const isMuted = this.audioManager.isMuted; // Get the current mute state
+        this.registry.set("isMuted", isMuted); // Store it in the registry
+
         if (this.scene.isActive("AnagramInstruc")) {
             this.scene.stop("AnagramInstruc");
             this.scene.start("AnagramGame");
@@ -739,6 +746,14 @@ export class AnagramInstruc extends Scene {
         } catch (e) {
             console.error("Resize error:", e);
         }
+    }
+
+    cleanup() {
+        // Remove pointer event listeners for 'pointerdown', 'pointerup', 'pointerover', and 'pointerout'
+        this.input.off("pointerdown", this.handlePointerDown, this);
+        this.input.off("pointerup", this.handlePointerUp, this);
+        this.input.off("pointerover", this.handlePointerOver, this);
+        this.input.off("pointerout", this.handlePointerOut, this);
     }
 }
 
