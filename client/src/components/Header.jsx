@@ -77,20 +77,18 @@ const Header = () => {
                         {open && (
                             <ul className="absolute w-[136px] sm:w-[255px] h-auto -left-[24px] sm:left-0 mt-[7px] shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
                                 {navItems.map(({ to, label, action }) => (
-                                    <li
+                                    <Link
                                         key={to}
+                                        to={to}
+                                        onClick={
+                                            action || (() => setOpen(false))
+                                        }
                                         className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex items-center pl-[20px] sm:pl-[36px] pr-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200"
                                     >
-                                        <Link
-                                            to={to}
-                                            className="text-start text-[26px] text-[#FCF4E7]"
-                                            onClick={
-                                                action || (() => setOpen(false))
-                                            }
-                                        >
+                                        <li className="text-start text-[26px] text-[#FCF4E7]">
                                             {label}
-                                        </Link>
-                                    </li>
+                                        </li>
+                                    </Link>
                                 ))}
                             </ul>
                         )}

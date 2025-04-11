@@ -66,7 +66,7 @@ export class AnagramGame extends Scene {
                 .setOrigin(0.5)
                 .setScale(0.5)
                 .setInteractive()
-                .setDepth(200);
+                .setDepth(198);
 
             this.muteButton.on("pointerdown", () => this.toggleMute());
         }
