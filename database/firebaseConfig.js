@@ -44,10 +44,11 @@ const default_collection = {
   nickname: "",
   type: "",
   rarity: "",
+  stage: 0,
   age: 0,
   hunger: 10,
   traits: [],
-  minted_ID: null
+  minted_ID: false
 }
 
 //Game rules
@@ -98,6 +99,11 @@ db.once('value', snapshot => {
     console.log('. . . Initializing User Collections in Database');
     db.update({ collections: { _init: true }});
   }
+
+  if(!data.marketplace) {
+    console.log('. . . Initializing Marketplace in Database');
+    db.update({ marketplace: [] });
+  }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
   if(process.env.MODE == "DEVELOPMENT") {
@@ -106,7 +112,8 @@ db.once('value', snapshot => {
       users: { _init: true },
       collections: { _init: true },
       leaderboard: default_leaderboard,
-      game_rules: default_game_rules
+      game_rules: default_game_rules,
+      marketplace: []
     });
   } 
 });
