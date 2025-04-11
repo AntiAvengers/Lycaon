@@ -15,10 +15,10 @@ export class AnagramGame extends Scene {
     errorMessage;
     inputBG;
     inputField;
-    clearBG;
-    clearBtn;
-    submitBG;
-    submitBtn;
+    clearShadow;
+    clearBg;
+    clearZone;
+    clearText;
     helpIcon;
     popupBg;
     popupText;
@@ -33,7 +33,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 200;
+        this.remainingTime = 30;
         this.wordList = [];
         this.inputText = "";
     }
@@ -62,7 +62,7 @@ export class AnagramGame extends Scene {
         // Create the mute button in the scene
         if (!this.muteButton) {
             this.muteButton = this.add
-                .image(this.scale.width - 30, this.scale.height - 30, "star")
+                .image(this.scale.width - 70, this.scale.height - 30, "star")
                 .setOrigin(0.5)
                 .setScale(0.5)
                 .setInteractive()
@@ -200,131 +200,208 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
-        this.clearBG = this.add
-            .rectangle(
-                this.scale.width / 2 - 100,
-                this.scale.height * 0.85,
-                Math.min(this.scale.width * 0.25, 150), // Width of the button
-                Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0xcfcfcf
+        const clearWidth = Math.min(this.scale.width * 0.25, 200);
+        const clearHeight = Math.min(this.scale.height * 0.1, 40);
+
+        this.clearShadow = this.add.graphics();
+        this.clearShadow
+            .fillStyle(0x000000, 0.3)
+            .fillRoundedRect(
+                this.scale.width / 2 - 215 + 4,
+                this.scale.height * 0.82 + 4,
+                clearWidth,
+                clearHeight,
+                5
             )
-            .setOrigin(0.5)
-            .setDepth(99)
+            .setDepth(98);
+
+        this.clearBg = this.add.graphics();
+        const drawClearBg = (color = 0xdadada, offsetX = 0, offsetY = 0) => {
+            this.clearBg.clear();
+            this.clearBg
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 215 + offsetX,
+                    this.scale.height * 0.82 + offsetY,
+                    clearWidth,
+                    clearHeight,
+                    5
+                )
+                .setDepth(99);
+        };
+
+        this.clearZone = this.add
+            .zone(
+                this.scale.width / 2 - 215,
+                this.scale.height * 0.82,
+                clearWidth,
+                clearHeight
+            )
+            .setOrigin(0)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true });
 
-        this.clearBtn = this.add
+        this.clearText = this.add
             .text(
-                this.scale.width / 2 - 100,
+                this.scale.width / 2 - 115,
                 this.scale.height * 0.85,
                 "Clear",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
                     color: "#000000",
                     align: "center",
                 }
             )
-            .setDepth(100)
             .setOrigin(0.5)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true });
+
+        drawClearBg();
+
+        this.clearZone
+            .on("pointerover", () => {
+                drawClearBg(0xb0b0b0); // Hover color
+            })
+            .on("pointerout", () => {
+                drawClearBg(0xdadada); // Default color
+                this.clearText.setY(this.scale.height * 0.85);
+            })
+            .on("pointerdown", () => {
+                drawClearBg(0xb0b0b0, 4, 4);
+                this.clearText.setY(this.scale.height * 0.85 + 2);
+                if (this.inputField) {
+                    this.inputField.setText("");
+                    this.inputText = "";
+                }
+            })
+            .on("pointerup", () => {
+                drawClearBg(0xdadada); // Reset to hover color
+                this.clearText.setY(this.scale.height * 0.85);
+            });
+
+        this.clearText
+            .on("pointerover", () => {
+                drawClearBg(0xb0b0b0); // Hover color
+            })
+            .on("pointerout", () => {
+                drawClearBg(0xdadada); // Default color
+                this.clearText.setY(this.scale.height * 0.85);
+            })
+            .on("pointerdown", () => {
+                drawClearBg(0xb0b0b0, 4, 4);
+                this.clearText.setY(this.scale.height * 0.85 + 2);
+                if (this.inputField) {
+                    this.inputField.setText("");
+                    this.inputText = "";
+                }
+            })
+            .on("pointerup", () => {
+                drawClearBg(0xdadada); // Reset to hover color
+                this.clearText.setY(this.scale.height * 0.85);
+            });
 
         //----------------------------------------------------------
 
-        this.submitBG = this.add
-            .rectangle(
-                this.scale.width / 2 + 100,
-                this.scale.height * 0.85,
-                Math.min(this.scale.width * 0.25, 150), // Width of the button
-                Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0x4a63e4
+        const submitWidth = Math.min(this.scale.width * 0.25, 200);
+        const submitHeight = Math.min(this.scale.height * 0.1, 40);
+
+        this.submitShadow = this.add.graphics();
+        this.submitShadow
+            .fillStyle(0x000000, 0.3)
+            .fillRoundedRect(
+                this.scale.width / 2 + 10 + 4,
+                this.scale.height * 0.82 + 4,
+                submitWidth,
+                submitHeight,
+                5
             )
-            .setOrigin(0.5)
-            .setDepth(99)
+            .setDepth(98);
+
+        this.submitBg = this.add.graphics();
+        const drawSubmitBg = (color = 0x4a63e4, offsetX = 0, offsetY = 0) => {
+            this.submitBg.clear();
+            this.submitBg
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 + 10 + offsetX,
+                    this.scale.height * 0.82 + offsetY,
+                    submitWidth,
+                    submitHeight,
+                    5
+                )
+                .setDepth(99);
+        };
+
+        this.submitZone = this.add
+            .zone(
+                this.scale.width / 2 + 10,
+                this.scale.height * 0.82,
+                submitWidth,
+                submitHeight
+            )
+            .setOrigin(0)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true });
 
-        this.submitBtn = this.add
+        this.submitText = this.add
             .text(
-                this.scale.width / 2 + 100,
+                this.scale.width / 2 + 110,
                 this.scale.height * 0.85,
                 "Submit",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
                     color: "#ffffff",
                     align: "center",
                 }
             )
-            .setDepth(100)
             .setOrigin(0.5)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true });
 
-        //----------------------------------------------------------
+        drawSubmitBg();
 
-        const buttonHoverEffect = (button, background, isHovering) => {
-            // const textColor = isHovering ? "#ffcc00" : "#000000";
-            // const backgroundColor = isHovering ? 0xcfcfcf : 0xadb5bd;
-            const scaleValue = isHovering ? 1.05 : 1;
-
-            // button.setStyle({ color: textColor });
-            // background.setFillStyle(backgroundColor);
-
-            this.tweens.add({
-                targets: [button, background],
-                scaleX: scaleValue,
-                scaleY: scaleValue,
-                duration: 200,
-                ease: "Power1",
+        this.submitZone
+            .on("pointerover", () => {
+                drawSubmitBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawSubmitBg(0x4a63e4); // Default color
+                this.submitText.setY(this.scale.height * 0.85);
+            })
+            .on("pointerdown", () => {
+                drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
+                this.submitText.setY(this.scale.height * 0.85 + 2);
+                this.handleWordSubmit();
+            })
+            .on("pointerup", () => {
+                drawSubmitBg(0x4a63e4); // Reset to hover color
+                this.submitText.setY(this.scale.height * 0.85);
             });
-        };
 
-        // Apply hover effect to clear button
-        this.clearBG.on("pointerover", () =>
-            buttonHoverEffect(this.clearBtn, this.clearBG, true)
-        );
-        this.clearBG.on("pointerout", () =>
-            buttonHoverEffect(this.clearBtn, this.clearBG, false)
-        );
-        this.clearBtn.on("pointerover", () =>
-            buttonHoverEffect(this.clearBtn, this.clearBG, true)
-        );
-        this.clearBtn.on("pointerout", () =>
-            buttonHoverEffect(this.clearBtn, this.clearBG, false)
-        );
-
-        // Apply hover effect to submit button
-        this.submitBG.on("pointerover", () =>
-            buttonHoverEffect(this.submitBtn, this.submitBG, true)
-        );
-        this.submitBG.on("pointerout", () =>
-            buttonHoverEffect(this.submitBtn, this.submitBG, false)
-        );
-        this.submitBtn.on("pointerover", () =>
-            buttonHoverEffect(this.submitBtn, this.submitBG, true)
-        );
-        this.submitBtn.on("pointerout", () =>
-            buttonHoverEffect(this.submitBtn, this.submitBG, false)
-        );
-
-        // Button click functionality
-        this.clearBG.on("pointerdown", () => {
-            if (this.inputField) {
-                this.inputField.setText("");
-                this.inputText = "";
-            }
-        });
-        this.clearBtn.on("pointerdown", () => {
-            if (this.inputField) {
-                this.inputField.setText("");
-                this.inputText = "";
-            }
-        });
-        this.submitBG.on("pointerdown", () => this.handleWordSubmit());
-        this.submitBtn.on("pointerdown", () => this.handleWordSubmit());
+        this.submitText
+            .on("pointerover", () => {
+                drawSubmitBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawSubmitBg(0x4a63e4); // Default color
+                this.submitText.setY(this.scale.height * 0.85);
+            })
+            .on("pointerdown", () => {
+                drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
+                this.submitText.setY(this.scale.height * 0.85 + 2);
+                this.handleWordSubmit();
+            })
+            .on("pointerup", () => {
+                drawSubmitBg(0x4a63e4); // Reset to hover color
+                this.submitText.setY(this.scale.height * 0.85);
+            });
 
         //----------------------------------------------------------
 
         this.helpIcon = this.add
-            .image(this.scale.width / 2, this.scale.height * 0.95, "help")
+            .image(this.scale.width - 30, this.scale.height - 30, "help")
             .setOrigin(0.5)
             .setScale(1) // Resize the icon if needed
             .setDepth(100)
@@ -356,66 +433,160 @@ export class AnagramGame extends Scene {
 
         //----------------------------------------------------------
 
-        this.popupBg = this.add
-            .rectangle(
-                this.scale.width / 2,
-                this.scale.height / 2,
-                400,
-                300,
-                0xffffff
+        this.blurOverlay = this.add
+            .rectangle(0, 0, this.scale.width, this.scale.height, 0xb0b0b0)
+            .setOrigin(0)
+            .setDepth(199)
+            .setVisible(false);
+
+        this.popupBg = this.add.graphics();
+        this.popupBg
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(
+                this.scale.width / 2 - 250,
+                this.scale.height / 2 - 160,
+                this.scale.width * 0.6,
+                this.scale.height * 0.55,
+                10
             )
-            .setOrigin(0.5)
             .setDepth(200)
             .setVisible(false);
 
         this.popupText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 - 40,
+                this.scale.height / 2 - 70,
                 "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: 350 },
-                    lineSpacing: 5,
+                    wordWrap: { width: this.scale.width * 0.5 },
+                    lineSpacing: 7,
                 }
             )
             .setOrigin(0.5)
             .setDepth(201)
             .setVisible(false);
 
-        this.closeBtn = this.add
-            .rectangle(
+        this.popupText2 = this.add
+            .text(
                 this.scale.width / 2,
-                this.scale.height / 2 + 70,
-                80,
-                40,
-                0x00ff00
+                this.scale.height / 2 + 30,
+                "⚠ Note: Not all words formed are valid answers.",
+                {
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.4 },
+                    lineSpacing: 7,
+                }
             )
-            .setOrigin(0.5)
-            .setDepth(201)
-            .setInteractive({ useHandCursor: true })
-            .setVisible(false);
-
-        this.closeText = this.add
-            .text(this.scale.width / 2, this.scale.height / 2 + 70, "Back", {
-                fontFamily: "Arial",
-                fontSize: Math.min(this.scale.width * 0.05, 25),
-                color: "#000000",
-            })
             .setOrigin(0.5)
             .setDepth(202)
             .setVisible(false);
 
-        this.closeBtn.on("pointerdown", () => {
-            this.hidePopup();
-        });
+        const resumeWidth = Math.min(this.scale.width * 0.25, 200);
+        const resumeHeight = Math.min(this.scale.height * 0.1, 40);
 
-        this.closeText.on("pointerdown", () => {
-            this.hidePopup();
-        });
+        this.resumeShadow = this.add.graphics();
+        this.resumeShadow
+            .fillStyle(0x000000, 0.3)
+            .fillRoundedRect(
+                this.scale.width / 2 - 100 + 4,
+                this.scale.height / 2 + 90 + 4,
+                resumeWidth,
+                resumeHeight,
+                5
+            )
+            .setDepth(201)
+            .setVisible(false);
+
+        this.resumeBg = this.add.graphics();
+        const drawResumeBg = (color = 0x4a63e4, offsetX = 0, offsetY = 0) => {
+            this.resumeBg.clear();
+            this.resumeBg
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + offsetX,
+                    this.scale.height / 2 + 90 + offsetY,
+                    resumeWidth,
+                    resumeHeight,
+                    5
+                )
+                .setDepth(202);
+        };
+
+        this.resumeBg.setVisible(false);
+
+        this.resumeZone = this.add
+            .zone(
+                this.scale.width / 2 - 100,
+                this.scale.height / 2 + 90,
+                resumeWidth,
+                resumeHeight
+            )
+            .setOrigin(0)
+            .setDepth(203)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(false);
+
+        this.resumeText = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height / 2 + 110,
+                "Resume Game",
+                {
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 35),
+                    color: "#ffffff",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(203)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(false);
+
+        drawResumeBg();
+
+        this.resumeZone
+            .on("pointerover", () => {
+                drawResumeBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawResumeBg(0x4a63e4); // Default color
+                this.resumeText.setY(this.scale.height / 2 + 110);
+            })
+            .on("pointerdown", () => {
+                drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
+                this.resumeText.setY(this.scale.height / 2 + 110 + 2);
+                this.hidePopup();
+            })
+            .on("pointerup", () => {
+                drawResumeBg(0x4a63e4); // Reset to hover color
+                this.resumeText.setY(this.scale.height / 2 + 110);
+            });
+
+        this.resumeText
+            .on("pointerover", () => {
+                drawResumeBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawResumeBg(0x4a63e4); // Default color
+                this.resumeText.setY(this.scale.height / 2 + 110);
+            })
+            .on("pointerdown", () => {
+                drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
+                this.resumeText.setY(this.scale.height / 2 + 110 + 2);
+                this.hidePopup();
+            })
+            .on("pointerup", () => {
+                drawResumeBg(0x4a63e4); // Reset to hover color
+                this.resumeText.setY(this.scale.height / 2 + 110);
+            });
 
         //----------------------------------------------------------
 
@@ -468,8 +639,12 @@ export class AnagramGame extends Scene {
     showPopup() {
         this.popupBg.setVisible(true);
         this.popupText.setVisible(true);
-        this.closeBtn.setVisible(true);
-        this.closeText.setVisible(true);
+        this.popupText2.setVisible(true);
+        this.resumeShadow.setVisible(true);
+        this.resumeBg.setVisible(true);
+        this.resumeZone.setVisible(true);
+        this.resumeText.setVisible(true);
+        this.blurOverlay.setVisible(true);
 
         // Pause timer
         if (this.timerEvent) {
@@ -480,8 +655,12 @@ export class AnagramGame extends Scene {
     hidePopup() {
         this.popupBg.setVisible(false);
         this.popupText.setVisible(false);
-        this.closeBtn.setVisible(false);
-        this.closeText.setVisible(false);
+        this.popupText2.setVisible(false);
+        this.resumeShadow.setVisible(false);
+        this.resumeBg.setVisible(false);
+        this.resumeZone.setVisible(false);
+        this.resumeText.setVisible(false);
+        this.blurOverlay.setVisible(false);
 
         // Resume timer and manually check if time is up
         if (this.timerEvent) {
@@ -729,48 +908,129 @@ export class AnagramGame extends Scene {
 
             //----------------------------------------------------------
 
-            this.clearBG
-                .setPosition(width / 2 - 100, height * 0.85)
-                .setSize(
-                    Math.min(this.scale.width * 0.25, 150),
-                    Math.min(this.scale.height * 0.1, 40)
+            const clearWidth = Math.min(this.scale.width * 0.25, 200);
+            const clearHeight = Math.min(this.scale.height * 0.1, 40);
+
+            this.clearShadow.clear();
+            this.clearShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 215 + 4,
+                    this.scale.height * 0.82 + 4,
+                    clearWidth,
+                    clearHeight,
+                    5
                 );
 
-            this.clearBtn
-                .setPosition(width / 2 - 100, height * 0.85)
-                .setFontSize(Math.min(width * 0.05, 25));
+            this.clearBg.clear();
+            this.clearBg
+                .fillStyle(0xdadada, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 215,
+                    this.scale.height * 0.82,
+                    clearWidth,
+                    clearHeight,
+                    5
+                );
+
+            this.clearZone
+                .setPosition(width / 2 - 215, height * 0.8)
+                .setSize(clearWidth, clearHeight);
+
+            this.clearText
+                .setPosition(width / 2 - 115, height * 0.85)
+                .setFontSize(Math.min(width * 0.05, 30));
 
             //----------------------------------------------------------
 
-            this.submitBG
-                .setPosition(width / 2 + 100, height * 0.85)
-                .setSize(
-                    Math.min(this.scale.width * 0.25, 150),
-                    Math.min(this.scale.height * 0.1, 40)
+            const submitWidth = Math.min(this.scale.width * 0.25, 200);
+            const submitHeight = Math.min(this.scale.height * 0.1, 40);
+
+            this.submitShadow.clear();
+            this.submitShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 + 10 + 4,
+                    this.scale.height * 0.82 + 4,
+                    submitWidth,
+                    submitHeight,
+                    5
                 );
 
-            this.submitBtn
-                .setPosition(width / 2 + 100, height * 0.85)
-                .setSize(
-                    Math.min(this.scale.width * 0.25, 200),
-                    Math.min(this.scale.height * 0.1, 40)
+            this.submitBg.clear();
+            this.submitBg
+                .fillStyle(0x4a63e4, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 + 10,
+                    this.scale.height * 0.82,
+                    submitWidth,
+                    submitHeight,
+                    5
                 );
+
+            this.submitZone
+                .setPosition(width / 2 + 10, height * 0.82)
+                .setSize(submitWidth, submitHeight);
+
+            this.submitText
+                .setPosition(width / 2 + 110, height * 0.85)
+                .setFontSize(Math.min(width * 0.05, 30));
 
             //----------------------------------------------------------
 
-            this.popupBg.setPosition(width / 2, height / 2).setSize(400, 300);
+            this.blurOverlay.setPosition(0, 0).setSize(width, height);
+
+            this.popupBg.clear();
+            this.popupBg
+                .fillStyle(0xffffff, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 250,
+                    this.scale.height / 2 - 160,
+                    this.scale.width * 0.6,
+                    this.scale.height * 0.55,
+                    10
+                );
 
             this.popupText
-                .setPosition(width / 2, height / 2 - 40)
-                .setFontSize(Math.min(width * 0.05, 25));
+                .setPosition(width / 2, height / 2 - 70)
+                .setFontSize(Math.min(width * 0.05, 30));
 
-            this.closeBtn
-                .setPosition(width / 2, height / 2 + 70)
-                .setSize(80, 40);
+            this.popupText2
+                .setPosition(width / 2, height / 2 + 30)
+                .setFontSize(Math.min(width * 0.05, 30));
 
-            this.closeText
-                .setPosition(width / 2, height / 2 + 70)
-                .setFontSize(Math.min(width * 0.05, 25));
+            const resumeWidth = Math.min(this.scale.width * 0.25, 200);
+            const resumeHeight = Math.min(this.scale.height * 0.1, 40);
+
+            this.resumeShadow.clear();
+            this.resumeShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + 4,
+                    this.scale.height / 2 + 90 + 4,
+                    resumeWidth,
+                    resumeHeight,
+                    5
+                );
+
+            this.resumeBg.clear();
+            this.resumeBg
+                .fillStyle(0x4a63e4, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100,
+                    this.scale.height / 2 + 90,
+                    resumeWidth,
+                    resumeHeight,
+                    5
+                );
+
+            this.resumeZone
+                .setPosition(width / 2 - 100, height / 2 + 90)
+                .setSize(resumeWidth, resumeHeight);
+
+            this.resumeText
+                .setPosition(width / 2, height / 2 + 110)
+                .setFontSize(Math.min(width * 0.05, 35));
 
             //----------------------------------------------------------
 

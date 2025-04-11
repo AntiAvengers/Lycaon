@@ -567,11 +567,7 @@ export class AnagramInstruc extends Scene {
 
         try {
             // Ensure objects exist before updating their positions
-            if (
-                !this.instrucText ||
-                !this.startGameBtn ||
-                !this.startGameBtnBackground
-            ) {
+            if (!this.instrucText || !this.startText || !this.startZone) {
                 console.warn(
                     "Some objects are not initialized yet, resize skipped."
                 );
