@@ -23,16 +23,21 @@ const authenticate_JWT = (req, res, next) => {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Access denied. No token provided." });
     }
+
+    try {
+      const token = authHeader.split(" ")[1]; // Extract token from "Bearer <token>"
   
-    const token = authHeader.split(" ")[1]; // Extract token from "Bearer <token>"
-  
-    const decoded = jwt.verifyToken(token, ACCESS_TOKEN_SECRET);
-    if (!decoded) {
-      return res.status(403).json({ error: "Invalid or expired token." });
+      const decoded = jwt.verifyToken(token, ACCESS_TOKEN_SECRET);
+      if (!decoded) {
+        return res.status(403).json({ error: "Invalid or expired token." });
+      }
+    
+      req.user = decoded;
+      next();
+    } catch(err) {
+      console.error(err);
+      return res.status(403).json({ error: err });
     }
-  
-    req.user = decoded;
-    next();
 };
 
 module.exports = {

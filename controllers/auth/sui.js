@@ -13,37 +13,10 @@ const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const Users_UUID = new Map();
 
 function check_account(address) {
-    // const new_user = {
-    //     [hashed]: {
-    //         profile_name: "",
-    //         wallet_id: address,
-    //         keys: 0,
-    //         shards: 0,
-    //         pages: 0,
-    //         highest_score: {
-    //             game_type: "",
-    //             score: 0
-    //         },
-    //         last_login: Date.now(),
-    //     }
-    // }
-
-    // const new_game_session = {
-    //     [hashed]: {
-    //         game_type: "",
-    //         puzzle_data: [],
-    //         validate_on_client: false,
-    //         valid_answers: [],
-    //         submitted_answers: [],
-    //         key_used: false
-    //     }
-    // }
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const new_user = { [hashed]: default_user };
     const new_game_session = { [hashed]: default_game_session };
-
-    console.log(default_user); 
 
     const users = database.ref('users');
     users.once("value", snapshot => {
@@ -71,9 +44,6 @@ function check_account(address) {
 function generate_UUID(req, res) {
     //Step 0: Connect React App w/ Sui Wallet through @mysten/dapp-kit (Responsibility of FrontEnd)
     const { address } = req.body;
-    if(!address) {
-        res.json({ error: "Missing Property in request body: Wallet Address, perhaps wallet is not connected!"})
-    }
 
     //Step 1: Generate UUID message for Client w/ Sui Wallet to sign to prove ownership of wallet
     const UUID = crypto.randomUUID();
@@ -86,8 +56,8 @@ async function login(req, res) {
     //Step 2: Client signs message, sends bytes + signature back encoded via Base64
     const { address, bytes, message, signature } = req.body;
 
-    if(!address || !bytes || !message || !signature) {
-        return res.status(400).json({ error: "Missing required fields (address, message or signature) from request body!" });
+    if(!bytes || !message || !signature) {
+        return res.status(400).json({ error: "Missing required fields (message or signature) from request body!" });
     }
 
     const UUID_message = Users_UUID.get(address);

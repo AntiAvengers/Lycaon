@@ -12,10 +12,6 @@ const create_listing = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
-
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const collections = database.ref('collections');
@@ -58,10 +54,6 @@ const read_listing = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
-
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const marketplace = database.ref('marketplace');
@@ -77,10 +69,6 @@ const read_all_listings = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
-
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const marketplace = database.ref('marketplace');
@@ -95,10 +83,6 @@ const read_all_listings = async (req, res) => {
 const update_listing = async (req, res) => {
     const { address, asking_price, creature, id } = req.body;
     const { type, rarity, minted_ID } = creature;
-
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 

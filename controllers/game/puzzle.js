@@ -23,7 +23,6 @@ const random = async () => {
     return output;
 }
 
-//hashed = crypto.createHash('sha256').update(address).digest('hex'); of wallet address
 const generate = async (hashed) => {
     //Generate new puzzle for player - random puzzle
     const random_puzzle = await random();
@@ -48,12 +47,8 @@ const generate = async (hashed) => {
 
 const load = async (req, res) => {
     const { address } = req.body;
-    console.log(req.body);
-    const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
-    if(!address) {
-        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
-    }
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const session = database.ref('game_session');
     const snapshot = await session.orderByKey().equalTo(hashed).once("value");
@@ -77,8 +72,6 @@ const check_answer = async (req, res) => {
     
     if(!answer) {
         res.status(403).json({ error: 'Missing "answer" parameter in request body'});
-    } else if(!address) {
-        res.status(403).json({ error: 'Missing "address" (wallet address) parameter in request body'});
     }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -109,10 +102,6 @@ const check_answer = async (req, res) => {
 
 const finish = async (req, res) => {
     const { address } = req.body;
-
-    if(!address) {
-        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 

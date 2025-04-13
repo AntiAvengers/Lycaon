@@ -5,10 +5,6 @@ const { database, schema } = require('../../database/firebaseConfig.js');
 const get_user_profile = async (req, res) => {
     const { address } = req.body;
 
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
-
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const user = database.ref('users');
@@ -23,10 +19,6 @@ const get_user_profile = async (req, res) => {
 
 const get_user_collection = async (req, res) => {
     const { address } = req.body;
-
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
