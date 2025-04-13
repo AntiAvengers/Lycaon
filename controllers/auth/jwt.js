@@ -1,40 +1,36 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('../../utils/jwt');
+
 const dotenv = require('dotenv');
 
 dotenv.config();
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
-const ACCESS_TOKEN_LIFETIME = '20m';  //minutes
-const REFRESH_TOKEN_LIFETIME = '7d'; // days
 
-const generateToken = (user, secret, lifetime) => {
-    return jwt.sign(user, secret, { expiresIn: lifetime });
-};
-
-const verifyToken = (token, secret) => {
-    return jwt.verify(token, secret);
-};
-
-const authenticateJWT = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+const refresh_JWT = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken; // Assuming refresh token is stored in cookies
+    const { address } = req.body;
   
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Access denied. No token provided." });
+    if (!refreshToken) {
+      return res.status(403).json({ message: "No refresh token provided." });
     }
   
-    const token = authHeader.split(" ")[1]; // Extract token from "Bearer <token>"
+    try {
+      const decoded = jwt.verifyToken(refreshToken, REFRESH_TOKEN_SECRET);
+      const userId = decoded.userId; // Extract user info from the decoded token
   
-    const decoded = verifyToken(token, ACCESS_TOKEN_SECRET);
-    if (!decoded) {
-      return res.status(403).json({ message: "Invalid or expired token." });
+      const newAccessToken = jwt.generateToken(
+        { address },
+        ACCESS_TOKEN_SECRET,
+        { expiresIn: "30m" }
+      );
+  
+      return res.json({ accessToken: newAccessToken });
+    } catch (err) {
+      return res.status(403).json({ message: "Invalid refresh token." });
     }
-  
-    req.user = decoded; // Attach user info to request
-    next(); // Move to the next middleware/route handler
   };
+  
 
 module.exports = {
-  generateToken,
-  verifyToken,
-  authenticateJWT
-};
+    refresh_JWT
+}

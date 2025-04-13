@@ -1,0 +1,22 @@
+{
+    "littles": {
+        "id": 1,
+        "pull_rate": 520 
+    },
+    "familiar": {
+        "id": 2,
+        "pull_rate": 310 
+    },
+    "noble": {
+        "id": 3,
+        "pull_rate": 120 
+    },
+    "elite": {
+        "id": 4,
+        "pull_rate": 45 
+    },
+    "mythic": {
+        "id": 5,
+        "pull_rate": 5
+    },
+}

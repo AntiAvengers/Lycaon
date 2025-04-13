@@ -6,7 +6,7 @@ const { SuiGraphQLClient } = require('@mysten/sui/graphql');
 
 const { database, schema } = require('../../database/firebaseConfig');
 const { default_user, default_game_session } = schema;
-const { generateToken, verifyToken } = require('./jwt');
+const { generateToken, verifyToken } = require('../../utils/jwt');
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
@@ -118,11 +118,17 @@ async function login(req, res) {
         check_account(address);
 
         //Step 5: Issue a JWT
-        const user = { address };  // User object (could be expanded with other data)
-        const accessToken = generateToken(user, ACCESS_TOKEN_SECRET, '30m');  // Access token for authentication
-        const refreshToken = generateToken(user, REFRESH_TOKEN_SECRET, '7d');  // Refresh token for long-term sessions
+        const accessToken = generateToken({ address }, ACCESS_TOKEN_SECRET, '30m');  // Access token for authentication
+        const refreshToken = generateToken({ address }, REFRESH_TOKEN_SECRET, '7d');  // Refresh token for long-term sessions
 
-        res.status(200).json({ accessToken, refreshToken });
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "PRODUCTION",
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({ accessToken });
     } catch(err) {
         console.log(err);
         res.status(500).json({ error: err });

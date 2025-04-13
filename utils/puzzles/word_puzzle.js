@@ -1,4 +1,4 @@
-const dictionary = require('../../utils/dictionary');
+const dictionary = require('../dictionary');
 const words = dictionary.load();
 
 function generate_puzzle(num_of_letters = 7, count = 0) {
@@ -71,6 +71,5 @@ function get_validity(letters) {
 }
 
 module.exports = {
-    generate_puzzle,
-    check_answer 
+    generate_puzzle
 }

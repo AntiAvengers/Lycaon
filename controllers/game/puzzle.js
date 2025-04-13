@@ -17,7 +17,7 @@ const random = async () => {
 
     const output = {
         puzzle: puzzles[i].split(".")[0],
-        controller: require(`./${puzzles[i]}`)
+        controller: require(`../../utils/puzzles/${puzzles[i]}`)
     }
 
     return output;
