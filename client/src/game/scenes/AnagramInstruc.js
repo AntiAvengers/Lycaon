@@ -112,7 +112,7 @@ export class AnagramInstruc extends Scene {
                     fontSize: Math.min(this.scale.width * 0.06, 35),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.7 },
+                    wordWrap: { width: this.scale.width * 0.65 },
                     lineSpacing: 10,
                 }
             )

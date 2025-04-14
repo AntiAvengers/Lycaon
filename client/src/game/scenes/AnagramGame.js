@@ -42,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 5;
+        this.remainingTime = 30;
         this.wordList = [];
         this.inputText = "";
     }
