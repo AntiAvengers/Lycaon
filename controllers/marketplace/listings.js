@@ -41,6 +41,9 @@ const create_listing = async (req, res) => {
         asking_price: asking_price,
     };
 
+    console.log('Player Listing:');
+    console.log(player_listing);
+
     const marketplace = database.ref('marketplace');
     const market_snapshot = await marketplace.once("value");
     const listings = market_snapshot.val() || [];
@@ -105,8 +108,6 @@ const update_listing = async (req, res) => {
     if(asking_price <= 0 || asking_price.isNaN) {
         return res.status(400).json({ error: "Asking price must be a positive number" });
     }
-
-    //You have to go through the array . . . delete the original and upload the new one . . . great
 
     const player_listing = {
         id: id,

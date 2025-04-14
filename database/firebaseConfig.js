@@ -42,10 +42,12 @@ const default_leaderboard = {
 
 const default_collection = {
   nickname: "",
+  favorite: false,
+  showcase: false,
   type: "",
   rarity: "",
   stage: 0,
-  age: 0,
+  date_of_birth: Date.now(),
   hunger: 10,
   traits: [],
   minted_ID: false
@@ -117,8 +119,6 @@ db.once('value', snapshot => {
     });
   } 
 });
-
-
 
 // Export the database reference
 module.exports = {
