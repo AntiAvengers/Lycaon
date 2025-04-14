@@ -1,15 +1,25 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
+import { AudioManager } from "../AudioManager";
+
 export class AnagramOver extends Scene {
+    background;
+    audioManager;
+    muteButton;
     anagramBG;
     anagramText;
     timerText;
     timesUpText;
     wordCount;
+    rewardBg;
     rewardsText;
-    backBG;
-    backBtn;
+    rewardsText2;
+    scrollIcon;
+    homeShadow;
+    homeBg;
+    homeZone;
+    homeText
 
     lastWidth = null;
     lastHeight = null;
@@ -23,20 +33,52 @@ export class AnagramOver extends Scene {
     }
 
     create() {
-        // Retrieve the remaining time from the global registry
         const remainingTime = this.registry.get("remainingTime");
 
         const wordCount = this.registry.get("wordCount");
 
         const pageReward = this.calculatePages(wordCount);
 
-        console.log("Total Pages:", pageReward);
+        //----------------------------------------------------------
 
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setOrigin(0.5)
             .setAlpha(0.75)
             .setDisplaySize(this.scale.width, this.scale.height);
+
+        //----------------------------------------------------------
+
+        // Ensure AudioManager is instantiated and persistent
+        if (!this.sys.game.audioManager) {
+            this.sys.game.audioManager = new AudioManager(this); // Create AudioManager only once
+        }
+
+        this.audioManager = this.sys.game.audioManager;
+        this.audioManager.create(); // Initialize audio
+
+        // Create the mute button in the scene
+        if (!this.muteButton) {
+            this.muteButton = this.add
+                .image(this.scale.width - 30, this.scale.height - 30, "star")
+                .setOrigin(0.5)
+                .setScale(0.5)
+                .setInteractive()
+                .setDepth(198);
+
+            this.muteButton.on("pointerdown", () => this.toggleMute());
+        }
+
+        // Retrieve the mute state from the registry
+        const isMuted = this.registry.get("isMuted");
+
+        // Update the mute button's visual state
+        if (isMuted) {
+            this.muteButton.setAlpha(0.5); // Dim the button if muted
+        } else {
+            this.muteButton.setAlpha(1); // Brighten the button if not muted
+        }
+
         //----------------------------------------------------------
 
         this.anagramBG = this.add
@@ -44,7 +86,7 @@ export class AnagramOver extends Scene {
                 this.scale.width / 2, // Center horizontally
                 0, // Touch the top
                 this.scale.width,
-                Math.min(this.scale.height * 0.15, 100), // Height of the button
+                Math.min(this.scale.height * 0.12, 100), // Height of the button
                 0x4a63e4
             )
             .setAlpha(0.65)
@@ -54,12 +96,12 @@ export class AnagramOver extends Scene {
         this.anagramText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height + Math.min(this.scale.height * 0.15, 100) / 2, // Vertically center text within rectangle
-                "E  I  T  S  P  E  R",
+                this.scale.height + Math.min(this.scale.height * 0.12, 100) / 2, // Vertically center text within rectangle
+                "E  I  T  S  P",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.08, 65),
-                    color: "#000000",
+                    color: "#FFFFFF",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
                 }
@@ -70,12 +112,12 @@ export class AnagramOver extends Scene {
         this.timerText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.25,
+                this.scale.height * 0.22,
                 this.formatTime(remainingTime),
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.08, 65),
-                    color: "#ff0000",
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.125, 90),
+                    color: "#EA1A26",
                     align: "center",
                 }
             )
@@ -85,14 +127,12 @@ export class AnagramOver extends Scene {
         this.timesUpText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.45,
+                this.scale.height * 0.35,
                 "Time's up!",
                 {
-                    fontFamily: "Arial Black",
-                    fontSize: Math.min(this.scale.width * 0.08, 50), // Responsive font size
-                    color: "#ffffff",
-                    stroke: "#000000",
-                    strokeThickness: 8,
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.08, 55),
+                    color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
                 }
@@ -103,11 +143,11 @@ export class AnagramOver extends Scene {
         this.wordCount = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.6,
+                this.scale.height * 0.43,
                 `You found ${wordCount} words!`,
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25), // Responsive font size
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.08, 55),
                     color: "#000000",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
@@ -115,16 +155,33 @@ export class AnagramOver extends Scene {
             )
             .setOrigin(0.5)
             .setDepth(100);
+
+        this.rewardBg = this.add
+            .image(this.scale.width / 2, this.scale.height * 0.67, "reward-bg")
+            .setOrigin(0.5)
+            .setScale(1.1)
+            .setDepth(99);
 
         this.rewardsText = this.add
+            .text(this.scale.width / 2, this.scale.height * 0.6, "Obtained", {
+                fontFamily: "CustomFont",
+                fontSize: Math.min(this.scale.width * 0.05, 45),
+                color: "#ffffff",
+                align: "center",
+                wordWrap: { width: this.scale.width * 0.8 },
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
+
+        this.rewardsText2 = this.add
             .text(
-                this.scale.width / 2,
+                this.scale.width / 2 - 30,
                 this.scale.height * 0.7,
-                `You are rewarded with ${pageReward} pages!`,
+                `${pageReward}x`,
                 {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 30), // Responsive font size
-                    color: "#000000",
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.1, 90),
+                    color: "#ffffff",
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.8 },
                 }
@@ -132,73 +189,103 @@ export class AnagramOver extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.backBG = this.add
-            .rectangle(
-                this.scale.width / 2,
-                this.scale.height * 0.8,
-                Math.min(this.scale.width * 0.3, 300), // Width of the button
-                Math.min(this.scale.height * 0.1, 40), // Height of the button
-                0x4a63e4
-            )
+        this.scrollIcon = this.add
+            .image(this.scale.width / 2 + 40, this.scale.height * 0.7, "scroll")
             .setOrigin(0.5)
-            .setDepth(99)
-            .setInteractive({ useHandCursor: true });
-
-        this.backBtn = this.add
-            .text(
-                this.scale.width / 2,
-                this.scale.height * 0.8,
-                "Back to Home",
-                {
-                    fontFamily: "Arial",
-                    fontSize: Math.min(this.scale.width * 0.05, 25),
-                    color: "#ffffff",
-                    align: "center",
-                }
-            )
-            .setDepth(100)
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true });
+            .setScale(2.75)
+            .setDepth(100);
 
         //----------------------------------------------------------
 
-        const buttonHoverEffect = (isHovering) => {
-            const textColor = isHovering ? "#000000" : "#ffffff";
-            const backgroundColor = isHovering ? 0xffffff : 0x4a63e4;
-            const scaleValue = isHovering ? 1.05 : 1;
+        const homeWidth = Math.min(this.scale.width * 0.25, 200);
+        const homeHeight = Math.min(this.scale.height * 0.1, 40);
 
-            this.backBtn.setStyle({ color: textColor });
-            this.backBG.setFillStyle(backgroundColor);
+        this.homeShadow = this.add.graphics();
+        this.homeShadow
+            .fillStyle(0x000000, 0.3)
+            .fillRoundedRect(
+                this.scale.width / 2 - 100 + 4,
+                this.scale.height * 0.88 + 4,
+                homeWidth,
+                homeHeight,
+                5
+            )
+            .setDepth(98);
 
-            this.tweens.add({
-                targets: this.backBtn,
-                scaleX: scaleValue,
-                scaleY: scaleValue,
-                duration: 200,
-                ease: "Power1",
-            });
-
-            this.tweens.add({
-                targets: this.backBG,
-                scaleX: scaleValue,
-                scaleY: scaleValue,
-                duration: 200,
-                ease: "Power1",
-            });
+        this.homeBg = this.add.graphics();
+        const drawHomeBg = (color = 0x4a63e4, offsetX = 0, offsetY = 0) => {
+            this.homeBg.clear();
+            this.homeBg
+                .fillStyle(color, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100 + offsetX,
+                    this.scale.height * 0.88 + offsetY,
+                    homeWidth,
+                    homeHeight,
+                    5
+                )
+                .setDepth(99);
         };
 
-        this.backBG.on("pointerover", () => buttonHoverEffect(true));
-        this.backBG.on("pointerout", () => buttonHoverEffect(false));
+        this.homeZone = this.add
+            .zone(
+                this.scale.width / 2 - 100,
+                this.scale.height * 0.88,
+                homeWidth,
+                homeHeight
+            )
+            .setOrigin(0)
+            .setDepth(100)
+            .setInteractive({ useHandCursor: true });
 
-        this.backBtn.on("pointerover", () => buttonHoverEffect(true));
-        this.backBtn.on("pointerout", () => buttonHoverEffect(false));
+        this.homeText = this.add
+            .text(this.scale.width / 2, this.scale.height * 0.91, "Back Home", {
+                fontFamily: "CustomFont",
+                fontSize: Math.min(this.scale.width * 0.05, 30),
+                color: "#ffffff",
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100)
+            .setInteractive({ useHandCursor: true });
 
-        [this.backBG, this.backBtn].forEach((btn) => {
-            btn.setInteractive({ useHandCursor: true });
-            btn.on("pointerdown", () => {
+        drawHomeBg();
+
+        this.homeZone
+            .on("pointerover", () => {
+                drawHomeBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawHomeBg(0x4a63e4); // Default color
+                this.homeText.setY(this.scale.height * 0.91);
+            })
+            .on("pointerdown", () => {
+                drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
+                this.homeText.setY(this.scale.height * 0.91 + 2);
                 window.location.href = "/home";
+            })
+            .on("pointerup", () => {
+                drawHomeBg(0x4a63e4); // Reset to hover color
+                this.homeText.setY(this.scale.height * 0.91);
             });
-        });
+
+        this.homeText
+            .on("pointerover", () => {
+                drawHomeBg(0x1d329f); // Hover color
+            })
+            .on("pointerout", () => {
+                drawHomeBg(0x4a63e4); // Default color
+                this.homeText.setY(this.scale.height * 0.91);
+            })
+            .on("pointerdown", () => {
+                drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
+                this.homeText.setY(this.scale.height * 0.91 + 2);
+                window.location.href = "/home";
+            })
+            .on("pointerup", () => {
+                drawHomeBg(0x4a63e4); // Reset to hover color
+                this.homeText.setY(this.scale.height * 0.91);
+            });
 
         //----------------------------------------------------------
 
@@ -215,6 +302,9 @@ export class AnagramOver extends Scene {
         this.resize({ width: this.scale.width, height: this.scale.height });
 
         EventBus.emit("current-scene-ready", this);
+
+        // Clean up listeners on scene shutdown
+        this.events.once("shutdown", this.cleanup, this);
     }
 
     formatTime(seconds) {
@@ -235,6 +325,29 @@ export class AnagramOver extends Scene {
         } else {
             return 3;
         }
+    }
+
+    toggleMute() {
+        this.audioManager.toggleMute();
+        if (this.audioManager.isMuted) {
+            this.muteButton.setAlpha(0.5); // Dim the button if muted
+            this.registry.set("isMuted", true); // Save mute state to registry
+        } else {
+            this.muteButton.setAlpha(1); // Brighten the button if not muted
+            this.registry.set("isMuted", false); // Save unmute state to registry
+        }
+    }
+
+    update() {
+        // Only update button position if the size has changed
+        if (
+            this.lastWidth !== this.scale.width ||
+            this.lastHeight !== this.scale.height
+        ) {
+            this.resize({ width: this.scale.width, height: this.scale.height });
+        }
+
+        this.audioManager.update(); // Update the audio state (e.g., background music position)
     }
 
     resize({ width, height }) {
@@ -259,47 +372,91 @@ export class AnagramOver extends Scene {
 
             this.anagramBG
                 .setPosition(width / 2, 0)
-                .setSize(width, Math.min(height * 0.15, 100));
+                .setSize(width, Math.min(height * 0.12, 100));
 
             this.anagramText
                 .setPosition(
                     width / 2,
-                    Math.min(this.scale.height * 0.15, 100) / 2
+                    Math.min(this.scale.height * 0.12, 100) / 2
                 )
                 .setFontSize(Math.min(width * 0.08, 65));
 
             this.timerText
-                .setPosition(width / 2, height * 0.25)
-                .setFontSize(Math.min(width * 0.08, 65));
+                .setPosition(width / 2, height * 0.22)
+                .setFontSize(Math.min(width * 0.125, 90));
 
             this.timesUpText
-                .setPosition(width / 2, height * 0.45)
-                .setFontSize(Math.min(width * 0.08, 50));
+                .setPosition(width / 2, height * 0.35)
+                .setFontSize(Math.min(width * 0.08, 55));
 
-            this.wordCount
-                .setPosition(width / 2, height * 0.6)
-                .setFontSize(Math.min(width * 0.05, 25));
+            this.wordCounts
+                .setPosition(width / 2, height * 0.43)
+                .setFontSize(Math.min(width * 0.08, 55));
+
+            this.rewardBg.setPosition(width / 2, height * 0.67);
 
             this.rewardsText
-                .setPosition(width / 2, height * 0.7)
-                .setFontSize(Math.min(width * 0.05, 30));
+                .setPosition(width / 2, height * 0.6)
+                .setFontSize(Math.min(width * 0.05, 45));
 
-            this.backBG
-                .setPosition(width / 2, height * 0.8)
-                .setSize(
-                    Math.min(this.scale.width * 0.3, 300),
-                    Math.min(this.scale.height * 0.1, 40)
+            this.rewardsText2
+                .setPosition(width / 2 - 30, height * 0.7)
+                .setFontSize(Math.min(width * 0.1, 90));
+
+            this.scrollIcon.setPosition(width / 2 + 40, height * 0.7);
+
+            //----------------------------------------------------------
+
+            const homeWidth = Math.min(this.scale.width * 0.25, 200);
+            const homeHeight = Math.min(this.scale.height * 0.1, 40);
+
+            this.homeShadow.clear();
+            this.homeShadow
+                .fillStyle(0x000000, 0.3)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100  + 4,
+                    this.scale.height * 0.88 + 4,
+                    homeWidth,
+                    homeHeight,
+                    5
                 );
 
-            this.backBtn
-                .setPosition(width / 2, height * 0.8)
-                .setFontSize(Math.min(width * 0.06, 25));
+            this.homeBg.clear();
+            this.homeBg
+                .fillStyle(0x4a63e4, 1)
+                .fillRoundedRect(
+                    this.scale.width / 2 - 100,
+                    this.scale.height * 0.88,
+                    homeWidth,
+                    homeHeight,
+                    5
+                );
+
+            this.homeZone
+                .setPosition(width / 2 - 100, height * 0.88)
+                .setSize(homeWidth, homeHeight);
+
+            this.homeText
+                .setPosition(width / 2, height * 0.91)
+                .setFontSize(Math.min(width * 0.05, 30));
+
+            //----------------------------------------------------------
+
+            this.muteButton.setPosition(width - 30, height - 30);
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);
         } catch (e) {
             console.error("Resize error: ", e);
         }
+    }
+
+    cleanup() {
+        // Remove pointer event listeners for 'pointerdown', 'pointerup', 'pointerover', and 'pointerout'
+        this.input.off("pointerdown", this.handlePointerDown, this);
+        this.input.off("pointerup", this.handlePointerUp, this);
+        this.input.off("pointerover", this.handlePointerOver, this);
+        this.input.off("pointerout", this.handlePointerOut, this);
     }
 }
 

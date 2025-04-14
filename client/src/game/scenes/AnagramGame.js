@@ -15,15 +15,24 @@ export class AnagramGame extends Scene {
     errorMessage;
     inputBG;
     inputField;
+    bottomBorder
     clearShadow;
     clearBg;
     clearZone;
     clearText;
+    submitShadow;
+    submitBg;
+    submitZone;
+    submitText;
     helpIcon;
+    blurOverlay;
     popupBg;
     popupText;
-    closeBtn;
-    closeText;
+    popupText2;
+    resumeShadow;
+    resumeBg;
+    resumeZone;
+    resumeText;
     timerEvent;
     errorMessageTween;
 
@@ -33,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30;
+        this.remainingTime = 5;
         this.wordList = [];
         this.inputText = "";
     }
@@ -114,7 +123,7 @@ export class AnagramGame extends Scene {
         this.timerText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.2,
+                this.scale.height * 0.22,
                 this.formatTime(this.remainingTime),
                 {
                     fontFamily: "CustomFont",
@@ -764,7 +773,7 @@ export class AnagramGame extends Scene {
                 if (this.remainingTime > 0) {
                     this.remainingTime--;
                     if (this.remainingTime <= 10) {
-                        this.timerText.setColor("#ff0000");
+                        this.timerText.setColor("#EA1A26");
                     }
                     this.timerText.setText(this.formatTime(this.remainingTime));
                 } else {
@@ -859,7 +868,7 @@ export class AnagramGame extends Scene {
                 .setFontSize(Math.min(width * 0.08, 65));
 
             this.timerText
-                .setPosition(width / 2, height * 0.2)
+                .setPosition(width / 2, height * 0.22)
                 .setFontSize(Math.min(width * 0.125, 90));
 
             this.wordDisplay
