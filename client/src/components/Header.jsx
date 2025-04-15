@@ -56,7 +56,7 @@ const Header = () => {
         { to: "/puzzles", label: "Puzzles", action: handlePuzzleClick },
         { to: "/fountain", label: "Fountain" },
         { to: "/collection", label: "Collection" },
-        { to: "/trove", label: "Trove" },
+        { to: "/pantry", label: "Pantry" },
         { to: "/market", label: "Market" },
     ];
 
