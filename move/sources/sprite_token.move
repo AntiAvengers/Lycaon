@@ -1,9 +1,5 @@
-module wallet_address::sprite_token {
-    use sui::transfer;
-    use sui::object::{Self, UID};
-    use sui::tx_context::TxContext;
-
-    struct Sprite has key {
+module 0x0::sprite_token {
+    public struct Sprite has key {
         id: UID,
         metadata_url: vector<u8>,
     }
