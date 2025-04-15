@@ -43,7 +43,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-evenly items-center text-[25px]">
                         2
                         <img
-                            src="assets/icons/key.svg"
+                            src="/assets/icons/key.svg"
                             alt="Key Icon"
                             className="w-[25px] h-[25px] ml-2"
                         />
@@ -51,7 +51,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-evenly items-center text-[25px]">
                         5
                         <img
-                            src="assets/icons/scroll.svg"
+                            src="/assets/icons/scroll.svg"
                             alt="Pages Icon"
                             className="w-[25px] h-[25px] ml-2"
                         />
@@ -59,7 +59,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-evenly items-center text-[25px]">
                         2000
                         <img
-                            src="assets/icons/shard.svg"
+                            src="/assets/icons/shard.svg"
                             alt="Shards Icon"
                             className="w-[25px] h-[25px] ml-2"
                         />
@@ -67,7 +67,7 @@ const InGameCurrencyTracker = () => {
                     <li className="flex justify-evenly items-center text-[25px]">
                         1000
                         <img
-                            src="assets/icons/sui-logo.svg"
+                            src="/assets/icons/sui-logo.svg"
                             alt="Shards Icon"
                             className="w-[25px] h-[25px] ml-2"
                         />
@@ -80,7 +80,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     2
                     <img
-                        src="assets/icons/key.svg"
+                        src="/assets/icons/key.svg"
                         alt="Key Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />
@@ -88,7 +88,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     5
                     <img
-                        src="assets/icons/scroll.svg"
+                        src="/assets/icons/scroll.svg"
                         alt="Pages Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />
@@ -96,7 +96,7 @@ const InGameCurrencyTracker = () => {
                 <li className="flex items-center">
                     2000
                     <img
-                        src="assets/icons/shard.svg"
+                        src="/assets/icons/shard.svg"
                         alt="Shards Icon"
                         className="w-[25px] h-[25px] ml-[5px]"
                     />

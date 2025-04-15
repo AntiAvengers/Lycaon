@@ -67,7 +67,7 @@ const Header = () => {
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
                     <div ref={menuRef} className="relative">
                         <img
-                            src={`assets/icons/${
+                            src={`/assets/icons/${
                                 open ? "closeBtn" : "openBtn"
                             }.svg`}
                             alt="Toggle Menu"
@@ -98,7 +98,7 @@ const Header = () => {
                         className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
                     >
                         <img
-                            src="assets/star.png"
+                            src="/assets/star.png"
                             alt="Key Icon"
                             className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] mr-[15px]"
                         />
