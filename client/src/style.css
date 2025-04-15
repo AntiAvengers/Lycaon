@@ -27,6 +27,15 @@ body.puzzle-bg {
     overflow-x: hidden;
 }
 
+body.spriteDetail-bg {
+    background: url("/assets/bg/spriteDetailBg.svg") no-repeat center center
+        fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 #app {
     width: 100%;
     height: 100vh;

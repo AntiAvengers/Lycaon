@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     return (
         <div className="min-h-screen flex flex-col">
             {!isSignInPage && <Header />}
-            <main className="flex flex-grow justify-center items-start">
+            <main className="flex flex-grow justify-center items-center">
                 {children}
             </main>
             <div className="hidden md:block">
