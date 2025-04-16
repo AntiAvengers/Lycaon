@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const { SuiClient, Ed25519Keypair, fromB64 } = require('@mysten/sui.js');
 
 const SUI_FULLNODE = process.env.MODE == 'DEVELOPMENT' 

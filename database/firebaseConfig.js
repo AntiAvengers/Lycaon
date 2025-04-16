@@ -43,7 +43,6 @@ const default_leaderboard = {
 const default_collection = {
   nickname: "",
   favorite: false,
-  showcase: false,
   type: "",
   rarity: "",
   stage: 0,
