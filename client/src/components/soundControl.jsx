@@ -9,6 +9,7 @@ const SoundControl = () => {
     const [volume, setVolume] = useState(1); // State for volume level
     const [prevVolume, setPrevVolume] = useState(1); // Store previous volume before muting
     const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
+    const [hovering, setHovering] = useState(false);
 
     // Memoize the enableAudio function to prevent unnecessary re-creations
     const enableAudio = useCallback(() => {
@@ -92,7 +93,13 @@ const SoundControl = () => {
             />
 
             {/* Volume Control Slider */}
-            <div className="bg-[#242C53] w-[173.3px] h-[26px] flex justify-center items-center gap-[10px] rounded-[30px] px-[10px] py-[4px]">
+            <div
+                onMouseEnter={() => setHovering(true)}
+                onMouseLeave={() => setHovering(false)}
+                className={`bg-[#242C53] h-[26px] flex items-center rounded-[30px] px-[10px] py-[4px] gap-[10px] transition-all duration-300 overflow-hidden ${
+                    hovering ? "w-[173.3px]" : "w-[42px] justify-center"
+                }`}
+            >
                 {/* Mute Button */}
                 <button
                     onClick={toggleMute}
@@ -104,18 +111,22 @@ const SoundControl = () => {
                         <VolumeUpIcon sx={{ width: 26, height: 18 }} />
                     )}
                 </button>
-                <Slider
-                    size="small"
-                    min={0}
-                    max={1}
-                    value={volume}
-                    onChange={handleVolumeChange}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
-                    step={0.01}
-                    aria-label="Volume Control"
-                    sx={{ width: 122.3, color: "#FCF4E7" }}
-                />
+                {hovering && (
+                    <Slider
+                        size="small"
+                        min={0}
+                        max={1}
+                        value={volume}
+                        onChange={handleVolumeChange}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value) =>
+                            `${Math.round(value * 100)}%`
+                        }
+                        step={0.01}
+                        aria-label="Volume Control"
+                        sx={{ width: 122.3, color: "#FCF4E7" }}
+                    />
+                )}
             </div>
         </div>
     );

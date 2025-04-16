@@ -16,10 +16,8 @@ const Layout = ({ children }) => {
             <main className="flex flex-grow justify-center items-center">
                 {children}
             </main>
-            <div className="hidden md:block">
-                {!isSignInPage && !isPuzzlePage && (
-                    <SoundControl />
-                )}
+            <div className="hidden md:block sticky bottom-0">
+                {!isSignInPage && !isPuzzlePage && <SoundControl />}
             </div>
             {/* {!isSignInPage && <Footer />} */}
         </div>

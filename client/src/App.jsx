@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ConnectPg from "./components/connectPg.jsx";
 import HomePg from "./components/homePg.jsx";
 import PuzzlePg from "./components/puzzelPg.jsx";
-import UserProfilePg from "./components/userProfilePg.jsx";
 import FountainPg from "./components/fountainPg.jsx";
 import CollectionPg from "./components/collectionPg.jsx";
 import SpritesDetailPg from "./components/spriteDetailPg.jsx";
@@ -20,7 +19,6 @@ const App = () => {
                 <Route path="/" element={<Layout><ConnectPg /></Layout>} />
                 <Route path="/home" element={<Layout><HomePg /></Layout>} />
                 <Route path="/puzzles" element={<Layout><PuzzlePg /></Layout>} />
-                <Route path="/user-profile" element={<Layout><UserProfilePg /></Layout>} />
                 <Route path="/fountain" element={<Layout><FountainPg /></Layout>} />
                 <Route path="/collection" element={<Layout><CollectionPg /></Layout>} />
                 <Route path="/collection/spriteDetail" element={<Layout><SpritesDetailPg /></Layout>} />
