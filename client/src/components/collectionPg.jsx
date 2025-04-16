@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
@@ -56,9 +55,26 @@ const SpritesCollectionPg = () => {
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
     );
+    const [popupMessage, setPopupMessage] = useState("");
+    const [isFading, setIsFading] = useState(false);
 
     const handleToggleLike = (index) => {
         const updatedLikes = [...likedList];
+        const currentLikesCount = updatedLikes.filter(Boolean).length;
+
+        if (!updatedLikes[index]) {
+            if (currentLikesCount >= 3) {
+                setPopupMessage("You can only like up to 3 items!");
+                setIsFading(false); // reset if re-triggered quickly
+                setTimeout(() => setIsFading(true), 1000);
+                setTimeout(() => {
+                    setPopupMessage("");
+                    setIsFading(false); // reset for next time
+                }, 2500); // Remove after fade
+                return;
+            }
+        }
+
         updatedLikes[index] = !updatedLikes[index];
         setLikedList(updatedLikes);
     };
@@ -67,11 +83,20 @@ const SpritesCollectionPg = () => {
         <div className="w-full flex flex-col items-center justify-start">
             <h1 className="text-[80px] text-center">Sprites Collection</h1>
 
-            {/* Showcase */}
-            <section className="w-[702px] h-[260px] p-1 bg-[#FCF4E7]/10 rounded flex flex-col justify-between items-end">
-                <div className="w-[30px] h-[30px] flex items-center justify-center bg-[#FCF4E7]/50 rounded-full cursor-pointer">
-                    <EditIcon />
+            {/* Like Error Message */}
+            {popupMessage && (
+                <div
+                    className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                    bg-[#EA1A26] text-[#FFFFFF] text-[30px] tracking-[2px] p-[20px] rounded-lg shadow-lg z-50 
+                    transition-opacity duration-1000 ease-in-out
+                    ${isFading ? "opacity-0" : "opacity-100"}`}
+                >
+                    {popupMessage}
                 </div>
+            )}
+
+            {/* Showcase */}
+            <section className="w-[702px] h-[260px] p-1 bg-[#FCF4E7]/10 rounded flex justify-end">
                 <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
                     {creaturesList.slice(0, 3).map((creature) => (
                         <li key={creature.label}>
@@ -84,7 +109,7 @@ const SpritesCollectionPg = () => {
                     ))}
                 </ul>
             </section>
-            
+
             {/* Sprites Count */}
             <section className="w-[754px] flex items-center">
                 <span className="text-[35px] ml-auto">30/100</span>
