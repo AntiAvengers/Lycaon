@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 
@@ -71,6 +72,15 @@ const FoodMeter = ({ hunger }) => {
         </div>
     );
 };
+
+FoodMeter.propTypes = {
+    hunger: PropTypes.number.isRequired,
+};
+
+FoodMeter.defaultProps = {
+    hunger: 8,
+};
+
 
 export default FoodMeter;
 

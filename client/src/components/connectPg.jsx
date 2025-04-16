@@ -4,7 +4,7 @@ const ConnectPg = () => {
     return (
         <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6">
             <h1 className="text-[45px] sm:text-[80px] uppercase text-center">
-                Welcom to Lycaon
+                Welcome to Lycaon
             </h1>
             <span className="text-[25px] sm:text-[30px]">
                 Game Requires a Sui Wallet

@@ -6,7 +6,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const creaturesList = [
     {
-        src: "/assets/star.png",
+        src: "/assets/sprites/celestial-sprite.png",
         label: "creature1",
         to: "/collection/spriteDetail",
     },
@@ -16,7 +16,7 @@ const creaturesList = [
         to: "/collection/spriteDetail",
     },
     {
-        src: "/assets/star.png",
+        src: "/assets/sprites/celestial-sprite.png",
         label: "creature3",
         to: "/collection/spriteDetail",
     },

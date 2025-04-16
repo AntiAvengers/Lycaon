@@ -5,10 +5,10 @@ const SuiWallet = () => {
                 <img
                     src="/assets/icons/sui-logo.svg"
                     alt="Sui Icon"
-                    className="w-[20px] h-[20px]"
+                    className="w-[20px] h-[20px] "
                 />
                 <div className="flex items-center h-[25px]">
-                    <h1 className="text-[21px]">1000 SUI</h1>
+                    <h1 className="text-[25px]">1000</h1>
                 </div>
             </section>
         </div>

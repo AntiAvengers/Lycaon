@@ -6,15 +6,16 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Header = () => {
     const [open, setOpen] = useState(false);
+    const [profile, setProfile] = useState(false);
     const [message, setMessage] = useState("");
-    const menuRef = useRef(null);
+    const menuRef1 = useRef(null);
+    const menuRef2 = useRef(null);
 
     const location = useLocation();
     const navigate = useNavigate();
 
     const handleHomeClick = () => {
         navigate("/home");
-        window.location.reload();
     };
 
     // Show the confirmation popup or message
@@ -25,6 +26,7 @@ const Header = () => {
             setTimeout(() => setMessage(""), 3000);
         } else {
             navigate("/puzzles");
+            window.location.reload();
         }
     };
 
@@ -33,10 +35,18 @@ const Header = () => {
         console.log("Dropdown menu header clicked");
     };
 
+    const toggleProfile = () => {
+        setProfile((prev) => !prev);
+        console.log("Dropdown profile header clicked");
+    };
+
     // Memorized function to prevent unnecessary re-creations
     const handleOutsideClick = useCallback((event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
+        if (menuRef1.current && !menuRef1.current.contains(event.target)) {
             setOpen(false);
+        }
+        if (menuRef2.current && !menuRef2.current.contains(event.target)) {
+            setProfile(false);
         }
     }, []);
 
@@ -65,7 +75,7 @@ const Header = () => {
             <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
                 {/* Left Section: Menu and Logo */}
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
-                    <div ref={menuRef} className="relative">
+                    <div ref={menuRef1} className="relative">
                         <img
                             src={`/assets/icons/${
                                 open ? "closeBtn" : "openBtn"
@@ -110,9 +120,25 @@ const Header = () => {
                 <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
-                    <Link to="/user-profile" aria-label="Go to User Profile">
+                    <div
+                        className="relative"
+                        ref={menuRef2}
+                        onClick={toggleProfile}
+                    >
                         <AccountCircleIcon sx={{ width: 30, height: 30 }} />
-                    </Link>
+                        {profile && (
+                            <div className="absolute right-0 mt-[7px] w-[136px] sm:w-[255px] h-auto shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
+                                <Link
+                                    to="/"
+                                    aria-label="Logs Out back to SignIn"
+                                    onClick={() => setProfile(false)}
+                                    className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex items-center pl-[20px] sm:pl-[36px] pr-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-start text-[26px] text-[#FCF4E7]"
+                                >
+                                    Log Out
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </section>
 
                 {/* Already on PuzzlePage Message */}
