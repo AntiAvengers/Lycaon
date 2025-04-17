@@ -112,18 +112,21 @@ const SpritesCollectionPg = () => {
                         </div>
                     )}
 
-                    {/* Showcase */}
+                    {/* Showcase - Liked Creatures */}
                     <section className="w-[702px] h-[260px] p-1 bg-[#FCF4E7]/10 rounded flex justify-end">
                         <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
-                            {creaturesList.slice(0, 3).map((creature) => (
-                                <li key={creature.label}>
-                                    <img
-                                        src={creature.src}
-                                        alt={creature.label}
-                                        className="object-contain"
-                                    />
-                                </li>
-                            ))}
+                            {creaturesList
+                                .filter((_, idx) => likedList[idx]) // only liked
+                                .slice(0, 3) // up to 3
+                                .map((creature) => (
+                                    <li key={creature.label}>
+                                        <img
+                                            src={creature.src}
+                                            alt={creature.label}
+                                            className="object-contain"
+                                        />
+                                    </li>
+                                ))}
                         </ul>
                     </section>
 
