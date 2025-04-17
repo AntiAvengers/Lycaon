@@ -19,7 +19,7 @@ const ConnectPg = () => {
                     alt="sui-icon"
                     className="w-[25px] h-[25px]"
                 />
-                <span className="text-[25px] text-white pl-[5px]">
+                <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
                     Connect Sui Wallet
                 </span>
             </Link>
