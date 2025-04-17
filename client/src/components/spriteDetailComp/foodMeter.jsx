@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 
-const FoodMeter = ({ hunger }) => {
-    const maxHunger = 8;
+const FoodMeter = ({ hunger, max }) => {
+    const maxHunger = max;
     const progress = (hunger / maxHunger) * 100;
     const segmentCount = 8;
     const size = 49;
@@ -75,12 +75,8 @@ const FoodMeter = ({ hunger }) => {
 
 FoodMeter.propTypes = {
     hunger: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
 };
-
-FoodMeter.defaultProps = {
-    hunger: 8,
-};
-
 
 export default FoodMeter;
 

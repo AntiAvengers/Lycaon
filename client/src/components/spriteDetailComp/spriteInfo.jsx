@@ -1,14 +1,7 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const sprite = {
-    name: "Sprite",
-    age: 5,
-    personality: ["Happy", "Adventurous"],
-    details:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus libero sit amet egestas accumsan. Sed massa sem, convallis et fringilla lacinia, faucibus sed augue.",
-};
-
-const SpritesInfo = () => {
+const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -65,6 +58,15 @@ const SpritesInfo = () => {
             <p className="text-[25px]">{sprite.details}</p>
         </div>
     );
+};
+
+SpritesInfo.propTypes = {
+    sprite: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        age: PropTypes.number.isRequired,
+        personality: PropTypes.arrayOf(PropTypes.string).isRequired,
+        details: PropTypes.string.isRequired,
+    }).isRequired,
 };
 
 export default SpritesInfo;
