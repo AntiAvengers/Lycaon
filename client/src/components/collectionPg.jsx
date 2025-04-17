@@ -6,46 +6,55 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 const creaturesList = [
     {
         src: "/assets/sprites/celestial-sprite.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature1",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature2",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/sprites/celestial-sprite.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature3",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/star.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature4",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature5",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/star.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature6",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/star.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature7",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature8",
         to: "/collection/spriteDetail",
     },
     {
         src: "/assets/star.png",
+        still:"/assets/stillSprites/still-slime.svg",
         label: "creature9",
         to: "/collection/spriteDetail",
     },

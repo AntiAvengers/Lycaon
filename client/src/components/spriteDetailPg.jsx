@@ -15,6 +15,7 @@ const initialFoodList = [
 const sprite = {
     name: "Sprite",
     src: "/assets/sprites/slime-sprite.gif",
+    still:"/assets/stillSprites/still-slime.svg",
     hunger: 4,
     age: 5,
     personality: ["Happy", "Adventurous"],
@@ -113,8 +114,8 @@ const SpritesDetailPg = () => {
 
             {/* Minting Comp Popup */}
             {showMint && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-                    <MintPg onClose={closeMint} />
+                <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
+                    <MintPg onClose={closeMint} sprite={sprite} />
                 </div>
             )}
         </div>
