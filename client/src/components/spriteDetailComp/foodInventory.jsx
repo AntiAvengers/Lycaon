@@ -11,7 +11,7 @@ const FoodInventory = () => {
             {foodList.map((food) => (
                 <li
                     key={food.label}
-                    className="bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center p-[10px]"
+                    className="group bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center outline-[5px] outline-transparent transition-all duration-300 hover:outline-[#4A63E4] shadow-md active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95"
                 >
                     <span className="absolute top-0 right-2 text-[25px]">
                         x{food.amt}
@@ -20,7 +20,7 @@ const FoodInventory = () => {
                         <img
                             src={food.src}
                             alt={food.label}
-                            className="object-contain"
+                            className="object-contain transform transition duration-300 ease-in-out group-hover:-translate-y-1"
                         />
                     </button>
                 </li>

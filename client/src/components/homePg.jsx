@@ -31,8 +31,8 @@ const HomePg = () => {
                         onClick={closePopup}
                         className="absolute top-[10px] right-[10px] cursor-pointer w-[30px] h-[30px]"
                     />
-                    <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none">
-                        <h1>Welcome!</h1>
+                    <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none tracking-[1px]">
+                        <h1 className="text-[45px]">Welcome!</h1>
                         <p>Thank you for playing Lycaon! 🎉</p>
                         <p>As a new player, we gifted you 4 pages and 500 shards to start.</p>
                         <p>Go enjoy the game!!!!</p>
