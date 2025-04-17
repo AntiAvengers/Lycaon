@@ -11,6 +11,7 @@ const ConnectPg = () => {
             </span>
             <Link
                 to="/home"
+                state={{ from: "/" }}
                 className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
             >
                 <img

@@ -81,68 +81,89 @@ const SpritesCollectionPg = () => {
 
     return (
         <div className="w-full flex flex-col items-center justify-start">
-            <h1 className="text-[80px] text-center">Sprites Collection</h1>
-
-            {/* Like Error Message */}
-            {popupMessage && (
+            {/* If user has no creatures */}
+            {creaturesList.length === 0 && (
                 <div
-                    className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                    bg-[#EA1A26] text-[#FFFFFF] text-[30px] tracking-[2px] p-[20px] rounded-lg shadow-lg z-50 
-                    transition-opacity duration-1000 ease-in-out
-                    ${isFading ? "opacity-0" : "opacity-100"}`}
+                    className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                    bg-[#EA1A26] text-[#FFFFFF] text-[32px] tracking-[2px] px-[40px] py-[20px] 
+                    rounded-lg shadow-lg z-50 text-center"
                 >
-                    {popupMessage}
+                    You do not have any sprites yet! Go play puzzles to earn
+                    pages to roll for a sprite!
                 </div>
             )}
 
-            {/* Showcase */}
-            <section className="w-[702px] h-[260px] p-1 bg-[#FCF4E7]/10 rounded flex justify-end">
-                <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
-                    {creaturesList.slice(0, 3).map((creature) => (
-                        <li key={creature.label}>
-                            <img
-                                src={creature.src}
-                                alt={creature.label}
-                                className="object-contain"
-                            />
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            {/* Only show content below if there are creatures */}
+            {creaturesList.length > 0 && (
+                <>
+                    <h1 className="text-[80px] text-center">
+                        Sprites Collection
+                    </h1>
 
-            {/* Sprites Count */}
-            <section className="w-[754px] flex items-center">
-                <span className="text-[35px] ml-auto">30/100</span>
-            </section>
-
-            {/* All Sprites */}
-            <ul className="w-[754px] grid grid-cols-3 gap-[25px]">
-                {creaturesList.map((creature, index) => (
-                    <li
-                        key={creature.label}
-                        className="bg-[#FCF4E7]/50 flex flex-col items-center justify-between p-[10px]"
-                    >
-                        <button
-                            onClick={() => handleToggleLike(index)}
-                            aria-label="favorite"
-                            className="w-full flex justify-end cursor-pointer"
+                    {/* Like Error Message */}
+                    {popupMessage && (
+                        <div
+                            className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                    bg-[#EA1A26] text-[#FFFFFF] text-[30px] tracking-[2px] p-[20px] rounded-lg shadow-lg z-50 
+                    transition-opacity duration-1000 ease-in-out
+                    ${isFading ? "opacity-0" : "opacity-100"}`}
                         >
-                            {likedList[index] ? (
-                                <FavoriteIcon style={{ color: "#EA1A26" }} />
-                            ) : (
-                                <FavoriteBorderIcon />
-                            )}
-                        </button>
-                        <Link key={creature.to} to={creature.to}>
-                            <img
-                                src={creature.src}
-                                alt={creature.label}
-                                className="object-contain"
-                            />
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+                            {popupMessage}
+                        </div>
+                    )}
+
+                    {/* Showcase */}
+                    <section className="w-[702px] h-[260px] p-1 bg-[#FCF4E7]/10 rounded flex justify-end">
+                        <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
+                            {creaturesList.slice(0, 3).map((creature) => (
+                                <li key={creature.label}>
+                                    <img
+                                        src={creature.src}
+                                        alt={creature.label}
+                                        className="object-contain"
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+
+                    {/* Sprites Count */}
+                    <section className="w-[754px] flex items-center">
+                        <span className="text-[35px] ml-auto">30/100</span>
+                    </section>
+
+                    {/* All Sprites */}
+                    <ul className="w-[754px] grid grid-cols-3 gap-[25px]">
+                        {creaturesList.map((creature, index) => (
+                            <li
+                                key={creature.label}
+                                className="bg-[#FCF4E7]/50 flex flex-col items-center justify-between p-[10px]"
+                            >
+                                <button
+                                    onClick={() => handleToggleLike(index)}
+                                    aria-label="favorite"
+                                    className="w-full flex justify-end cursor-pointer"
+                                >
+                                    {likedList[index] ? (
+                                        <FavoriteIcon
+                                            style={{ color: "#EA1A26" }}
+                                        />
+                                    ) : (
+                                        <FavoriteBorderIcon />
+                                    )}
+                                </button>
+                                <Link key={creature.to} to={creature.to}>
+                                    <img
+                                        src={creature.src}
+                                        alt={creature.label}
+                                        className="object-contain"
+                                    />
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
         </div>
     );
 };
