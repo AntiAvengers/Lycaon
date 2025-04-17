@@ -1,18 +1,28 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
-const { fromBase64 } = require('@mysten/sui/utils');
-const { verifyPersonalMessageSignature } = require('@mysten/sui/verify');
-const { SuiGraphQLClient } = require('@mysten/sui/graphql');
+// const { fromBase64 } = require('@mysten/sui/utils');
+// const { verifyPersonalMessageSignature } = require('@mysten/sui/verify');
+// const { SuiGraphQLClient } = require('@mysten/sui/graphql');
 
-const { database, schema } = require('../../database/firebaseConfig');
+// const { database, schema } = require('../../database/firebaseConfig');
+// const { default_user, default_game_session } = schema;
+// const { generateToken, verifyToken } = require('../../utils/jwt');
+
+import crypto from 'crypto';
+
+import { fromBase64 } from '@mysten/sui/utils';
+import { verifyPersonalMessageSignature } from '@mysten/sui/verify';
+import { SuiGraphQLClient } from '@mysten/sui/graphql';
+
+import { database, schema } from '../../database/firebaseConfig.js';
 const { default_user, default_game_session } = schema;
-const { generateToken, verifyToken } = require('../../utils/jwt');
+import { generateToken, verifyToken } from '../../utils/jwt.js';
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 const Users_UUID = new Map();
 
-function check_account(address) {
+export const check_account = (address) => {
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const new_user = { [hashed]: default_user };
@@ -41,7 +51,7 @@ function check_account(address) {
     console.log('. . .', address, 'has logged in!');
 }
 
-function generate_UUID(req, res) {
+export const generate_UUID = (req, res) => {
     //Step 0: Connect React App w/ Sui Wallet through @mysten/dapp-kit (Responsibility of FrontEnd)
     const { address } = req.body;
 
@@ -52,7 +62,7 @@ function generate_UUID(req, res) {
     res.json({ UUID });
 }
 
-async function login(req, res) {
+export const login = async (req, res) => {
     //Step 2: Client signs message, sends bytes + signature back encoded via Base64
     const { address, bytes, message, signature } = req.body;
 
@@ -105,8 +115,14 @@ async function login(req, res) {
     }
 }
 
-module.exports = {
-    check_account,
-    generate_UUID,
-    login,
-} 
+// module.exports = {
+//     check_account,
+//     generate_UUID,
+//     login,
+// }
+
+// export {
+//     check_account,
+//     generate_UUID,
+//     login,
+// };

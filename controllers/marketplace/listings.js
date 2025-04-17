@@ -1,14 +1,17 @@
-const crypto = require('crypto');
-const { database, schema } = require('../../database/firebaseConfig.js');
+// const crypto = require('crypto');/
+// const { database, schema } = require('../../database/firebaseConfig.js');
 
-const get_listings = async (req, res) => {
+import crypto from 'crypto';
+import { database, schema } from '../../database/firebaseConfig.js';
+
+export const get_listings = async (req, res) => {
     const marketplace = database.ref('marketplace');
     const snapshot = await marketplace.once("value");
 
     return res.status(200).json({ response: snapshot.val() });
 }
 
-const create_listing = async (req, res) => {
+export const create_listing = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
@@ -53,7 +56,7 @@ const create_listing = async (req, res) => {
     return res.status(200).json({ response: `Listing succesfully created!`, listing: player_listing })
 }
 
-const read_listing = async (req, res) => {
+export const read_listing = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
@@ -68,7 +71,7 @@ const read_listing = async (req, res) => {
     return res.status(200).json({ response: player_listings });
 }
 
-const read_all_listings = async (req, res) => {
+export const read_all_listings = async (req, res) => {
     const { address, asking_price, creature} = req.body;
     const { type, rarity, minted_ID } = creature;
 
@@ -83,7 +86,7 @@ const read_all_listings = async (req, res) => {
     return res.status(200).json({ response: player_listings });
 }
 
-const update_listing = async (req, res) => {
+export const update_listing = async (req, res) => {
     const { address, asking_price, creature, id } = req.body;
     const { type, rarity, minted_ID } = creature;
 
@@ -136,16 +139,25 @@ const update_listing = async (req, res) => {
     return res.status(200).json({ response: `Listing succesfully created!`, listing: player_listing })
 }
 
-const delete_listing = async (req, res) => {
+export const delete_listing = async (req, res) => {
     
 }
 
 
-module.exports = {
-    get_listings,
-    create_listing,
-    read_listing,
-    read_all_listings,
-    update_listing,
-    delete_listing,
-}
+// module.exports = {
+//     get_listings,
+//     create_listing,
+//     read_listing,
+//     read_all_listings,
+//     update_listing,
+//     delete_listing,
+// }
+
+// export {
+//     get_listings,
+//     create_listing,
+//     read_listing,
+//     read_all_listings,
+//     update_listing,
+//     delete_listing,
+// }

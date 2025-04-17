@@ -1,7 +1,10 @@
-const jwt = require('../utils/jwt');
-const dotenv = require('dotenv');
+// const jwt = require('../utils/jwt');
+// const dotenv = require('dotenv');
 
-dotenv.config();
+// dotenv.config();
+
+import { generateToken, verifyToken } from '../utils/jwt.js';
+import 'dotenv/config';
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const ACCESS_TOKEN_LIFETIME = '20m';  //minutes
@@ -27,7 +30,7 @@ const authenticate_JWT = (req, res, next) => {
     try {
       const token = authHeader.split(" ")[1]; // Extract token from "Bearer <token>"
   
-      const decoded = jwt.verifyToken(token, ACCESS_TOKEN_SECRET);
+      const decoded = verifyToken(token, ACCESS_TOKEN_SECRET);
       if (!decoded) {
         return res.status(403).json({ error: "Invalid or expired token." });
       }
@@ -40,7 +43,12 @@ const authenticate_JWT = (req, res, next) => {
     }
 };
 
-module.exports = {
-    has_wallet_address,
-    authenticate_JWT
+// module.exports = {
+//     has_wallet_address,
+//     authenticate_JWT
+// }
+
+export {
+  has_wallet_address,
+  authenticate_JWT
 }

@@ -1,12 +1,21 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
-const dotenv = require("dotenv");
-dotenv.config();
+// const dotenv = require("dotenv");
+// dotenv.config();
 
-const { SuiClient, Ed25519Keypair, fromB64 } = require('@mysten/sui.js');
-const { TransactionBlock } = require('@mysten/sui.js/transactions');
+// const { SuiClient, Ed25519Keypair, fromB64 } = require('@mysten/sui.js');
+// const { TransactionBlock } = require('@mysten/sui.js/transactions');
 
-const { client, keypair } = require('../config/sui');
+// const { client, keypair } = require('../config/sui');
+
+import crypto from 'crypto';
+
+import 'dotenv/config';
+
+import { SuiClient, Ed25519Keypair, fromB64 } from '@mysten/sui.js';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+
+import { client, keypair } from '../config/sui.js';
 
 const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = "sprite_token";
@@ -95,9 +104,16 @@ const transfer_sui = async ({ amount, recipient }) => {
   }
 };
 
-module.exports = {
-    get_token_owner,
-    mint_sprite,
-    transfer_sprite,
-    transfer_sui
+// module.exports = {
+//     get_token_owner,
+//     mint_sprite,
+//     transfer_sprite,
+//     transfer_sui
+// }
+
+export {
+  get_token_owner,
+  mint_sprite,
+  transfer_sprite,
+  transfer_sui
 }

@@ -1,6 +1,12 @@
-const router = require("express").Router();
-const sprites_controller = require("../../controllers/users/sprites.js");
+// const router = require("express").Router();
+// const sprites_controller = require("../../controllers/users/sprites.js");
 
-router.post("/mint", sprites_controller.create_mint_transaction);
+import express from 'express';
+const router = express.Router();
 
-module.exports = router;
+import { create_mint_transaction } from '../../controllers/users/sprites.js';
+
+router.post("/mint", create_mint_transaction);
+
+// module.exports = router;
+export default router;

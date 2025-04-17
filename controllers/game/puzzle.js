@@ -1,13 +1,25 @@
-const fs = require('fs').promises;
-const path = require('path');
+// const fs = require('fs').promises;
+// const path = require('path');
 
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
-const { database, schema } = require('../../database/firebaseConfig.js');
+// const { database, schema } = require('../../database/firebaseConfig.js');
+// const { default_game_session } = schema;
+
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import crypto from 'crypto';
+
+import { database, schema } from '../../database/firebaseConfig.js';
 const { default_game_session } = schema;
 
 //Picks a random puzzle and selects the appropiate controller file
-const random = async () => {
+export const random = async () => {
     const files = await fs.readdir(path.join(__dirname, './'));
     //We decided to remove the math puzzle for now.
     const blacklist = ["puzzle.js", "math_puzzle.js"];
@@ -23,7 +35,7 @@ const random = async () => {
     return output;
 }
 
-const generate = async (hashed) => {
+export const generate = async (hashed) => {
     //Generate new puzzle for player - random puzzle
     const random_puzzle = await random();
 
@@ -45,7 +57,7 @@ const generate = async (hashed) => {
     }
 }
 
-const load = async (req, res) => {
+export const load = async (req, res) => {
     const { address } = req.body;
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -67,7 +79,7 @@ const load = async (req, res) => {
     res.status(200).json({puzzle: snapshot.val()});
 }
 
-const check_answer = async (req, res) => {
+export const check_answer = async (req, res) => {
     const { address, answer } = req.body;
     
     if(!answer) {
@@ -100,7 +112,7 @@ const check_answer = async (req, res) => {
     return res.status(200).json({ result: false });
 }
 
-const finish = async (req, res) => {
+export const finish = async (req, res) => {
     const { address } = req.body;
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -186,10 +198,18 @@ const finish = async (req, res) => {
     return output;
 }
 
-module.exports = {
-    random,
-    generate,
-    load,
-    check_answer,
-    finish
-}
+// module.exports = {
+//     random,
+//     generate,
+//     load,
+//     check_answer,
+//     finish
+// }
+
+// export {
+//     random,
+//     generate,
+//     load,
+//     check_answer,
+//     finish
+// }

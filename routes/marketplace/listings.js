@@ -1,6 +1,12 @@
-const router = require("express").Router();
-const listings_controller = require("../../controllers/marketplace/listings.js");
+// const router = require("express").Router();
+// const listings_controller = require("../../controllers/marketplace/listings.js");
 
-router.get("/", listings_controller.get_listings);
+import express from 'express';
+const router = express.Router();
 
-module.exports = router;
+import { get_listings } from '../../controllers/marketplace/listings.js';
+
+router.get("/", get_listings);
+
+// module.exports = router;
+export default router;

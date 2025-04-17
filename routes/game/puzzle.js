@@ -1,8 +1,14 @@
-const router = require("express").Router();
-const puzzle_controller = require("../../controllers/game/puzzle.js");
+// const router = require("express").Router();
+// const puzzle_controller = require("../../controllers/game/puzzle.js");
 
-router.post("/", puzzle_controller.load);
-router.post("/check-answer", puzzle_controller.check_answer);
-router.post("/finish", puzzle_controller.finish);
+import express from 'express';
+const router = express.Router();
 
-module.exports = router;
+import { load, check_answer, finish } from '../../controllers/game/puzzle.js';
+
+router.post("/", load);
+router.post("/check-answer", check_answer);
+router.post("/finish", finish);
+
+// module.exports = router;
+export default router;

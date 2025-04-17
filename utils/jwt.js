@@ -1,14 +1,21 @@
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
-const generateToken = (user, secret, lifetime) => {
+import jwt from 'jsonwebtoken';
+
+export const generateToken = (user, secret, lifetime) => {
     return jwt.sign(user, secret, { expiresIn: lifetime });
 };
 
-const verifyToken = (token, secret) => {
+export const verifyToken = (token, secret) => {
     return jwt.verify(token, secret);
 };
 
-module.exports = {
-  generateToken,
-  verifyToken
-};
+// module.exports = {
+//   generateToken,
+//   verifyToken
+// };
+
+// export default {
+//   generateToken,
+//   verifyToken
+// };

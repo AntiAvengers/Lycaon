@@ -1,8 +1,11 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
-const { database, schema } = require('../../database/firebaseConfig.js');
+// const { database, schema } = require('../../database/firebaseConfig.js');
 
-const get_user_profile = async (req, res) => {
+import crypto from 'crypto';
+import { database, schema } from '../../database/firebaseConfig.js';
+
+export const get_user_profile = async (req, res) => {
     const { address } = req.body;
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -17,7 +20,7 @@ const get_user_profile = async (req, res) => {
     return res.status(200).json({ data: snapshot.val() });
 }
 
-const get_user_collection = async (req, res) => {
+export const get_user_collection = async (req, res) => {
     const { address } = req.body;
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -32,7 +35,12 @@ const get_user_collection = async (req, res) => {
     return res.status(200).json({ data: snapshot.val() });
 }
 
-module.exports = {
-    get_user_profile,
-    get_user_collection
-}
+// module.exports = {
+//     get_user_profile,
+//     get_user_collection
+// }
+
+// export {
+//     get_user_profile,
+//     get_user_collection
+// }

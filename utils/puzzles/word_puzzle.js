@@ -1,4 +1,7 @@
-const dictionary = require('../dictionary');
+// const dictionary = require('../dictionary');
+
+import dictionary from '../dictionary.js';
+
 const words = dictionary.load();
 
 function generate_puzzle(num_of_letters = 7, count = 0) {

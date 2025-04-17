@@ -1,19 +1,22 @@
-const dotenv = require("dotenv");
-dotenv.config();
+// const dotenv = require("dotenv");
+// dotenv.config();
 
-const { client } = require('../../utils/sui/config');
+// const { client } = require('../../utils/sui/config');
 
-const { TransactionBlock } = require('@mysten/sui.js/transactions');
+// const { TransactionBlock } = require('@mysten/sui.js/transactions');
+// // const { bcs } = require('@mysten/sui.js/bcs');
+
+import 'dotenv/config';
+import { client } from '../../utils/sui/config.js';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 // const { bcs } = require('@mysten/sui.js/bcs');
 
 const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = 'sprite_token';
 const MINT_FUNCTION = 'mint';
 
-const create_mint_transaction = async (req, res) => {
+export const create_mint_transaction = async (req, res) => {
     const { address, stats } = req.body;
-
-    //Need code to get the creature that was selected to mint.
 
     const input = JSON.stringify(Object.keys(stats).sort().reduce((acc, key) => {
         acc[key] = obj[key];
@@ -47,6 +50,10 @@ const create_mint_transaction = async (req, res) => {
     });
 };
 
-module.exports = {
-    create_mint_transaction
-}
+// module.exports = {
+//     create_mint_transaction
+// }
+
+// export {
+//     create_mint_transaction
+// }

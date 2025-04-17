@@ -1,11 +1,23 @@
-const fs = require('fs');
-const path = require('path');
-const dotenv = require("dotenv");
-dotenv.config();
+// const fs = require('fs');
+// const path = require('path');
+// const dotenv = require("dotenv");
+// dotenv.config();
 
-const admin = require("firebase-admin");
+// const admin = require("firebase-admin");
 
-const serviceAccount = require('./' + process.env.SERVICE_ACCOUNT_KEY);
+// const serviceAccount = require('./' + process.env.SERVICE_ACCOUNT_KEY);
+
+// import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+import 'dotenv/config';
+
+import admin from 'firebase-admin';
+
+import serviceAccount from './firebase-config.json' with { type: 'json' };
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -120,7 +132,19 @@ db.once('value', snapshot => {
 });
 
 // Export the database reference
-module.exports = {
-  database: admin.database(),
-  schema: { default_user, default_game_session, default_collection }
+// module.exports = {
+//   database: admin.database(),
+//   schema: { default_user, default_game_session, default_collection }
+// }
+
+export const database = admin.database();
+export const schema = {
+  default_user, 
+  default_game_session, 
+  default_collection
 }
+
+// export default {
+//   database,
+//   schema: { default_user, default_game_session, default_collection }
+// }

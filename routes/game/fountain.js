@@ -1,6 +1,13 @@
-const router = require("express").Router();
-const fountain_controller = require("../../controllers/game/fountain.js");
+// const router = require("express").Router();
+// const fountain_controller = require("../../controllers/game/fountain.js");
 
-router.post("/pull", fountain_controller.pull);
+import express from 'express';
+const router = express.Router();
 
-module.exports = router;
+import { pull } from '../../controllers/game/fountain.js';
+
+router.post("/pull", pull);
+
+// module.exports = router;
+
+export default router;

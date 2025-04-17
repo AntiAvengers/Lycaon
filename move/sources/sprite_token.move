@@ -4,9 +4,10 @@ module 0x0::sprite_token {
         hashed_metadata: vector<u8>,
     }
 
-    public fun mint(ctx: &mut TxContext, hashed_metadata: vector<u8>): Sprite {
+    public fun mint(ctx: &mut TxContext, hashed_metadata: vector<u8>) {
         let id = object::new(ctx);
         let sprite = Sprite { id, hashed_metadata };
+        let recipient = tx_context::sender(ctx);
         transfer::transfer(sprite, recipient);
     }
 

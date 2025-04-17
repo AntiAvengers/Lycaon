@@ -1,7 +1,11 @@
-const pull = (req, res) => {
+export const pull = (req, res) => {
     
 }
 
-module.exports = {
-    pull
-}
+// module.exports = {
+//     pull
+// }
+
+// export {
+//     pull
+// }
