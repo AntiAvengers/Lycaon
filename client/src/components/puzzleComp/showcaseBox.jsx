@@ -1,21 +1,23 @@
+const showcase = [
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        label: "creature1",
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        label: "creature2",
+    },
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        label: "creature3",
+    },
+];
+
 const ShowcaseBox = () => {
     return (
-        <div className="w-full h-[253.06px] p-1 bg-[#FCF4E7]/10 rounded">
-            <ul className="h-full flex flex-row justify-between items-end pb-[10px]">
-                {[
-                    {
-                        src: "/assets/sprites/celestial-sprite.png",
-                        label: "creature1",
-                    },
-                    {
-                        src: "/assets/sprites/slime-sprite.gif",
-                        label: "creature2",
-                    },
-                    {
-                        src: "/assets/sprites/celestial-sprite.png",
-                        label: "creature3",
-                    },
-                ].map((creature) => (
+        <div className="w-full h-[253.06px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
+            <ul className="h-full flex flex-row justify-between items-end pb-[5px]">
+                {showcase.map((creature) => (
                     <li key={creature.label}>
                         <img
                             src={creature.src}
