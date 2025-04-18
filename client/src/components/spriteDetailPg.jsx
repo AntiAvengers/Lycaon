@@ -6,8 +6,8 @@ import FoodMeter from "./spriteDetailComp/foodMeter";
 import MintPg from "./mintPg";
 
 const initialFoodList = [
-    { src: "/assets/star.png", label: "apple", amt: 4, value: 1 },
-    { src: "/assets/star.png", label: "meat", amt: 56, value: 2 },
+    { src: "/assets/foods/apple.svg", label: "apple", amt: 4, value: 1 },
+    { src: "/assets/foods/meat-stick.svg", label: "meat", amt: 56, value: 2 },
     { src: "/assets/star.png", label: "pizza", amt: 100, value: 3 },
     { src: "/assets/star.png", label: "carrot", amt: 10, value: 4 },
 ];
