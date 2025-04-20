@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import FoodInventory from "./spriteDetailComp/foodInventory";
 import SpritesInfo from "./spriteDetailComp/spriteInfo";
@@ -15,12 +16,15 @@ const initialFoodList = [
 const sprite = {
     name: "Sprite",
     src: "/assets/sprites/slime-sprite.gif",
-    still:"/assets/stillSprites/still-slime.svg",
+    still: "/assets/stillSprites/still-slime.svg",
     hunger: 4,
     age: 5,
     personality: ["Happy", "Adventurous"],
     details:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus libero sit amet egestas accumsan. Sed massa sem, convallis et fringilla lacinia, faucibus sed augue.",
+    mint: false,
+    marketplace: false,
+    evo: true,
 };
 
 const SpritesDetailPg = () => {
@@ -29,15 +33,35 @@ const SpritesDetailPg = () => {
     const [foods, setFoods] = useState(initialFoodList);
     const [isFull, setIsFull] = useState(false);
     const [isFading, setIsFading] = useState(false);
+    const [minted, setMinted] = useState(sprite.mint);
+    const [market, setMarket] = useState(sprite.marketplace);
+
+    const navigate = useNavigate();
 
     const maxHunger = 8;
 
     const handleMintClick = () => {
-        setShowMint(true);
+        if (!minted) {
+            setShowMint(true);
+            console.log("Sprite minted");
+        } else if (minted && !market) {
+            setMarket(true);
+            console.log("Sprite listed on marketplace");
+        } else if (minted && market) {
+            navigate("/marketplace");
+        }
     };
 
     const closeMint = () => {
         setShowMint(false);
+    };
+
+    const handleMint = () => {
+        setMinted(true);
+    };
+
+    const handleSell = () => {
+        setMarket(true);
     };
 
     const handleFeed = (foodValue, foodLabel) => {
@@ -108,14 +132,23 @@ const SpritesDetailPg = () => {
                     onClick={handleMintClick}
                     className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center"
                 >
-                    Mint Sprite
+                    {minted
+                        ? market
+                            ? "View Marketplace"
+                            : "Sell on Marketplace"
+                        : "Mint Sprite"}
                 </button>
             </section>
 
             {/* Minting Comp Popup */}
             {showMint && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
-                    <MintPg onClose={closeMint} sprite={sprite} />
+                    <MintPg
+                        onClose={closeMint}
+                        sprite={sprite}
+                        onMint={handleMint}
+                        onSell={handleSell}
+                    />
                 </div>
             )}
         </div>

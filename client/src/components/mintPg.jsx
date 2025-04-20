@@ -1,34 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const MintPg = ({ onClose, sprite }) => {
-    const [price, setPrice] = useState("");
+const MintPg = ({ onClose, sprite, onMint, onSell }) => {
     const [mintStatus, setMintStatus] = useState("idle"); // 'idle' | 'minting' | 'success'
-    const [priceError, setPriceError] = useState(false);
     const [postMintAction, setPostMintAction] = useState("none"); // "none" | "readyToSell" | "confirm"
 
-    const handlePriceChange = (e) => {
-        setPrice(e.target.value);
-    };
+    const navigate = useNavigate();
 
     const handleMint = () => {
-        const priceValue = parseFloat(price);
-
-        if (!price || isNaN(priceValue) || priceValue <= 0) {
-            setPriceError(true);
-            return;
-        }
-
         setMintStatus("minting");
 
         setTimeout(() => {
             setMintStatus("success");
+            onMint();
         }, 4000);
     };
 
     const handleConfirmSell = () => {
         // Do something to confirm the listing
         console.log("Confirmed listing on marketplace!");
+        onSell();
         // After confirming, you might reset postMintAction or mintStatus depending on your flow
     };
 
@@ -72,18 +64,14 @@ const MintPg = ({ onClose, sprite }) => {
             <section className="w-full h-[101px] bg-[#242C53] flex flex-col items-center justify-center text-[#FCF4EF] text-[25px] text-center px-4">
                 {mintStatus === "success" ? (
                     postMintAction === "readyToSell" ? (
-                        <>
-                            <p className="leading-tight">
-                                Confirm to sell this sprite in the marketplace.
-                            </p>
-                        </>
+                        <p className="leading-tight">
+                            Confirm to sell this sprite in the marketplace.
+                        </p>
                     ) : postMintAction === "confirming" ? (
-                        <>
-                            <p className="leading-tight">
-                                Listing confirmed. Your sprite is now on the
-                                marketplace!
-                            </p>
-                        </>
+                        <div className="leading-tight">
+                            <p>Listing confirmed.</p>
+                            <p>Your sprite is now on the marketplace!</p>
+                        </div>
                     ) : (
                         <div className="leading-none">
                             <p>{sprite.name} minted successfully!</p>
@@ -91,56 +79,23 @@ const MintPg = ({ onClose, sprite }) => {
                         </div>
                     )
                 ) : (
-                    <>
-                        <p>
-                            {mintStatus === "minting"
-                                ? `Minting ${sprite.name}...`
-                                : `Mint ${sprite.name} on the blockchain`}
-                        </p>
-                        <div className="w-[50%] flex flex-row justify-between items-center mt-2">
-                            <p>Total Price</p>
-                            <div className="flex flex-row justify-center items-center">
-                                <img
-                                    src="/assets/icons/sui-icon-bg.svg"
-                                    alt="Sui Icon"
-                                    className="w-[15px] h-[15px] mr-[5px]"
-                                />
-                                <input
-                                    type="number"
-                                    min="0.01"
-                                    step="0.01"
-                                    value={price}
-                                    onChange={(e) => {
-                                        handlePriceChange(e);
-                                        if (
-                                            e.target.value &&
-                                            parseFloat(e.target.value) > 0
-                                        ) {
-                                            setPriceError(false);
-                                        }
-                                    }}
-                                    placeholder="0.00"
-                                    className="no-spinner w-[35px] h-[20px] border-b-[1px] border-white outline-none bg-transparent text-end"
-                                />
-                            </div>
-                        </div>
-                        {priceError && (
-                            <p className="text-red-400 text-[15px] leading-none mt-1">
-                                * Price is required
-                            </p>
-                        )}
-                    </>
+                    <p>
+                        {mintStatus === "minting"
+                            ? `Minting ${sprite.name}...`
+                            : `Mint ${sprite.name} on the blockchain`}
+                    </p>
                 )}
             </section>
 
             <button
-                disabled={
-                    (mintStatus !== "idle" && mintStatus !== "success") ||
-                    (mintStatus === "success" &&
-                        postMintAction === "confirming")
-                }
+                disabled={mintStatus === "minting"}
                 onClick={() => {
-                    if (mintStatus === "idle") {
+                    if (
+                        mintStatus === "success" &&
+                        postMintAction === "confirming"
+                    ) {
+                        navigate("/marketplace");
+                    } else if (mintStatus === "idle") {
                         handleMint();
                     } else if (
                         mintStatus === "success" &&
@@ -156,9 +111,7 @@ const MintPg = ({ onClose, sprite }) => {
                     }
                 }}
                 className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] ${
-                    mintStatus === "minting" ||
-                    (mintStatus === "success" &&
-                        postMintAction === "confirming")
+                    mintStatus === "minting"
                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                         : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 }`}
@@ -169,7 +122,7 @@ const MintPg = ({ onClose, sprite }) => {
                     ? postMintAction === "readyToSell"
                         ? "Confirm"
                         : postMintAction === "confirming"
-                        ? "Done"
+                        ? "View Marketplace"
                         : "Sell on marketplace"
                     : "Mint"}
             </button>
@@ -182,7 +135,11 @@ MintPg.propTypes = {
     sprite: PropTypes.shape({
         name: PropTypes.string.isRequired,
         still: PropTypes.string.isRequired,
+        mint: PropTypes.bool.isRequired,
+        marketplace: PropTypes.bool.isRequired,
     }).isRequired,
+    onMint: PropTypes.func.isRequired,
+    onSell: PropTypes.func.isRequired,
 };
 
 export default MintPg;

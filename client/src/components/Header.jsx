@@ -127,12 +127,12 @@ const Header = () => {
                     >
                         <AccountCircleIcon sx={{ width: 30, height: 30 }} />
                         {profile && (
-                            <div className="absolute right-0 mt-[7px] w-[136px] sm:w-[255px] h-auto shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
+                            <div className="absolute right-0 translate-x-[20px] mt-[7px] w-[136px] sm:w-[255px] h-auto shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
                                 <Link
                                     to="/"
                                     aria-label="Logs Out back to SignIn"
                                     onClick={() => setProfile(false)}
-                                    className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex items-center pl-[20px] sm:pl-[36px] pr-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-start text-[26px] text-[#FCF4E7]"
+                                    className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
                                 >
                                     Log Out
                                 </Link>

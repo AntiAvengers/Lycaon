@@ -28,7 +28,7 @@ body.puzzle-bg {
 }
 
 body.spriteDetail-bg {
-    background: url("/assets/bg/spriteDetailBg.svg") no-repeat center center
+    background: url("/assets/bg/spriteDetailBg.png") no-repeat center center
         fixed;
     background-size: cover;
     margin: 0;
@@ -47,11 +47,10 @@ body.spriteDetail-bg {
 /* Removes spinner from number inputs */
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .no-spinner {
-  -moz-appearance: textfield; /* Firefox */
+    -moz-appearance: textfield; /* Firefox */
 }
-  
