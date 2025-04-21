@@ -10,6 +10,7 @@ const foods = [
 const PantryPg = () => {
     const [buy, setBuy] = useState(false);
     const [selectedFood, setSelectedFood] = useState(null);
+    const [quantity, setQuantity] = useState(1);
 
     const closeBuy = () => {
         setBuy(false);
@@ -17,8 +18,9 @@ const PantryPg = () => {
     };
 
     const handleBuy = (food) => {
-        setBuy(true);
         setSelectedFood(food);
+        setQuantity(1);
+        setBuy(true);
     };
 
     return (
@@ -65,8 +67,28 @@ const PantryPg = () => {
                             alt={selectedFood.label}
                             className="w-[160px] h-[160px]"
                         />
+                        <section className="flex flex-row">
+                            <label>Amount</label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={quantity}
+                                onWheel={(e) => e.target.blur()}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === "") {
+                                        setQuantity(""); // allow empty temporarily
+                                    } else {
+                                        const value = Math.max(1, Number(val));
+                                        setQuantity(value);
+                                    }
+                                }}
+                                className="no-spinner w-[35px] h-[20px] border-b-[1px] border-white outline-none bg-transparent text-end"
+                            />
+                        </section>
+
                         <p className="text-[25px] text-[#FCF4EF]">
-                            {selectedFood.price} Shards
+                            Total: {selectedFood.price * quantity} Shards
                         </p>
                         <button className="bg-[#FEFAF3] text-[#273472] rounded-[4px] px-[20px] py-[5px] text-[25px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75">
                             Confirm Purchase

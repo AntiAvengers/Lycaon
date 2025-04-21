@@ -43,3 +43,14 @@ body.spriteDetail-bg {
     /* justify-content: center; */
     /* align-items: center; */
 }
+
+/* Removes spinner from number inputs */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-spinner {
+    -moz-appearance: textfield; /* Firefox */
+}
