@@ -10,11 +10,13 @@ const foods = [
 const PantryPg = () => {
     const [buy, setBuy] = useState(false);
     const [selectedFood, setSelectedFood] = useState(null);
+    const [purchaseConfirmed, setPurchaseConfirmed] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
     const closeBuy = () => {
         setBuy(false);
         setSelectedFood(null);
+        setPurchaseConfirmed(false);
     };
 
     const handleBuy = (food) => {
@@ -67,7 +69,7 @@ const PantryPg = () => {
                             alt={selectedFood.label}
                             className="w-[160px] h-[160px]"
                         />
-                        <section className="flex flex-row">
+                        {/* <section className="flex flex-row">
                             <label>Amount</label>
                             <input
                                 type="number"
@@ -86,12 +88,66 @@ const PantryPg = () => {
                                 className="no-spinner w-[35px] h-[20px] border-b-[1px] border-white outline-none bg-transparent text-end"
                             />
                         </section>
-
                         <p className="text-[25px] text-[#FCF4EF]">
                             Total: {selectedFood.price * quantity} Shards
-                        </p>
-                        <button className="bg-[#FEFAF3] text-[#273472] rounded-[4px] px-[20px] py-[5px] text-[25px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75">
-                            Confirm Purchase
+                        </p> */}
+
+                        <section className="flex flex-col items-center gap-2">
+                            {!purchaseConfirmed ? (
+                                <>
+                                    <section className="flex flex-row items-center gap-2">
+                                        <label className="text-white">
+                                            Amount
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={quantity}
+                                            onWheel={(e) => e.target.blur()}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                if (val === "") {
+                                                    setQuantity(""); // allow empty temporarily
+                                                } else {
+                                                    const value = Math.max(
+                                                        1,
+                                                        Number(val)
+                                                    );
+                                                    setQuantity(value);
+                                                }
+                                            }}
+                                            className="no-spinner w-[50px] h-[25px] border-b-[1px] border-white outline-none bg-transparent text-end text-white"
+                                        />
+                                    </section>
+                                    <p className="text-[25px] text-[#FCF4EF]">
+                                        Total: {selectedFood.price * quantity}
+                                        {""} Shards
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="text-[22px] text-[#FCF4EF] text-center">
+                                    You bought {quantity} {selectedFood.label}
+                                    {quantity > 1 ? "s" : ""}! 🎉
+                                </p>
+                            )}
+                        </section>
+
+                        <button
+                            onClick={() => {
+                                if (!purchaseConfirmed)
+                                    setPurchaseConfirmed(true);
+                            }}
+                            disabled={purchaseConfirmed}
+                            className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
+                             ${
+                                 purchaseConfirmed
+                                     ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
+                                     : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                             }`}
+                        >
+                            {purchaseConfirmed
+                                ? "Thank you for your purchase!"
+                                : "Confirm Purchase"}
                         </button>
                     </div>
                 </div>
