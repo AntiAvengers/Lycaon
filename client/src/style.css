@@ -64,3 +64,13 @@ body.fountain-bg {
     -moz-appearance: textfield; /* Firefox */
 }
 
+@keyframes fade-up {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(-30px);
+    }
+  }

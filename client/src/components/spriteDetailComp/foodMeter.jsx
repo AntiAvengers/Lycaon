@@ -6,10 +6,10 @@ const FoodMeter = ({ hunger, max }) => {
     const maxHunger = max;
     const progress = (hunger / maxHunger) * 100;
     const segmentCount = 8;
-    const size = 49;
-    const borderWidth = 1.5;
-    const lineLength = 49;
-    const lineThickness = 1;
+    const size = 80;
+    const borderWidth = 2;
+    const lineLength = 80;
+    const lineThickness = 1.5;
 
     return (
         <div className="absolute top-[25px] left-[25px]">

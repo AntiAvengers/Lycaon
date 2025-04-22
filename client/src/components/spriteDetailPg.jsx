@@ -35,6 +35,7 @@ const SpritesDetailPg = () => {
     const [isFading, setIsFading] = useState(false);
     const [minted, setMinted] = useState(sprite.mint);
     const [market, setMarket] = useState(sprite.marketplace);
+    const [showAmount, setShowAmount] = useState(null);
 
     const navigate = useNavigate();
 
@@ -92,6 +93,10 @@ const SpritesDetailPg = () => {
                     : food
             )
         );
+
+        // Show "+X" for feeding effect
+        setShowAmount(`+${foodValue}`);
+        setTimeout(() => setShowAmount(null), 1000);
     };
 
     useEffect(() => {
@@ -107,6 +112,18 @@ const SpritesDetailPg = () => {
             <FoodInventory foods={foods} onFeed={handleFeed} />
             <section className="w-[496px] h-[543px] rounded-[10px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
+                {showAmount && (
+                    <span
+                        className="absolute top-[75px] left-[150px] text-[#FFFFFF] text-[60px] font-bold"
+                        style={{
+                            transform: "translate(-50%, -50%)",
+                            opacity: 1,
+                            animation: "fade-up 1s ease-out forwards",
+                        }}
+                    >
+                        {showAmount}
+                    </span>
+                )}
                 <img
                     src={sprite.src}
                     alt={sprite.name}
