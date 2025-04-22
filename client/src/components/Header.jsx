@@ -21,11 +21,11 @@ const Header = () => {
     // Show the confirmation popup or message
     const handlePuzzleClick = (e) => {
         e.preventDefault();
-        if (location.pathname === "/puzzles") {
-            setMessage("You are already on the Puzzles page!");
+        if (location.pathname === "/puzzle") {
+            setMessage("You are already on the Puzzle page!");
             setTimeout(() => setMessage(""), 3000);
         } else {
-            navigate("/puzzles");
+            navigate("/puzzle");
             window.location.reload();
         }
     };
@@ -63,7 +63,7 @@ const Header = () => {
 
     const navItems = [
         { to: "/home", label: "Home" },
-        { to: "/puzzles", label: "Puzzles", action: handlePuzzleClick },
+        { to: "/puzzle", label: "Puzzle", action: handlePuzzleClick },
         { to: "/fountain", label: "Fountain" },
         { to: "/collection", label: "Collection" },
         { to: "/pantry", label: "Pantry" },

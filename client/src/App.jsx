@@ -18,7 +18,7 @@ const App = () => {
                 <Routes>
                 <Route path="/" element={<Layout><ConnectPg /></Layout>} />
                 <Route path="/home" element={<Layout><HomePg /></Layout>} />
-                <Route path="/puzzles" element={<Layout><PuzzlePg /></Layout>} />
+                <Route path="/puzzle" element={<Layout><PuzzlePg /></Layout>} />
                 <Route path="/fountain" element={<Layout><FountainPg /></Layout>} />
                 <Route path="/collection" element={<Layout><CollectionPg /></Layout>} />
                 <Route path="/collection/spriteDetail" element={<Layout><SpritesDetailPg /></Layout>} />

@@ -93,12 +93,20 @@ const SpritesCollectionPg = () => {
             {/* If user has no creatures */}
             {creaturesList.length === 0 && (
                 <div
-                    className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-                    bg-[#EA1A26] text-[#FFFFFF] text-[32px] tracking-[2px] px-[40px] py-[20px] 
-                    rounded-lg shadow-lg z-50 text-center"
+                    className="w-[890px] h-[598px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                    bg-[#FEFAF3] text-[#000000] text-[37px] text-center px-[40px] py-[20px] leading-none rounded-[20px] shadow-lg z-50 flex flex-col items-center justify-center gap-[40px]"
                 >
-                    You do not have any sprites yet! Go play puzzles to earn
-                    pages to roll for a sprite!
+                    <span>0/100</span>
+                    <section>
+                        <p>You do not have any sprites!</p>
+                        <p>
+                            Play some games and earn pages to pull for sprites!
+                        </p>
+                    </section>
+                    <Link to="/puzzle" className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] cursor-pointer flex items-center justify-center">
+                        Play the puzzle!
+                    </Link>
+                    <img src="/assets/bg/grassBtmShowcase.svg" alt="grassBtm" />
                 </div>
             )}
 
