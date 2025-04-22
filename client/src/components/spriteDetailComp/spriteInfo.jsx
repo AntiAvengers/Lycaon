@@ -24,10 +24,10 @@ const SpritesInfo = ({ sprite }) => {
     };
 
     return (
-        <div className="w-[305px] h-[252.5px] leading-none">
+        <div className="w-[305px] pr-[20px] leading-none">
             {isEditing ? (
                 <input
-                    className="text-[50px] w-full h-[50px] bg-transparent border-b border-black/50 focus:outline-none"
+                    className="text-[50px] h-[50px] bg-transparent border-b border-black/50 focus:outline-none"
                     type="text"
                     value={name}
                     onChange={handleChange}

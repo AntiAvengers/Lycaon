@@ -126,7 +126,7 @@ const SpritesDetailPg = () => {
             )}
 
             {/* Sprite */}
-            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] flex flex-col justify-around items-center">
+            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
                 <SpritesInfo sprite={sprite} />
                 <button
                     onClick={handleMintClick}
