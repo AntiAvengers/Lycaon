@@ -9,54 +9,72 @@ const creaturesList = [
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature1",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature2",
         to: "/collection/spriteDetail",
+        rank: "Littles",
+        name: "Slimey",
     },
     {
         src: "/assets/sprites/celestial-sprite.png",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature3",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/star.png",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature4",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature5",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/star.png",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature6",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/star.png",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature7",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature8",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
     {
         src: "/assets/star.png",
         still: "/assets/stillSprites/still-slime.svg",
         label: "creature9",
         to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
     },
 ];
 
@@ -103,7 +121,10 @@ const SpritesCollectionPg = () => {
                             Play some games and earn pages to pull for sprites!
                         </p>
                     </section>
-                    <Link to="/puzzle" className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] cursor-pointer flex items-center justify-center">
+                    <Link
+                        to="/puzzle"
+                        className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] cursor-pointer flex items-center justify-center"
+                    >
                         Play the puzzle!
                     </Link>
                     <img src="/assets/bg/grassBtmShowcase.svg" alt="grassBtm" />
@@ -157,28 +178,40 @@ const SpritesCollectionPg = () => {
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
-                                className="bg-[#FCF4E7]/50 flex flex-col items-center justify-between p-[10px]"
+                                className="flex flex-col items-start justify-between"
                             >
-                                <button
-                                    onClick={() => handleToggleLike(index)}
-                                    aria-label="favorite"
-                                    className="w-full flex justify-end cursor-pointer"
-                                >
-                                    {likedList[index] ? (
-                                        <FavoriteIcon
-                                            style={{ color: "#EA1A26" }}
+                                <div className="w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative">
+                                    <button
+                                        onClick={() => handleToggleLike(index)}
+                                        aria-label="favorite"
+                                        className="absolute top-2 right-2 cursor-pointer"
+                                    >
+                                        {likedList[index] ? (
+                                            <FavoriteIcon
+                                                style={{ color: "#EA1A26" }}
+                                            />
+                                        ) : (
+                                            <FavoriteBorderIcon />
+                                        )}
+                                    </button>
+                                    <div className="flex-grow" />{" "}
+                                    {/* Spacer to push image down */}
+                                    <Link key={creature.to} to={creature.to}>
+                                        <img
+                                            src={creature.src}
+                                            alt={creature.label}
+                                            className="object-contain max-h-[150px]"
                                         />
-                                    ) : (
-                                        <FavoriteBorderIcon />
-                                    )}
-                                </button>
-                                <Link key={creature.to} to={creature.to}>
-                                    <img
-                                        src={creature.src}
-                                        alt={creature.label}
-                                        className="object-contain"
-                                    />
-                                </Link>
+                                    </Link>
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[15px] font-bold mt-2">
+                                        {creature.rank}
+                                    </span>
+                                    <span className="text-[25px]">
+                                        {creature.name}
+                                    </span>
+                                </div>
                             </li>
                         ))}
                     </ul>
