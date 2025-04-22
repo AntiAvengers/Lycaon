@@ -110,7 +110,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell }) => {
                         setPostMintAction("confirming");
                     }
                 }}
-                className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] ${
+                className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer ${
                     mintStatus === "minting"
                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                         : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"

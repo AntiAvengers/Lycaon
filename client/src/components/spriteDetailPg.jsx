@@ -105,7 +105,7 @@ const SpritesDetailPg = () => {
         <div className="w-full h-[625px] flex flex-row justify-evenly items-center">
             {/* Food */}
             <FoodInventory foods={foods} onFeed={handleFeed} />
-            <section className="w-[496px] h-[543px]  rounded-[10px] p-[15px] relative flex items-end justify-center">
+            <section className="w-[496px] h-[543px] rounded-[10px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
                 <img
                     src={sprite.src}
@@ -130,7 +130,7 @@ const SpritesDetailPg = () => {
                 <SpritesInfo sprite={sprite} />
                 <button
                     onClick={handleMintClick}
-                    className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center"
+                    className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center cursor-pointer"
                 >
                     {minted
                         ? market

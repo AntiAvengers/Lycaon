@@ -24,7 +24,7 @@ const PantryPg = () => {
     };
 
     return (
-        <div className="w-[1000px] h-[550px] flex flex-col text-[#FFFFFF]">
+        <div className="w-[1100px] h-[550px] bg-[#FEFAF3]/20 px-[50px] flex flex-col text-[#FFFFFF]">
             <h1 className="text-start text-[60px]">Pantry</h1>
             <div className="flex-1 flex items-center justify-center">
                 <ul className="w-full flex flex-row justify-between">
