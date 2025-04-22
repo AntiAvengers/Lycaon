@@ -11,7 +11,8 @@ const FoodInventory = ({ foods, onFeed }) => {
                             onFeed(food.value, food.label);
                         }
                     }}
-                    className="group bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center cursor-pointer outline-[5px] outline-transparent transition-all duration-300 hover:outline-[#4A63E4] shadow-md active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95"
+                    className="group bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center cursor-pointer outline-[1px] outline-[#CFCFCF] transition-all shadow-[4px_4px_0_#CFCFCF]
+                    duration-300 hover:outline-[#FBBB26] hover:outline-[3px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[-4px_-4px_0_#FBBB26] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95"
                 >
                     <span className="absolute top-0 right-2 text-[25px]">
                         x{food.amt}
