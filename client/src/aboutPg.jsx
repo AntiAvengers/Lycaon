@@ -1,6 +1,17 @@
+const aboutImg = [
+    { text: "Obtain the sprites by solving the puzzles", width: "w-[675px]" },
+    { text: "Puzzles grant you pages", width: "w-[591px]" },
+    {
+        text: "With enough pages, make a wish at the fountain",
+        width: "w-[675px]",
+    },
+    { text: "And obtain the Sprites", width: "w-[591px]" },
+    { text: "Collect, feed, and trade your Sprites!", width: "w-[675px]" },
+];
+
 const AboutPg = () => {
     return (
-        <div className="w-full bg-[#FFFFFF]/50 flex flex-col px-[100px] py-[50px]">
+        <div className="w-full bg-[#FFFFFF]/50 flex flex-col px-[100px] py-[50px] gap-[50px]">
             <p className="w-[722px] text-[25px]">
                 Lycaon, a powerful summoner, created the Codex Bestiarum to
                 control all beasts but was trapped inside it by a forbidden
@@ -9,12 +20,22 @@ const AboutPg = () => {
                 waits within. Will you finish the summoning—or become its next
                 prisoner?
             </p>
-            <section className="text-[37px]">
-                <h1>Obtain the sprites by solving the puzzles</h1>
-                <h1>Puzzles grants you pages</h1>
-                <h1>With enough pages, make a wish at the fountain</h1>
-                <h1>And obtain the Sprites</h1>
-                <h1>Collect, feed, and trade your Sprites!</h1>
+            <section className="text-[37px] flex flex-col gap-[40px]">
+                {aboutImg.map((about, index) => (
+                    <div
+                        key={index}
+                        className={`flex flex-col items-center ${
+                            index % 2 === 0 ? "items-start" : "items-end"
+                        } w-full`}
+                    >
+                        <h1 className="mb-2">
+                            {about.text}
+                        </h1>
+                        <div
+                            className={`${about.width} h-[377px] border border-[#FFFFFF] bg-[#CFCFCF]`}
+                        />
+                    </div>
+                ))}
             </section>
             <section className="w-[977px]">
                 <h1 className="text-[37px]">Read the lore</h1>
