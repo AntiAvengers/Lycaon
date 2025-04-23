@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const MintPg = ({ onClose, sprite, onMint, onSell }) => {
+const MintDetail = ({ onClose, sprite, onMint, onSell }) => {
     const [mintStatus, setMintStatus] = useState("idle"); // 'idle' | 'minting' | 'success'
     const [postMintAction, setPostMintAction] = useState("none"); // "none" | "readyToSell" | "confirm"
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleMint = () => {
         setMintStatus("minting");
@@ -92,7 +93,8 @@ const MintPg = ({ onClose, sprite, onMint, onSell }) => {
                 onClick={() => {
                     if (
                         mintStatus === "success" &&
-                        postMintAction === "confirming"
+                        postMintAction === "confirming" &&
+                        location.pathname !== "/marketplace"
                     ) {
                         navigate("/marketplace");
                     } else if (mintStatus === "idle") {
@@ -111,7 +113,10 @@ const MintPg = ({ onClose, sprite, onMint, onSell }) => {
                     }
                 }}
                 className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer ${
-                    mintStatus === "minting"
+                    mintStatus === "minting" ||
+                    (mintStatus === "success" &&
+                        postMintAction === "confirming" &&
+                        location.pathname === "/marketplace")
                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                         : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 }`}
@@ -130,7 +135,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell }) => {
     );
 };
 
-MintPg.propTypes = {
+MintDetail.propTypes = {
     onClose: PropTypes.func.isRequired,
     sprite: PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -142,5 +147,5 @@ MintPg.propTypes = {
     onSell: PropTypes.func.isRequired,
 };
 
-export default MintPg;
+export default MintDetail;
 

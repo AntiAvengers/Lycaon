@@ -1,57 +1,105 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import MintDetail from "../spriteDetailComp/mintDetail";
 
 const creaturesList = [
-    // {
-    //     src: "/assets/sprites/celestial-sprite.png",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature1",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Elite",
-    //     name: "Nemo",
-    // },
-    // {
-    //     src: "/assets/sprites/slime-sprite.gif",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature2",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Littles",
-    //     name: "Slimey",
-    // },
-    // {
-    //     src: "/assets/sprites/celestial-sprite.png",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature3",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Elite",
-    //     name: "Nemo",
-    // },
-    // {
-    //     src: "/assets/star.png",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature4",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Elite",
-    //     name: "Nemo",
-    // },
-    // {
-    //     src: "/assets/sprites/slime-sprite.gif",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature5",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Elite",
-    //     name: "Nemo",
-    // },
-    // {
-    //     src: "/assets/star.png",
-    //     still: "/assets/stillSprites/still-slime.svg",
-    //     label: "creature6",
-    //     to: "/collection/spriteDetail",
-    //     rank: "Elite",
-    //     name: "Nemo",
-    // },
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature1",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: false,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature2",
+        to: "/collection/spriteDetail",
+        rank: "Littles",
+        name: "Slimey",
+        mint: false,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature3",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: false,
+        marketplace: false,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature4",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: false,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature5",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: false,
+        marketplace: false,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature6",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: false,
+        marketplace: false,
+    },
 ];
 
 const UserListing = () => {
+    const [showMint, setShowMint] = useState(false);
+    const [sprite, setSprites] = useState(creaturesList);
+    const [selectedSprite, setSelectedSprite] = useState(null);
+
+    const handleMintClick = (clickedSprite) => {
+        setSelectedSprite(clickedSprite);
+        setShowMint(true);
+    };
+
+    const closeMint = () => {
+        setShowMint(false);
+        setSelectedSprite(null);
+    };
+
+    const handleMint = () => {
+        setSprites((prev) =>
+            prev.map((s) =>
+                s.label === selectedSprite.label ? { ...s, mint: true } : s
+            )
+        );
+        setSelectedSprite((prev) => ({ ...prev, mint: true }));
+    };
+
+    const handleSell = () => {
+        setSprites((prev) =>
+            prev.map((s) =>
+                s.label === selectedSprite.label
+                    ? { ...s, marketplace: true }
+                    : s
+            )
+        );
+        setSelectedSprite((prev) => ({ ...prev, marketplace: true }));
+    };
+
     return (
         <div className="w-[1261px] h-[337px] bg-[#FEFAF4] rounded-[10px]">
             {creaturesList.length === 0 && (
@@ -71,9 +119,67 @@ const UserListing = () => {
                 </div>
             )}
             {creaturesList.length > 0 && (
-                <>
-                    <h1>Your Sprites</h1>
-                </>
+                <div className="h-full px-[80px] py-[10px] flex flex-col justify-around">
+                    <h1 className="text-[40px]">Your Sprites</h1>
+                    <ul className="flex flex-row items-center justify-between">
+                        {sprite.slice(0, 3).map((sprite) => (
+                            <li
+                                key={sprite.label}
+                                className="flex flex-row items-center gap-[20px]"
+                            >
+                                <img
+                                    src={sprite.still}
+                                    alt={sprite.label}
+                                    className="object-contain bg-[#E9E9E9]"
+                                />
+                                <section className="flex flex-col text-[25px]">
+                                    <span>{sprite.name}</span>
+                                    <span>{sprite.rank}</span>
+                                    <button
+                                        onClick={() => {
+                                            if (!sprite.mint) {
+                                                handleMintClick(sprite);
+                                            } else if (
+                                                sprite.mint &&
+                                                !sprite.marketplace
+                                            ) {
+                                                // directly trigger sell (no popup)
+                                                handleSell(sprite); // mark marketplace as true
+                                            }
+                                        }}
+                                        disabled={sprite.marketplace}
+                                        className={`underline cursor-pointer ${
+                                            sprite.marketplace
+                                                ? "text-gray-400 cursor-not-allowed"
+                                                : ""
+                                        }`}
+                                    >
+                                        {sprite.mint
+                                            ? sprite.marketplace
+                                                ? "On Marketplace"
+                                                : "Sell on Marketplace"
+                                            : "Start Minting"}
+                                    </button>
+                                </section>
+                            </li>
+                        ))}
+                    </ul>
+                    <Link to="/collection" className="underline text-[25px]">
+                        View your collection
+                    </Link>
+                </div>
+            )}
+
+            {/* Minting Comp Popup */}
+            {showMint && selectedSprite && (
+                <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
+                    <MintDetail
+                        onClose={closeMint}
+                        sprite={selectedSprite}
+                        onMint={handleMint}
+                        onSell={handleSell}
+                    />
+                </div>
             )}
         </div>
     );
