@@ -9,6 +9,10 @@
     font-style: normal;
 }
 
+html,body {
+    height: 100%;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -45,8 +49,12 @@ body.fountain-bg {
     overflow-x: hidden;
 }
 
+body.market-bg {
+    background: #140E28;
+}
+
 #app {
-    width: 100%;
+    /* width: 100%; */
     height: 100vh;
     /* overflow: hidden; */
     /* justify-content: center; */
