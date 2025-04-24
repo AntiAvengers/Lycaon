@@ -1,59 +1,96 @@
-// const dotenv = require("dotenv");
-// dotenv.config();
-
-// const { client } = require('../../utils/sui/config');
-
-// const { TransactionBlock } = require('@mysten/sui.js/transactions');
-// // const { bcs } = require('@mysten/sui.js/bcs');
-
+import * as crypto from 'crypto';
 import 'dotenv/config';
 import { client } from '../../utils/sui/config.js';
+import { get_transaction_block } from '../../utils/sui/client.js';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-// const { bcs } = require('@mysten/sui.js/bcs');
+import { bcs } from '@mysten/sui/bcs';
+
+import * as ed from '@noble/ed25519';
 
 const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = 'sprite_token';
 const MINT_FUNCTION = 'mint';
 
 export const create_mint_transaction = async (req, res) => {
-    const { address, stats } = req.body;
+    try {
+        const { address, stats } = req.body;
 
-    const input = JSON.stringify(Object.keys(stats).sort().reduce((acc, key) => {
-        acc[key] = obj[key];
-        return acc;
-        }, {}));
+        const uuid = crypto.randomUUID().replace(/-/g, '');
 
-    const hashed = crypto.createHash('sha256').update(input).digest();
+        const MyStruct = bcs.struct('MyStruct', {
+            uuid: bcs.byteVector(),
+            expiration: bcs.u64(),
+            sprite_type: bcs.byteVector(),
+            sprite_rarity: bcs.byteVector(),
+        });
 
-    const tx = new TransactionBlock();
+        const struct = MyStruct.serialize({ 
+            uuid: new TextEncoder().encode(uuid),
+            expiration: Date.now() + (1000 * 60 * 5),
+            sprite_type: new TextEncoder().encode(stats.type),
+            sprite_rarity: new TextEncoder().encode(stats.rarity)
+        })
+        .toBytes();
 
-    tx.moveCall({
-        target: `${PACKAGE_ID}::${MODULE_NAME}::${MINT_FUNCTION}`,
-        arguments: [
-            tx.pure(hashed),
-        ],
-    });
+        const privKey = ed.utils.randomPrivateKey();
+        const pubKey = await ed.getPublicKeyAsync(privKey);
+        const signature = await ed.signAsync(struct, privKey);
+        const isValid = await ed.verifyAsync(signature, struct, pubKey);
 
-    //Gas-Fee Estimation
-    const simulation = await client.devInspectTransactionBlock({
-        sender: address,
-        transactionBlock: tx,
-    });
+        const tx = new TransactionBlock();
 
-    const gas_fees = simulation.effects.gasUsed;
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE_NAME}::${MINT_FUNCTION}`,
+            arguments: [
+                tx.pure(bcs.vector(bcs.u8()).serialize(struct)),
+                tx.pure(bcs.vector(bcs.u8()).serialize(signature)),
+                tx.pure(bcs.vector(bcs.u8()).serialize(pubKey)), 
+                tx.object(process.env.UUID_REGISTRY),
+                tx.object('0x6'),
+            ],
+        });
 
-    const serialized = await tx.serialize();
+        tx.setGasBudget(100_000_000);
+    
+        const simulation = await client.devInspectTransactionBlock({
+            sender: address,
+            transactionBlock: tx,
+        });
+    
+        const gas_fees = simulation.effects.gasUsed;
 
-    return res.json({
-        transactionBlock: serialized,
-        estimatedGas: gas_fees.computationCost + gas_fees.storageCost - gas_fees.storageRebate,
-    });
+        if(simulation.effects.status.status == 'failure') {
+            throw simulation.effects.status.error;
+        }
+    
+        const serialized = await tx.serialize();
+    
+        return res.json({
+            transactionBlock: serialized,
+            estimatedGas: parseFloat(gas_fees.computationCost) + parseFloat(gas_fees.storageCost) - parseFloat(gas_fees.storageRebate),
+        });
+    } catch(err) {
+        console.error(err);
+    } 
 };
 
-// module.exports = {
-//     create_mint_transaction
-// }
+export const update_minted_digest = async (req, res) => {
+    try {
+        const { address, digest } = req.body;
 
-// export {
-//     create_mint_transaction
-// }
+        if(!digest) {
+            return res.status(403).json({ error: "Missing Digest for Transaction Block!" });
+        }
+    
+        const tx = await get_transaction_block(digest);
+        console.log(tx);
+        console.log(Object.keys(tx));
+    
+        const minted_object_ID = tx.objectChanges.filter(obj => obj.type == 'created')[0].objectId;
+        
+        //7j6V7LWcwcNTvxaEF9fugwqDTeHHB4WuWDJRUV25mDp2
+    } catch(err) {
+        console.error(err);
+        return res.status(500).json({ error: err });
+    }
+}

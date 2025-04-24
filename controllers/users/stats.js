@@ -1,7 +1,3 @@
-// const crypto = require('crypto');
-
-// const { database, schema } = require('../../database/firebaseConfig.js');
-
 import crypto from 'crypto';
 import { database, schema } from '../../database/firebaseConfig.js';
 
@@ -34,13 +30,3 @@ export const get_user_collection = async (req, res) => {
 
     return res.status(200).json({ data: snapshot.val() });
 }
-
-// module.exports = {
-//     get_user_profile,
-//     get_user_collection
-// }
-
-// export {
-//     get_user_profile,
-//     get_user_collection
-// }

@@ -1,8 +1,3 @@
-// const jwt = require('../utils/jwt');
-// const dotenv = require('dotenv');
-
-// dotenv.config();
-
 import { generateToken, verifyToken } from '../utils/jwt.js';
 import 'dotenv/config';
 
@@ -10,7 +5,7 @@ const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const ACCESS_TOKEN_LIFETIME = '20m';  //minutes
 const REFRESH_TOKEN_LIFETIME = '7d'; // days
 
-const has_wallet_address = (req, res, next) => {
+export const has_wallet_address = (req, res, next) => {
     const { address } = req.body;
 
     if(!address) {
@@ -20,7 +15,7 @@ const has_wallet_address = (req, res, next) => {
     next();
 };
 
-const authenticate_JWT = (req, res, next) => {
+export const authenticate_JWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
   
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -42,13 +37,3 @@ const authenticate_JWT = (req, res, next) => {
       return res.status(403).json({ error: err });
     }
 };
-
-// module.exports = {
-//     has_wallet_address,
-//     authenticate_JWT
-// }
-
-export {
-  has_wallet_address,
-  authenticate_JWT
-}

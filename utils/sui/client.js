@@ -1,34 +1,35 @@
-// const crypto = require('crypto');
-
-// const dotenv = require("dotenv");
-// dotenv.config();
-
-// const { SuiClient, Ed25519Keypair, fromB64 } = require('@mysten/sui.js');
-// const { TransactionBlock } = require('@mysten/sui.js/transactions');
-
-// const { client, keypair } = require('../config/sui');
-
 import crypto from 'crypto';
 
 import 'dotenv/config';
 
-import { SuiClient, Ed25519Keypair, fromB64 } from '@mysten/sui.js';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
-import { client, keypair } from '../config/sui.js';
+import { client } from './config.js';
 
 const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = "sprite_token";
 const MINT_FUNCTION = "mint"
 const TRANSFER_FUNCTION = "transfer_token";
 
-const get_token_owner = async (token_id) => {
+export const get_token_owner = async (token_id) => {
     const object = await client.getObject({ id: token_id, options: { showOwner: true } });
     return object.data.owner.AddressOwner;
 }
 
-//Might not be necessary if we get the player to sign the transaction to mint the sprite
-const mint_sprite = async (stats) => { //stats = object of sprite immutable stats (type, rarity)
+export const get_transaction_block = async (digest) => {
+  return await client.getTransactionBlock({ 
+    digest, 
+    options: {
+      showInput: true,
+      showEffects: true,
+      showEvents: true,
+      showObjectChanges: true,
+      showBalanceChanges: true,
+    } 
+  });
+}
+
+export const mint_sprite = async (stats) => { //stats = object of sprite immutable stats (type, rarity)
   try { 
     const input = JSON.stringify(Object.keys(stats).sort().reduce((acc, key) => {
       acc[key] = obj[key];
@@ -55,7 +56,7 @@ const mint_sprite = async (stats) => { //stats = object of sprite immutable stat
   }
 }
 
-const transfer_sprite = async ({ tokenId, recipient }) => {
+export const transfer_sprite = async ({ tokenId, recipient }) => {
   try {
     const tx = new TransactionBlock();
 
@@ -81,7 +82,7 @@ const transfer_sprite = async ({ tokenId, recipient }) => {
   }
 }
 
-const transfer_sui = async ({ amount, recipient }) => {
+export const transfer_sui = async ({ amount, recipient }) => {
   try {
     const tx = new TransactionBlock();
 
@@ -104,16 +105,3 @@ const transfer_sui = async ({ amount, recipient }) => {
   }
 };
 
-// module.exports = {
-//     get_token_owner,
-//     mint_sprite,
-//     transfer_sprite,
-//     transfer_sui
-// }
-
-export {
-  get_token_owner,
-  mint_sprite,
-  transfer_sprite,
-  transfer_sui
-}

@@ -1,6 +1,3 @@
-// const fs = require('fs');
-// const path = require('path');
-
 import fs from 'fs';
 import path from 'path';
 
@@ -11,9 +8,9 @@ if(!fs.existsSync(dictionary_path)) {
 
 const MAX_COUNT = 2000000;
 
-const get_score_cutoff = () => MAX_COUNT;
+export const get_score_cutoff = () => MAX_COUNT;
 
-const load = () => {
+export const load = () => {
     const MAX_COUNT = 2000000;
     const dictionary = fs.readFileSync(dictionary_path, 'UTF-8')
         .split("\r\n")
@@ -25,13 +22,3 @@ const load = () => {
     
     return dictionary;
 }
-
-// module.exports = {
-//     get_score_cutoff,
-//     load
-// }
-
-export {
-    get_score_cutoff,
-    load
-};

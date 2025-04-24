@@ -34,7 +34,7 @@ export const check_account = (address) => {
             users.set(new_user);
         }
         else if(!snapshot.val()[hashed]) {
-            users.push(default_user);
+            users.update({ [hashed]: default_user });
         }
     });
 
@@ -44,7 +44,7 @@ export const check_account = (address) => {
             game_sessions.set(new_game_session);
         }
         else if(!snapshot.val()[hashed]) {
-            game_sessions.push(default_game_session);
+            game_sessions.update({ [hashed]: default_game_session });
         }
     });
 
@@ -64,15 +64,15 @@ export const generate_UUID = (req, res) => {
 
 export const login = async (req, res) => {
     //Step 2: Client signs message, sends bytes + signature back encoded via Base64
-    const { address, bytes, message, signature } = req.body;
+    const { address, bytes, UUID, message, signature } = req.body;
 
-    if(!bytes || !message || !signature) {
+    if(!bytes || !message || !signature || !UUID) {
         return res.status(400).json({ error: "Missing required fields (message or signature) from request body!" });
     }
 
     const UUID_message = Users_UUID.get(address);
 
-    if(!UUID_message || UUID_message !== message) {
+    if(!UUID_message || UUID_message !== UUID) {
         return res.status(401).json({ error: "Invalid or Expired UUID Message"});
     }
 
@@ -86,9 +86,15 @@ export const login = async (req, res) => {
             { 
                 address: address, 
                 client: new SuiGraphQLClient({
-                    url: 'https://sui-testnet.mystenlabs.com/graphql',
+                    url: `https://sui-devnet.mystenlabs.com/graphql`,
                 }),
-            } : { address: address }
+            } :
+            { 
+                address: address, 
+                client: new SuiGraphQLClient({
+                    url: `https://sui-testnet.mystenlabs.com/graphql`,
+                }),
+            }
         );
 
         Users_UUID.delete(address);
@@ -114,15 +120,3 @@ export const login = async (req, res) => {
         res.status(500).json({ error: err });
     }
 }
-
-// module.exports = {
-//     check_account,
-//     generate_UUID,
-//     login,
-// }
-
-// export {
-//     check_account,
-//     generate_UUID,
-//     login,
-// };
