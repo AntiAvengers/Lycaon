@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FoodInventory from "./spriteDetailComp/foodInventory";
 import SpritesInfo from "./spriteDetailComp/spriteInfo";
 import FoodMeter from "./spriteDetailComp/foodMeter";
-import MintDetail from "./spriteDetailComp/mintDetail";
+import MintPg from "./mintPg";
 
 const initialFoodList = [
     { src: "/assets/foods/apple.svg", label: "apple", amt: 4, value: 1 },
@@ -160,7 +160,7 @@ const SpritesDetailPg = () => {
             {/* Minting Comp Popup */}
             {showMint && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
-                    <MintDetail
+                    <MintPg
                         onClose={closeMint}
                         sprite={sprite}
                         onMint={handleMint}

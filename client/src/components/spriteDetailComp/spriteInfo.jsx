@@ -27,17 +27,18 @@ const SpritesInfo = ({ sprite }) => {
         <div className="w-[305px] pr-[20px] leading-none">
             {isEditing ? (
                 <input
-                    className="text-[50px] h-[50px] bg-transparent border-b border-black/50 focus:outline-none"
+                    className="w-[287px] text-[50px] h-[50px] bg-transparent border-b border-black/50 focus:outline-none"
                     type="text"
                     value={name}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
+                    maxLength={30}
                     autoFocus
                 />
             ) : (
                 <h1
-                    className="text-[50px] cursor-pointer"
+                    className="w-[287px] text-[50px] cursor-pointer truncate"
                     onDoubleClick={handleDoubleClick}
                 >
                     {name}

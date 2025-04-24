@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const MintDetail = ({ onClose, sprite, onMint, onSell }) => {
+const MintPg = ({ onClose, sprite, onMint, onSell }) => {
     const [mintStatus, setMintStatus] = useState("idle"); // 'idle' | 'minting' | 'success'
     const [postMintAction, setPostMintAction] = useState("none"); // "none" | "readyToSell" | "confirm"
 
@@ -135,7 +135,7 @@ const MintDetail = ({ onClose, sprite, onMint, onSell }) => {
     );
 };
 
-MintDetail.propTypes = {
+MintPg.propTypes = {
     onClose: PropTypes.func.isRequired,
     sprite: PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -147,5 +147,5 @@ MintDetail.propTypes = {
     onSell: PropTypes.func.isRequired,
 };
 
-export default MintDetail;
+export default MintPg;
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import MintDetail from "../spriteDetailComp/mintDetail";
+import MintPg from "../mintPg";
 
 const creaturesList = [
     {
@@ -89,6 +89,17 @@ const UserListing = () => {
         setSelectedSprite((prev) => ({ ...prev, mint: true }));
     };
 
+    const btnSell = (clickedSprite) => {
+        setSelectedSprite({ ...clickedSprite, marketplace: true });
+        setSprites((prev) =>
+            prev.map((s) =>
+                s.label === clickedSprite.label
+                    ? { ...s, marketplace: true }
+                    : s
+            )
+        );
+    };
+
     const handleSell = () => {
         setSprites((prev) =>
             prev.map((s) =>
@@ -143,8 +154,7 @@ const UserListing = () => {
                                                 sprite.mint &&
                                                 !sprite.marketplace
                                             ) {
-                                                // directly trigger sell (no popup)
-                                                handleSell(sprite); // mark marketplace as true
+                                                btnSell(sprite);
                                             }
                                         }}
                                         disabled={sprite.marketplace}
@@ -173,7 +183,7 @@ const UserListing = () => {
             {/* Minting Comp Popup */}
             {showMint && selectedSprite && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
-                    <MintDetail
+                    <MintPg
                         onClose={closeMint}
                         sprite={selectedSprite}
                         onMint={handleMint}
