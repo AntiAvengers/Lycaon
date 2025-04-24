@@ -1,13 +1,3 @@
-// const crypto = require('crypto');
-
-// const { fromBase64 } = require('@mysten/sui/utils');
-// const { verifyPersonalMessageSignature } = require('@mysten/sui/verify');
-// const { SuiGraphQLClient } = require('@mysten/sui/graphql');
-
-// const { database, schema } = require('../../database/firebaseConfig');
-// const { default_user, default_game_session } = schema;
-// const { generateToken, verifyToken } = require('../../utils/jwt');
-
 import crypto from 'crypto';
 
 import { fromBase64 } from '@mysten/sui/utils';

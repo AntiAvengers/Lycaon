@@ -1,8 +1,3 @@
-// const jwt = require('../../utils/jwt');
-
-// const dotenv = require('dotenv');
-// dotenv.config();
-
 import { generateToken, verifyToken } from '../../utils/jwt.js';
 import 'dotenv/config';
 
@@ -30,10 +25,3 @@ export const refresh_JWT = async (req, res) => {
     return res.status(403).json({ message: "Invalid refresh token." });
   }
 };
-  
-
-// module.exports = {
-//     refresh_JWT
-// }
-
-// export { refresh_JWT };

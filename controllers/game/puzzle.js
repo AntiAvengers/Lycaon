@@ -1,11 +1,3 @@
-// const fs = require('fs').promises;
-// const path = require('path');
-
-// const crypto = require('crypto');
-
-// const { database, schema } = require('../../database/firebaseConfig.js');
-// const { default_game_session } = schema;
-
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -197,19 +189,3 @@ export const finish = async (req, res) => {
 
     return output;
 }
-
-// module.exports = {
-//     random,
-//     generate,
-//     load,
-//     check_answer,
-//     finish
-// }
-
-// export {
-//     random,
-//     generate,
-//     load,
-//     check_answer,
-//     finish
-// }

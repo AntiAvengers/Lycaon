@@ -4,6 +4,7 @@ import { client } from '../../utils/sui/config.js';
 import { get_transaction_block } from '../../utils/sui/client.js';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { bcs } from '@mysten/sui/bcs';
+import { database } from '../../database/firebaseConfig.js';
 
 import * as ed from '@noble/ed25519';
 
@@ -85,10 +86,21 @@ export const update_minted_digest = async (req, res) => {
         const tx = await get_transaction_block(digest);
         console.log(tx);
         console.log(Object.keys(tx));
-    
+        
+        if(tx.objectChanges) {
+            if(tx.objectChanges.length > 0) {
+                const { objectId } = tx.objectChange
+                    .filter(obj => obj.type == 'created' && obj.objectType.includes('sprite_token'))
+                    [0];
+
+                //Address = Tx Address?
+                const hashed = crypto.createHash('sha256').update(address).digest('hex');
+            
+                const user = database.ref('collections')
+            }
+        }
         const minted_object_ID = tx.objectChanges.filter(obj => obj.type == 'created')[0].objectId;
         
-        //7j6V7LWcwcNTvxaEF9fugwqDTeHHB4WuWDJRUV25mDp2
     } catch(err) {
         console.error(err);
         return res.status(500).json({ error: err });

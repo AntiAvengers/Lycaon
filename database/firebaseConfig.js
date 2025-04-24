@@ -1,13 +1,3 @@
-// const fs = require('fs');
-// const path = require('path');
-// const dotenv = require("dotenv");
-// dotenv.config();
-
-// const admin = require("firebase-admin");
-
-// const serviceAccount = require('./' + process.env.SERVICE_ACCOUNT_KEY);
-
-// import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -131,20 +121,9 @@ db.once('value', snapshot => {
   } 
 });
 
-// Export the database reference
-// module.exports = {
-//   database: admin.database(),
-//   schema: { default_user, default_game_session, default_collection }
-// }
-
 export const database = admin.database();
 export const schema = {
   default_user, 
   default_game_session, 
   default_collection
 }
-
-// export default {
-//   database,
-//   schema: { default_user, default_game_session, default_collection }
-// }

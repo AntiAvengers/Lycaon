@@ -1,6 +1,3 @@
-// const crypto = require('crypto');/
-// const { database, schema } = require('../../database/firebaseConfig.js');
-
 import crypto from 'crypto';
 import { database, schema } from '../../database/firebaseConfig.js';
 
@@ -142,22 +139,3 @@ export const update_listing = async (req, res) => {
 export const delete_listing = async (req, res) => {
     
 }
-
-
-// module.exports = {
-//     get_listings,
-//     create_listing,
-//     read_listing,
-//     read_all_listings,
-//     update_listing,
-//     delete_listing,
-// }
-
-// export {
-//     get_listings,
-//     create_listing,
-//     read_listing,
-//     read_all_listings,
-//     update_listing,
-//     delete_listing,
-// }
