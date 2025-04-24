@@ -9,6 +9,7 @@ const creaturesList = [
         label: "creature1",
         to: "/collection/spriteDetail",
         rank: "Elite",
+        stage: "Egg",
         name: "Nemo",
         mint: false,
         marketplace: false,
@@ -19,6 +20,7 @@ const creaturesList = [
         label: "creature2",
         to: "/collection/spriteDetail",
         rank: "Littles",
+        stage: "Basic",
         name: "Slimey",
         mint: false,
         marketplace: false,
@@ -29,6 +31,7 @@ const creaturesList = [
         label: "creature3",
         to: "/collection/spriteDetail",
         rank: "Elite",
+        stage: "Adult",
         name: "Nemo",
         mint: false,
         marketplace: false,
@@ -39,6 +42,7 @@ const creaturesList = [
         label: "creature4",
         to: "/collection/spriteDetail",
         rank: "Elite",
+        stage: "Egg",
         name: "Nemo",
         mint: false,
         marketplace: false,
@@ -49,6 +53,7 @@ const creaturesList = [
         label: "creature5",
         to: "/collection/spriteDetail",
         rank: "Elite",
+        stage: "Egg",
         name: "Nemo",
         mint: false,
         marketplace: false,
@@ -59,6 +64,7 @@ const creaturesList = [
         label: "creature6",
         to: "/collection/spriteDetail",
         rank: "Elite",
+        stage: "Egg",
         name: "Nemo",
         mint: false,
         marketplace: false,
@@ -144,8 +150,10 @@ const UserListing = () => {
                                     className="object-contain bg-[#E9E9E9]"
                                 />
                                 <section className="flex flex-col text-[25px]">
+                                    <span>
+                                        {sprite.stage} {sprite.rank}
+                                    </span>
                                     <span>{sprite.name}</span>
-                                    <span>{sprite.rank}</span>
                                     <button
                                         onClick={() => {
                                             if (!sprite.mint) {
