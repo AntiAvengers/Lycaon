@@ -1,3 +1,5 @@
+import { useState, useMemo } from "react";
+
 const creaturesList = [
     {
         src: "/assets/sprites/celestial-sprite.png",
@@ -86,6 +88,26 @@ const creaturesList = [
 ];
 
 const AllListing = () => {
+    const [filter, setFilter] = useState("all");
+    const [showFilters, setShowFilters] = useState(false);
+    const [sortOrder, setSortOrder] = useState("asc");
+
+    // const filteredCreatures = creaturesList
+    //     .filter((creature) =>
+    //         filter === "all" ? true : creature.rank === filter
+    //     )
+    //     .sort((a, b) =>
+    //         sortOrder === "asc" ? a.price - b.price : b.price - a.price
+    //     );
+
+    const filteredCreatures = useMemo(() => {
+        return creaturesList
+            .filter((creature) => filter === "all" || creature.rank === filter)
+            .sort((a, b) =>
+                sortOrder === "asc" ? a.price - b.price : b.price - a.price
+            );
+    }, [filter, sortOrder]);
+
     return (
         <div className="w-[1267px]">
             {creaturesList.length === 0 && (
@@ -95,16 +117,70 @@ const AllListing = () => {
             )}
 
             {creaturesList.length > 0 && (
-                <div className="flex flex-col items-end justify-start mt-[10px] gap-[25px]">
-                    <button className="w-[57px] h-[35px] rounded-[66px] bg-[#FFFFFF] flex items-center justify-center cursor-pointer shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75">
-                        <img
-                            src="/assets/icons/filter.svg"
-                            alt="filterIcon"
-                            className="w-[20px] h-[25px]"
-                        />
-                    </button>
+                <div className="flex flex-col items-start justify-start mt-[10px] gap-[25px] relative">
+                    <div className="w-full flex justify-end">
+                        <button
+                            onClick={() => setShowFilters((prev) => !prev)}
+                            className="w-[57px] h-[35px] rounded-[66px] bg-[#FFFFFF] flex items-center justify-center cursor-pointer shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75"
+                        >
+                            <img
+                                src="/assets/icons/filter.svg"
+                                alt="filterIcon"
+                                className="w-[20px] h-[25px]"
+                            />
+                        </button>
+                    </div>
+
+                    {showFilters && (
+                        <div className="absolute top-[45px] right-0 bg-white border border-gray-300 rounded-lg shadow-md p-2 z-10 w-[150px]">
+                            <button
+                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                onClick={() => {
+                                    setFilter("all");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                All
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                onClick={() => {
+                                    setFilter("Elite");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Elite
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                onClick={() => {
+                                    setFilter("Littles");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Littles
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                onClick={() => {
+                                    setSortOrder("asc"), setShowFilters(false);
+                                }}
+                            >
+                                Price ↑
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                onClick={() => {
+                                    setSortOrder("desc"), setShowFilters(false);
+                                }}
+                            >
+                                Price ↓
+                            </button>
+                        </div>
+                    )}
+
                     <ul className="w-full flex flex-wrap gap-x-[105px] gap-y-[50px] max-w-max">
-                        {creaturesList.map((creature) => (
+                        {filteredCreatures.map((creature) => (
                             <li key={creature.label} className="w-[238px]">
                                 <img
                                     src={creature.still}
