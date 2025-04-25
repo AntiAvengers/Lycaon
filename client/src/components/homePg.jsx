@@ -14,15 +14,38 @@ const HomePg = () => {
         }
     }, [location, navType]);
 
+    useEffect(() => {
+        document.body.classList.add("home-bg");
+        return () => {
+            document.body.classList.remove("home-bg");
+        };
+    }, []);
+
     const closePopup = () => {
         setShowPopup(false);
     };
 
     return (
-        <div className="flex w-full max-w-screen mx-8 sm:mt-8 md:mt-8 sm:my-0 my-8 border-1 border-gray-300 bg-[#E9ECEF] justify-center items-center">
-            <h1 className="text-5xl">Home</h1>
+        <div className="flex w-full relative">
+            <div className="group">
+                <img
+                    className="absolute bottom-[45px] left-[606px] cursor-pointer"
+                    src="/assets/icons/book.svg"
+                    alt="bookIcon"
+                />
 
-            {/* Popup */}
+                <img
+                    className="absolute bottom-[45px] left-[606px] cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    src="/assets/icons/book-hover.png"
+                    alt="bookIconHover"
+                />
+
+                <span className="absolute bottom-[260px] left-[700px] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    Puzzle
+                </span>
+            </div>
+
+            {/* New User Reward Popup */}
             {showPopup && (
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[30px] z-50 flex flex-col justify-center items-center">
                     <img
@@ -34,7 +57,10 @@ const HomePg = () => {
                     <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none tracking-[1px]">
                         <h1 className="text-[45px]">Welcome!</h1>
                         <p>Thank you for playing Lycaon! 🎉</p>
-                        <p>As a new player, we gifted you 4 pages and 500 shards to start.</p>
+                        <p>
+                            As a new player, we gifted you 4 pages and 500
+                            shards to start.
+                        </p>
                         <p>Go enjoy the game!!!!</p>
                     </section>
                 </div>
