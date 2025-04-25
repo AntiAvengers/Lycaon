@@ -7,7 +7,7 @@ const creaturesList = [
         label: "creature1",
         to: "/collection/spriteDetail",
         rank: "Elite",
-        name: "Nemo",
+        name: "Alexanders Maximillian Theodore",
         stage: "Egg",
         mint: true,
         marketplace: true,

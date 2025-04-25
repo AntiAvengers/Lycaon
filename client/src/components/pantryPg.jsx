@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 const foods = [
-    { src: "/assets/foods/apple.svg", label: "apple", value: 1, price: 5 },
-    { src: "/assets/foods/meat-stick.svg", label: "meat", value: 2, price: 10 },
-    { src: "/assets/star.png", label: "pizza", value: 3, price: 25 },
-    { src: "/assets/star.png", label: "carrot", value: 4, price: 50 },
+    { src: "/assets/foods/apple.svg", label: "Apple", value: 1, price: 5 },
+    { src: "/assets/foods/cherries.svg", label: "Cherries", value: 2, price: 10 },
+    { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 25 },
+    { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 50 },
 ];
 
 const PantryPg = () => {

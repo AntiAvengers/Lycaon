@@ -20,7 +20,7 @@ const FoodInventory = ({ foods, onFeed }) => {
                     <img
                         src={food.src}
                         alt={food.label}
-                        className="object-contain transform transition duration-300 ease-in-out group-hover:-translate-y-1"
+                        className="w-[84px] object-contain transform transition duration-300 ease-in-out group-hover:-translate-y-1"
                     />
                 </li>
             ))}
