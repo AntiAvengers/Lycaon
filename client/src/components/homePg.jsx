@@ -48,7 +48,7 @@ const HomePg = () => {
             </div>
 
             {/* Statue Group */}
-            <div className="group z-50">
+            <div className="group z-30">
                 <Link to="/collection">
                     <img
                         className="absolute top-1/2 left-0 transform -translate-y-[53%] cursor-pointer"

@@ -11,6 +11,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
@@ -19,6 +21,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Littles",
         name: "Slimey",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/sprites/celestial-sprite.png",
@@ -27,6 +31,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/star.png",
@@ -35,6 +41,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: true,
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
@@ -43,6 +51,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: true,
     },
     {
         src: "/assets/star.png",
@@ -51,6 +61,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/star.png",
@@ -59,6 +71,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/sprites/slime-sprite.gif",
@@ -67,6 +81,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
     {
         src: "/assets/star.png",
@@ -75,6 +91,8 @@ const creaturesList = [
         to: "/collection/spriteDetail",
         rank: "Elite",
         name: "Nemo",
+        mint: true,
+        marketplace: false,
     },
 ];
 
@@ -178,8 +196,19 @@ const SpritesCollectionPg = () => {
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
-                                className="flex flex-col items-start justify-between"
+                                className={`flex flex-col items-start justify-between ${
+                                    creature.marketplace
+                                        ? "opacity-50 filter grayscale pointer-events-none cursor-not-allowed"
+                                        : ""
+                                }`}
                             >
+                                {/* Badge */}
+                                {creature.marketplace && (
+                                    <span className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-full z-10">
+                                        Listed
+                                    </span>
+                                )}
+                                
                                 <div className="w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative">
                                     <button
                                         onClick={() => handleToggleLike(index)}
