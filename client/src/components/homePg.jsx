@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigationType } from "react-router-dom";
+import { useLocation, useNavigationType, Link } from "react-router-dom";
 
 const HomePg = () => {
     const location = useLocation();
@@ -27,22 +27,60 @@ const HomePg = () => {
 
     return (
         <div className="flex w-full relative">
+            {/* Book Group */}
             <div className="group">
-                <img
-                    className="absolute bottom-[45px] left-[606px] cursor-pointer"
-                    src="/assets/icons/book.svg"
-                    alt="bookIcon"
-                />
+                <Link to="/puzzle">
+                    <img
+                        className="absolute bottom-[45px] left-[51.20%] transform -translate-x-1/2 cursor-pointer group-hover:opacity-0 transition-opacity duration-200"
+                        src="/assets/icons/book.svg"
+                        alt="bookIcon"
+                    />
+                    <img
+                        className="absolute bottom-[45px] left-[51.20%] transform -translate-x-1/2 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        src="/assets/icons/book-hover.png"
+                        alt="bookIconHover"
+                    />
+                </Link>
 
-                <img
-                    className="absolute bottom-[45px] left-[606px] cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    src="/assets/icons/book-hover.png"
-                    alt="bookIconHover"
-                />
-
-                <span className="absolute bottom-[260px] left-[700px] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <span className="absolute bottom-[260px] left-[52%] transform -translate-x-1/2 leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     Puzzle
                 </span>
+            </div>
+
+            {/* Statue Group */}
+            <div className="group z-50">
+                <Link to="/collection">
+                    <img
+                        className="absolute top-1/2 left-0 transform -translate-y-[53%] cursor-pointer"
+                        src="/assets/icons/statues.png"
+                        alt="statuesIcon"
+                    />
+                    <span className="absolute top-1/2 left-[9%] transform -translate-y-[30%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Collection
+                    </span>
+                </Link>
+            </div>
+
+            {/* Market Group */}
+            <div className="group">
+                <Link to="/marketplace">
+                    <img
+                        className="absolute top-1/2 right-[1%] transform -translate-y-[74%] cursor-pointer"
+                        src="/assets/icons/market.png"
+                        alt="marketIcon"
+                    />
+                    <span className="absolute top-1/2 right-[10%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Marketplace
+                    </span>
+                </Link>
+            </div>
+
+            {/* Pantry Group */}
+            <div className="group">
+                <Link to="/pantry">
+                <img className="absolute top-1/2 left-[23.5%] transform -translate-y-[75%]" src="/assets/icons/tree.png" alt="treeIcon" />
+                <span className="absolute top-1/2 left-[26%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">Pantry</span>
+                </Link>
             </div>
 
             {/* New User Reward Popup */}
