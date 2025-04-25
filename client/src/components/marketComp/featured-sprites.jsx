@@ -46,7 +46,7 @@ const FeaturedSprites = () => {
                                 alt={feature.label}
                                 className="w-[322px] object-contain bg-[#E9E9E9]"
                             />
-                            <section className="w-[239px] flex flex-col justify-start gap-[5px] leading-none">
+                            <section className="w-[239px] flex flex-col justify-start gap-[5px] leading-none text-[#FEFAF3]">
                                 <span className="text-[25px]">
                                     {feature.stage} {feature.rank}
                                 </span>
@@ -61,7 +61,7 @@ const FeaturedSprites = () => {
                                     />
                                     {feature.price}
                                 </span>
-                                <button className="w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] cursor-pointer">
+                                <button className="w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer">
                                     Buy Now
                                 </button>
                             </section>
