@@ -74,10 +74,11 @@ export const login = async (req, res) => {
             signature, 
             process.env.MODE == "DEVELOPMENT" ? 
             { 
-                address: address, 
-                client: new SuiGraphQLClient({
-                    url: `https://sui-devnet.mystenlabs.com/graphql`,
-                }),
+                address: address,
+                //At some point this stopped working and caused the signature to fail to verify . . .
+                // client: new SuiGraphQLClient({
+                //     url: `https://sui-devnet.mystenlabs.com/graphql`,
+                // }),
             } :
             { 
                 address: address, 
@@ -99,9 +100,10 @@ export const login = async (req, res) => {
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "PRODUCTION",
-            sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            secure: process.env.MODE === "PRODUCTION",
+            sameSite: process.env.MODE === "PRODUCTION" ? "Strict" : "Lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: '/',
         });
 
         res.status(200).json({ accessToken });

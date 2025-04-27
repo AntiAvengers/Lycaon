@@ -6,7 +6,7 @@ module 0x0::sprite_token {
     use sui::bcs;
     use sui::clock::{Clock};
 
-    public struct Sprite has key {
+    public struct Sprite has key, store {
         id: UID,
         sprite_type: string::String,
         sprite_rarity: string::String, 

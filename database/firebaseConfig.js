@@ -79,7 +79,8 @@ db.once('value', snapshot => {
       users: { _init: true },
       collections: { _init: true },
       leaderboard: default_leaderboard,
-      game_rules: default_game_rules
+      game_rules: default_game_rules,
+      marketplace: { _init: true }
     });
   }
 
@@ -105,20 +106,20 @@ db.once('value', snapshot => {
 
   if(!data.marketplace) {
     console.log('. . . Initializing Marketplace in Database');
-    db.update({ marketplace: [] });
+    db.update({ marketplace: { _init: true }});
   }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
-  if(process.env.MODE == "DEVELOPMENT") {
-    console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
-    db.set({
-      users: { _init: true },
-      collections: { _init: true },
-      leaderboard: default_leaderboard,
-      game_rules: default_game_rules,
-      marketplace: []
-    });
-  } 
+  // if(process.env.MODE == "DEVELOPMENT") {
+  //   console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
+  //   db.set({
+  //     users: { _init: true },
+  //     collections: { _init: true },
+  //     leaderboard: default_leaderboard,
+  //     game_rules: default_game_rules,
+  //     marketplace: { _init: true }
+  //   });
+  // } 
 });
 
 export const database = admin.database();

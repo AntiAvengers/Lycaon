@@ -25,9 +25,8 @@ export const pull = async (req, res) => {
 
     //Player's Collection is full
     if(snapshot.exists()) {
-        console.log(snapshot.val());
         if(snapshot.val().length >= 100) {
-            res.status(403).json({ error: "Player's Collection is full!" });
+            return res.status(403).json({ error: "Player's Collection is full!" });
         }
     }
 
@@ -42,7 +41,6 @@ export const pull = async (req, res) => {
     for(const key in rarity) {
         const { id, pull_rate } = rarity[key];
         cumulative_pull_rate += pull_rate;
-        console.log(weight);
         if(weight < cumulative_pull_rate) {
             rarity_result = id;
             break;
@@ -58,6 +56,7 @@ export const pull = async (req, res) => {
 
     //Database Update
     const sprite = {
+        id: crypto.randomUUID(),
         nickname: "",
         favorite: false,
         type: sprite_result.type,
@@ -71,13 +70,13 @@ export const pull = async (req, res) => {
 
     //First sprite
     if(!snapshot.exists()) { 
-        collection.set([sprite]);
-        return res.status(200).json({ response: sprite_result });
-    }
+        collection.set({ [0]: sprite });
+        return res.status(200).json({ response: sprite });
+    }   
 
     //Otherwise pushes sprite to player collection
     const player_collection = snapshot.val();
-    player_collection.push(sprite);
-    collection.set(player_collection);
+    const len = Object.keys(player_collection).length;
+    collection.update({[len]: sprite});
     return res.status(200).json({ response: sprite_result });
 }
