@@ -44,14 +44,15 @@ const SpritesDetailPg = () => {
     const handleMintClick = () => {
         if (!minted) {
             setShowMint(true);
-            console.log("Sprite minted");
         } else if (minted && !market) {
-            setMarket(true);
-            console.log("Sprite listed on marketplace");
+            setShowMint(true);
+            console.log(minted, market);
         } else if (minted && market) {
             navigate("/marketplace");
         }
     };
+
+    console.log(minted, market);
 
     const closeMint = () => {
         setShowMint(false);
@@ -60,6 +61,7 @@ const SpritesDetailPg = () => {
     const handleMint = () => {
         setMinted(true);
     };
+
 
     const handleSell = () => {
         setMarket(true);
@@ -165,6 +167,8 @@ const SpritesDetailPg = () => {
                         sprite={sprite}
                         onMint={handleMint}
                         onSell={handleSell}
+                        minted = {minted}
+                        market = {market}
                     />
                 </div>
             )}

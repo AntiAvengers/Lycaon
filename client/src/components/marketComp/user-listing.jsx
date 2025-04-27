@@ -95,16 +95,16 @@ const UserListing = () => {
         setSelectedSprite((prev) => ({ ...prev, mint: true }));
     };
 
-    const btnSell = (clickedSprite) => {
-        setSelectedSprite({ ...clickedSprite, marketplace: true });
-        setSprites((prev) =>
-            prev.map((s) =>
-                s.label === clickedSprite.label
-                    ? { ...s, marketplace: true }
-                    : s
-            )
-        );
-    };
+    // const btnSell = (clickedSprite) => {
+    //     setSelectedSprite({ ...clickedSprite, marketplace: true });
+    //     setSprites((prev) =>
+    //         prev.map((s) =>
+    //             s.label === clickedSprite.label
+    //                 ? { ...s, marketplace: true }
+    //                 : s
+    //         )
+    //     );
+    // };
 
     const handleSell = () => {
         setSprites((prev) =>
@@ -162,7 +162,8 @@ const UserListing = () => {
                                                 sprite.mint &&
                                                 !sprite.marketplace
                                             ) {
-                                                btnSell(sprite);
+                                                // btnSell(sprite);
+                                                handleMintClick(sprite);
                                             }
                                         }}
                                         disabled={sprite.marketplace}
