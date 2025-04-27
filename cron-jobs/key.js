@@ -1,12 +1,11 @@
 import cron from 'node-cron';
 import { database } from '../database/firebaseConfig.js';
 
-const dev_schedule = '* * * * *';
-const prod_schedule = '* */12 * * *';
+const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '* */12 * * *';
 
-//Giving players daily keys, every 12 hours
-console.log('. . . Loaded cron-job "Key"');
-cron.schedule(dev_schedule, async () => {
+//Giving players keys (every minute in development) every 12 hours
+console.log('. . . Loaded cron-job "Key"', `(${schedule})`);
+cron.schedule(schedule, async () => {
     try {
         const users_ref = database.ref('users');
         const snapshot = await users_ref.once("value");

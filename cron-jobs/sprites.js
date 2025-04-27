@@ -1,4 +1,5 @@
 import cron from 'node-cron';
+import 'dotenv/config';
 
 import fs from 'fs';
 import path from 'path';
@@ -11,23 +12,13 @@ const __dirname = dirname(__filename);
 
 import { database } from '../database/firebaseConfig.js';
 
-//Giving players shards every 4 hours (depending on sprite rarity)
-
-const dev_schedule = '* * * * *';
-const prod_schedule = '* */4 * * *';
-
-// const ref = {
-//     "Little": 1,
-//     "Familiar": 2,
-//     "Noble": 3,
-//     "Elite": 4,
-//     "Mythic": 5,
-// }
+//Giving players shards (every minute if development) every 4 hours based on sprite rarity
+const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '* */4 * * *';
 
 const ref = JSON.parse(fs.readFileSync(path.join(__dirname, '../database/rarity.json'), 'UTF-8'));
 
-console.log('. . . Loaded cron-job "sprites"');
-cron.schedule(dev_schedule, async () => {
+console.log('. . . Loaded cron-job "sprites"', `(${schedule})`);
+cron.schedule(schedule, async () => {
     try {
         const users_ref = database.ref("users");
         const users_snapshot = await users_ref.once("value");
