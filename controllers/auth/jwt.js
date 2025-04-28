@@ -4,9 +4,7 @@ import 'dotenv/config';
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 export const refresh_JWT = async (req, res) => {
-  console.log('refreshing jwt token for user');
   const refreshToken = req.cookies.refreshToken;
-  console.log('123');
 
   if (!refreshToken) {
     return res.status(401).json({ message: "No refresh token provided." });
@@ -19,10 +17,10 @@ export const refresh_JWT = async (req, res) => {
     const newAccessToken = generateToken(
       { address },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" }
+      "30m"
     );
 
-    return res.json({ accessToken: newAccessToken });
+    return res.status(200).json({ accessToken: newAccessToken });
   } catch (err) {
     return res.status(401).json({ message: "Invalid refresh token." });
   }

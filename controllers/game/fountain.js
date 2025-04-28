@@ -17,7 +17,7 @@ function normalize_U32(value, max) {
 }
 
 export const pull = async (req, res) => {
-    const { address } = req.body;
+    const { address } = req.user;    
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const collection = database.ref(`collections/${hashed}`);

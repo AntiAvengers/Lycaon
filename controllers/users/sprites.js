@@ -78,13 +78,14 @@ export const update_sprite = async (req, res) => {
 //Minting Creatures
 export const request_mint_tx = async (req, res) => {
     try {
-        const { address, id } = req.body;
-
+        const { id } = req.body;
+        const { address } = req.user;
+         
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
         
         const collections = database.ref(`collections/${hashed}`);
         const snapshot = await collections.orderByChild("id").equalTo(id).once("value");
-        
+
         if(!snapshot.exists()) {
             return res.status(400).json({ error: "Sprite ID does not exist for player" });
         }
@@ -126,7 +127,7 @@ export const request_mint_tx = async (req, res) => {
             arguments: [
                 tx.pure(bcs.vector(bcs.u8()).serialize(struct)),
                 tx.pure(bcs.vector(bcs.u8()).serialize(signature)),
-                tx.pure(bcs.vector(bcs.u8()).serialize(pubKey)), 
+                tx.pure(bcs.vector(bcs.u8()).serialize(public_key)), 
                 tx.object(process.env.UUID_REGISTRY),
                 tx.object('0x6'),
             ],
@@ -144,53 +145,18 @@ export const request_mint_tx = async (req, res) => {
         }
     
         const serialized = await tx.serialize();
-    
+        
+        console.log('. . . Created Minting Transaction for address', address);
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {
         console.error(err);
     } 
 };
 
-export const update_minted_digest = async (req, res) => {
-    try {
-        const { address, digest, id } = req.body;
-
-        if(!digest) {
-            return res.status(400).json({ error: "Missing Digest for Transaction Block!" })
-        } 
-        if(!id) {
-            return res.status(400).json({ error: "Missing ID of sprite to reference database!" })
-        }
-    
-        const tx = await get_transaction_block(digest);
-        console.log(tx);
-        console.log(Object.keys(tx));
-        
-        if(tx.objectChanges) {
-            console.log('tx.objectChanges');
-            if(tx.objectChanges.length > 0) {
-                const { objectId } = tx.objectChanges
-                    .filter(obj => obj.type == 'created' && obj.objectType.includes('sprite_token'))
-                    [0];
-
-                const hashed = crypto.createHash('sha256').update(address).digest('hex');
-            
-                const collection = database.ref(`collections/${hashed}`);
-                const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
-                const key = Object.keys(snapshot.val())[0];
-                database.ref(`collections/${hashed}/${key}`).update({ minted_ID: objectId });
-            }
-        }
-        return res.status(200);
-    } catch(err) {
-        console.log(err);
-        return res.status(400).json({ error: err });
-    }
-};
-
 //TEST F - B - SUI - B - F model
 export const execute_mint_tx = async (req, res) => {
-    const { bytes, signature } = req.body;
+    const { bytes, signature, id } = req.body;
+    const { address } = req.user;
 
     if(!bytes) {
         return res.status(400).json({ error: "Missing 'bytes' parameter from request body" });
@@ -206,14 +172,44 @@ export const execute_mint_tx = async (req, res) => {
         requestType: 'WaitForLocalExecution',
         options: {
             showEffects: true,
+            showObjectChanges: true
         },
     });
+
+    if(result.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
 
     const transaction = await client.waitForTransaction({
         digest: result.digest,
         options: {
-            objectChanges: true,
+            showObjectChanges: true,
             showEffects: true
         },
     });
+
+    if(transaction.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    console.log(result);
+    console.log(transaction.effects.created);
+
+    if(transaction.objectChanges) {
+        if(transaction.objectChanges.length > 0) {
+            const { objectId } = transaction.objectChanges
+                .filter(obj => obj.type == 'created' && obj.objectType.includes('sprite_token'))
+                [0];
+
+            const hashed = crypto.createHash('sha256').update(address).digest('hex');
+            const collection = database.ref(`collections/${hashed}`);
+            const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
+            const key = Object.keys(snapshot.val())[0];
+            database.ref(`collections/${hashed}/${key}`).update({ minted_ID: objectId });
+            console.log('. . . Executed Minting Transaction for address', address);
+            console.log('. . . . . . Minted Object ID:', objectId);
+        }
+    }
+
+    return res.status(200).json({ response: transaction });
 }

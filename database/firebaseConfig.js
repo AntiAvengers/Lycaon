@@ -110,16 +110,20 @@ db.once('value', snapshot => {
   }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
-  // if(process.env.MODE == "DEVELOPMENT") {
-  //   console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
-  //   db.set({
-  //     users: { _init: true },
-  //     collections: { _init: true },
-  //     leaderboard: default_leaderboard,
-  //     game_rules: default_game_rules,
-  //     marketplace: { _init: true }
-  //   });
-  // } 
+  if(process.argv.length > 2) {
+    const reset_commands = ['-d', '-r', 'delete', 'del', 'purge', 'reset', 'clear', 'wipe', 'flush'];
+    const command = process.argv[2].toLowerCase();
+    if(process.env.MODE == "DEVELOPMENT" && reset_commands.includes(command)) {
+      console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
+      db.set({
+        users: { _init: true },
+        collections: { _init: true },
+        leaderboard: default_leaderboard,
+        game_rules: default_game_rules,
+        marketplace: { _init: true }
+      });
+    } 
+  }
 });
 
 export const database = admin.database();

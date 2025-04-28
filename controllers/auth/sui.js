@@ -97,7 +97,7 @@ export const login = async (req, res) => {
         //Step 5: Issue a JWT
         const accessToken = generateToken({ address }, ACCESS_TOKEN_SECRET, '30m');  // Access token for authentication
         const refreshToken = generateToken({ address }, REFRESH_TOKEN_SECRET, '7d');  // Refresh token for long-term sessions
-
+        
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.MODE === "PRODUCTION",
