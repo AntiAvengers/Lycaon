@@ -28,6 +28,21 @@ const HomePg = () => {
         setShowPopup(false);
     };
 
+    //Closes with Escape Btn as well
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                closePopup();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
     return (
         <div className="flex w-full relative">
             {/* Book Group */}
@@ -81,8 +96,29 @@ const HomePg = () => {
             {/* Pantry Group */}
             <div className="group">
                 <Link to="/pantry">
-                <img className="absolute top-1/2 left-[23.5%] transform -translate-y-[75%]" src="/assets/icons/tree.png" alt="treeIcon" />
-                <span className="absolute top-1/2 left-[26%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">Pantry</span>
+                    <img
+                        className="absolute top-1/2 left-[23.5%] transform -translate-y-[75%]"
+                        src="/assets/icons/tree.png"
+                        alt="treeIcon"
+                    />
+                    <span className="absolute top-1/2 left-[26%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Pantry
+                    </span>
+                </Link>
+            </div>
+
+            {/* Fountain Group */}
+
+            <div className="group">
+                <Link to="/fountain">
+                    <img
+                        className="absolute top-1/2 left-1/2 transform -translate-x-[47%] -translate-y-[18%]"
+                        src="/assets/icons/fountain.png"
+                        alt="foundtainIcon"
+                    />
+                    <span className="absolute top-[150px] left-[51%] transform -translate-x-1/2 leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Fountain
+                    </span>
                 </Link>
             </div>
 
