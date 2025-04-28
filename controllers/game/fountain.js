@@ -16,20 +16,7 @@ function normalize_U32(value, max) {
     return (value / 0xFFFFFFFF) * max;
 }
 
-export const pull = async (req, res) => {
-    const { address } = req.user;    
-    const hashed = crypto.createHash('sha256').update(address).digest('hex');
-
-    const collection = database.ref(`collections/${hashed}`);
-    const snapshot = await collection.once("value");
-
-    //Player's Collection is full
-    if(snapshot.exists()) {
-        if(snapshot.val().length >= 100) {
-            return res.status(403).json({ error: "Player's Collection is full!" });
-        }
-    }
-
+function pull_sprite() {
     const RNG = crypto.getRandomValues(new Uint32Array(2));
     const RNG_rarity = RNG[0];
     const weight = normalize_U32(RNG_rarity, 1000);
@@ -68,15 +55,61 @@ export const pull = async (req, res) => {
         minted_ID: false
     }
 
+    return sprite;
+}
+
+export const pull = async (req, res) => {
+    const { address } = req.user;
+    const { ten_pull } = req.body;
+
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+
+    const user_ref = database.ref(`users/${hashed}`);
+    const user_snapshot = await user_ref.once("value");
+    const user = user_snapshot.val();
+    const { pages } = user;
+
+    if(!ten_pull && pages < 1 || ten_pull && pages < 10) {
+        return res.status(403).json({ error: "Player does not have enough pages to pull" });
+    }
+
+    const collection = database.ref(`collections/${hashed}`);
+    const snapshot = await collection.once("value");
+
+    //Player's Collection is full
+    if(snapshot.exists()) {
+        if(snapshot.val().length >= 100 || (ten_pull && snapshot.val().length >= 91)) {
+            return res.status(403).json({ error: "Player's Collection is/will be full!" });
+        }
+    }
+
+    let results = [pull_sprite()];
+    if(ten_pull) {
+        for(let i = 0; i < 9; i++) {
+            results.push(pull_sprite());
+        }
+    }
+
     //First sprite
-    if(!snapshot.exists()) { 
-        collection.set({ [0]: sprite });
-        return res.status(200).json({ response: sprite });
+    if(!snapshot.exists()) {
+        const output = {};
+        for(let i = 0; i < results.length; i++) {
+            output[i] = results[i];
+        }
+        collection.set({ output });
+        user_ref.update({ pages: (pages - 1) });
+        return res.status(200).json({ response: output });
     }   
 
     //Otherwise pushes sprite to player collection
     const player_collection = snapshot.val();
     const len = Object.keys(player_collection).length;
-    collection.update({[len]: sprite});
-    return res.status(200).json({ response: sprite_result });
+    const len_end = len + 10;
+    const output = {};
+    for(let i = 0; i < results.length; i++) {
+        output[i+len] = results[i];
+    }
+    collection.update(output);
+    user_ref.update({ pages: (pages - results.length) });
+    return res.status(200).json({ response: output });
 }
