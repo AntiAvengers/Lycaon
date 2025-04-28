@@ -24,9 +24,8 @@ const Layout = ({ children }) => {
     );
 };
 
-// Define prop types
 Layout.propTypes = {
-    children: PropTypes.node.isRequired, // children should be a React node (JSX, string, etc.)
+    children: PropTypes.node.isRequired,
 };
 
 export default Layout;

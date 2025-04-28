@@ -6,6 +6,7 @@ const HomePg = () => {
     const navType = useNavigationType();
     const [showPopup, setShowPopup] = useState(false);
 
+    // Trigger for New User Popup --- still need connect on how to detect new user
     useEffect(() => {
         const cameFromRoot =
             document.referrer.endsWith("/") || location.state?.from === "/";
@@ -14,6 +15,7 @@ const HomePg = () => {
         }
     }, [location, navType]);
 
+    // Background for HomePg
     useEffect(() => {
         document.body.classList.add("home-bg");
         return () => {
@@ -21,6 +23,7 @@ const HomePg = () => {
         };
     }, []);
 
+    // Closes New User Popup
     const closePopup = () => {
         setShowPopup(false);
     };

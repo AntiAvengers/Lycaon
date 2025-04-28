@@ -11,7 +11,8 @@ const aboutImg = [
 
 const AboutPg = () => {
     return (
-        <div className="w-full bg-[#FFFFFF]/50 flex flex-col px-[100px] py-[50px] gap-[50px]">
+        <div className="w-full bg-[#FFFFFF] flex flex-col px-[100px] py-[50px] gap-[50px]">
+            {/* Synopsis of Game */}
             <p className="w-[722px] text-[25px]">
                 Lycaon, a powerful summoner, created the Codex Bestiarum to
                 control all beasts but was trapped inside it by a forbidden
@@ -20,6 +21,8 @@ const AboutPg = () => {
                 waits within. Will you finish the summoning—or become its next
                 prisoner?
             </p>
+
+            {/* Pic Section About Game */}
             <section className="text-[37px] flex flex-col gap-[40px]">
                 {aboutImg.map((about, index) => (
                     <div
@@ -37,6 +40,7 @@ const AboutPg = () => {
                     </div>
                 ))}
             </section>
+            {/* Story of Game */}
             <section className="w-[977px]">
                 <h1 className="text-[37px]">Read the lore</h1>
                 <p className="text-[25px]">

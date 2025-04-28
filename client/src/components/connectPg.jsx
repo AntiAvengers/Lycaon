@@ -4,6 +4,7 @@ import AboutPg from "../aboutPg";
 const ConnectPg = () => {
     return (
         <div className="w-full flex flex-col justify-center items-center">
+            {/* Sigin Area */}
             <section className="min-h-screen flex flex-col items-center justify-center">
                 <h1 className="text-[45px] sm:text-[80px] uppercase text-center">
                     Welcome to Lycaon
@@ -26,6 +27,8 @@ const ConnectPg = () => {
                     </span>
                 </Link>
             </section>
+
+            {/* About Description - Photos of Game */}
             <AboutPg />
         </div>
     );

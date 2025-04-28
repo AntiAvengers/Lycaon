@@ -5,20 +5,22 @@ import SuiWallet from "./headerComp/suiWallet.jsx";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Header = () => {
-    const [open, setOpen] = useState(false);
-    const [profile, setProfile] = useState(false);
-    const [message, setMessage] = useState("");
-    const menuRef1 = useRef(null);
-    const menuRef2 = useRef(null);
+    const [open, setOpen] = useState(false); // menu
+    const [profile, setProfile] = useState(false); //logout
+    const [message, setMessage] = useState(""); //puzzle message
+
+    const menuRef1 = useRef(null); //menu
+    const menuRef2 = useRef(null); // logout
 
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Game Logo directory
     const handleHomeClick = () => {
         navigate("/home");
     };
 
-    // Show the confirmation popup or message
+    // Show the Puzzle Popup or navigate to puzzlePg
     const handlePuzzleClick = (e) => {
         e.preventDefault();
         if (location.pathname === "/puzzle") {
@@ -30,11 +32,13 @@ const Header = () => {
         }
     };
 
+    //Opens Dropdown
     const toggleDropdown = () => {
         setOpen((prev) => !prev);
         console.log("Dropdown menu header clicked");
     };
 
+    // Opens Logout
     const toggleProfile = () => {
         setProfile((prev) => !prev);
         console.log("Dropdown profile header clicked");
@@ -50,6 +54,7 @@ const Header = () => {
         }
     }, []);
 
+    // Close dropdown when clicked outside of menu
     useEffect(() => {
         document.addEventListener("pointerdown", handleOutsideClick);
         return () =>
@@ -75,6 +80,7 @@ const Header = () => {
             <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
                 {/* Left Section: Menu and Logo */}
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
+                    {/* Menu */}
                     <div ref={menuRef1} className="relative">
                         <img
                             src={`/assets/icons/${
@@ -103,6 +109,7 @@ const Header = () => {
                             </ul>
                         )}
                     </div>
+                    {/* Logo */}
                     <button
                         onClick={handleHomeClick}
                         className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
@@ -120,6 +127,7 @@ const Header = () => {
                 <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
+                    {/* Logout */}
                     <div
                         className="relative"
                         ref={menuRef2}
@@ -141,7 +149,7 @@ const Header = () => {
                     </div>
                 </section>
 
-                {/* Already on PuzzlePage Message */}
+                {/* Already on PuzzlePg Message */}
                 {message && (
                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-md text-center text-xl sm:text-2xl">
                         {message}

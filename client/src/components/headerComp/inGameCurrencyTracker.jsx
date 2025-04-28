@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const InGameCurrencyTracker = () => {
-    const [open, setOpen] = useState(false);
-    const menuRef = useRef(null); // Reference for the menu
+const userWallet = { keys: 4, pages: 10, shards: 2000 };
 
+const InGameCurrencyTracker = () => {
+    const [open, setOpen] = useState(false); // Opens Menu for Mobile
+    const menuRef = useRef(null); // Menu for Mobile
+
+    //Dropdown for mobile
     const handleToggle = () => {
         setOpen((prev) => !prev);
         console.log("Dropdown in-game currency clicked");
@@ -16,6 +19,7 @@ const InGameCurrencyTracker = () => {
         }
     }, []);
 
+    // Close dropdown when clicked outside of menu
     useEffect(() => {
         document.addEventListener("pointerdown", handleOutsideClick);
         return () =>
@@ -24,7 +28,7 @@ const InGameCurrencyTracker = () => {
 
     return (
         <div ref={menuRef} className="relative">
-            {/* Dropdown Toggle Button on Mobile */}
+            {/* Dropdown Toggle Button for Mobile */}
             <button
                 className="md:hidden flex items-center"
                 onClick={handleToggle}
@@ -37,11 +41,11 @@ const InGameCurrencyTracker = () => {
                 />
             </button>
 
-            {/* Dropdown Menu (Mobile) */}
+            {/* Dropdown Menu Mobile */}
             {open && (
                 <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-[20px] space-y-2 w-[136px] md:hidden">
                     <li className="flex justify-evenly items-center text-[25px]">
-                        2
+                        {userWallet.keys}
                         <img
                             src="/assets/icons/key.svg"
                             alt="Key Icon"
@@ -49,7 +53,7 @@ const InGameCurrencyTracker = () => {
                         />
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
-                        5
+                        {userWallet.pages}
                         <img
                             src="/assets/icons/scroll.svg"
                             alt="Pages Icon"
@@ -57,7 +61,7 @@ const InGameCurrencyTracker = () => {
                         />
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
-                        2000
+                        {userWallet.shards}
                         <img
                             src="/assets/icons/shard.svg"
                             alt="Shards Icon"
@@ -78,7 +82,7 @@ const InGameCurrencyTracker = () => {
             {/* Visible List (Desktop & Larger) */}
             <ul className="hidden md:flex space-x-[10px] text-[25px]">
                 <li className="flex items-center">
-                    2
+                    {userWallet.keys}
                     <img
                         src="/assets/icons/key.svg"
                         alt="Key Icon"
@@ -86,7 +90,7 @@ const InGameCurrencyTracker = () => {
                     />
                 </li>
                 <li className="flex items-center">
-                    5
+                    {userWallet.pages}
                     <img
                         src="/assets/icons/scroll.svg"
                         alt="Pages Icon"
@@ -94,7 +98,7 @@ const InGameCurrencyTracker = () => {
                     />
                 </li>
                 <li className="flex items-center">
-                    2000
+                    {userWallet.shards}
                     <img
                         src="/assets/icons/shard.svg"
                         alt="Shards Icon"

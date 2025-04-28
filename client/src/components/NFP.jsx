@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const NFP = () => {
     return (
-        <div className="w-[80vw] h-[80vh] flex flex-col justify-center items-center gap-5 bg-[#FCF4E7]/25 rounded">
+        <div className="w-[80vw] h-[80vh] flex flex-col justify-center items-center gap-5 bg-[#FCF4E7] rounded-[50px]">
             <h1 className="text-[50px] sm:text-[75px] leading-none m-0 p-0 font-bold">
                 Congratulations! 🎉
             </h1>
