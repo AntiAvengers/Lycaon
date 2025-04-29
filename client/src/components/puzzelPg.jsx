@@ -45,6 +45,7 @@ const PuzzelPg = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    //Puzzle-Pg Background
     useEffect(() => {
         document.body.classList.add("puzzle-bg");
         return () => {
@@ -54,13 +55,13 @@ const PuzzelPg = () => {
 
     return (
         <div className="w-full sm:w-[1320.5px] sm:h-[648.06px] mb-[20px] flex flex-col sm:flex-row sm:mx-4 justify-center gap-[10px] sm:gap-[20px]">
-            {/* Left Side of PuzzlePg - (Titel + Phaser) */}
+            {/* Left Side of PuzzlePg - Phaser */}
             <section className="flex justify-center items-center">
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
-            {/* Right Side PuzzlePg - (Showcase+High Score + Leaderboard)  */}
-            <section className="w-auto sm:w-[441px] sm:h-[648.06px] flex flex-col justify-center items-center gap-[17px] mx-2 mb-2 sm:m-0">
+            {/* Right Side PuzzlePg - (Showcase + High Score + Leaderboard)  */}
+            <section className="w-auto sm:w-[441px] sm:h-[648.06px] flex flex-col justify-between items-center mx-2 mb-2 sm:m-0">
                 <ShowcaseBox />
                 <HighscoreBox />
                 <LeaderboardBox />

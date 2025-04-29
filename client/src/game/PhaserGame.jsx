@@ -44,7 +44,7 @@ export const PhaserGame = forwardRef(function PhaserGame(
         };
     }, [currentActiveScene, ref]);
 
-    return <div id="game-container" className="rounded-[20px]"></div>;
+    return <div id="game-container" className="rounded-[20px] shadow-lg"></div>;
 });
 
 // Props definitions

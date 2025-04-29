@@ -15,8 +15,8 @@ const showcase = [
 
 const ShowcaseBox = () => {
     return (
-        <div className="w-full h-[253.06px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
-            <ul className="h-full flex flex-row justify-between items-end pb-[5px]">
+        <div className="w-full h-[253.06px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
+            <ul className="h-full flex flex-row justify-between items-end pb-[8px]">
                 {showcase.map((creature) => (
                     <li key={creature.label}>
                         <img

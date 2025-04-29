@@ -15,7 +15,7 @@ export class AnagramGame extends Scene {
     errorMessage;
     inputBG;
     inputField;
-    bottomBorder
+    bottomBorder;
     clearShadow;
     clearBg;
     clearZone;
@@ -42,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30;
+        this.remainingTime = 10;
         this.wordList = [];
         this.inputText = "";
     }
@@ -52,6 +52,7 @@ export class AnagramGame extends Scene {
     }
 
     create() {
+        //Main Background
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setOrigin(0.5)
@@ -104,6 +105,7 @@ export class AnagramGame extends Scene {
             .setOrigin(0.5, 0)
             .setDepth(99);
 
+        //Where the randomized letters will appear
         this.anagramText = this.add
             .text(
                 this.scale.width / 2,
@@ -268,47 +270,37 @@ export class AnagramGame extends Scene {
 
         drawClearBg();
 
-        this.clearZone
-            .on("pointerover", () => {
-                drawClearBg(0xb0b0b0); // Hover color
-            })
-            .on("pointerout", () => {
-                drawClearBg(0xdadada); // Default color
-                this.clearText.setY(this.scale.height * 0.85);
-            })
-            .on("pointerdown", () => {
-                drawClearBg(0xb0b0b0, 4, 4);
-                this.clearText.setY(this.scale.height * 0.85 + 2);
-                if (this.inputField) {
-                    this.inputField.setText("");
-                    this.inputText = "";
-                }
-            })
-            .on("pointerup", () => {
-                drawClearBg(0xdadada); // Reset to hover color
-                this.clearText.setY(this.scale.height * 0.85);
-            });
+        const handleClearOver = () => {
+            drawClearBg(0xb0b0b0); // Hover color
+        };
 
-        this.clearText
-            .on("pointerover", () => {
-                drawClearBg(0xb0b0b0); // Hover color
-            })
-            .on("pointerout", () => {
-                drawClearBg(0xdadada); // Default color
-                this.clearText.setY(this.scale.height * 0.85);
-            })
-            .on("pointerdown", () => {
-                drawClearBg(0xb0b0b0, 4, 4);
-                this.clearText.setY(this.scale.height * 0.85 + 2);
-                if (this.inputField) {
-                    this.inputField.setText("");
-                    this.inputText = "";
-                }
-            })
-            .on("pointerup", () => {
-                drawClearBg(0xdadada); // Reset to hover color
-                this.clearText.setY(this.scale.height * 0.85);
-            });
+        const handleClearOut = () => {
+            drawClearBg(0xdadada); // Default color
+            this.clearText.setY(this.scale.height * 0.85);
+        };
+
+        const handleClearDown = () => {
+            drawClearBg(0xb0b0b0, 4, 4);
+            this.clearText.setY(this.scale.height * 0.85 + 2);
+            if (this.inputField) {
+                this.inputField.setText("");
+                this.inputText = "";
+            }
+        };
+
+        const handleClearUp = () => {
+            drawClearBg(0xdadada); // Reset to default color
+            this.clearText.setY(this.scale.height * 0.85);
+        };
+
+        // Apply to both clearZone and clearText
+        [this.clearZone, this.clearText].forEach((obj) => {
+            obj.setInteractive()
+                .on("pointerover", handleClearOver)
+                .on("pointerout", handleClearOut)
+                .on("pointerdown", handleClearDown)
+                .on("pointerup", handleClearUp);
+        });
 
         //----------------------------------------------------------
 
@@ -371,41 +363,34 @@ export class AnagramGame extends Scene {
 
         drawSubmitBg();
 
-        this.submitZone
-            .on("pointerover", () => {
-                drawSubmitBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawSubmitBg(0x4a63e4); // Default color
-                this.submitText.setY(this.scale.height * 0.85);
-            })
-            .on("pointerdown", () => {
-                drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
-                this.submitText.setY(this.scale.height * 0.85 + 2);
-                this.handleWordSubmit();
-            })
-            .on("pointerup", () => {
-                drawSubmitBg(0x4a63e4); // Reset to hover color
-                this.submitText.setY(this.scale.height * 0.85);
-            });
+        const handleSubmitOver = () => {
+            drawSubmitBg(0x1d329f); // Hover color
+        };
 
-        this.submitText
-            .on("pointerover", () => {
-                drawSubmitBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawSubmitBg(0x4a63e4); // Default color
-                this.submitText.setY(this.scale.height * 0.85);
-            })
-            .on("pointerdown", () => {
-                drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
-                this.submitText.setY(this.scale.height * 0.85 + 2);
-                this.handleWordSubmit();
-            })
-            .on("pointerup", () => {
-                drawSubmitBg(0x4a63e4); // Reset to hover color
-                this.submitText.setY(this.scale.height * 0.85);
-            });
+        const handleSubmitOut = () => {
+            drawSubmitBg(0x4a63e4); // Default color
+            this.submitText.setY(this.scale.height * 0.85);
+        };
+
+        const handleSubmitDown = () => {
+            drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
+            this.submitText.setY(this.scale.height * 0.85 + 2);
+            this.handleWordSubmit();
+        };
+
+        const handleSubmitUp = () => {
+            drawSubmitBg(0x4a63e4); // Reset to default color
+            this.submitText.setY(this.scale.height * 0.85);
+        };
+
+        // Apply handlers to both submitZone and submitText
+        [this.submitZone, this.submitText].forEach((obj) => {
+            obj.setInteractive()
+                .on("pointerover", handleSubmitOver)
+                .on("pointerout", handleSubmitOut)
+                .on("pointerdown", handleSubmitDown)
+                .on("pointerup", handleSubmitUp);
+        });
 
         //----------------------------------------------------------
 
@@ -497,6 +482,8 @@ export class AnagramGame extends Scene {
             .setDepth(202)
             .setVisible(false);
 
+        //----------------------------------------------------------
+
         const resumeWidth = Math.min(this.scale.width * 0.25, 200);
         const resumeHeight = Math.min(this.scale.height * 0.1, 40);
 
@@ -561,41 +548,34 @@ export class AnagramGame extends Scene {
 
         drawResumeBg();
 
-        this.resumeZone
-            .on("pointerover", () => {
-                drawResumeBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawResumeBg(0x4a63e4); // Default color
-                this.resumeText.setY(this.scale.height / 2 + 110);
-            })
-            .on("pointerdown", () => {
-                drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
-                this.resumeText.setY(this.scale.height / 2 + 110 + 2);
-                this.hidePopup();
-            })
-            .on("pointerup", () => {
-                drawResumeBg(0x4a63e4); // Reset to hover color
-                this.resumeText.setY(this.scale.height / 2 + 110);
-            });
+        const handleResumeOver = () => {
+            drawResumeBg(0x1d329f); // Hover color
+        };
 
-        this.resumeText
-            .on("pointerover", () => {
-                drawResumeBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawResumeBg(0x4a63e4); // Default color
-                this.resumeText.setY(this.scale.height / 2 + 110);
-            })
-            .on("pointerdown", () => {
-                drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
-                this.resumeText.setY(this.scale.height / 2 + 110 + 2);
-                this.hidePopup();
-            })
-            .on("pointerup", () => {
-                drawResumeBg(0x4a63e4); // Reset to hover color
-                this.resumeText.setY(this.scale.height / 2 + 110);
-            });
+        const handleResumeOut = () => {
+            drawResumeBg(0x4a63e4); // Default color
+            this.resumeText.setY(this.scale.height / 2 + 110);
+        };
+
+        const handleResumeDown = () => {
+            drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
+            this.resumeText.setY(this.scale.height / 2 + 112); // 110 + 2
+            this.hidePopup();
+        };
+
+        const handleResumeUp = () => {
+            drawResumeBg(0x4a63e4); // Reset to default color
+            this.resumeText.setY(this.scale.height / 2 + 110);
+        };
+
+        // Apply handlers to both resumeZone and resumeText
+        [this.resumeZone, this.resumeText].forEach((obj) => {
+            obj.setInteractive()
+                .on("pointerover", handleResumeOver)
+                .on("pointerout", handleResumeOut)
+                .on("pointerdown", handleResumeDown)
+                .on("pointerup", handleResumeUp);
+        });
 
         //----------------------------------------------------------
 
@@ -682,6 +662,7 @@ export class AnagramGame extends Scene {
 
     toggleMute() {
         this.audioManager.toggleMute();
+
         if (this.audioManager.isMuted) {
             this.muteButton.setAlpha(0.5); // Dim the button if muted
             this.registry.set("isMuted", true); // Save mute state to registry
@@ -943,7 +924,7 @@ export class AnagramGame extends Scene {
                 );
 
             this.clearZone
-                .setPosition(width / 2 - 215, height * 0.8)
+                .setPosition(width / 2 - 215, height * 0.82)
                 .setSize(clearWidth, clearHeight);
 
             this.clearText

@@ -9,7 +9,7 @@ const SoundControl = () => {
     const [volume, setVolume] = useState(1); // State for volume level
     const [prevVolume, setPrevVolume] = useState(1); // Store previous volume before muting
     const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
-    const [hovering, setHovering] = useState(false);
+    const [hovering, setHovering] = useState(false); //Hover for acces to volume slider
 
     // Memoize the enableAudio function to prevent unnecessary re-creations
     const enableAudio = useCallback(() => {
@@ -82,13 +82,13 @@ const SoundControl = () => {
 
     return (
         <div className="h-[45px] flex justify-start items-center mx-8">
-            {/* Audio Element */}
+            {/* Audio File */}
             <audio
                 ref={audioRef}
                 src="assets/sounds/mesmerizing-song-of-the-wood-thrush-156669.mp3"
                 preload="auto"
                 loop
-                muted={isMuted} // Mute based on the isMuted state
+                muted={isMuted}
                 autoPlay
             />
 
@@ -111,6 +111,8 @@ const SoundControl = () => {
                         <VolumeUpIcon sx={{ width: 26, height: 18 }} />
                     )}
                 </button>
+
+                {/* Slider */}
                 {hovering && (
                     <Slider
                         size="small"

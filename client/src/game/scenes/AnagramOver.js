@@ -19,7 +19,7 @@ export class AnagramOver extends Scene {
     homeShadow;
     homeBg;
     homeZone;
-    homeText
+    homeText;
 
     lastWidth = null;
     lastHeight = null;
@@ -33,6 +33,7 @@ export class AnagramOver extends Scene {
     }
 
     create() {
+        //input data from last scene
         const remainingTime = this.registry.get("remainingTime");
 
         const wordCount = this.registry.get("wordCount");
@@ -41,6 +42,7 @@ export class AnagramOver extends Scene {
 
         //----------------------------------------------------------
 
+        //Main Background
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setOrigin(0.5)
@@ -93,6 +95,7 @@ export class AnagramOver extends Scene {
             .setOrigin(0.5, 0) // Center horizontally, ancho at top
             .setDepth(99); // Make sure the background is behind the text
 
+        //Where the randomized letters will appear
         this.anagramText = this.add
             .text(
                 this.scale.width / 2,
@@ -251,41 +254,34 @@ export class AnagramOver extends Scene {
 
         drawHomeBg();
 
-        this.homeZone
-            .on("pointerover", () => {
-                drawHomeBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawHomeBg(0x4a63e4); // Default color
-                this.homeText.setY(this.scale.height * 0.91);
-            })
-            .on("pointerdown", () => {
-                drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
-                this.homeText.setY(this.scale.height * 0.91 + 2);
-                window.location.href = "/home";
-            })
-            .on("pointerup", () => {
-                drawHomeBg(0x4a63e4); // Reset to hover color
-                this.homeText.setY(this.scale.height * 0.91);
-            });
+        const handleHomeOver = () => {
+            drawHomeBg(0x1d329f); // Hover color
+        };
 
-        this.homeText
-            .on("pointerover", () => {
-                drawHomeBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawHomeBg(0x4a63e4); // Default color
-                this.homeText.setY(this.scale.height * 0.91);
-            })
-            .on("pointerdown", () => {
-                drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
-                this.homeText.setY(this.scale.height * 0.91 + 2);
-                window.location.href = "/home";
-            })
-            .on("pointerup", () => {
-                drawHomeBg(0x4a63e4); // Reset to hover color
-                this.homeText.setY(this.scale.height * 0.91);
-            });
+        const handleHomeOut = () => {
+            drawHomeBg(0x4a63e4); // Default color
+            this.homeText.setY(this.scale.height * 0.91);
+        };
+
+        const handleHomeDown = () => {
+            drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
+            this.homeText.setY(this.scale.height * 0.91 + 2);
+            window.location.href = "/home"; // Navigate to home
+        };
+
+        const handleHomeUp = () => {
+            drawHomeBg(0x4a63e4); // Reset color
+            this.homeText.setY(this.scale.height * 0.91);
+        };
+
+        // Apply handlers to both homeZone and homeText
+        [this.homeZone, this.homeText].forEach((obj) => {
+            obj.setInteractive()
+                .on("pointerover", handleHomeOver)
+                .on("pointerout", handleHomeOut)
+                .on("pointerdown", handleHomeDown)
+                .on("pointerup", handleHomeUp);
+        });
 
         //----------------------------------------------------------
 
@@ -329,6 +325,7 @@ export class AnagramOver extends Scene {
 
     toggleMute() {
         this.audioManager.toggleMute();
+        
         if (this.audioManager.isMuted) {
             this.muteButton.setAlpha(0.5); // Dim the button if muted
             this.registry.set("isMuted", true); // Save mute state to registry
@@ -414,7 +411,7 @@ export class AnagramOver extends Scene {
             this.homeShadow
                 .fillStyle(0x000000, 0.3)
                 .fillRoundedRect(
-                    this.scale.width / 2 - 100  + 4,
+                    this.scale.width / 2 - 100 + 4,
                     this.scale.height * 0.88 + 4,
                     homeWidth,
                     homeHeight,

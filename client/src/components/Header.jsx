@@ -151,7 +151,7 @@ const Header = () => {
 
                 {/* Already on PuzzlePg Message */}
                 {message && (
-                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-md text-center text-xl sm:text-2xl">
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-md text-center text-xl sm:text-[30px]">
                         {message}
                     </div>
                 )}

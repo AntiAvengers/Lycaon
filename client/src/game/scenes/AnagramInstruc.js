@@ -44,6 +44,7 @@ export class AnagramInstruc extends Scene {
     }
 
     create() {
+        //Main Background
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
             .setOrigin(0.5)
@@ -60,7 +61,7 @@ export class AnagramInstruc extends Scene {
         this.audioManager = this.sys.game.audioManager;
         this.audioManager.create(); // Initialize audio
 
-        // Create the mute button in the scene
+        // Mute Btn
         if (!this.muteButton) {
             this.muteButton = this.add
                 .image(this.scale.width - 30, this.scale.height - 30, "star")
@@ -83,7 +84,7 @@ export class AnagramInstruc extends Scene {
                 0x4a63e4
             )
             .setAlpha(0.85)
-            .setOrigin(0.5, 0) // Center horizontally, ancho at top
+            .setOrigin(0.5, 0) // Center horizontally, anchored at top
             .setDepth(99); // Make sure the background is behind the text
 
         this.titleText = this.add
@@ -273,41 +274,34 @@ export class AnagramInstruc extends Scene {
             .setDepth(100)
             .setInteractive({ useHandCursor: true });
 
-        this.startZone
-            .on("pointerover", () => {
-                drawStartBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawStartBg(0x4a63e4); // Default color
-                this.startText.setY(this.scale.height * 0.9);
-            })
-            .on("pointerdown", () => {
-                drawStartBg(0x16296c, 4, 4); // Pressed color + offset
-                this.startText.setY(this.scale.height * 0.9 + 2);
-                this.showPopup();
-            })
-            .on("pointerup", () => {
-                drawStartBg(0x4a63e4); // Reset to hover color
-                this.startText.setY(this.scale.height * 0.9);
-            });
+        const handlePointerOver = () => {
+            drawStartBg(0x1d329f); // Hover color
+        };
 
-        this.startText
-            .on("pointerover", () => {
-                drawStartBg(0x1d329f); // Hover color
-            })
-            .on("pointerout", () => {
-                drawStartBg(0x4a63e4); // Default color
-                this.startText.setY(this.scale.height * 0.9);
-            })
-            .on("pointerdown", () => {
-                drawStartBg(0x16296c, 4, 4); // Pressed color + offset
-                this.startText.setY(this.scale.height * 0.9 + 2);
-                this.showPopup();
-            })
-            .on("pointerup", () => {
-                drawStartBg(0x4a63e4); // Reset to hover color
-                this.startText.setY(this.scale.height * 0.9);
-            });
+        const handlePointerOut = () => {
+            drawStartBg(0x4a63e4); // Default color
+            this.startText.setY(this.scale.height * 0.9);
+        };
+
+        const handlePointerDown = () => {
+            drawStartBg(0x16296c, 4, 4); // Pressed color + offset
+            this.startText.setY(this.scale.height * 0.9 + 2);
+            this.showPopup();
+        };
+
+        const handlePointerUp = () => {
+            drawStartBg(0x4a63e4); // Reset to hover color
+            this.startText.setY(this.scale.height * 0.9);
+        };
+
+        // Add the event handlers to both startZone and startText
+        [this.startZone, this.startText].forEach((obj) => {
+            obj.setInteractive() // make sure they are interactive first!
+                .on("pointerover", handlePointerOver)
+                .on("pointerout", handlePointerOut)
+                .on("pointerdown", handlePointerDown)
+                .on("pointerup", handlePointerUp);
+        });
 
         //----------------------------------------------------------
 
@@ -389,6 +383,8 @@ export class AnagramInstruc extends Scene {
             .setScale(2.5)
             .setVisible(false);
 
+        //----------------------------------------------------------
+
         const confirmWidth = Math.min(this.scale.width * 0.25, 200);
         const confirmHeight = Math.min(this.scale.height * 0.1, 40);
 
@@ -452,43 +448,34 @@ export class AnagramInstruc extends Scene {
             .setInteractive({ useHandCursor: true })
             .setVisible(false);
 
-        // Add press down effect
-        this.confirmZone
-            .on("pointerover", () => {
-                drawConfirmBg(0x16296c);
-            })
-            .on("pointerdown", () => {
-                drawConfirmBg(0x16296c, 4, 4); // darker press color
-                this.confirmText.setY(this.scale.height / 2 + 252);
-                this.changeScene();
-            })
-            .on("pointerup", () => {
-                drawConfirmBg(0x4a63e4); // back to original
-                this.confirmText.setY(this.scale.height / 2 + 250);
-            })
-            .on("pointerout", () => {
-                drawConfirmBg(0x4a63e4); // reset color if mouse leaves
-                this.confirmText.setY(this.scale.height / 2 + 250);
-            });
+        const handleConfirmOver = () => {
+            drawConfirmBg(0x16296c);
+        };
 
-        // Optional: same for text click too
-        this.confirmText
-            .on("pointerover", () => {
-                drawConfirmBg(0x16296c);
-            })
-            .on("pointerdown", () => {
-                drawConfirmBg(0x16296c, 4, 4);
-                this.confirmText.setY(this.scale.height / 2 + 252);
-                this.changeScene();
-            })
-            .on("pointerup", () => {
-                drawConfirmBg(0x4a63e4);
-                this.confirmText.setY(this.scale.height / 2 + 250);
-            })
-            .on("pointerout", () => {
-                drawConfirmBg(0x4a63e4);
-                this.confirmText.setY(this.scale.height / 2 + 250);
-            });
+        const handleConfirmDown = () => {
+            drawConfirmBg(0x16296c, 4, 4);
+            this.confirmText.setY(this.scale.height / 2 + 252);
+            this.changeScene();
+        };
+
+        const handleConfirmUp = () => {
+            drawConfirmBg(0x4a63e4);
+            this.confirmText.setY(this.scale.height / 2 + 250);
+        };
+
+        const handleConfirmOut = () => {
+            drawConfirmBg(0x4a63e4);
+            this.confirmText.setY(this.scale.height / 2 + 250);
+        };
+
+        // Apply to both confirmZone and confirmText
+        [this.confirmZone, this.confirmText].forEach((obj) => {
+            obj.setInteractive()
+                .on("pointerover", handleConfirmOver)
+                .on("pointerdown", handleConfirmDown)
+                .on("pointerup", handleConfirmUp)
+                .on("pointerout", handleConfirmOut);
+        });
 
         //----------------------------------------------------------
 

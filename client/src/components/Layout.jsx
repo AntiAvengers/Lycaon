@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     const location = useLocation();
 
     const isSignInPage = location.pathname === "/";
-    const isPuzzlePage = location.pathname === "/puzzles";
+    const isPuzzlePage = location.pathname === "/puzzle";
 
     return (
         <div className="min-h-screen flex flex-col">
