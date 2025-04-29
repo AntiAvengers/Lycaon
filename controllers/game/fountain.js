@@ -96,7 +96,7 @@ export const pull = async (req, res) => {
         for(let i = 0; i < results.length; i++) {
             output[i] = results[i];
         }
-        collection.set({ output });
+        collection.set(output);
         user_ref.update({ pages: (pages - 1) });
         return res.status(200).json({ response: output });
     }   

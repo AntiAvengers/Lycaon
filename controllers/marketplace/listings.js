@@ -1,28 +1,34 @@
 import crypto from 'crypto';
 import { client } from '../../utils/sui/config.js';
-import { get_transaction_block } from '../../utils/sui/client.js';
+import { get_transaction_block, get_object } from '../../utils/sui/client.js';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 
 import { database, schema } from '../../database/firebaseConfig.js';
+import { request_mint_tx } from '../users/sprites.js';
 
 const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = 'marketplace';
 const CREATE_FUNCTION = 'create';
+const BUY_FUNCTION = 'buy';
+const CANCEL_FUNCTION = 'cancel';
 
-export const get_listings = async (req, res) => {
-    const marketplace = database.ref('marketplace');
-    const snapshot = await marketplace.once("value");
-
-    return res.status(200).json({ response: snapshot.val() });
+export const check_tx = async(req, res) => {
+    const { digest, id } = req.body;
+    const a = await get_transaction_block(digest);
+    // const a = await get_object(id);
+    console.dir(a, { depth: null, color: true });
+    return res.status(200);
 }
 
-export const create_blockchain_listing = async (req, res) => {
-    const { address, price, id } = req.body;
+//Sui Blockchain
+export const request_listing_tx = async (req, res) => {
+    const { asking_price, id } = req.body;
+    const { address } = req.user;
 
     try {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
-        const marketplace = database.ref(`marketplace`)
+        // const marketplace = database.ref(`marketplace`)
 
         const collections = database.ref(`collections/${hashed}`);
         const snapshot = await collections.orderByChild("id").equalTo(id).once("value");
@@ -36,13 +42,11 @@ export const create_blockchain_listing = async (req, res) => {
 
         const { minted_ID } = sprite.val();
 
-        console.log('MINTED_ID:', minted_ID);
-
         if(!minted_ID) {
-            return res.status(400).json({ error: "You can only sell a minted creature!" });
+            return res.status(400).json({ error: "You can only list a minted creature!" });
         }
 
-        if(price <= 0 || price.isNaN) {
+        if(asking_price <= 0 || asking_price.isNaN) {
             return res.status(400).json({ error: "Asking price must be a positive number" });
         }
 
@@ -52,7 +56,7 @@ export const create_blockchain_listing = async (req, res) => {
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CREATE_FUNCTION}`,
             arguments: [
                 tx.object(minted_ID),
-                tx.pure(price)
+                tx.pure(asking_price)
             ],
         });
 
@@ -74,54 +78,135 @@ export const create_blockchain_listing = async (req, res) => {
     }
 }
 
-export const confirm_blockchain_listing = async (req, res) => {
-    //Once the listing is signed for and created on the blockchain, this updates our backend with the information
-    try {
-        const { address, digest } = req.body;
+export const execute_listing_tx = async (req, res) => {
+    const { bytes, signature, id, asking_price } = req.body;
+    const { address } = req.user;
 
-        if(!digest) {
-            return res.status(400).json({ error: "Missing Digest for Transaction Block!" });
-        }
-    
-        const tx = await get_transaction_block(digest);
-        console.log(tx);
-        console.log(Object.keys(tx));
+    if(!bytes) {
+        return res.status(400).json({ error: "Missing 'bytes' parameter from request body" });
+    }
+
+    if(!signature) {
+        return res.status(400).json({ error: "Missing 'signature' parameter from request body" });
+    }
+
+    const result = await client.executeTransactionBlock({
+        transactionBlock: bytes,
+        signature,
+        requestType: 'WaitForLocalExecution',
+        options: {
+            showInputs: true,
+            showEffects: true,
+            showObjectChanges: true
+        },
+    });
+
+    if(result.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    const transaction = await client.waitForTransaction({
+        digest: result.digest,
+        options: {
+            showInputs: true,
+            showObjectChanges: true,
+            showEffects: true
+        },
+    });
+
+    if(transaction.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    console.dir(result, { depth: null, colors: true });
+    console.dir(transaction, { depth: null, colors: true });
+
+    /* 
+        You need to store the objectId of the Listing Object (Sui) somewhere to reference later.
+        I guess the player should have their own listings right?
+
+        to get the transaction digest = 
+        transaction.digest
         
-        if(tx.objectChanges) {
-            if(tx.objectChanges.length > 0) {
-                const { objectId } = tx.objectChanges
-                    .filter(obj => obj.type == 'created' && obj.objectType.includes('marketplace'))
-                    [0];
+        ** This is from get_transaction_block
+        price = obj.transaction.data.transaction.inputs[?].type == "pure" for price, value_type == "u64", value = "5" price as string
 
-                //Address = Tx Address?
-                const hashed = crypto.createHash('sha256').update(address).digest('hex');
-                const all_listings = database.ref(`marketplace/${hashed}`);
-                const snapshot = all_listings.once('value');
+        ** this is from get_object
+        sprite_type / sprite_rarity = 
+        obj.data.content.fields.value.fields.sprite_rarity
+    */
 
-                const listing_obj = {
-                    id: objectId,
-                }
-                
-                //First Listing
-                if(!snapshot.exists()) {
-                    all_listings.update({ [0]: listing_obj });
-                    return res.status(200).json({ response: listing_obj });
-                }
+    if(transaction.objectChanges) {
+        if(transaction.objectChanges.length > 0) {
+            const { objectId: listing_object_ID } = transaction.objectChanges
+                 .filter(obj => obj.type == 'created' && obj.objectType.includes('marketplace'))
+                 [0];
+            const { objectId: sprite_token_object_ID } = transaction.objectChanges
+                .filter(obj => obj.type == 'created' && obj.objectType.includes('sprite_token'))
+                [0];
+            
+            const tx_data = await get_transaction_block(transaction.digest);
+            const sprite_data = await get_object(sprite_token_object_ID);
+            // const listing_data = await get_object(listing_object_ID);
 
-                const len = Object.keys(snapshot.val());
-                all_listings.update({ [len]: listing_obj });
+            const listing_price = tx_data.transaction.data.transaction.inputs
+                .filter(obj => {
+                    if(obj.type == 'pure') {
+                        if(obj.valueType && obj.value) {
+                            if(obj.valueType == 'u64') {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                })
+                [0].value;
+            
+            const { sprite_rarity, sprite_type } = sprite_data.data.content.fields.value.fields;
+
+            const listing_obj = {
+                id: listing_object_ID,
+                // owner: address,
+                price: parseInt(listing_price),
+                type: sprite_type,
+                rarity: sprite_rarity
+            }
+
+            const hashed = crypto.createHash('sha256').update(address).digest('hex');
+            const marketplace_ref = database.ref(`marketplace/${hashed}`);
+            const snapshot = await marketplace_ref.once("value");
+
+            //First listing
+            if(!snapshot.exists()) {
+                marketplace_ref.set({ [0]: listing_obj });
                 return res.status(200).json({ response: listing_obj });
             }
+
+            const listings = snapshot.val();
+            const len = Object.keys(listings).length;
+            marketplace_ref.update({ [len]: listing_obj });
+            console.log('. . . Executing Listing of Sprite for address', address);
+            return res.status(200).json({ response: listing_obj });
         }
-        
-    } catch(err) {
-        console.log(err);
-        return res.status(400).json({ error: err });
     }
 }
 
 export const buy = async (req, res) => {
+    const { asking_price, id } = req.body;
+    const { address } = req.user;
+}
 
+export const cancel = async (req, res) => {
+    const { asking_price, id } = req.body;
+    const { address } = req.user;
+}
+
+//Backend API calls
+export const get_listings = async (req, res) => {
+    const marketplace = database.ref('marketplace');
+    const snapshot = await marketplace.once("value");
+
+    return res.status(200).json({ response: snapshot.val() });
 }
 
 export const read_listing = async (req, res) => {

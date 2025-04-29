@@ -75,7 +75,7 @@ export const update_sprite = async (req, res) => {
     }
 }
 
-//Minting Creatures
+//Sui Blockchain
 export const request_mint_tx = async (req, res) => {
     try {
         const { id } = req.body;
@@ -153,7 +153,6 @@ export const request_mint_tx = async (req, res) => {
     } 
 };
 
-//TEST F - B - SUI - B - F model
 export const execute_mint_tx = async (req, res) => {
     const { bytes, signature, id } = req.body;
     const { address } = req.user;

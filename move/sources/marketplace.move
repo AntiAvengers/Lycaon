@@ -2,49 +2,46 @@ module 0x0::marketplace {
     use 0x0::sprite_token;
     use sui::sui::SUI;
     use sui::coin::{Self, Coin};
-    // use sui::balance::{Self, Balance};
+    use sui::dynamic_field as ofield;
 
-    const ENotEnough: u64 = 0;
+    const E_NOT_ENOUGH: u64 = 0;
+    const E_NOT_OWNER: u64 = 1;
 
     //Struct for Listing
     public struct Listing has key {
         id: UID,
         sender: address,
-        sprite: sprite_token::Sprite,
         price: u64,
     }
 
     //Create Listing
     public fun create(sprite: sprite_token::Sprite, price: u64, ctx: &mut TxContext) {
-        transfer::share_object(Listing { 
+        let mut listing = Listing {
             id: object::new(ctx),
             sender: ctx.sender(),
-            sprite: sprite,
             price: price
-        });
+        };
+        ofield::add(&mut listing.id, b"sprite", sprite);
+        transfer::share_object(listing);
     }
 
     //Purchase from Listing
     public fun buy(listing: Listing, payment: &mut Coin<SUI>, ctx: &mut TxContext) {
-        let Listing { id, sender, sprite, price } = listing;
-        assert!(coin::value(payment) >= price, ENotEnough);
-
+        let Listing { mut id, sender, price } = listing;
+        assert!(coin::value(payment) >= price, E_NOT_ENOUGH);
         let paid = coin::split(payment, price, ctx);
-
-        // transfer::transfer(sprite, ctx.sender());
-        transfer::public_transfer(sprite, ctx.sender());
-        // sprite_token::transfer_token(sprite, ctx.sender());
         transfer::public_transfer(paid, sender);
+        let sprite: sprite_token::Sprite = ofield::remove(&mut id, b"sprite");
         object::delete(id);
+        transfer::public_transfer(sprite, ctx.sender());
     }
 
-    //Cancel
+    //Cancel Listing if Owner
     public fun cancel(listing: Listing, ctx: &mut TxContext) {
-        let Listing { id, sender, sprite, .. } = listing;
-        assert!(sender == ctx.sender());
-        // transfer::transfer(sprite, sender);
-        transfer::public_transfer(sprite, sender);
-        // sprite_token::transfer_token(sprite, sender);
+        let Listing { mut id, sender, .. } = listing;
+        assert!(sender == ctx.sender(), E_NOT_OWNER);
+        let sprite: sprite_token::Sprite = ofield::remove(&mut id, b"sprite");
         object::delete(id);
+        transfer::public_transfer(sprite, sender);
     }
 }

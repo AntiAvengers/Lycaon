@@ -16,6 +16,13 @@ export const get_token_owner = async (token_id) => {
     return object.data.owner.AddressOwner;
 }
 
+export const get_object = async (id) => {
+  return await client.getObject({
+    id: id,
+    options: { showContent: true }
+  })
+}
+
 export const get_transaction_block = async (digest) => {
   return await client.getTransactionBlock({ 
     digest, 
