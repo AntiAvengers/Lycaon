@@ -42,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 10;
+        this.remainingTime = 30;
         this.wordList = [];
         this.inputText = "";
     }
@@ -439,8 +439,8 @@ export class AnagramGame extends Scene {
             .fillRoundedRect(
                 this.scale.width / 2 - 250,
                 this.scale.height / 2 - 160,
-                this.scale.width * 0.6,
-                this.scale.height * 0.55,
+                500,
+                340,
                 10
             )
             .setDepth(200)
@@ -976,8 +976,8 @@ export class AnagramGame extends Scene {
                 .fillRoundedRect(
                     this.scale.width / 2 - 250,
                     this.scale.height / 2 - 160,
-                    this.scale.width * 0.6,
-                    this.scale.height * 0.55,
+                    500,
+                    340,
                     10
                 );
 
