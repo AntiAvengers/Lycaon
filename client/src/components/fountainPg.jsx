@@ -16,7 +16,7 @@ const FountainPg = () => {
     const closeRate = () => setShowRate(false);
     const handleRate = () => setShowRate(true);
 
-    //Popmessage for Pull Btns
+    //Popup message for Pull Btns
     const handlePull = (amount) => {
         setPullMessage(
             `You just pulled ${amount} page${amount > 1 ? "s" : ""}!`

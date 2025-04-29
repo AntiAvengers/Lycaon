@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+//Not Found Page
 const NFP = () => {
     return (
         <div className="w-[80vw] h-[80vh] flex flex-col justify-center items-center gap-5 bg-[#FCF4E7] rounded-[50px]">
