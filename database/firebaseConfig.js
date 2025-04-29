@@ -1,11 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const dotenv = require("dotenv");
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const admin = require("firebase-admin");
+const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+import 'dotenv/config';
 
-const serviceAccount = require('./' + process.env.SERVICE_ACCOUNT_KEY);
+import admin from 'firebase-admin';
+
+import serviceAccount from './firebase-config.json' with { type: 'json' };
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -42,10 +44,11 @@ const default_leaderboard = {
 
 const default_collection = {
   nickname: "",
+  favorite: false,
   type: "",
   rarity: "",
   stage: 0,
-  age: 0,
+  date_of_birth: Date.now(),
   hunger: 10,
   traits: [],
   minted_ID: false
@@ -76,7 +79,8 @@ db.once('value', snapshot => {
       users: { _init: true },
       collections: { _init: true },
       leaderboard: default_leaderboard,
-      game_rules: default_game_rules
+      game_rules: default_game_rules,
+      marketplace: { _init: true }
     });
   }
 
@@ -102,26 +106,29 @@ db.once('value', snapshot => {
 
   if(!data.marketplace) {
     console.log('. . . Initializing Marketplace in Database');
-    db.update({ marketplace: [] });
+    db.update({ marketplace: { _init: true }});
   }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
-  if(process.env.MODE == "DEVELOPMENT") {
-    console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
-    db.set({
-      users: { _init: true },
-      collections: { _init: true },
-      leaderboard: default_leaderboard,
-      game_rules: default_game_rules,
-      marketplace: []
-    });
-  } 
+  if(process.argv.length > 2) {
+    const reset_commands = ['-d', '-r', 'delete', 'del', 'purge', 'reset', 'clear', 'wipe', 'flush'];
+    const command = process.argv[2].toLowerCase();
+    if(process.env.MODE == "DEVELOPMENT" && reset_commands.includes(command)) {
+      console.log('. . . Purging Firebase Database [DEVELOPMENT MODE]')
+      db.set({
+        users: { _init: true },
+        collections: { _init: true },
+        leaderboard: default_leaderboard,
+        game_rules: default_game_rules,
+        marketplace: { _init: true }
+      });
+    } 
+  }
 });
 
-
-
-// Export the database reference
-module.exports = {
-  database: admin.database(),
-  schema: { default_user, default_game_session, default_collection }
+export const database = admin.database();
+export const schema = {
+  default_user, 
+  default_game_session, 
+  default_collection
 }

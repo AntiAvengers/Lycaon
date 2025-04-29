@@ -1,13 +1,22 @@
-const express = require('express');
-const routes = require("./routes");
+import express from 'express';
+import routes from './routes/index.js';
 
-const firebase_admin = require('./database/firebaseConfig.js');
+import cors from 'cors';
+
+import cookieParser from 'cookie-parser';
+
+import './cron-jobs/index.js';
 
 const app = express();
-const cors = require('cors');
 
 app.use(express.json());
-app.use(cors());
+
+// app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:8080',
+    credentials: true,
+}));
+app.use(cookieParser());
 
 app.use(routes);
 

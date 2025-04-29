@@ -1,7 +1,8 @@
-const dictionary = require('../../utils/dictionary');
+import dictionary from '../dictionary.js';
+
 const words = dictionary.load();
 
-function generate_puzzle(num_of_letters = 7, count = 0) {
+export function generate_puzzle(num_of_letters = 7, count = 0) {
     const all_vowels = ["a", "e", "i", "o", "u"];
     const all_consonants = ["b", "c", 'd', 'f', 'g', 'h', 'j', 'k', 
     'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
@@ -68,9 +69,4 @@ function get_validity(letters) {
         length: true_words.length
     }
     return output;
-}
-
-module.exports = {
-    generate_puzzle,
-    check_answer 
 }

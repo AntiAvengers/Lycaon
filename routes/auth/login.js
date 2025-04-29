@@ -1,8 +1,11 @@
-const router = require("express").Router();
+import express from 'express';
+const router = express.Router();
 
-const sui_controller = require('../../controllers/auth/sui.js');
+import { login, generate_UUID } from '../../controllers/auth/sui.js';
+import { refresh_JWT } from '../../controllers/auth/jwt.js';
 
-router.post("/", sui_controller.generate_UUID);
-router.post("/verify_signature", sui_controller.login);
+router.post("/", generate_UUID);
+router.post("/refresh", refresh_JWT);
+router.post("/verify_signature", login);
 
-module.exports = router;
+export default router;

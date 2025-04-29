@@ -57,7 +57,7 @@ function generate_puzzle(num = 20) {
     return output;
 }
 
-module.exports = {
+export {
     generate,
     generate_puzzle
 }

@@ -1,6 +1,8 @@
-const router = require("express").Router();
-const stats_controller = require("../../controllers/users/stats.js");
+import express from 'express';
+const router = express.Router();
 
-router.post("/get_user_profile", stats_controller.get_user_profile);
+import { get_user_profile } from '../../controllers/users/stats.js';
 
-module.exports = router;
+router.post("/get_user_profile", get_user_profile);
+
+export default router;

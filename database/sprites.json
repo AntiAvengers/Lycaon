@@ -1,0 +1,32 @@
+{
+  "slime": {
+    "type": "slime",
+    "rarity": 1,
+    "rarity_title": "Littles",
+    "lore": "Born from magical tree sap, Glorbo bounces endlessly through forests. It mimics other creatures, but only manages to make silly squelching sounds."
+  },
+  "FAMILIAR_PLACEHOLDER": {
+    "type": "FAMILIAR_PLACEHOLDER",
+    "rarity": 2,
+    "rarity_title": "Familiar",
+    "lore": "FAMILIAR_LORE"
+  },
+  "NOBLE_PLACEHOLDER": {
+    "type": "NOBLE_PLACEHOLDER",
+    "rarity": 3,
+    "rarity_title": "Noble",
+    "lore": "NOBLE_LORE"
+  },
+  "ELITE_PLACEHOLDER": {
+    "type": "ELITE_PLACEHOLDER",
+    "rarity": 4,
+    "rarity_title": "Elite",
+    "lore": "ELITE_LORE"
+  },
+  "MYTHIC_PLACEHOLDER": {
+    "type": "MYTHIC_PLACEHOLDER",
+    "rarity": 5,
+    "rarity_title": "Mythic",
+    "lore": "MYTHIC_LORE"
+  }
+}

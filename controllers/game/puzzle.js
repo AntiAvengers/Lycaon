@@ -1,13 +1,17 @@
-const fs = require('fs').promises;
-const path = require('path');
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const crypto = require('crypto');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const { database, schema } = require('../../database/firebaseConfig.js');
+import crypto from 'crypto';
+
+import { database, schema } from '../../database/firebaseConfig.js';
 const { default_game_session } = schema;
 
 //Picks a random puzzle and selects the appropiate controller file
-const random = async () => {
+export const random = async () => {
     const files = await fs.readdir(path.join(__dirname, './'));
     //We decided to remove the math puzzle for now.
     const blacklist = ["puzzle.js", "math_puzzle.js"];
@@ -17,14 +21,13 @@ const random = async () => {
 
     const output = {
         puzzle: puzzles[i].split(".")[0],
-        controller: require(`./${puzzles[i]}`)
+        controller: require(`../../utils/puzzles/${puzzles[i]}`)
     }
 
     return output;
 }
 
-//hashed = crypto.createHash('sha256').update(address).digest('hex'); of wallet address
-const generate = async (hashed) => {
+export const generate = async (hashed) => {
     //Generate new puzzle for player - random puzzle
     const random_puzzle = await random();
 
@@ -46,14 +49,10 @@ const generate = async (hashed) => {
     }
 }
 
-const load = async (req, res) => {
+export const load = async (req, res) => {
     const { address } = req.body;
-    console.log(req.body);
-    const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
-    if(!address) {
-        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
-    }
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
     const session = database.ref('game_session');
     const snapshot = await session.orderByKey().equalTo(hashed).once("value");
@@ -72,13 +71,11 @@ const load = async (req, res) => {
     res.status(200).json({puzzle: snapshot.val()});
 }
 
-const check_answer = async (req, res) => {
+export const check_answer = async (req, res) => {
     const { address, answer } = req.body;
     
     if(!answer) {
         res.status(403).json({ error: 'Missing "answer" parameter in request body'});
-    } else if(!address) {
-        res.status(403).json({ error: 'Missing "address" (wallet address) parameter in request body'});
     }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -107,12 +104,8 @@ const check_answer = async (req, res) => {
     return res.status(200).json({ result: false });
 }
 
-const finish = async (req, res) => {
+export const finish = async (req, res) => {
     const { address } = req.body;
-
-    if(!address) {
-        res.status(403).json({ error: "Missing Sui wallet address. Make sure wallet is connected with Lycaon" })
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
@@ -195,12 +188,4 @@ const finish = async (req, res) => {
     generate(hashed);
 
     return output;
-}
-
-module.exports = {
-    random,
-    generate,
-    load,
-    check_answer,
-    finish
 }

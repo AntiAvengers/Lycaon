@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
 
-import listings_route from './listings.js';
+import { pull } from '../../controllers/game/fountain.js';
 
-router.use("/listings", listings_route);
+router.post("/pull", pull);
 
 export default router;

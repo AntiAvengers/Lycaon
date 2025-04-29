@@ -1,13 +1,8 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
+import { database, schema } from '../../database/firebaseConfig.js';
 
-const { database, schema } = require('../../database/firebaseConfig.js');
-
-const get_user_profile = async (req, res) => {
+export const get_user_profile = async (req, res) => {
     const { address } = req.body;
-
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
@@ -21,12 +16,8 @@ const get_user_profile = async (req, res) => {
     return res.status(200).json({ data: snapshot.val() });
 }
 
-const get_user_collection = async (req, res) => {
+export const get_user_collection = async (req, res) => {
     const { address } = req.body;
-
-    if(!address) {
-        return res.status(400).json({ error: "Wallet Address was not provided in request body" });
-    }
 
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
@@ -38,9 +29,4 @@ const get_user_collection = async (req, res) => {
     }
 
     return res.status(200).json({ data: snapshot.val() });
-}
-
-module.exports = {
-    get_user_profile,
-    get_user_collection
 }
