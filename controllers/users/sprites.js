@@ -14,15 +14,18 @@ const MINT_FUNCTION = 'mint';
 
 //Basic stuff regarding Creatures
 export const read_sprite = async (req, res) => {
-    const { address, id } = req.body;
+    const { id } = req.body;
+    const { address } = req.user;
     try {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
-        if(!id) throw new Error("Missing Sprite id (UUID) from Request Body");
-        const collection = database.ref(`collections/${hashed}`);
-        const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
-        const key = Object.keys(snapshot.val())[0];
-        console.log(key);
-        const sprite = await collection.child(key).once("value");
+        if(!id) {
+            return res.status(400).json({error: 'Missing parameter "id" (UUID) from Request Body'})
+        }
+        const collection_ref = database.ref(`collections/${hashed}/${id}`);
+        const snapshot = await collection_ref.once("value");
+        if(!snapshot.exists()) {
+            return res.status(400).json({ error: `${id} does not exist` });
+        }
         return res.status(200).json({ response: sprite });
     } catch(err) {
         return res.status(403).json({ error: err });
@@ -30,7 +33,7 @@ export const read_sprite = async (req, res) => {
 }
 
 export const read_all_sprites = async (req, res) => {
-    const { address } = req.body;
+    const { address } = req.user;
     try {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
         const collection = database.ref(`collections/${hashed}`);
@@ -44,7 +47,8 @@ export const read_all_sprites = async (req, res) => {
 }
 
 export const update_sprite = async (req, res) => {
-    const { address, id, nickname, favorite, hunger } = req.body;
+    const { id, nickname, favorite, hunger } = req.body;
+    const { address } = req.user;
     try {
         if(nickname && typeof nickname !== "string") {
             res.status(400).json({ error: "nickname has to be a string" });
@@ -64,11 +68,14 @@ export const update_sprite = async (req, res) => {
 
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
 
-        const collection = database.ref(`collections/${hashed}`);
-        const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
-        const key = Object.keys(snapshot.val())[0];
-
-        database.ref(`collections/${hashed}/${key}`).update(update_obj);
+        const collection_ref = database.ref(`collections/${hashed}/${id}`);
+        const snapshot = await collection-ref.once("value");
+        // const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
+        // const key = Object.keys(snapshot.val())[0];
+        if(!snapshot.exists()) {
+            return res.status(400).json({ error: `${id} does not exist` });
+        }
+        collection_ref.update(update_obj);
         return res.status(200).json({ response: update_obj });
     } catch(err) {
         return res.status(403).json({ error: err });
@@ -83,17 +90,14 @@ export const request_mint_tx = async (req, res) => {
          
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
         
-        const collections = database.ref(`collections/${hashed}`);
-        const snapshot = await collections.orderByChild("id").equalTo(id).once("value");
+        const collections_ref = database.ref(`collections/${hashed}/${id}`);
+        const snapshot = await collections_ref.once("value");
 
         if(!snapshot.exists()) {
             return res.status(400).json({ error: "Sprite ID does not exist for player" });
         }
 
-        const key = Object.keys(snapshot.val())[0];
-        const sprite = await collections.child(key).once("value");
-
-        const { minted_ID, type, rarity } = sprite.val();
+        const { minted_ID, type, rarity } = snapshot.val();
 
         if(minted_ID) {
             return res.status(400).json({ error: "Sprite is already minted!" });
@@ -201,10 +205,9 @@ export const execute_mint_tx = async (req, res) => {
                 [0];
 
             const hashed = crypto.createHash('sha256').update(address).digest('hex');
-            const collection = database.ref(`collections/${hashed}`);
-            const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
-            const key = Object.keys(snapshot.val())[0];
-            database.ref(`collections/${hashed}/${key}`).update({ minted_ID: objectId });
+            const collection_ref = database.ref(`collections/${hashed}/${id}`);
+            const snapshot = await collection_ref.once("value");
+            collection_ref.update({ minted_ID: objectId });
             console.log('. . . Executed Minting Transaction for address', address);
             console.log('. . . . . . Minted Object ID:', objectId);
         }

@@ -43,7 +43,6 @@ function pull_sprite() {
 
     //Database Update
     const sprite = {
-        id: crypto.randomUUID(),
         nickname: "",
         favorite: false,
         type: sprite_result.type,
@@ -90,24 +89,15 @@ export const pull = async (req, res) => {
         }
     }
 
-    //First sprite
-    if(!snapshot.exists()) {
-        const output = {};
-        for(let i = 0; i < results.length; i++) {
-            output[i] = results[i];
-        }
-        collection.set(output);
-        user_ref.update({ pages: (pages - 1) });
-        return res.status(200).json({ response: output });
-    }   
+    const UUID = snapshot.exists() ? Object.keys(snapshot.val()) : [];
 
-    //Otherwise pushes sprite to player collection
-    const player_collection = snapshot.val();
-    const len = Object.keys(player_collection).length;
-    const len_end = len + 10;
     const output = {};
     for(let i = 0; i < results.length; i++) {
-        output[i+len] = results[i];
+        let key = crypto.randomUUID();
+        while(UUID.includes(key)) {
+            key = crypto.randomUUID();
+        }
+        output[key] = results[i];
     }
     collection.update(output);
     user_ref.update({ pages: (pages - results.length) });

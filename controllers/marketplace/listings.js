@@ -27,9 +27,6 @@ export const request_listing_tx = async (req, res) => {
 
     try {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
-
-        // const marketplace = database.ref(`marketplace`)
-
         const collections = database.ref(`collections/${hashed}`);
         const snapshot = await collections.orderByChild("id").equalTo(id).once("value");
         
@@ -121,21 +118,6 @@ export const execute_listing_tx = async (req, res) => {
     console.dir(result, { depth: null, colors: true });
     console.dir(transaction, { depth: null, colors: true });
 
-    /* 
-        You need to store the objectId of the Listing Object (Sui) somewhere to reference later.
-        I guess the player should have their own listings right?
-
-        to get the transaction digest = 
-        transaction.digest
-        
-        ** This is from get_transaction_block
-        price = obj.transaction.data.transaction.inputs[?].type == "pure" for price, value_type == "u64", value = "5" price as string
-
-        ** this is from get_object
-        sprite_type / sprite_rarity = 
-        obj.data.content.fields.value.fields.sprite_rarity
-    */
-
     if(transaction.objectChanges) {
         if(transaction.objectChanges.length > 0) {
             const { objectId: listing_object_ID } = transaction.objectChanges
@@ -191,14 +173,149 @@ export const execute_listing_tx = async (req, res) => {
     }
 }
 
-export const buy = async (req, res) => {
-    const { asking_price, id } = req.body;
+export const request_buy_tx = async (req, res) => {
+    const { id } = req.body;
     const { address } = req.user;
 }
 
-export const cancel = async (req, res) => {
-    const { asking_price, id } = req.body;
+export const execute_buy_tx = async (req, res) => {
+    const { bytes, signature } = req.body;
     const { address } = req.user;
+
+    if(!bytes) {
+        return res.status(400).json({ error: "Missing 'bytes' parameter from request body" });
+    }
+
+    if(!signature) {
+        return res.status(400).json({ error: "Missing 'signature' parameter from request body" });
+    }
+
+    const result = await client.executeTransactionBlock({
+        transactionBlock: bytes,
+        signature,
+        requestType: 'WaitForLocalExecution',
+        options: {
+            showInputs: true,
+            showEffects: true,
+            showObjectChanges: true
+        },
+    });
+
+    if(result.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    const transaction = await client.waitForTransaction({
+        digest: result.digest,
+        options: {
+            showInputs: true,
+            showObjectChanges: true,
+            showEffects: true
+        },
+    });
+
+    if(transaction.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    console.dir(result, { depth: null, colors: true });
+    console.dir(transaction, { depth: null, colors: true });
+
+    //Missing DB update logic
+}
+
+export const request_cancel_tx = async (req, res) => {
+    const { id } = req.body;
+    const { address } = req.user;
+
+    try {
+        const hashed = crypto.createHash('sha256').update(address).digest('hex');
+        const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
+        const snapshot = await marketplace_ref.once("value");
+        // const snapshot = await marketplace_ref.orderByChild("id").equalTo(id).once("value");
+        
+        //Impossible
+        if(!snapshot.exists()) {
+            return res.status(400).json({ error: "Listing does not exist for player" });
+        }
+
+        const listing = snapshot.val();
+        const { id: objectId } = listing;
+
+        console.log('LISTING:');
+        console.log(listing);
+
+        //Move Module
+        const tx = new TransactionBlock();
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE_NAME}::${CANCEL_FUNCTION}`,
+            arguments: [
+                tx.object(minted_ID)
+            ],
+        });
+
+        tx.setGasBudget(100_000_000);
+        
+        const simulation = await client.devInspectTransactionBlock({
+            sender: address,
+            transactionBlock: tx,
+        });
+
+        if(simulation.effects.status.status == 'failure') throw simulation.effects.status.error;
+
+        const serialized = await tx.serialize();
+
+        return res.status(200).json({ transactionBlock: serialized });
+    } catch(err) {
+        console.log(err);
+        return res.status(400).json({ error: err });
+    }
+}
+
+export const execute_cancel_tx = async (req, res) => {
+    const { bytes, signature } = req.body;
+    const { address } = req.user;
+
+    if(!bytes) {
+        return res.status(400).json({ error: "Missing 'bytes' parameter from request body" });
+    }
+
+    if(!signature) {
+        return res.status(400).json({ error: "Missing 'signature' parameter from request body" });
+    }
+
+    const result = await client.executeTransactionBlock({
+        transactionBlock: bytes,
+        signature,
+        requestType: 'WaitForLocalExecution',
+        options: {
+            showInputs: true,
+            showEffects: true,
+            showObjectChanges: true
+        },
+    });
+
+    if(result.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    const transaction = await client.waitForTransaction({
+        digest: result.digest,
+        options: {
+            showInputs: true,
+            showObjectChanges: true,
+            showEffects: true
+        },
+    });
+
+    if(transaction.effects.status.status != "success") {
+        return res.status(503).json({ error: result.effects.status.status });
+    }
+
+    console.dir(result, { depth: null, colors: true });
+    console.dir(transaction, { depth: null, colors: true });
+
+    //Missing DB update logic
 }
 
 //Backend API calls
