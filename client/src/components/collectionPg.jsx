@@ -96,13 +96,16 @@ const creaturesList = [
     },
 ];
 
+const userData = { collection: 30 };
+
 const SpritesCollectionPg = () => {
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
     );
-    const [popupMessage, setPopupMessage] = useState("");
-    const [isFading, setIsFading] = useState(false);
+    const [popupMessage, setPopupMessage] = useState(""); //popup for max like
+    const [isFading, setIsFading] = useState(false); //fading for max like popup
 
+    //Like sprites
     const handleToggleLike = (index) => {
         const updatedLikes = [...likedList];
         const currentLikesCount = updatedLikes.filter(Boolean).length;
@@ -188,7 +191,9 @@ const SpritesCollectionPg = () => {
 
                     {/* Sprites Count */}
                     <section className="w-[754px] flex items-center">
-                        <span className="text-[35px] ml-auto">30/100</span>
+                        <span className="text-[35px] ml-auto">
+                            {userData.collection}/100
+                        </span>
                     </section>
 
                     {/* All Sprites */}
@@ -208,8 +213,9 @@ const SpritesCollectionPg = () => {
                                         Listed
                                     </span>
                                 )}
-                                
+
                                 <div className="w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative">
+                                    {/* Like Btn */}
                                     <button
                                         onClick={() => handleToggleLike(index)}
                                         aria-label="favorite"
@@ -223,8 +229,9 @@ const SpritesCollectionPg = () => {
                                             <FavoriteBorderIcon />
                                         )}
                                     </button>
-                                    <div className="flex-grow" />{" "}
                                     {/* Spacer to push image down */}
+                                    <div className="flex-grow" />
+                                    {/* Sprites */}
                                     <Link key={creature.to} to={creature.to}>
                                         <img
                                             src={creature.src}
@@ -233,6 +240,7 @@ const SpritesCollectionPg = () => {
                                         />
                                     </Link>
                                 </div>
+                                {/* Sprties Descipt */}
                                 <div className="flex flex-col items-start">
                                     <span className="text-[15px] font-bold mt-2">
                                         {creature.rank}
