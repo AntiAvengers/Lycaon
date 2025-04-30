@@ -31,6 +31,8 @@ export class AnagramInstruc extends Scene {
     confirmBg;
     confirmZone;
     confirmText;
+    errorMessage;
+    errorMessageTween;
 
     lastWidth = null;
     lastHeight = null;
@@ -217,6 +219,22 @@ export class AnagramInstruc extends Scene {
             )
             .setOrigin(0.5)
             .setDepth(100);
+            
+            /* 
+                this.scale.width / 2,
+                this.scale.height / 2 + 140,
+            */
+
+        this.errorMessage = this.add
+            .text(this.scale.width / 2, this.scale.height * 0.58, "", {
+                fontFamily: "CustomFont",
+                fontSize: Math.min(this.scale.width * 0.06, 45),
+                color: "#ff0000",
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100)
+            .setAlpha(0); // Start hidden
 
         //----------------------------------------------------------
 
@@ -455,12 +473,25 @@ export class AnagramInstruc extends Scene {
         const handleConfirmDown = () => {
             drawConfirmBg(0x16296c, 4, 4);
             this.confirmText.setY(this.scale.height / 2 + 252);
-            this.changeScene();
+            // this.changeScene();
         };
 
         const handleConfirmUp = () => {
             drawConfirmBg(0x4a63e4);
             this.confirmText.setY(this.scale.height / 2 + 250);
+
+            const use_key = this.game.injected?.AUTH_API_CALL
+            if (use_key) {
+                use_key('game/puzzle/use-key')
+                    .then(data => {
+                        if(data.error) {
+                            this.showErrorMessage("You don't have enough keys!");
+                        } else {
+                            this.changeScene();
+                        }
+                    })
+                    .catch(err => console.error('API call error:', err));
+            }
         };
 
         const handleConfirmOut = () => {
@@ -495,6 +526,39 @@ export class AnagramInstruc extends Scene {
 
         // Clean up listeners on scene shutdown
         this.events.once("shutdown", this.cleanup, this);
+    }
+
+    showErrorMessage(message) {
+        // Reset any ongoing tween
+        if (this.errorMessageTween) {
+            this.errorMessageTween.remove();
+        }
+
+        // Ensure the error message is visible and reset position
+        this.errorMessage.setText(message).setAlpha(1).setVisible(true);
+
+        // Start the new fade-out tween
+        this.errorMessageTween = this.tweens.add({
+            targets: this.errorMessage,
+            x: this.errorMessage.x + 10, // Move slightly right
+            yoyo: true, // Move back
+            repeat: 4, // Number of shakes
+            duration: 50, // Speed of each shake
+            onComplete: () => {
+                this.time.delayedCall(500, () => {
+                    this.tweens.add({
+                        targets: this.errorMessage,
+                        alpha: 0, //fade out
+                        duration: 1000,
+                        ease: "Power2",
+                        onComplete: () => {
+                            this.errorMessage.setVisible(false); // Hide it after fading
+                            this.errorMessage.alpha = 1; // Reset alpha for future use
+                        },
+                    });
+                });
+            },
+        });
     }
 
     // Show popup function
@@ -560,6 +624,10 @@ export class AnagramInstruc extends Scene {
                 );
                 return;
             }
+
+            // this.errorMessage
+            //     .setPosition(width / 2, height * 0.63)
+            //     .setFontSize(Math.min(width * 0.06, 45));
 
             this.background
                 .setPosition(width / 2, height / 2)
@@ -732,6 +800,13 @@ export class AnagramInstruc extends Scene {
     }
 
     cleanup() {
+        // Ensure the error message tween is stopped and removed
+        if (this.errorMessageTween) {
+            this.errorMessageTween.stop(); // Stop if it's active
+            this.errorMessageTween.remove(); // Clean up tween resources
+            this.errorMessageTween = null;
+        }
+
         // Remove pointer event listeners for 'pointerdown', 'pointerup', 'pointerover', and 'pointerout'
         this.input.off("pointerdown", this.handlePointerDown, this);
         this.input.off("pointerup", this.handlePointerUp, this);

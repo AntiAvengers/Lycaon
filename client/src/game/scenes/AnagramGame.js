@@ -42,9 +42,10 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30;
+        this.remainingTime = 30; //DEV CHANGE THIS BACK
         this.wordList = [];
         this.inputText = "";
+        this.letters_data = [];
     }
 
     preload() {
@@ -52,6 +53,18 @@ export class AnagramGame extends Scene {
     }
 
     create() {
+        // const get_letters = this.game.injected?.get_puzzle_data;
+        const get_letters = this.game.injected?.AUTH_API_CALL
+
+        if (get_letters) {
+            get_letters('game/puzzle/')
+                .then(data => {
+                    this.letters_data = data.response.puzzle_data.map(letter => letter.toUpperCase());
+                    this.anagramText.setText(this.letters_data.join(" "));
+                })
+                .catch(err => console.error('API call error:', err));
+        }
+
         //Main Background
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
@@ -110,7 +123,7 @@ export class AnagramGame extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height + Math.min(this.scale.height * 0.12, 100) / 2, // Vertically center text within rectangle
-                "E  I  T  S  P",
+                "LOADING . . . ",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.08, 65),
@@ -686,9 +699,11 @@ export class AnagramGame extends Scene {
     handleWordSubmit() {
         const enteredWord = this.inputText.trim();
 
-        // Check for invalid characters (anything other than letters)
         if (!/^[a-zA-Z]+$/.test(enteredWord)) {
             this.showErrorMessage("Invalid word. Use letters only.");
+            this.inputText = "";
+            this.updateInputField();
+            return;
         } else if (
             this.wordList.some(
                 (word) => word.toLowerCase() === enteredWord.toLowerCase()
@@ -697,15 +712,28 @@ export class AnagramGame extends Scene {
             this.showErrorMessage(
                 `${enteredWord.toUpperCase()} was already answered!`
             );
-            // need to add logic for answers that are not correct/not found
-        } else {
-            this.wordList.push(enteredWord);
-            this.updateWordDisplay();
+            this.inputText = "";
+            this.updateInputField();
+            return;
         }
 
-        // Clear input field
-        this.inputText = "";
-        this.updateInputField();
+        // const is_valid = this.game.injected?.check_answer;
+        const is_valid = this.game.injected?.AUTH_API_CALL;
+
+        if (is_valid) {
+            is_valid('game/puzzle/check-answer/', {answer: enteredWord})
+                .then(result => {
+                    if(result.response) {
+                        this.wordList.push(enteredWord);
+                        this.updateWordDisplay();
+                    } else {
+                        this.showErrorMessage("Not a valid word");
+                    }
+                    this.inputText = "";
+                    this.updateInputField();
+                })
+                .catch(err => console.error('API call error:', err));
+        }
     }
 
     updateWordDisplay() {

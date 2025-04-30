@@ -1,6 +1,6 @@
-import dictionary from '../dictionary.js';
+import { load, get_score_cutoff } from '../dictionary.js';
 
-const words = dictionary.load();
+const words = load();
 
 export function generate_puzzle(num_of_letters = 7, count = 0) {
     const all_vowels = ["a", "e", "i", "o", "u"];
@@ -33,7 +33,7 @@ export function generate_puzzle(num_of_letters = 7, count = 0) {
     const output = {
         data: puzzle,
         solution: check.valid_words
-            .map(word => word.toLowerCase().trim()),
+            .map(obj => obj.word.toLowerCase().trim()),
         validate_on_client: false, //Server will check answers
         meta: {
             is_valid: check.is_valid,
@@ -61,7 +61,7 @@ function get_validity(letters) {
     }
 
     const true_words = valid_words
-        .filter(obj => obj.count >= dictionary.get_score_cutoff());    
+        .filter(obj => obj.count >= get_score_cutoff());    
     
     const output = {
         is_valid: (true_words.length >= 15 ? true : false),

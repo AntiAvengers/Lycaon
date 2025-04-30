@@ -36,9 +36,50 @@ export class AnagramOver extends Scene {
         //input data from last scene
         const remainingTime = this.registry.get("remainingTime");
 
-        const wordCount = this.registry.get("wordCount");
+        // const wordCount = this.registry.get("wordCount");
 
-        const pageReward = this.calculatePages(wordCount);
+        // const game_results = this.game.injected?.game_finished;
+        const game_results = this.game.injected?.AUTH_API_CALL;
+
+        if (game_results) {
+            game_results('game/puzzle/finish/')
+                .then(data => {
+                    const { player } = data.response;
+                    const { score, reward } = player;
+                    this.wordCount = this.add
+                        .text(
+                            this.scale.width / 2,
+                            this.scale.height * 0.43,
+                            `You found ${score} words!`,
+                            {
+                                fontFamily: "CustomFont",
+                                fontSize: Math.min(this.scale.width * 0.08, 55),
+                                color: "#000000",
+                                align: "center",
+                                wordWrap: { width: this.scale.width * 0.8 },
+                            }
+                        )
+                        .setOrigin(0.5)
+                        .setDepth(100);
+                    this.rewardsText2 = this.add
+                        .text(
+                            this.scale.width / 2 - 30,
+                            this.scale.height * 0.7,
+                            `${reward}x`,
+                            {
+                                fontFamily: "CustomFont",
+                                fontSize: Math.min(this.scale.width * 0.1, 90),
+                                color: "#ffffff",
+                                align: "center",
+                                wordWrap: { width: this.scale.width * 0.8 },
+                            }
+                        )
+                        .setOrigin(0.5)
+                        .setDepth(100);
+                })
+                .catch(err => console.error('API call error:', err));
+        }
+
 
         //----------------------------------------------------------
 
@@ -143,21 +184,21 @@ export class AnagramOver extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.wordCount = this.add
-            .text(
-                this.scale.width / 2,
-                this.scale.height * 0.43,
-                `You found ${wordCount} words!`,
-                {
-                    fontFamily: "CustomFont",
-                    fontSize: Math.min(this.scale.width * 0.08, 55),
-                    color: "#000000",
-                    align: "center",
-                    wordWrap: { width: this.scale.width * 0.8 },
-                }
-            )
-            .setOrigin(0.5)
-            .setDepth(100);
+        // this.wordCount = this.add
+        //     .text(
+        //         this.scale.width / 2,
+        //         this.scale.height * 0.43,
+        //         `You found ${wordCount} words!`,
+        //         {
+        //             fontFamily: "CustomFont",
+        //             fontSize: Math.min(this.scale.width * 0.08, 55),
+        //             color: "#000000",
+        //             align: "center",
+        //             wordWrap: { width: this.scale.width * 0.8 },
+        //         }
+        //     )
+        //     .setOrigin(0.5)
+        //     .setDepth(100);
 
         this.rewardBg = this.add
             .image(this.scale.width / 2, this.scale.height * 0.67, "reward-bg")
@@ -176,21 +217,21 @@ export class AnagramOver extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
-        this.rewardsText2 = this.add
-            .text(
-                this.scale.width / 2 - 30,
-                this.scale.height * 0.7,
-                `${pageReward}x`,
-                {
-                    fontFamily: "CustomFont",
-                    fontSize: Math.min(this.scale.width * 0.1, 90),
-                    color: "#ffffff",
-                    align: "center",
-                    wordWrap: { width: this.scale.width * 0.8 },
-                }
-            )
-            .setOrigin(0.5)
-            .setDepth(100);
+        // this.rewardsText2 = this.add
+        //     .text(
+        //         this.scale.width / 2 - 30,
+        //         this.scale.height * 0.7,
+        //         `${pageReward}x`,
+        //         {
+        //             fontFamily: "CustomFont",
+        //             fontSize: Math.min(this.scale.width * 0.1, 90),
+        //             color: "#ffffff",
+        //             align: "center",
+        //             wordWrap: { width: this.scale.width * 0.8 },
+        //         }
+        //     )
+        //     .setOrigin(0.5)
+        //     .setDepth(100);
 
         this.scrollIcon = this.add
             .image(this.scale.width / 2 + 40, this.scale.height * 0.7, "scroll")
@@ -311,17 +352,17 @@ export class AnagramOver extends Scene {
         ).padStart(2, "0")}`;
     }
 
-    calculatePages(wordCount) {
-        if (wordCount === 0) {
-            return 0;
-        } else if (wordCount <= 5) {
-            return 1;
-        } else if (wordCount <= 10) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
+    // calculatePages(wordCount) {
+    //     if (wordCount === 0) {
+    //         return 0;
+    //     } else if (wordCount <= 5) {
+    //         return 1;
+    //     } else if (wordCount <= 10) {
+    //         return 2;
+    //     } else {
+    //         return 3;
+    //     }
+    // }
 
     toggleMute() {
         this.audioManager.toggleMute();

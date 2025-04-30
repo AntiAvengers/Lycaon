@@ -25,8 +25,10 @@ const config = {
     roundPixels: true, // Rounds pixels for smoother rendering (optional)
 };
 
-const StartGame = (parent) => {
+const StartGame = (parent, injected = {}) => {
     const game = new Phaser.Game({ ...config, parent });
+    
+    game.injected = injected;
 
     const handleResize = () => {
         if (!game || !game.scale || !game.isRunning) return; // Guard against null access

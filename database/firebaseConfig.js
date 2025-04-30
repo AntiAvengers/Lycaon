@@ -22,8 +22,7 @@ const default_user = {
   shards: 0,
   pages: 0,
   highest_score: {
-      game_type: "",
-      score: 0
+    word_puzzle: 0
   },
   last_login: Date.now(),
 }
@@ -35,11 +34,11 @@ const default_game_session = {
   valid_answers: [-1],
   submitted_answers: [-1],
   score: 0,
-  key_used: false
+  key_used: true
 }
 
 const default_leaderboard = {
-  word_puzzle: [{ profile_name: 'Lycaon', score: -1 }]
+  word_puzzle: { _init: true } 
 }
 
 const default_collection = {

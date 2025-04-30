@@ -18,6 +18,16 @@ const PuzzelPg = () => {
         }
     };
 
+    const handleSceneReady = (currentScene) => {
+        setScene(currentScene);
+        
+        currentScene.events.off('score-updated');
+        currentScene.events.off('leaderboard-updated');
+
+        currentScene.events.on('score-updated', setHighScore);
+        currentScene.events.on('leaderboard-updated', setLeaderboardData);
+    };
+
     // Listen for scene change events via EventBus
     useEffect(() => {
         const handleSceneChange = (sceneName) => {
