@@ -2,23 +2,30 @@ import { useState } from "react";
 
 const foods = [
     { src: "/assets/foods/apple.svg", label: "Apple", value: 1, price: 5 },
-    { src: "/assets/foods/cherries.svg", label: "Cherries", value: 2, price: 10 },
+    {
+        src: "/assets/foods/cherries.svg",
+        label: "Cherries",
+        value: 2,
+        price: 10,
+    },
     { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 25 },
     { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 50 },
 ];
 
 const PantryPg = () => {
-    const [buy, setBuy] = useState(false);
+    const [buy, setBuy] = useState(false); //buy popup
     const [selectedFood, setSelectedFood] = useState(null);
     const [purchaseConfirmed, setPurchaseConfirmed] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
+    //closes buy popup
     const closeBuy = () => {
         setBuy(false);
         setSelectedFood(null);
         setPurchaseConfirmed(false);
     };
 
+    //handles food purchased
     const handleBuy = (food) => {
         setSelectedFood(food);
         setQuantity(1);
@@ -29,6 +36,7 @@ const PantryPg = () => {
         <div className="w-[1100px] h-[550px] bg-[#FEFAF3]/20 px-[50px] flex flex-col text-[#FFFFFF]">
             <h1 className="text-start text-[60px]">Pantry</h1>
             <div className="flex-1 flex items-center justify-center">
+                {/* Pantry List */}
                 <ul className="w-full flex flex-row justify-between">
                     {foods.map((food) => (
                         <li
@@ -52,6 +60,7 @@ const PantryPg = () => {
                 </ul>
             </div>
 
+            {/* Purchase Popup */}
             {buy && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-evenly">
@@ -69,30 +78,8 @@ const PantryPg = () => {
                             alt={selectedFood.label}
                             className="w-[160px] h-[160px]"
                         />
-                        {/* <section className="flex flex-row">
-                            <label>Amount</label>
-                            <input
-                                type="number"
-                                min="1"
-                                value={quantity}
-                                onWheel={(e) => e.target.blur()}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    if (val === "") {
-                                        setQuantity(""); // allow empty temporarily
-                                    } else {
-                                        const value = Math.max(1, Number(val));
-                                        setQuantity(value);
-                                    }
-                                }}
-                                className="no-spinner w-[35px] h-[20px] border-b-[1px] border-white outline-none bg-transparent text-end"
-                            />
-                        </section>
-                        <p className="text-[25px] text-[#FCF4EF]">
-                            Total: {selectedFood.price * quantity} Shards
-                        </p> */}
-
                         <section className="flex flex-col items-center gap-2">
+                            {/* Purchasing */}
                             {!purchaseConfirmed ? (
                                 <>
                                     <section className="flex flex-row items-center gap-2">
@@ -125,6 +112,7 @@ const PantryPg = () => {
                                     </p>
                                 </>
                             ) : (
+                                // Purchased
                                 <p className="text-[22px] text-[#FCF4EF] text-center">
                                     You bought {quantity} {selectedFood.label}
                                     {quantity > 1 ? "s" : ""}! 🎉

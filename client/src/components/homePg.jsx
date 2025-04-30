@@ -23,24 +23,13 @@ const HomePg = () => {
         };
     }, []);
 
-    // Closes New User Popup
-    const closePopup = () => {
-        setShowPopup(false);
-    };
-
-    //Closes with Escape Btn as well
+    // Close popup with ESC key
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === "Escape") {
-                closePopup();
-            }
+            if (e.key === "Escape") setShowPopup(false);
         };
-
         window.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
     return (
@@ -128,7 +117,7 @@ const HomePg = () => {
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
-                        onClick={closePopup}
+                        onClick={() => setShowPopup(false)}
                         className="absolute top-[10px] right-[10px] cursor-pointer w-[30px] h-[30px]"
                     />
                     <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none tracking-[1px]">

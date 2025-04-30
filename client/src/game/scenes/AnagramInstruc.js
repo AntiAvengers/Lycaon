@@ -311,8 +311,8 @@ export class AnagramInstruc extends Scene {
             .fillRoundedRect(
                 this.scale.width / 2 - 170 + 5, // slight x offset
                 this.scale.height / 2 + 100 + 5, // slight y offset
-                this.scale.width * 0.4,
-                this.scale.height * 0.3,
+                340,
+                200,
                 10
             )
             .setDepth(199) // behind the main popup
@@ -325,15 +325,15 @@ export class AnagramInstruc extends Scene {
             .fillRoundedRect(
                 this.scale.width / 2 - 170,
                 this.scale.height / 2 + 100,
-                this.scale.width * 0.4,
-                this.scale.height * 0.3,
+                340,
+                200,
                 10
             )
             .strokeRoundedRect(
                 this.scale.width / 2 - 170,
                 this.scale.height / 2 + 100,
-                this.scale.width * 0.4,
-                this.scale.height * 0.3,
+                340,
+                200,
                 10
             )
             .setDepth(200)
@@ -651,8 +651,8 @@ export class AnagramInstruc extends Scene {
                 .fillRoundedRect(
                     width / 2 - 170 + 5,
                     height / 2 + 100 + 5,
-                    width * 0.4,
-                    height * 0.3,
+                    340,
+                    200,
                     10
                 );
 
@@ -662,16 +662,16 @@ export class AnagramInstruc extends Scene {
                 .fillRoundedRect(
                     width / 2 - 170,
                     height / 2 + 100,
-                    width * 0.4,
-                    height * 0.3,
+                    340,
+                    200,
                     10
                 )
                 .lineStyle(2, 0x000000, 1)
                 .strokeRoundedRect(
                     width / 2 - 170,
                     height / 2 + 100,
-                    width * 0.4,
-                    height * 0.3,
+                    340,
+                    200,
                     10
                 );
 
