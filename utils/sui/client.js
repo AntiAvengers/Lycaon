@@ -2,7 +2,8 @@ import crypto from 'crypto';
 
 import 'dotenv/config';
 
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+// import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { Transaction } from '@mysten/sui/transactions';
 
 import { client } from './config.js';
 
@@ -36,6 +37,7 @@ export const get_transaction_block = async (digest) => {
   });
 }
 
+//Probably Deprecated
 export const mint_sprite = async (stats) => { //stats = object of sprite immutable stats (type, rarity)
   try { 
     const input = JSON.stringify(Object.keys(stats).sort().reduce((acc, key) => {
@@ -45,7 +47,7 @@ export const mint_sprite = async (stats) => { //stats = object of sprite immutab
   
     const hashed = crypto.createHash('sha256').update(input).digest();
     
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
   
     tx.moveCall({
         target: `${PACKAGE_ID}::${MODULE_NAME}::${MINT_FUNCTION}`,
@@ -65,7 +67,7 @@ export const mint_sprite = async (stats) => { //stats = object of sprite immutab
 
 export const transfer_sprite = async ({ tokenId, recipient }) => {
   try {
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
 
     tx.moveCall({
         target: `${PACKAGE_ID}::${MODULE_NAME}::${TRANSFER_FUNCTION}`,
@@ -91,7 +93,7 @@ export const transfer_sprite = async ({ tokenId, recipient }) => {
 
 export const transfer_sui = async ({ amount, recipient }) => {
   try {
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
 
     tx.transferObjects(
       [tx.splitCoins(tx.gas, [tx.pure(amount)])],

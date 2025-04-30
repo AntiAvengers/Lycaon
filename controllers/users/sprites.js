@@ -2,7 +2,8 @@ import * as crypto from 'crypto';
 import 'dotenv/config';
 import { client } from '../../utils/sui/config.js';
 import { get_transaction_block } from '../../utils/sui/client.js';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+// import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { Transaction } from '@mysten/sui/transactions';
 import { bcs } from '@mysten/sui/bcs';
 import { database } from '../../database/firebaseConfig.js';
 
@@ -124,7 +125,7 @@ export const request_mint_tx = async (req, res) => {
         const public_key = await ed.getPublicKeyAsync(private_key);
         const signature = await ed.signAsync(struct, private_key);
 
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
 
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE_NAME}::${MINT_FUNCTION}`,

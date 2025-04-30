@@ -1,7 +1,8 @@
 import crypto from 'crypto';
 import { client } from '../../utils/sui/config.js';
 import { get_transaction_block, get_object } from '../../utils/sui/client.js';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+// import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { Transaction } from '@mysten/sui/transactions';
 
 import { database, schema } from '../../database/firebaseConfig.js';
 import { request_mint_tx } from '../users/sprites.js';
@@ -48,7 +49,7 @@ export const request_listing_tx = async (req, res) => {
         }
 
         //Move Module
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CREATE_FUNCTION}`,
             arguments: [
@@ -246,7 +247,7 @@ export const request_cancel_tx = async (req, res) => {
         console.log(listing);
 
         //Move Module
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CANCEL_FUNCTION}`,
             arguments: [
