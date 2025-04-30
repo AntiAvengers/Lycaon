@@ -8,6 +8,15 @@ const rates = [
     { name: "Mythic", percent: 0.005 },
 ];
 
+// const sprite = {
+//     name: "Slime",
+//     rank: "Elite",
+//     src: "/assets/sprites/slime-sprite.gif",
+//     still: "/assets/stillSprites/still-slime.svg",
+//     details:
+//         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus libero sit amet egestas accumsan. Sed massa sem, convallis et fringilla lacinia, faucibus sed augue.",
+// };
+
 const FountainPg = () => {
     const [showRate, setShowRate] = useState(false);
     const [pullMessage, setPullMessage] = useState("");
@@ -16,13 +25,17 @@ const FountainPg = () => {
     const closeRate = () => setShowRate(false);
     const handleRate = () => setShowRate(true);
 
+
     //Popup message for Pull Btns
     const handlePull = (amount) => {
         setPullMessage(
             `You just pulled ${amount} page${amount > 1 ? "s" : ""}!`
         );
-        setTimeout(() => setPullMessage(""), 2000);
+        // setTimeout(() => setPullMessage(""), 2000);
     };
+
+    //Closes Pull Popup
+    const closePullPopup = () => setPullMessage("");
 
     useEffect(() => {
         document.body.classList.add("fountain-bg");
@@ -94,7 +107,13 @@ const FountainPg = () => {
 
             {/* Pull Popup  */}
             {pullMessage && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 bg-[#FBBB26] text-black text-[30px] px-[20px] py-[10px] rounded-[10px] shadow-lg z-50">
+                <div className="w-[407px] h-[304px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center justify-between">
+                    <img
+                        src="/assets/icons/closeBtn.svg"
+                        alt="closeBtn"
+                        onClick={closePullPopup}
+                        className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                    />
                     {pullMessage}
                 </div>
             )}
