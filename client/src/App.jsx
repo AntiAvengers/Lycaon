@@ -38,16 +38,16 @@ const App = () => {
                 <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Layout><ConnectPg /></Layout>} />
-                        <Route element={<ProtectedRoutes/>}>
-                            <Route path="/home" element={<Layout><HomePg /></Layout>} />
-                            <Route path="/puzzle" element={<Layout><PuzzlePg /></Layout>} />
-                            <Route path="/fountain" element={<Layout><FountainPg /></Layout>} />
-                            <Route path="/collection" element={<Layout><CollectionPg /></Layout>} />
-                            <Route path="/collection/spriteDetail" element={<Layout><SpritesDetailPg /></Layout>} />
-                            <Route path="/pantry" element={<Layout><PantryPg /></Layout>} />
-                            <Route path="/marketplace" element={<Layout><MarketPg /></Layout>} />
+                    <Route element={<ProtectedRoutes />}>
+                        <Route path="/home" element={<Layout><HomePg /></Layout>} />
+                        <Route path="/puzzle" element={<Layout><PuzzlePg /></Layout>} />
+                        <Route path="/fountain" element={<Layout><FountainPg /></Layout>} />
+                        <Route path="/collection" element={<Layout><CollectionPg /></Layout>} />
+                        <Route path="/collection/spriteDetail" element={<Layout><SpritesDetailPg /></Layout>} />
+                        <Route path="/pantry" element={<Layout><PantryPg /></Layout>} />
+                        <Route path="/marketplace" element={<Layout><MarketPg /></Layout>} />
+                        <Route path="*" element={<Layout><NotFoundPg /></Layout>} />
                     </Route>
-                    <Route path="*" element={<Layout><NotFoundPg /></Layout>} />
                 </Routes>
                 </AuthProvider>
             </Router>
