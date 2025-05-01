@@ -121,29 +121,46 @@ const FountainPg = () => {
                         onClick={closePullPopup}
                         className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                     />
-                    <h2 className="text-[30px] font-bold mb-[10px]">
-                        You just pulled:
+                    <h2 className="text-[40px] font-bold mt-[30px] mb-[10px]">
+                        You just pulled . . .
                     </h2>
-                    <div className="grid grid-cols-2 gap-4">
-                        {pulledSprites.map((s) => (
-                            <div
-                                key={s.id}
-                                className="flex flex-col items-center"
-                            >
-                                <img
-                                    src={s.still}
-                                    alt={s.name}
-                                    className="w-[80px] h-[80px]"
-                                />
-                                <p className="text-[20px] font-semibold">
-                                    {s.name}
-                                </p>
-                                <p className="text-[16px]">{s.rank}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {pulledSprites.length === 1 ? (
+                        <div className="flex flex-col items-center mt-4">
+                            <img
+                                src={pulledSprites[0].still}
+                                alt={pulledSprites[0].name}
+                                className="w-[150px] h-[150px] mb-2"
+                            />
+                            <p className="text-[35px]">
+                                {pulledSprites[0].name}
+                            </p>
+                            <p className="text-[25px]">
+                                {pulledSprites[0].rank}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-4">
+                            {pulledSprites.map((s) => (
+                                <div
+                                    key={s.id}
+                                    className="flex flex-col items-center"
+                                >
+                                    <img
+                                        src={s.still}
+                                        alt={s.name}
+                                        className="w-[80px] h-[80px]"
+                                    />
+                                    <p className="text-[20px] font-semibold">
+                                        {s.name}
+                                    </p>
+                                    <p className="text-[16px]">{s.rank}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
+
         </div>
     );
 };
