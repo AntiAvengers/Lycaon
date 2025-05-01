@@ -75,6 +75,7 @@ const UserListing = () => {
     const [showMint, setShowMint] = useState(false);
     const [sprite, setSprites] = useState(creaturesList);
     const [selectedSprite, setSelectedSprite] = useState(null);
+    const [cancelPopup, setCancelPopup] = useState(null);
 
     const handleMintClick = (clickedSprite) => {
         setSelectedSprite(clickedSprite);
@@ -120,6 +121,8 @@ const UserListing = () => {
                 ? { ...prev, marketplace: false }
                 : prev
         );
+
+        setCancelPopup(null);
     };
 
     return (
@@ -187,9 +190,7 @@ const UserListing = () => {
                                     {sprite.marketplace && (
                                         <button
                                             onClick={() =>
-                                                handleCancelListing(
-                                                    sprite.label
-                                                )
+                                                setCancelPopup(sprite)
                                             }
                                             className="underline cursor-pointer hover:text-[#FBBB26]"
                                         >
@@ -203,6 +204,36 @@ const UserListing = () => {
                     <Link to="/collection" className="underline text-[25px]">
                         View your collection
                     </Link>
+
+                    {cancelPopup && (
+                        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
+                            <img
+                                src="/assets/icons/closeBtn.svg"
+                                alt="closeBtn"
+                                onClick={() => setCancelPopup(null)}
+                                className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                            />
+                            <img
+                                src={cancelPopup.still}
+                                alt={cancelPopup.label}
+                                className="object-contain max-h-[150px]"
+                            />
+                            <span className="text-[25px]">
+                                {cancelPopup.name}
+                            </span>
+                            <p className="text-[25px] text-center">
+                                Would you like to take it off the marketplace?
+                            </p>
+                            <button
+                                onClick={() =>
+                                    handleCancelListing(cancelPopup.label)
+                                }
+                                className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
 
