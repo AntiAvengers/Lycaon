@@ -95,17 +95,6 @@ const UserListing = () => {
         setSelectedSprite((prev) => ({ ...prev, mint: true }));
     };
 
-    // const btnSell = (clickedSprite) => {
-    //     setSelectedSprite({ ...clickedSprite, marketplace: true });
-    //     setSprites((prev) =>
-    //         prev.map((s) =>
-    //             s.label === clickedSprite.label
-    //                 ? { ...s, marketplace: true }
-    //                 : s
-    //         )
-    //     );
-    // };
-
     const handleSell = () => {
         setSprites((prev) =>
             prev.map((s) =>
@@ -115,6 +104,22 @@ const UserListing = () => {
             )
         );
         setSelectedSprite((prev) => ({ ...prev, marketplace: true }));
+    };
+
+    // Cancel marketplace listing
+    const handleCancelListing = (label) => {
+        setSprites((prev) =>
+            prev.map((s) =>
+                s.label === label ? { ...s, marketplace: false } : s
+            )
+        );
+
+        // Also update selectedSprite if it's the one being canceled
+        setSelectedSprite((prev) =>
+            prev && prev.label === label
+                ? { ...prev, marketplace: false }
+                : prev
+        );
     };
 
     return (
@@ -149,7 +154,7 @@ const UserListing = () => {
                                     alt={sprite.label}
                                     className="object-contain bg-[#E9E9E9]"
                                 />
-                                <section className="flex flex-col text-[25px]">
+                                <section className="flex flex-col items-start text-[25px]">
                                     <span>
                                         {sprite.stage} {sprite.rank}
                                     </span>
@@ -167,9 +172,9 @@ const UserListing = () => {
                                             }
                                         }}
                                         disabled={sprite.marketplace}
-                                        className={`underline cursor-pointer ${
+                                        className={`underline cursor-pointer hover:text-[#FBBB26] ${
                                             sprite.marketplace
-                                                ? "text-gray-400 cursor-not-allowed"
+                                                ? "text-gray-400 pointer-events-none cursor-not-allowed"
                                                 : ""
                                         }`}
                                     >
@@ -179,6 +184,18 @@ const UserListing = () => {
                                                 : "Sell on Marketplace"
                                             : "Start Minting"}
                                     </button>
+                                    {sprite.marketplace && (
+                                        <button
+                                            onClick={() =>
+                                                handleCancelListing(
+                                                    sprite.label
+                                                )
+                                            }
+                                            className="underline cursor-pointer hover:text-[#FBBB26]"
+                                        >
+                                            Cancel?
+                                        </button>
+                                    )}
                                 </section>
                             </li>
                         ))}
