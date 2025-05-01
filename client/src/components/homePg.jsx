@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigationType, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HomePg = () => {
-    const location = useLocation();
-    const navType = useNavigationType();
-    const [showPopup, setShowPopup] = useState(false);
+    const [showNamePopup, setShowNamePopup] = useState(false);
+    const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+    const [playerName, setPlayerName] = useState("");
 
-    // Trigger for New User Popup --- still need connect on how to detect new user
+    // Popup for Name
     useEffect(() => {
-        const cameFromRoot =
-            document.referrer.endsWith("/") || location.state?.from === "/";
-        if (navType === "PUSH" && cameFromRoot) {
-            setShowPopup(true);
+        const isFirstTime = true; // Replace with actual login/new-user logic
+        if (isFirstTime) {
+            setShowNamePopup(true); // show first popup
         }
-    }, [location, navType]);
+    }, []);
 
     // Background for HomePg
     useEffect(() => {
@@ -23,17 +22,32 @@ const HomePg = () => {
         };
     }, []);
 
+    //Enter btn triggers to next popup
+    useEffect(() => {
+        const handleEnter = (e) => {
+            if (e.key === "Enter" && showNamePopup && playerName.trim()) {
+                setShowNamePopup(false);
+                setShowWelcomePopup(true);
+            }
+        };
+        window.addEventListener("keydown", handleEnter);
+        return () => window.removeEventListener("keydown", handleEnter);
+    }, [showNamePopup, playerName]);
+
     // Close popup with ESC key
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === "Escape") setShowPopup(false);
+            if (e.key === "Escape") setShowWelcomePopup(false);
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
     return (
-        <div className="flex w-full relative">
+        <div
+            className="flex w-full relative"
+            aria-hidden={showWelcomePopup || showNamePopup}
+        >
             {/* Book Group */}
             <div className="group">
                 <Link to="/puzzle">
@@ -97,7 +111,6 @@ const HomePg = () => {
             </div>
 
             {/* Fountain Group */}
-
             <div className="group">
                 <Link to="/fountain">
                     <img
@@ -111,13 +124,57 @@ const HomePg = () => {
                 </Link>
             </div>
 
+            {(showWelcomePopup || showNamePopup) && (
+                <div className="fixed inset-0 bg-black opacity-50 z-40 pointer-events-auto" />
+            )}
+
+            {/* New User Name */}
+            {showNamePopup && (
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[30px] z-50 flex flex-col justify-center items-center">
+                    <p className="text-[35px] text-white">
+                        Before you go on your adventure...
+                    </p>
+                    <p className="text-[35px] text-white leading-none">
+                        What is your name?
+                    </p>
+                    <p className="text-[25px] text-[#EA1A26] mb-4">
+                        &#x26A0; Name can NOT be changed, choose wisely!
+                        &#x26A0;
+                    </p>
+                    <input
+                        type="text"
+                        required
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        placeholder="Enter your name"
+                        className="px-4 py-3 mb-4 rounded-[8px] text-[25px] text-white w-[280px] text-center outline-none focus:ring-2 focus:ring-[#FBBB26] shadow-md placeholder-gray-400"
+                    />
+                    <button
+                        className={`px-5 py-2 rounded text-[20px] font-bold transition ${
+                            playerName.trim()
+                                ? "bg-[#FBBB26] hover:bg-yellow-400 cursor-pointer"
+                                : "bg-gray-400 cursor-not-allowed"
+                        }`}
+                        disabled={!playerName.trim()}
+                        onClick={() => {
+                            if (playerName.trim()) {
+                                setShowNamePopup(false);
+                                setShowWelcomePopup(true);
+                            }
+                        }}
+                    >
+                        Confirm
+                    </button>
+                </div>
+            )}
+
             {/* New User Reward Popup */}
-            {showPopup && (
+            {showWelcomePopup && (
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[30px] z-50 flex flex-col justify-center items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
-                        onClick={() => setShowPopup(false)}
+                        onClick={() => setShowWelcomePopup(false)}
                         className="absolute top-[10px] right-[10px] cursor-pointer w-[30px] h-[30px]"
                     />
                     <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none tracking-[1px]">
