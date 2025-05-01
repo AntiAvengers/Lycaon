@@ -104,6 +104,7 @@ const SpritesCollectionPg = () => {
     );
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
+    const [cancelPopup, setCancelPopup] = useState(null);
 
     //Like sprites
     const handleToggleLike = (index) => {
@@ -131,17 +132,15 @@ const SpritesCollectionPg = () => {
     const handleCancelListing = (creature) => {
         if (creature.marketplace) {
             const updated = creaturesList.map((c) =>
-                c.label === creature.label
-                    ? { ...c, marketplace: false }
-                    : c
+                c.label === creature.label ? { ...c, marketplace: false } : c
             );
             setCreatures(updated);
+            setCancelPopup(null);
             console.log(`${creature.name} was removed from the marketplace.`);
         } else {
             console.log(`${creature.name} is not listed on the marketplace.`);
         }
     };
-    
 
     return (
         <div className="w-full flex flex-col items-center justify-start">
@@ -227,7 +226,7 @@ const SpritesCollectionPg = () => {
                                         </span>
                                         <button
                                             onClick={() =>
-                                                handleCancelListing(creature)
+                                                setCancelPopup(creature)
                                             }
                                             className="absolute top-2 left-2 bg-[#FBBB26] text-black text-xs px-2 py-1 rounded-full z-10 cursor-pointer"
                                         >
@@ -279,6 +278,37 @@ const SpritesCollectionPg = () => {
                                         {creature.name}
                                     </span>
                                 </div>
+
+                                {cancelPopup && (
+                                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-evenly">
+                                        <img
+                                            src="/assets/icons/closeBtn.svg"
+                                            alt="closeBtn"
+                                            onClick={() => setCancelPopup(null)}
+                                            className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                                        />
+                                        <img
+                                            src={cancelPopup.src}
+                                            alt={cancelPopup.label}
+                                            className="object-contain max-h-[150px]"
+                                        />
+                                        <span className="text-[25px]">
+                                            {cancelPopup.name}
+                                        </span>
+                                        <p className="text-[25px]">
+                                            Would you like to take it off the
+                                            marketplace?
+                                        </p>
+                                        <button
+                                            onClick={() =>
+                                                handleCancelListing(cancelPopup)
+                                            }
+                                            className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
