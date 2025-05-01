@@ -8,7 +8,7 @@ const HomePg = () => {
 
     // Popup for Name
     useEffect(() => {
-        const isFirstTime = true; // Replace with actual login/new-user logic
+        const isFirstTime = false; // Replace with actual login/new-user logic
         if (isFirstTime) {
             setShowNamePopup(true); // show first popup
         }

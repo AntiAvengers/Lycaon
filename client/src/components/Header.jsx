@@ -4,6 +4,8 @@ import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+const user = { name: "Evasdfasdfasdfasd" };
+
 const Header = () => {
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
@@ -127,6 +129,10 @@ const Header = () => {
                 <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
+                    {/* User In-Game Name when Set */}
+                    {user.name && (
+                        <span className="text-[25px] max-w-[125px] truncate">{user.name}</span>
+                    )}
                     {/* Logout */}
                     <div
                         className="relative"
