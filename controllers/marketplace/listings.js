@@ -67,7 +67,7 @@ export const request_listing_tx = async (req, res) => {
 
         if(simulation.effects.status.status == 'failure') throw simulation.effects.status.error;
 
-        const serialized = await tx.serialize();
+        const serialized = await tx.toJSON();
 
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {
@@ -235,7 +235,6 @@ export const request_cancel_tx = async (req, res) => {
         const snapshot = await marketplace_ref.once("value");
         // const snapshot = await marketplace_ref.orderByChild("id").equalTo(id).once("value");
         
-        //Impossible
         if(!snapshot.exists()) {
             return res.status(400).json({ error: "Listing does not exist for player" });
         }
@@ -264,7 +263,7 @@ export const request_cancel_tx = async (req, res) => {
 
         if(simulation.effects.status.status == 'failure') throw simulation.effects.status.error;
 
-        const serialized = await tx.serialize();
+        const serialized = await tx.toJSON();
 
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {

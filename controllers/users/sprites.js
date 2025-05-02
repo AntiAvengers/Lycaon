@@ -149,7 +149,7 @@ export const request_mint_tx = async (req, res) => {
             throw simulation.effects.status.error;
         }
     
-        const serialized = await tx.serialize();
+        const serialized = await tx.toJSON();
         
         console.log('. . . Created Minting Transaction for address', address);
         return res.status(200).json({ transactionBlock: serialized });

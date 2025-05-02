@@ -87,7 +87,7 @@ db.once('value', snapshot => {
     console.log('. . . Initializing Leaderboard in Database');
     db.update({ leaderboard: default_leaderboard });
   }
-
+ 
   if(!data.game_rules) {
     console.log('. . . Initializing Game Rules in Database');
     db.update({ game_rules: default_game_rules})

@@ -19,7 +19,8 @@ export const get_score_cutoff = () => MAX_COUNT;
 export const load = () => {
     const MAX_COUNT = 2000000;
     const dictionary = fs.readFileSync(dictionary_path, 'UTF-8')
-        .split("\r\n")
+        //"/r/n" is Windows only, below is universal
+        .split(/\r?\n/)
         .map(str => new Object({
             word: str.split(",")[0].toLowerCase(),
             count: parseInt(str.split(",")[1]) > MAX_COUNT ? MAX_COUNT : parseInt(str.split(",")[1])
