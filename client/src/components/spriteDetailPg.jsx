@@ -28,19 +28,20 @@ const sprite = {
 };
 
 const SpritesDetailPg = () => {
-    const [showMint, setShowMint] = useState(false);
-    const [hunger, setHunger] = useState(sprite.hunger);
-    const [foods, setFoods] = useState(initialFoodList);
-    const [isFull, setIsFull] = useState(false);
-    const [isFading, setIsFading] = useState(false);
-    const [minted, setMinted] = useState(sprite.mint);
-    const [market, setMarket] = useState(sprite.marketplace);
-    const [showAmount, setShowAmount] = useState(null);
+    const [showMint, setShowMint] = useState(false); //Mint Popup
+    const [hunger, setHunger] = useState(sprite.hunger); //Sprite hunger level
+    const [foods, setFoods] = useState(initialFoodList); //User Food Inventory
+    const [isFull, setIsFull] = useState(false); //Error message for Sprite Fullness
+    const [isFading, setIsFading] = useState(false); //Fading timer for error message fullness
+    const [minted, setMinted] = useState(sprite.mint); //Sprite minted state
+    const [market, setMarket] = useState(sprite.marketplace); //Sprite maketplace state
+    const [showAmount, setShowAmount] = useState(null); //Value of food being fed
 
     const navigate = useNavigate();
 
-    const maxHunger = 8;
+    const maxHunger = 8; //Max Hunger of Sprite
 
+    //Mint Popup btn trigger
     const handleMintClick = () => {
         if (!minted) {
             setShowMint(true);
@@ -52,21 +53,22 @@ const SpritesDetailPg = () => {
         }
     };
 
-    console.log(minted, market);
-
+    //Closes Mint Popup
     const closeMint = () => {
         setShowMint(false);
     };
 
+    //Mint state change
     const handleMint = () => {
         setMinted(true);
     };
 
-
+    //Marketplace state change
     const handleSell = () => {
         setMarket(true);
     };
 
+    //Feeding
     const handleFeed = (foodValue, foodLabel) => {
         if (hunger >= maxHunger || isFading) {
             // Block feeding while fading
@@ -101,6 +103,7 @@ const SpritesDetailPg = () => {
         setTimeout(() => setShowAmount(null), 1000);
     };
 
+    //Background
     useEffect(() => {
         document.body.classList.add("spriteDetail-bg");
         return () => {
@@ -110,8 +113,9 @@ const SpritesDetailPg = () => {
 
     return (
         <div className="w-full h-[625px] flex flex-row justify-evenly items-center">
-            {/* Food */}
+            {/* Food Inventory*/}
             <FoodInventory foods={foods} onFeed={handleFeed} />
+            {/* Food Meter and Sprite Gif */}
             <section className="w-[496px] h-[543px] rounded-[10px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
                 {showAmount && (
@@ -133,6 +137,7 @@ const SpritesDetailPg = () => {
                 />
             </section>
 
+            {/* Fullness Popup */}
             {isFull && (
                 <div
                     className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
@@ -144,7 +149,7 @@ const SpritesDetailPg = () => {
                 </div>
             )}
 
-            {/* Sprite */}
+            {/* Sprite Description Box*/}
             <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
                 <SpritesInfo sprite={sprite} />
                 <button
@@ -159,7 +164,7 @@ const SpritesDetailPg = () => {
                 </button>
             </section>
 
-            {/* Minting Comp Popup */}
+            {/* Mint Popup */}
             {showMint && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
                     <MintPg
@@ -167,8 +172,8 @@ const SpritesDetailPg = () => {
                         sprite={sprite}
                         onMint={handleMint}
                         onSell={handleSell}
-                        minted = {minted}
-                        market = {market}
+                        minted={minted}
+                        market={market}
                     />
                 </div>
             )}
