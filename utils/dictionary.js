@@ -26,6 +26,6 @@ export const load = () => {
             count: parseInt(str.split(",")[1]) > MAX_COUNT ? MAX_COUNT : parseInt(str.split(",")[1])
         }))
         .sort((a,b) => a.count < b.count ? -1 : 1);
-    
+        
     return dictionary;
 }

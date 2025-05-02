@@ -17,6 +17,7 @@ import PantryPg from "./components/pantryPg.jsx";
 import MarketPg from "./components/marketPg.jsx";
 import NotFoundPg from "./components/NFP.jsx";
 import Layout from './components/layout.jsx';
+import WalletReconnect from "./components/walletReconnect.jsx";
 
 const { networkConfig } = createNetworkConfig({
 	localnet: { url: getFullnodeUrl('localnet') },
@@ -34,6 +35,7 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
             <SuiClientProvider networks={networkConfig} defaultNetwork={NODE}>
             <WalletProvider autoConnect={true} storage={localStorage} storageKey={"sui"}>
+            <WalletReconnect />
             <Router>
                 <AuthProvider>
                 <Routes>

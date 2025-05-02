@@ -28,7 +28,7 @@ const HighscoreBox = () => {
     
                 return () => unsubscribe();
             }
-        }, []);
+        }, [connectionStatus]);
 
     return (
         <div className="w-full h-[81px] pt-[5px] bg-[url('/assets/bg/highscore-border.svg')] bg-cover bg-center flex flex-col justify-between items-center ">
@@ -36,7 +36,7 @@ const HighscoreBox = () => {
                 Your High Score
             </h1>
             <span className="text-[50px] leading-none m-0 p-0">
-                {highscore} Words
+                {highscore !== -1 && `${highscore} Words`}
             </span>
         </div>
     );
