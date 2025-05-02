@@ -8,16 +8,16 @@ import MailIcon from "@mui/icons-material/Mail";
 
 const user = { name: "Evasdfasdfasdfasd" };
 
-const notifications = [
-    { id: 1, message: "New message", read: false },
-    { id: 2, message: "Friend request", read: false },
-    { id: 3, message: "Update available", read: true },
-];
-
 const Header = () => {
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
     const [message, setMessage] = useState(""); //puzzle message
+    const [notifications, setNotifications] = useState([
+        { id: 1, message: "New message: You sprite nemo has been sold. Congrats!", read: false },
+        { id: 2, message: "Friend request: David has requested to be friends", read: false },
+        { id: 3, message: "Update available: Server was just updated at 1PM", read: true },
+    ]);
+
     const [notificationOpen, setNotificationOpen] = useState(false);
 
     const menuRef1 = useRef(null); //menu
@@ -162,7 +162,9 @@ const Header = () => {
                     >
                         <button onClick={toggleNotificationDropdown}>
                             <Badge
-                                badgeContent={notifications.length}
+                                badgeContent={
+                                    notifications.filter((n) => !n.read).length
+                                }
                                 color="primary"
                             >
                                 <MailIcon className="text-white cursor-pointer" />
@@ -170,19 +172,33 @@ const Header = () => {
                         </button>
 
                         {notificationOpen && (
-                            <div className="absolute right-0 mt-[7px] w-[250px] bg-white text-black rounded-lg shadow-xl z-50">
+                            <div className="absolute right-0 mt-[7px] w-[300px] w-m-[300px] bg-white text-black rounded-lg shadow-xl z-50">
                                 {notifications.length === 0 ? (
                                     <div className="p-4 text-gray-500">
                                         No notifications
                                     </div>
                                 ) : (
-                                    notifications.map((n) => (
+                                    notifications.map((n, index) => (
                                         <div
                                             key={n.id}
-                                            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                                            onMouseEnter={() => {
+                                                if (!n.read) {
+                                                    setNotifications((prev) =>
+                                                        prev.map((notif, i) =>
+                                                            i === index
+                                                                ? {
+                                                                      ...notif,
+                                                                      read: true,
+                                                                  }
+                                                                : notif
+                                                        )
+                                                    );
+                                                }
+                                            }}
+                                            className={`px-4 py-2 cursor-pointer rounded-lg hover:bg-gray-100 transition-colors duration-300 text-wrap ${
                                                 n.read
                                                     ? "text-gray-600"
-                                                    : "font-semibold"
+                                                    : "text-[#EA1A26]"
                                             }`}
                                         >
                                             {n.message}
