@@ -97,14 +97,14 @@ const SpritesCollectionPg = () => {
             mint: true,
             marketplace: false,
         },
-    ]);
+    ]); //User Creatures
 
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
-    );
+    ); //Liked List
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
-    const [cancelPopup, setCancelPopup] = useState(null);
+    const [cancelPopup, setCancelPopup] = useState(null); //Cancel popup
 
     //Like sprites
     const handleToggleLike = (index) => {
@@ -144,7 +144,7 @@ const SpritesCollectionPg = () => {
 
     return (
         <div className="w-full flex flex-col items-center justify-start">
-            {/* If user has no creatures */}
+            {/* User has no sprites */}
             {creaturesList.length === 0 && (
                 <div
                     className="w-[890px] h-[598px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
@@ -167,7 +167,7 @@ const SpritesCollectionPg = () => {
                 </div>
             )}
 
-            {/* Only show content below if there are creatures */}
+            {/* User with sprites */}
             {creaturesList.length > 0 && (
                 <>
                     <h1 className="text-[80px] text-center">
@@ -269,7 +269,7 @@ const SpritesCollectionPg = () => {
                                         />
                                     </Link>
                                 </div>
-                                {/* Sprties Descipt */}
+                                {/* Sprites Descipt */}
                                 <div className="flex flex-col items-start">
                                     <span className="text-[15px] font-bold mt-2">
                                         {creature.rank}
@@ -279,6 +279,7 @@ const SpritesCollectionPg = () => {
                                     </span>
                                 </div>
 
+                                {/* Cancel Popup */}
                                 {cancelPopup && (
                                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
                                         <img
