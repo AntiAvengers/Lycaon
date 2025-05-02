@@ -22,11 +22,27 @@ const ConnectPg = () => {
 
     //Changes the title of the web page to "Lycaon"
     useEffect(() => {
-        document.title = "Lycaon - Login"; 
+        document.title = "Lycaon - Login";
+
+        // console.log('Wallet Connection Status:', connectionStatus);
+        // if(connectionStatus == 'disconnected') {
+        //     console.log(currentWallet);
+        //     const sui_wallet = wallets.filter(obj => obj.name.includes("slush"))
+        //     [0];
+        //     connect({ sui_wallet }, { onSuccess: console.log(connectionStatus) });
+        //     console.log('Connecting Wallet')
+        // }
+
+        // console.log('Connection Status:', connectionStatus);
+        
+        
+
+        // console.log(wallets[0]);
+        // console.log(wallets[0].accounts[0].address)
     }, []);
 
     const Handle_Login = async (event) => {
-
+        console.log("Handle Login execute");
         const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
         ? import.meta.env.VITE_DEV_URL
         : '';
@@ -41,15 +57,12 @@ const ConnectPg = () => {
             }
         );
         const { UUID } = await response.json();
-        console.log(UUID);
         const message_to_sign = "Please sign the following randomly generated message to confirm your wallet ownership\n\n" + UUID;
-        // const message_to_sign = 'hello';
 
         signPersonalMessage(
             { message: new TextEncoder().encode(message_to_sign) }, 
             {
                 onSuccess: async (result) => {
-                    console.log(result);
                     const loginResponse = await fetch(API_BASE_URL + "auth/login/verify_signature", 
                         {
                             method: "POST",

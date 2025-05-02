@@ -126,6 +126,7 @@ db.once('value', snapshot => {
 });
 
 export const database = admin.database();
+export const auth = admin.auth()
 export const schema = {
   default_user, 
   default_game_session, 

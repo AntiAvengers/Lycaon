@@ -54,11 +54,17 @@ const StartGame = (parent, injected = {}) => {
         }
 
         // Ensure the game is active before resizing
-        if (game.scale) {
-            // Resize the Phaser game canvas
-            game.scale.resize(newWidth, newHeight);
-            game.scale.refresh(); // Refresh the scale manager to apply the changes
+        //Added to stop the console spamming the error of passing null in resizing
+        try {
+            if (game.scale) {
+                // Resize the Phaser game canvas
+                game.scale.resize(newWidth, newHeight);
+                game.scale.refresh(); // Refresh the scale manager to apply the changes
+            }
+        } catch(error) {
+
         }
+        
 
         // Safely access the active scene and update UI
         const activeScene = game.scene.getScenes(true)[0];

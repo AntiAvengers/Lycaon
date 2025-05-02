@@ -101,5 +101,6 @@ export const pull = async (req, res) => {
     }
     collection.update(output);
     user_ref.update({ pages: (pages - results.length) });
-    return res.status(200).json({ response: output });
+    
+    return res.status(200).json({ response: results });
 }

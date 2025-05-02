@@ -13,14 +13,14 @@ const AboutPg = () => {
     return (
         <div className="w-full bg-[#FFFFFF] flex flex-col px-[100px] py-[50px] gap-[50px]">
             {/* Synopsis of Game */}
-            <p className="w-[722px] text-[25px]">
+            <div className="w-[722px] text-[25px]">
                 Lycaon, a powerful summoner, created the Codex Bestiarum to
                 control all beasts but was trapped inside it by a forbidden
                 ritual. Now, the Codex tempts new readers with power, guiding
                 them toward the same fate. Whispers say Lycaon’s spirit still
                 waits within. Will you finish the summoning—or become its next
                 prisoner?
-            </p>
+            </div>
 
             {/* Pic Section About Game */}
             <section className="text-[37px] flex flex-col gap-[40px]">
@@ -43,7 +43,7 @@ const AboutPg = () => {
             {/* Story of Game */}
             <section className="w-[977px]">
                 <h1 className="text-[37px]">Read the lore</h1>
-                <p className="text-[25px]">
+                <div className="text-[25px]">
                     Long ago, Lycaon was a brilliant summoner who sought to
                     catalog and control every creature that walked between
                     worlds. His obsession led him to craft the Codex Bestiarum,
@@ -79,7 +79,7 @@ const AboutPg = () => {
                     <div className="h-[15px]" />
                     Or will you unlock a secret that should have remained lost
                     forever?
-                </p>
+                </div>
             </section>
         </div>
     );

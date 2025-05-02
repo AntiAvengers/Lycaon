@@ -33,7 +33,7 @@ const App = () => {
         <div id="app" >
             <QueryClientProvider client={queryClient}>
             <SuiClientProvider networks={networkConfig} defaultNetwork={NODE}>
-            <WalletProvider autoConnect={true} storage={localStorage} storageKey="walletStorage">
+            <WalletProvider autoConnect={true} storage={localStorage} storageKey={"sui"}>
             <Router>
                 <AuthProvider>
                 <Routes>

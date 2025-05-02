@@ -8,6 +8,7 @@ const HomePg = () => {
 
     // Trigger for New User Popup --- still need connect on how to detect new user
     useEffect(() => {
+        document.title = "Lycaon - Home"; 
         const cameFromRoot =
             document.referrer.endsWith("/") || location.state?.from === "/";
         if (navType === "PUSH" && cameFromRoot) {

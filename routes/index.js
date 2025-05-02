@@ -10,9 +10,7 @@ import users_routes from './users/index.js';
 
 // API Routes
 router.use("/auth", auth_routes);
-
 router.use(authenticate_JWT);
-
 router.use("/game", game_routes);
 router.use("/marketplace", marketplace_routes);
 router.use("/users", users_routes);
