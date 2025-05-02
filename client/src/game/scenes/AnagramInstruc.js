@@ -474,12 +474,6 @@ export class AnagramInstruc extends Scene {
             drawConfirmBg(0x16296c, 4, 4);
             this.confirmText.setY(this.scale.height / 2 + 252);
             // this.changeScene();
-        };
-
-        const handleConfirmUp = () => {
-            drawConfirmBg(0x4a63e4);
-            this.confirmText.setY(this.scale.height / 2 + 250);
-
             const use_key = this.game.injected?.AUTH_API_CALL
             if (use_key) {
                 use_key('game/puzzle/use-key')
@@ -492,6 +486,11 @@ export class AnagramInstruc extends Scene {
                     })
                     .catch(err => console.error('API call error:', err));
             }
+        };
+
+        const handleConfirmUp = () => {
+            drawConfirmBg(0x4a63e4);
+            this.confirmText.setY(this.scale.height / 2 + 250);
         };
 
         const handleConfirmOut = () => {
