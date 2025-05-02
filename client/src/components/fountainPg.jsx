@@ -18,8 +18,8 @@ const sprite = {
 };
 
 const FountainPg = () => {
-    const [showRate, setShowRate] = useState(false);
-    const [pulledSprites, setPulledSprites] = useState([]);
+    const [showRate, setShowRate] = useState(false); //Rate Popup
+    const [pulledSprites, setPulledSprites] = useState([]); //Pulls
 
     //For Rate Btn
     const closeRate = () => setShowRate(false);
@@ -37,6 +37,7 @@ const FountainPg = () => {
     //Closes Pull Popup
     const closePullPopup = () => setPulledSprites([]);
 
+    //Background
     useEffect(() => {
         document.body.classList.add("fountain-bg");
         return () => {
@@ -82,8 +83,6 @@ const FountainPg = () => {
                 >
                     Rate Details
                 </button>
-
-                {/* Rate Popup  */}
                 {showRate && (
                     <div className="w-[407px] h-[304px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center justify-between">
                         <img
