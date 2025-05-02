@@ -13,16 +13,27 @@ const Header = () => {
     const [profile, setProfile] = useState(false); //logout
     const [message, setMessage] = useState(""); //puzzle message
     const [notifications, setNotifications] = useState([
-        { id: 1, message: "New message: You sprite nemo has been sold. Congrats!", read: false },
-        { id: 2, message: "Friend request: David has requested to be friends", read: false },
-        { id: 3, message: "Update available: Server was just updated at 1PM", read: true },
-    ]);
-
-    const [notificationOpen, setNotificationOpen] = useState(false);
+        {
+            id: 1,
+            message: "New message: You sprite nemo has been sold. Congrats!",
+            read: false,
+        },
+        {
+            id: 2,
+            message: "Friend request: David has requested to be friends",
+            read: false,
+        },
+        {
+            id: 3,
+            message: "Update available: Server was just updated at 1PM",
+            read: true,
+        },
+    ]); //notifications
+    const [notificationOpen, setNotificationOpen] = useState(false); //popup for notifications
 
     const menuRef1 = useRef(null); //menu
     const menuRef2 = useRef(null); // logout
-    const notificationRef = useRef(null);
+    const notificationRef = useRef(null); //notification
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -56,6 +67,7 @@ const Header = () => {
         console.log("Dropdown profile header clicked");
     };
 
+    //Opens Nofifications
     const toggleNotificationDropdown = () => {
         setNotificationOpen((prev) => !prev);
     };
@@ -88,6 +100,7 @@ const Header = () => {
         setOpen(false);
     }, [location.pathname]);
 
+    //Navigations for Menu1
     const navItems = [
         { to: "/home", label: "Home" },
         { to: "/puzzle", label: "Puzzle", action: handlePuzzleClick },
@@ -131,7 +144,7 @@ const Header = () => {
                             </ul>
                         )}
                     </div>
-                    {/* Logo */}
+                    {/* Logo + Title */}
                     <button
                         onClick={handleHomeClick}
                         className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
@@ -145,11 +158,11 @@ const Header = () => {
                     </button>
                 </section>
 
-                {/* Right Section: Currency, Wallet, Profile */}
+                {/* Right Section: Currency, Wallet, UserName, Notification, Logout*/}
                 <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
-                    {/* User In-Game Name when Set */}
+                    {/* UserName when Set */}
                     {user.name && (
                         <span className="text-[25px] max-w-[125px] truncate">
                             {user.name}
