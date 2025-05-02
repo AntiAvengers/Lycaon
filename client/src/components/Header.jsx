@@ -12,15 +12,17 @@ const notifications = [
     { id: 1, message: "New message", read: false },
     { id: 2, message: "Friend request", read: false },
     { id: 3, message: "Update available", read: true },
-  ];  
+];
 
 const Header = () => {
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
     const [message, setMessage] = useState(""); //puzzle message
+    const [notificationOpen, setNotificationOpen] = useState(false);
 
     const menuRef1 = useRef(null); //menu
     const menuRef2 = useRef(null); // logout
+    const notificationRef = useRef(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -54,6 +56,10 @@ const Header = () => {
         console.log("Dropdown profile header clicked");
     };
 
+    const toggleNotificationDropdown = () => {
+        setNotificationOpen((prev) => !prev);
+    };
+
     // Memorized function to prevent unnecessary re-creations
     const handleOutsideClick = useCallback((event) => {
         if (menuRef1.current && !menuRef1.current.contains(event.target)) {
@@ -61,6 +67,12 @@ const Header = () => {
         }
         if (menuRef2.current && !menuRef2.current.contains(event.target)) {
             setProfile(false);
+        }
+        if (
+            notificationRef.current &&
+            !notificationRef.current.contains(event.target)
+        ) {
+            setNotificationOpen(false);
         }
     }, []);
 
@@ -144,11 +156,43 @@ const Header = () => {
                         </span>
                     )}
                     {/* Notification */}
-                    <section className="pr-[10px]">
-                        <Badge badgeContent={notifications.length} color="primary">
-                            <MailIcon className="text-white" />
-                        </Badge>
+                    <section
+                        className="relative pr-[10px]"
+                        ref={notificationRef}
+                    >
+                        <button onClick={toggleNotificationDropdown}>
+                            <Badge
+                                badgeContent={notifications.length}
+                                color="primary"
+                            >
+                                <MailIcon className="text-white cursor-pointer" />
+                            </Badge>
+                        </button>
+
+                        {notificationOpen && (
+                            <div className="absolute right-0 mt-[7px] w-[250px] bg-white text-black rounded-lg shadow-xl z-50">
+                                {notifications.length === 0 ? (
+                                    <div className="p-4 text-gray-500">
+                                        No notifications
+                                    </div>
+                                ) : (
+                                    notifications.map((n) => (
+                                        <div
+                                            key={n.id}
+                                            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                                                n.read
+                                                    ? "text-gray-600"
+                                                    : "font-semibold"
+                                            }`}
+                                        >
+                                            {n.message}
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
                     </section>
+
                     {/* Logout */}
                     <div
                         className="relative"
