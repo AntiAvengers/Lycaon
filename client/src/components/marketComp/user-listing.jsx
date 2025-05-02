@@ -75,6 +75,7 @@ const UserListing = () => {
     const [showMint, setShowMint] = useState(false);
     const [sprite, setSprites] = useState(creaturesList);
     const [selectedSprite, setSelectedSprite] = useState(null);
+    const [cancelPopup, setCancelPopup] = useState(null);
 
     const handleMintClick = (clickedSprite) => {
         setSelectedSprite(clickedSprite);
@@ -95,17 +96,6 @@ const UserListing = () => {
         setSelectedSprite((prev) => ({ ...prev, mint: true }));
     };
 
-    // const btnSell = (clickedSprite) => {
-    //     setSelectedSprite({ ...clickedSprite, marketplace: true });
-    //     setSprites((prev) =>
-    //         prev.map((s) =>
-    //             s.label === clickedSprite.label
-    //                 ? { ...s, marketplace: true }
-    //                 : s
-    //         )
-    //     );
-    // };
-
     const handleSell = () => {
         setSprites((prev) =>
             prev.map((s) =>
@@ -115,6 +105,24 @@ const UserListing = () => {
             )
         );
         setSelectedSprite((prev) => ({ ...prev, marketplace: true }));
+    };
+
+    // Cancel marketplace listing
+    const handleCancelListing = (label) => {
+        setSprites((prev) =>
+            prev.map((s) =>
+                s.label === label ? { ...s, marketplace: false } : s
+            )
+        );
+
+        // Also update selectedSprite if it's the one being canceled
+        setSelectedSprite((prev) =>
+            prev && prev.label === label
+                ? { ...prev, marketplace: false }
+                : prev
+        );
+
+        setCancelPopup(null);
     };
 
     return (
@@ -149,7 +157,7 @@ const UserListing = () => {
                                     alt={sprite.label}
                                     className="object-contain bg-[#E9E9E9]"
                                 />
-                                <section className="flex flex-col text-[25px]">
+                                <section className="flex flex-col items-start text-[25px]">
                                     <span>
                                         {sprite.stage} {sprite.rank}
                                     </span>
@@ -167,9 +175,9 @@ const UserListing = () => {
                                             }
                                         }}
                                         disabled={sprite.marketplace}
-                                        className={`underline cursor-pointer ${
+                                        className={`underline cursor-pointer hover:text-[#FBBB26] ${
                                             sprite.marketplace
-                                                ? "text-gray-400 cursor-not-allowed"
+                                                ? "text-gray-400 pointer-events-none cursor-not-allowed"
                                                 : ""
                                         }`}
                                     >
@@ -179,6 +187,16 @@ const UserListing = () => {
                                                 : "Sell on Marketplace"
                                             : "Start Minting"}
                                     </button>
+                                    {sprite.marketplace && (
+                                        <button
+                                            onClick={() =>
+                                                setCancelPopup(sprite)
+                                            }
+                                            className="underline cursor-pointer hover:text-[#FBBB26]"
+                                        >
+                                            Cancel?
+                                        </button>
+                                    )}
                                 </section>
                             </li>
                         ))}
@@ -186,6 +204,36 @@ const UserListing = () => {
                     <Link to="/collection" className="underline text-[25px]">
                         View your collection
                     </Link>
+
+                    {cancelPopup && (
+                        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
+                            <img
+                                src="/assets/icons/closeBtn.svg"
+                                alt="closeBtn"
+                                onClick={() => setCancelPopup(null)}
+                                className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                            />
+                            <img
+                                src={cancelPopup.still}
+                                alt={cancelPopup.label}
+                                className="object-contain max-h-[150px]"
+                            />
+                            <span className="text-[25px]">
+                                {cancelPopup.name}
+                            </span>
+                            <p className="text-[25px] text-center">
+                                Would you like to take it off the marketplace?
+                            </p>
+                            <button
+                                onClick={() =>
+                                    handleCancelListing(cancelPopup.label)
+                                }
+                                className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
 

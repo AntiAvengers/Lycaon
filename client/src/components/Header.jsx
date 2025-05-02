@@ -3,6 +3,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+
+const user = { name: "Evasdfasdfasdfasd" };
+
+const notifications = [
+    { id: 1, message: "New message", read: false },
+    { id: 2, message: "Friend request", read: false },
+    { id: 3, message: "Update available", read: true },
+  ];  
 
 const Header = () => {
     const [open, setOpen] = useState(false); // menu
@@ -127,6 +137,18 @@ const Header = () => {
                 <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
+                    {/* User In-Game Name when Set */}
+                    {user.name && (
+                        <span className="text-[25px] max-w-[125px] truncate">
+                            {user.name}
+                        </span>
+                    )}
+                    {/* Notification */}
+                    <section className="pr-[10px]">
+                        <Badge badgeContent={notifications.length} color="primary">
+                            <MailIcon className="text-white" />
+                        </Badge>
+                    </section>
                     {/* Logout */}
                     <div
                         className="relative"

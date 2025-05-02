@@ -3,107 +3,108 @@ import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const creaturesList = [
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature1",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature2",
-        to: "/collection/spriteDetail",
-        rank: "Littles",
-        name: "Slimey",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature3",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature4",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: true,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature5",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: true,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature6",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature7",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature8",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature9",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-];
-
 const userData = { collection: 30 };
 
 const SpritesCollectionPg = () => {
+    const [creaturesList, setCreatures] = useState([
+        {
+            src: "/assets/sprites/celestial-sprite.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature1",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/sprites/slime-sprite.gif",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature2",
+            to: "/collection/spriteDetail",
+            rank: "Littles",
+            name: "Slimey",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/sprites/celestial-sprite.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature3",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/star.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature4",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: true,
+        },
+        {
+            src: "/assets/sprites/slime-sprite.gif",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature5",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: true,
+        },
+        {
+            src: "/assets/star.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature6",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/star.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature7",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/sprites/slime-sprite.gif",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature8",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+        {
+            src: "/assets/star.png",
+            still: "/assets/stillSprites/still-slime.svg",
+            label: "creature9",
+            to: "/collection/spriteDetail",
+            rank: "Elite",
+            name: "Nemo",
+            mint: true,
+            marketplace: false,
+        },
+    ]);
+
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
     );
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
+    const [cancelPopup, setCancelPopup] = useState(null);
 
     //Like sprites
     const handleToggleLike = (index) => {
@@ -125,6 +126,20 @@ const SpritesCollectionPg = () => {
 
         updatedLikes[index] = !updatedLikes[index];
         setLikedList(updatedLikes);
+    };
+
+    // Cancel marketplace listing
+    const handleCancelListing = (creature) => {
+        if (creature.marketplace) {
+            const updated = creaturesList.map((c) =>
+                c.label === creature.label ? { ...c, marketplace: false } : c
+            );
+            setCreatures(updated);
+            setCancelPopup(null);
+            console.log(`${creature.name} was removed from the marketplace.`);
+        } else {
+            console.log(`${creature.name} is not listed on the marketplace.`);
+        }
     };
 
     return (
@@ -201,20 +216,34 @@ const SpritesCollectionPg = () => {
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
-                                className={`flex flex-col items-start justify-between ${
-                                    creature.marketplace
-                                        ? "opacity-50 filter grayscale pointer-events-none cursor-not-allowed"
-                                        : ""
-                                }`}
+                                className="relative flex flex-col items-start justify-between"
                             >
-                                {/* Badge */}
+                                {/* Badge for Cancel? + Listed*/}
                                 {creature.marketplace && (
-                                    <span className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-full z-10">
-                                        Listed
-                                    </span>
+                                    <div>
+                                        <span className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-full z-10">
+                                            Listed
+                                        </span>
+                                        <button
+                                            onClick={() =>
+                                                setCancelPopup(creature)
+                                            }
+                                            className="absolute top-2 left-2 bg-[#FBBB26] text-black text-xs px-2 py-1 rounded-full z-10 cursor-pointer"
+                                        >
+                                            Cancel?
+                                        </button>
+                                    </div>
                                 )}
 
-                                <div className="w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative">
+                                <div
+                                    className={`w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative 
+                                     ${
+                                         creature.marketplace
+                                             ? "opacity-50 grayscale pointer-events-none"
+                                             : ""
+                                     }
+                                    `}
+                                >
                                     {/* Like Btn */}
                                     <button
                                         onClick={() => handleToggleLike(index)}
@@ -249,6 +278,37 @@ const SpritesCollectionPg = () => {
                                         {creature.name}
                                     </span>
                                 </div>
+
+                                {cancelPopup && (
+                                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
+                                        <img
+                                            src="/assets/icons/closeBtn.svg"
+                                            alt="closeBtn"
+                                            onClick={() => setCancelPopup(null)}
+                                            className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                                        />
+                                        <img
+                                            src={cancelPopup.still}
+                                            alt={cancelPopup.label}
+                                            className="object-contain max-h-[150px]"
+                                        />
+                                        <span className="text-[25px]">
+                                            {cancelPopup.name}
+                                        </span>
+                                        <p className="text-[25px] text-center">
+                                            Would you like to take it off the
+                                            marketplace?
+                                        </p>
+                                        <button
+                                            onClick={() =>
+                                                handleCancelListing(cancelPopup)
+                                            }
+                                            className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
