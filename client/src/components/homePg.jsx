@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const HomePg = () => {
-    const [showNamePopup, setShowNamePopup] = useState(false);
-    const [showWelcomePopup, setShowWelcomePopup] = useState(false);
-    const [playerName, setPlayerName] = useState("");
+    const [showNamePopup, setShowNamePopup] = useState(false); //new user Name popup
+    const [showWelcomePopup, setShowWelcomePopup] = useState(false); //welcome popup
+    const [playerName, setPlayerName] = useState(""); //Username
 
     // Popup for Name
     useEffect(() => {
@@ -22,7 +22,7 @@ const HomePg = () => {
         };
     }, []);
 
-    //Enter btn triggers to next popup
+    //Enter btn triggers to next popup (Username >>> Welcome)
     useEffect(() => {
         const handleEnter = (e) => {
             if (e.key === "Enter" && showNamePopup && playerName.trim()) {
@@ -124,11 +124,12 @@ const HomePg = () => {
                 </Link>
             </div>
 
+            {/* Background dimmed and prevents user from interacting w/ homePg */}
             {(showWelcomePopup || showNamePopup) && (
                 <div className="fixed inset-0 bg-black opacity-50 z-40 pointer-events-auto" />
             )}
 
-            {/* New User Name */}
+            {/* New UserName */}
             {showNamePopup && (
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[30px] z-50 flex flex-col justify-center items-center">
                     <p className="text-[35px] text-white">
