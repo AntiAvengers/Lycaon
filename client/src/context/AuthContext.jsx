@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
               {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                  'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     uid: uuidv4(),
