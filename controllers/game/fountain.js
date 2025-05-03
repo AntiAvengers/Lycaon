@@ -104,3 +104,19 @@ export const pull = async (req, res) => {
     
     return res.status(200).json({ response: results });
 }
+
+export const get_pull_rates = async (req, res) => {
+    const output = [];
+
+    const total_weight = Object.values(rarity)
+        .map(obj => obj.pull_rate)
+        .reduce((a,b) => a+b);
+    
+    for(const key in rarity) {
+        const { pull_rate } = rarity[key];
+        const percentage = pull_rate / total_weight;
+        output.push({ name: key, percentage: percentage });
+    }
+
+    return res.status(200).json({ response: output });
+}

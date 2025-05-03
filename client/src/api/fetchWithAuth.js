@@ -20,7 +20,7 @@ export async function fetchWithAuth(url, options = {}, accessToken, refreshAcces
       let response = await makeRequest(accessToken);
   
       if (response.status === 403) {
-        console.log('whale oil beef hooked');
+        console.log('Refreshing Access Token');
         try {
           const newToken = await refreshAccessToken();
           setAccessToken(newToken);
