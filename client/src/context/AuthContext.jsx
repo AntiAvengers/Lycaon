@@ -71,7 +71,10 @@ export function AuthProvider({ children }) {
         if (user) {
           console.log('Firebase: Client Connection Successful');
         } else {
-          console.log('Firebase: Client Connection Failed');
+          if(accessToken) {
+            authenticate();
+          }
+          console.log('Firebase: Client Connection Failed/Logged Out');
         }
     });
 

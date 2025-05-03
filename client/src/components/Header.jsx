@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { getAuth, signOut } from 'firebase/auth';
+import { app } from '../firebase/firebaseConfig.js';
+
 import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -26,6 +30,21 @@ const Header = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+
+    //Logout
+    const logout = async () => {
+        //Delete Refresh Token
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+          ? import.meta.env.VITE_DEV_URL
+          : '';
+          
+        const URL = API_BASE_URL + "auth/logout/";
+        await fetch(URL, { method: 'POST', credentials: 'include' });
+
+        //Logout of Firebase
+        const auth = getAuth(app);
+        signOut(auth);
+    }
 
     // Game Logo directory
     const handleHomeClick = () => {
@@ -221,7 +240,12 @@ const Header = () => {
                                 <Link
                                     to="/"
                                     aria-label="Logs Out back to SignIn"
-                                    onClick={() => setProfile(false)}
+                                    onClick={() => 
+                                        { 
+                                            setProfile(false);
+                                            logout();
+                                        }
+                                    }
                                     className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
                                 >
                                     Log Out

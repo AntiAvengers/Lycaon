@@ -131,7 +131,7 @@ const FountainPg = () => {
 
             return () => unsubscribe();
         }
-    }, [pages, connectionStatus])
+    }, [connectionStatus])
 
     useEffect(() => {
         document.body.classList.add("fountain-bg");

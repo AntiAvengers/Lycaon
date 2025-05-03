@@ -4,7 +4,7 @@ import { ref, onValue } from 'firebase/database';
 
 import SHA256 from 'crypto-js/sha256';
 
-import { useConnectWallet, useCurrentWallet, useWallets, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { useConnectWallet, useCurrentWallet, useWallets } from '@mysten/dapp-kit';
 
 // const user = { highscore: -1 };
 
