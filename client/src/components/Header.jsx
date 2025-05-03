@@ -185,7 +185,7 @@ const Header = () => {
                         </button>
 
                         {notificationOpen && (
-                            <div className="absolute right-0 mt-[7px] w-[300px] w-m-[300px] bg-white text-black rounded-lg shadow-xl z-50">
+                            <div className="absolute right-0 mt-[7px] w-[300px] max-w-[300px] bg-white text-black rounded-lg shadow-xl z-50">
                                 {notifications.length === 0 ? (
                                     <div className="p-4 text-gray-500">
                                         No notifications

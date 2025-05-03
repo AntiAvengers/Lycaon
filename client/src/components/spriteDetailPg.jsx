@@ -47,7 +47,6 @@ const SpritesDetailPg = () => {
             setShowMint(true);
         } else if (minted && !market) {
             setShowMint(true);
-            console.log(minted, market);
         } else if (minted && market) {
             navigate("/marketplace");
         }
@@ -116,7 +115,7 @@ const SpritesDetailPg = () => {
             {/* Food Inventory*/}
             <FoodInventory foods={foods} onFeed={handleFeed} />
             {/* Food Meter and Sprite Gif */}
-            <section className="w-[496px] h-[543px] rounded-[10px] p-[15px] relative flex items-end justify-center">
+            <section className="w-[496px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
                 {showAmount && (
                     <span
