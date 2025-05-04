@@ -159,6 +159,8 @@ export const execute_listing_tx = async (req, res) => {
             const marketplace_ref = database.ref(`marketplace/${hashed}`);
             const snapshot = await marketplace_ref.once("value");
 
+            //NEED TO ADD LISTING_UUID TO COLLECTION/${HASHED}/${UUID} -> as a property in sprite stats, defaults to false
+
             //First listing
             if(!snapshot.exists()) {
                 marketplace_ref.set({ [0]: listing_obj });

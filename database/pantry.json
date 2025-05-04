@@ -1,0 +1,22 @@
+{
+    "Apples": {
+        "id": 1,
+        "value": 1,
+        "cost": 500
+    },
+    "Cherries": {
+        "id": 2,
+        "value": 2,
+        "cost": 900
+    },
+    "Chicken": {
+        "id": 3,
+        "value": 3,
+        "cost": 1400
+    },
+    "Steak": {
+        "id": 4,
+        "value": 4,
+        "cost": 1800
+    }
+}

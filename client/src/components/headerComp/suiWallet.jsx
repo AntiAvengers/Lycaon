@@ -18,12 +18,13 @@ const SuiWallet = () => {
               coinType: '0x2::sui::SUI', // This is the SUI coin type
             });
 
-            //balance.totalBalance = MIST (1 SUI = 1 Billion Mist)
+            // balance.totalBalance = MIST (1 SUI = 1 Billion Mist)
+            const rounded_down = Math.floor(balance.totalBalance / 1_000_000_000 * 100) / 100;
             const formatted = new Intl.NumberFormat('en-US', {
-                style: 'decimal',
-                minimumFractionDigits: 3,
-                maximumFractionDigits: 6,
-              }).format(balance.totalBalance / 1_000_000_000);
+              style: 'decimal',
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(rounded_down);
 
             setSuiCoins(formatted)
           } catch (error) {

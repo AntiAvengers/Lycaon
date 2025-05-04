@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { database } from '../firebase/firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+
+import SHA256 from 'crypto-js/sha256';
+
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
+
+import { useCurrentWallet} from '@mysten/dapp-kit';
+
+import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
 
 import FoodInventory from "./spriteDetailComp/foodInventory";
 import SpritesInfo from "./spriteDetailComp/spriteInfo";
 import FoodMeter from "./spriteDetailComp/foodMeter";
 import MintPg from "./mintPg";
+import { getAge } from "../utils/getAge";
 
 const initialFoodList = [
     { src: "/assets/foods/apple.svg", label: "apple", amt: 4, value: 1 },
@@ -20,6 +33,7 @@ const sprite = {
     hunger: 4,
     age: 5,
     personality: ["Happy", "Adventurous"],
+    //Need character limit on details
     details:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus libero sit amet egestas accumsan. Sed massa sem, convallis et fringilla lacinia, faucibus sed augue.",
     mint: false,
@@ -27,7 +41,19 @@ const sprite = {
     evo: true,
 };
 
+const food_SVGs = {
+    Apples: '/assets/foods/apple.svg',
+    Cherries: '/assets/foods/cherries.svg',
+    Chicken: '/assets/foods/meat.svg',
+    Steak: '/assets/foods/steak.svg'
+}
+
 const SpritesDetailPg = () => {
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+
     const [showMint, setShowMint] = useState(false);
     const [hunger, setHunger] = useState(sprite.hunger);
     const [foods, setFoods] = useState(initialFoodList);
@@ -36,6 +62,82 @@ const SpritesDetailPg = () => {
     const [minted, setMinted] = useState(sprite.mint);
     const [market, setMarket] = useState(sprite.marketplace);
     const [showAmount, setShowAmount] = useState(null);
+    const [foodValues, setFoodValues] = useState({});
+    const [lore, setLore] = useState('');
+    const [spriteInfo, setSpriteInfo] = useState(null);
+
+    const location = useLocation();
+    const { id } = location.state;
+
+    //Setting State for - All Food Values
+    useEffect(() => {
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+            ? import.meta.env.VITE_DEV_URL
+            : '';
+        const URL = API_BASE_URL + "game/pantry/get";
+        fetchWithAuth(URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+            .then((request) => request.json())
+            .then((res) => setFoodValues(res.response));
+        
+        const LORE_URL = API_BASE_URL + "users/sprites/get-lore";
+        fetchWithAuth(LORE_URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+            .then((request) => request.json())
+            .then((res) => { console.log('LORE?:', res.response); setLore(res.response) });
+    }, [])
+
+    //Setting State for - Hunger, Pantry Inventory
+    useEffect(() => {       
+        if(connectionStatus == 'connected') {
+            if (Object.keys(foodValues).length === 0) return;
+
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const sprite_ref = ref(database, `collections/${hash}/${id}`);
+            const pantry_ref = ref(database, `pantry/${hash}`);
+
+            const unsubscribe_sprite = onValue(sprite_ref, (snapshot) => {
+                const sprite_snapshot = snapshot.val();
+                const { date_of_birth, hunger, type, stage, traits, minted_ID, marketplace_UUID, can_evolve } = sprite_snapshot;
+                const details = lore[type.toLowerCase()]?.lore;
+                const personality = Object.values(traits)
+                    .filter(t => t !== "?");
+
+                setSpriteInfo({ 
+                    name: type,
+                    age: getAge(date_of_birth),
+                    src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
+                    personality: personality,
+                    details: details || 'NO INFO FOUND',
+                    mint: minted_ID,
+                    marketplace: marketplace_UUID,
+                    evo: can_evolve
+                });
+                setMarket(marketplace_UUID);
+                setMinted(minted_ID);
+                setHunger(hunger);
+            });
+
+            const unsubscribe_pantry = onValue(pantry_ref, (snapshot) => {
+                const pantry = snapshot.val();
+                const array = [];
+                for(const key in pantry) {
+                    array.push({
+                        src: food_SVGs[key],
+                        label: key,
+                        amt: pantry[key],
+                        value: foodValues[key]?.value ?? 0
+                    });
+                }
+                setFoods(array);
+            });
+
+            return () => {
+                unsubscribe_sprite();
+                unsubscribe_pantry();
+            } 
+        }
+    }, [connectionStatus, foodValues, lore]);
 
     const navigate = useNavigate();
 
@@ -52,7 +154,7 @@ const SpritesDetailPg = () => {
         }
     };
 
-    console.log(minted, market);
+    // console.log(minted, market);
 
     const closeMint = () => {
         setShowMint(false);
@@ -67,38 +169,63 @@ const SpritesDetailPg = () => {
         setMarket(true);
     };
 
-    const handleFeed = (foodValue, foodLabel) => {
-        if (hunger >= maxHunger || isFading) {
-            // Block feeding while fading
-            setIsFull(true);
-            setIsFading(false); // reset fade immediately
-
-            // Start fading after 1.5 seconds
-            setTimeout(() => {
-                setIsFading(true);
-            }, 1000); // delay fade
-
-            // Fully hide popup after 2.5 seconds
-            setTimeout(() => {
-                setIsFull(false);
-                setIsFading(false);
-            }, 2000);
-
-            return; // Block feeding when full
-        }
-
-        setHunger((prev) => Math.min(prev + foodValue, maxHunger));
-        setFoods((prevFoods) =>
-            prevFoods.map((food) =>
-                food.label === foodLabel && food.amt > 0
-                    ? { ...food, amt: food.amt - 1 }
-                    : food
-            )
+    const handleFeed = async (foodLabel) => {
+        //API Call to get how much hunger is
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+            ? import.meta.env.VITE_DEV_URL
+            : '';
+        const URL = API_BASE_URL + "users/sprites/update_sprite";
+        const request = await fetchWithAuth( 
+            URL, 
+            { 
+                method: 'POST', 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    id: id,
+                    food_type: foodLabel
+                }),
+                credentials: 'include', // to include cookies
+            }, 
+            accessToken, 
+            refreshAccessToken, 
+            setAccessToken
         );
 
-        // Show "+X" for feeding effect
-        setShowAmount(`+${foodValue}`);
-        setTimeout(() => setShowAmount(null), 1000);
+        const res = await request.json();
+        if(res.response) {
+            //Sprite Full
+            if (hunger >= maxHunger || isFading) {
+                // Block feeding while fading
+                setIsFull(true);
+                setIsFading(false); // reset fade immediately
+    
+                // Start fading after 1.5 seconds
+                setTimeout(() => {
+                    setIsFading(true);
+                }, 1000); // delay fade
+    
+                // Fully hide popup after 2.5 seconds
+                setTimeout(() => {
+                    setIsFull(false);
+                    setIsFading(false);
+                }, 2000);
+    
+                return; // Block feeding when full
+            }
+    
+            // setHunger((prev) => Math.min(prev + foodValue, maxHunger));
+            // setFoods((prevFoods) =>
+            //     prevFoods.map((food) =>
+            //         food.label === foodLabel && food.amt > 0
+            //             ? { ...food, amt: food.amt - 1 }
+            //             : food
+            //     )
+            // );
+    
+            // Show "+X" for feeding effect
+            setShowAmount(`+${res.response.food_value}`);
+            setTimeout(() => setShowAmount(null), 1000);
+        }
     };
 
     useEffect(() => {
@@ -111,6 +238,7 @@ const SpritesDetailPg = () => {
     return (
         <div className="w-full h-[625px] flex flex-row justify-evenly items-center">
             {/* Food */}
+            {/* <FoodInventory foods={foods} onFeed={(label) => handleFeed(label)} /> */}
             <FoodInventory foods={foods} onFeed={handleFeed} />
             <section className="w-[496px] h-[543px] rounded-[10px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
@@ -127,8 +255,8 @@ const SpritesDetailPg = () => {
                     </span>
                 )}
                 <img
-                    src={sprite.src}
-                    alt={sprite.name}
+                    src={spriteInfo && spriteInfo.src}
+                    alt={spriteInfo && spriteInfo.name}
                     className="min-w-[50%]"
                 />
             </section>
@@ -140,13 +268,13 @@ const SpritesDetailPg = () => {
                     transition-opacity duration-1000 ease-in-out
                     ${isFading ? "opacity-0" : "opacity-100"}`}
                 >
-                    {sprite.name} is full!
+                    {spriteInfo.name} is full!
                 </div>
             )}
 
             {/* Sprite */}
             <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
-                <SpritesInfo sprite={sprite} />
+                {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
                 <button
                     onClick={handleMintClick}
                     className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center cursor-pointer"
