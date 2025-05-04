@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const foods = [
-    { src: "/assets/foods/apple.svg", label: "Apple", value: 1, price: 5 },
     {
         src: "/assets/foods/cherries.svg",
         label: "Cherries",
-        value: 2,
-        price: 10,
+        value: 1,
+        price: 20,
     },
-    { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 25 },
-    { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 50 },
+    {
+        src: "/assets/foods/apple.svg",
+        label: "Apple",
+        value: 2,
+        price: 40,
+    },
+    { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 100 },
+    { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 500 },
 ];
 
 const PantryPg = () => {
@@ -32,9 +37,17 @@ const PantryPg = () => {
         setBuy(true);
     };
 
+    //Background
+    useEffect(() => {
+        document.body.classList.add("pantry-bg");
+        return () => {
+            document.body.classList.remove("pantry-bg");
+        };
+    }, []);
+
     return (
-        <div className="w-[1100px] h-[550px] bg-[#FEFAF3]/20 px-[50px] flex flex-col text-[#FFFFFF]">
-            <h1 className="text-start text-[60px]">Pantry</h1>
+        <div className="w-[1150px] h-[550px] flex flex-col text-[#FFFFFF]">
+            <h1 className="text-start text-[75px]">Pantry</h1>
             <div className="flex-1 flex items-center justify-center">
                 {/* Pantry List */}
                 <ul className="w-full flex flex-row justify-between">
@@ -42,18 +55,24 @@ const PantryPg = () => {
                         <li
                             onClick={() => handleBuy(food)}
                             key={food.label}
-                            className="group flex flex-col gap-2"
+                            className="group w-[262px] h-[262px] bg-[#FFFFFF]   rounded-[10px] outline-[5px] outline-transparent transition-outline duration-300 hover:outline-[#4A63E4] shadow-md flex flex-col justify-between"
                         >
-                            <section className="w-[200px] h-[200px] bg-[#FFFFFF] rounded-[10px] shadow-md flex justify-center items-center relative cursor-pointer  outline-[5px] outline-transparent transition-all duration-300 hover:outline-[#4A63E4] shadow-md active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95">
+                            <section className="h-[213px] flex justify-center items-center relative cursor-pointer transition-all duration-300 rounded-t-[10px] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95">
                                 <img
                                     src={food.src}
                                     alt={food.label}
-                                    className="w-[100px] h-[100px] transform transition duration-300 ease-in-out group-hover:-translate-y-1"
+                                    className="w-[147px] h-[147px] transform transition duration-300 ease-in-out group-hover:-translate-y-1"
                                 />
                             </section>
-                            <section className="flex flex-col">
-                                <span>{food.price} Shards</span>
-                                <span>{food.label}</span>{" "}
+                            <section className="h-[49px] bg-[#4A63E4] rounded-b-[10px] flex flex-row justify-center items-center gap-[30px] text-[25px] leading-none">
+                                <div className="flex flex-row items-center gap-[5px]">
+                                    <img 
+                                    className="w-[21px] h-[23px]"
+                                    src="/assets/icons/shard.svg" alt="shardIcon" />
+                                 <span>{food.price}</span>   
+                                </div>
+                                
+                                <span>{food.label}</span>
                             </section>
                         </li>
                     ))}
