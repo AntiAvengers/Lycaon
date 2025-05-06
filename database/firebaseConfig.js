@@ -47,10 +47,15 @@ const default_collection = {
   type: "",
   rarity: "",
   stage: 0,
+  can_evolve: false,
   date_of_birth: Date.now(),
-  hunger: 10,
-  traits: [],
-  minted_ID: false
+  hunger: 8,
+  traits: {
+    0: "?",
+    1: "?"
+  },
+  minted_ID: false,
+  marketplace_UUID: false,
 }
 
 //Game rules
@@ -76,10 +81,12 @@ db.once('value', snapshot => {
     console.log('. . . Initializing User Collections in Database');
     return db.set({
       users: { _init: true },
+      pantry: { _init: true },
       collections: { _init: true },
       leaderboard: default_leaderboard,
       game_rules: default_game_rules,
-      marketplace: { _init: true }
+      marketplace: { _init: true },
+      notifications: { _init: true }
     });
   }
 
@@ -107,6 +114,16 @@ db.once('value', snapshot => {
     console.log('. . . Initializing Marketplace in Database');
     db.update({ marketplace: { _init: true }});
   }
+
+  if(!data.pantry) {
+    console.log('. . . initializing Pantry in Database');
+    db.update({ pantry: { _init: true }});
+  }
+
+  if(!data.notifications) {
+    console.log('. . . Initializing Notifications in Database');
+    db.update({ notificaitons: { _init: true }});
+  }
 }).then(() => {
   //DEV MODE - Resets database everytime server is restarted
   if(process.argv.length > 2) {
@@ -119,7 +136,9 @@ db.once('value', snapshot => {
         collections: { _init: true },
         leaderboard: default_leaderboard,
         game_rules: default_game_rules,
-        marketplace: { _init: true }
+        marketplace: { _init: true },
+        pantry: { _init: true },
+        notifications: { _init: true }
       });
     } 
   }

@@ -2,7 +2,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { getAuth, signOut } from 'firebase/auth';
-import { app } from '../firebase/firebaseConfig.js';
+import { app, database } from '../firebase/firebaseConfig.js';
+import { ref, onValue } from 'firebase/database';
+import SHA256 from 'crypto-js/sha256';
+import { useCurrentWallet} from '@mysten/dapp-kit';
 
 import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
@@ -13,27 +16,22 @@ import MailIcon from "@mui/icons-material/Mail";
 const user = { name: "Evasdfasdfasdfasd" };
 
 const Header = () => {
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
     const [message, setMessage] = useState(""); //puzzle message
-    const [notifications, setNotifications] = useState([
-        {
-            id: 1,
-            message: "New message: You sprite nemo has been sold. Congrats!",
-            read: false,
-        },
-        {
-            id: 2,
-            message: "Friend request: David has requested to be friends",
-            read: false,
-        },
-        {
-            id: 3,
-            message: "Update available: Server was just updated at 1PM",
-            read: true,
-        },
-    ]); //notifications
-    const [notificationOpen, setNotificationOpen] = useState(false); //popup for notifications
+    const [notifications, setNotifications] = useState([]);
+
+    /* 
+        [
+            { id: 1, message: "New message: You sprite nemo has been sold. Congrats!", read: false },
+            { id: 2, message: "Friend request: David has requested to be friends", read: false },
+            { id: 3, message: "Update available: Server was just updated at 1PM", read: true },
+        ]   
+    */
+
+    const [notificationOpen, setNotificationOpen] = useState(false);
 
     const menuRef1 = useRef(null); //menu
     const menuRef2 = useRef(null); // logout
@@ -41,6 +39,33 @@ const Header = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+
+    //Updates Notification State
+    useEffect(() => {
+        if(connectionStatus == 'connected') {
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const notifications_ref = ref(database, `notifications/${hash}`);
+
+            let notifications = [];
+            const unsubscribe = onValue(notifications_ref, (snapshot) => {
+                if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
+                const data = snapshot.val();
+                for(const key in data) {
+                    notifications.push({
+                        id: key,
+                        message,
+                        read,
+                        timestamp
+                    });
+                }
+                notifications.sort((a,b) => a.timestamp > b.timestamp ? -1 : 1);
+                setNotifications(notifications);
+            });
+
+            return () => unsubscribe()
+        }
+    }, [connectionStatus])
 
     //Logout
     const logout = async () => {

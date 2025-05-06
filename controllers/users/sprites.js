@@ -1,4 +1,10 @@
 import * as crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import 'dotenv/config';
 import { client } from '../../utils/sui/config.js';
 import { get_transaction_block } from '../../utils/sui/client.js';
@@ -13,70 +19,52 @@ const PACKAGE_ID = process.env.SUI_PACKAGE_ID;
 const MODULE_NAME = 'sprite_token';
 const MINT_FUNCTION = 'mint';
 
+const pantry = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/pantry.json'), 'UTF-8'));
+const sprites = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/sprites.json'), 'UTF-8'));
+
 //Basic stuff regarding Creatures
-export const read_sprite = async (req, res) => {
-    const { id } = req.body;
+export const get_lore = async(req, res) => {
+    return res.status(200).json({ response: sprites });
+}
+
+export const update_sprite = async (req, res) => {
+    const { id, nickname, favorite, food_type } = req.body;
     const { address } = req.user;
     try {
-        const hashed = crypto.createHash('sha256').update(address).digest('hex');
         if(!id) {
-            return res.status(400).json({error: 'Missing parameter "id" (UUID) from Request Body'})
+            return res.status(400).json({ error: "missing ID (label) of creature from request body "});
         }
+        if(nickname && typeof nickname !== "string") {
+            return res.status(400).json({ error: "nickname has to be a string" });
+        } 
+        if(favorite && typeof favorite !== "boolean") {
+            return res.status(400).json({ error: "favorite has to be boolean" });
+        } 
+        if(food_type && typeof food_type !== "string") {
+            return res.status(400).json({ error: "food_type has to be string" });
+        } 
+        const hashed = crypto.createHash('sha256').update(address).digest('hex');
+
         const collection_ref = database.ref(`collections/${hashed}/${id}`);
         const snapshot = await collection_ref.once("value");
         if(!snapshot.exists()) {
             return res.status(400).json({ error: `${id} does not exist` });
         }
-        return res.status(200).json({ response: sprite });
-    } catch(err) {
-        return res.status(403).json({ error: err });
-    }
-}
-
-export const read_all_sprites = async (req, res) => {
-    const { address } = req.user;
-    try {
-        const hashed = crypto.createHash('sha256').update(address).digest('hex');
-        const collection = database.ref(`collections/${hashed}`);
-        const snapshot = await collection.once("value");
-        if(!snapshot.exists()) { return res.status(200).json({ response: [] }); }
-        const output = snapshot.val();
-        return res.status(200).json({ response: output });
-    } catch(err) {
-        return res.status(403).json({ error: err });
-    }
-}
-
-export const update_sprite = async (req, res) => {
-    const { id, nickname, favorite, hunger } = req.body;
-    const { address } = req.user;
-    try {
-        if(nickname && typeof nickname !== "string") {
-            res.status(400).json({ error: "nickname has to be a string" });
-        } 
-        if(favorite && typeof favorite !== "boolean") {
-            res.status(400).json({ error: "favorite has to be boolean" });
-        } 
-        if(hunger && typeof hunger !== "number") {
-            res.status(400).json({ error: "hunger has to be integer" });
-        } 
-    
         const update_obj = {};
         if(nickname) update_obj.nickname = nickname;
-        if(favorite) update_obj.favorite = favorite;
-        //Missing Validation of Frontend using "Item"
-        if(hunger) update_obj.hunger = hunger;
-
-        const hashed = crypto.createHash('sha256').update(address).digest('hex');
-
-        const collection_ref = database.ref(`collections/${hashed}/${id}`);
-        const snapshot = await collection-ref.once("value");
-        // const snapshot = await collection.orderByChild("id").equalTo(id).once("value");
-        // const key = Object.keys(snapshot.val())[0];
-        if(!snapshot.exists()) {
-            return res.status(400).json({ error: `${id} does not exist` });
+        if(favorite !== undefined && favorite !== null) update_obj.favorite = favorite;
+        if(food_type) {
+            const pantry_ref = database.ref(`pantry/${hashed}`);
+            const pantry_snapshot = await pantry_ref.once("value");
+            const { [food_type]: num } = pantry_snapshot.val()
+            if(num > 0) {
+                pantry_ref.update({ [food_type]: (num - 1) });
+                const { hunger } = snapshot.val()
+                update_obj.hunger = Math.min(8, (hunger + pantry[food_type].value));
+            }
         }
         collection_ref.update(update_obj);
+        if(food_type) update_obj.food_value = pantry[food_type].value;
         return res.status(200).json({ response: update_obj });
     } catch(err) {
         return res.status(403).json({ error: err });

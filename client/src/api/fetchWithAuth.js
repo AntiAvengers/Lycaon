@@ -18,7 +18,7 @@ export async function fetchWithAuth(url, options = {}, accessToken, refreshAcces
     }
     try {
       let response = await makeRequest(accessToken);
-  
+
       if (response.status === 403) {
         console.log('Refreshing Access Token');
         try {
@@ -30,6 +30,7 @@ export async function fetchWithAuth(url, options = {}, accessToken, refreshAcces
           throw new Error('Authentication failed');
         }
       }
+
       return response;
     }
     catch(err) {

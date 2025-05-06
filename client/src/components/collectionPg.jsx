@@ -1,113 +1,182 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
+
+import { database } from '../firebase/firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+
+import SHA256 from 'crypto-js/sha256';
+
+import { useCurrentWallet} from '@mysten/dapp-kit';
+
+import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
+
 const userData = { collection: 30 };
 
+/* 
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature1",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature2",
+        to: "/collection/spriteDetail",
+        rank: "Littles",
+        name: "Slimey",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/celestial-sprite.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature3",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature4",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: true,
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature5",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: true,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature6",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature7",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/sprites/slime-sprite.gif",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature8",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+    {
+        src: "/assets/star.png",
+        still: "/assets/stillSprites/still-slime.svg",
+        label: "creature9",
+        to: "/collection/spriteDetail",
+        rank: "Elite",
+        name: "Nemo",
+        mint: true,
+        marketplace: false,
+    },
+*/
+
 const SpritesCollectionPg = () => {
-    const [creaturesList, setCreatures] = useState([
-        {
-            src: "/assets/sprites/celestial-sprite.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature1",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/sprites/slime-sprite.gif",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature2",
-            to: "/collection/spriteDetail",
-            rank: "Littles",
-            name: "Slimey",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/sprites/celestial-sprite.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature3",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/star.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature4",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: true,
-        },
-        {
-            src: "/assets/sprites/slime-sprite.gif",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature5",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: true,
-        },
-        {
-            src: "/assets/star.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature6",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/star.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature7",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/sprites/slime-sprite.gif",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature8",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-        {
-            src: "/assets/star.png",
-            still: "/assets/stillSprites/still-slime.svg",
-            label: "creature9",
-            to: "/collection/spriteDetail",
-            rank: "Elite",
-            name: "Nemo",
-            mint: true,
-            marketplace: false,
-        },
-    ]); //User Creatures
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
+    //set to [-1] because otherwise while getting info from database, it shows the "you have no sprites" part
+    const [creaturesList, setCreatures] = useState([-1]);
 
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
-    ); //Liked List
+    );
+
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
-    const [cancelPopup, setCancelPopup] = useState(null); //Cancel popup
+    const [cancelPopup, setCancelPopup] = useState(null);
+
+    //Firebase Database - Collection of Sprites
+    useEffect(() => {       
+        if(connectionStatus == 'connected') {
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const collections_ref = ref(database, `collections/${hash}`);
+
+            const unsubscribe = onValue(collections_ref, (snapshot) => {
+                //Initial State of "creatures" is set to [],
+                if(!snapshot.val()) return;
+
+                //Otherwise iterate through collection and update creatures state
+                const collections = snapshot.val();
+
+                const updated_likes = [...likedList];
+                const updated_creatures = [];
+                let i = 0;
+                
+                for(const key in collections) {
+                    const { favorite, hunger, minted_ID, rarity, type, stage, marketplace_UUID } = collections[key];
+
+                    if(favorite) {
+                        updated_likes[i] = favorite;
+                    }
+
+                    const info = {
+                        src: getCreatureImage(type, stage),
+                        still: getCreatureStillImage(type, stage),
+                        label: key,
+                        to: "/collection/spriteDetail",
+                        rank: rarity,
+                        name: type,
+                        mint: minted_ID,
+                        marketplace: marketplace_UUID,
+                    }
+
+                    updated_creatures.push(info);
+
+                    i++;
+                }
+                setCreatures(updated_creatures);
+                setLikedList(updated_likes);
+            });
+
+            return () => unsubscribe();
+        }
+    }, [connectionStatus]);
 
     //Like sprites
-    const handleToggleLike = (index) => {
+    const handleToggleLike = async (index) => {
         const updatedLikes = [...likedList];
         const currentLikesCount = updatedLikes.filter(Boolean).length;
 
@@ -124,7 +193,36 @@ const SpritesCollectionPg = () => {
             }
         }
 
-        updatedLikes[index] = !updatedLikes[index];
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+        ? import.meta.env.VITE_DEV_URL
+        : '';
+
+        const URL = API_BASE_URL + "users/sprites/update_sprite";
+
+        const changed = !updatedLikes[index];
+
+        console.log(creaturesList[index].label, changed);
+
+        const request = await fetchWithAuth(
+            URL,
+            {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: creaturesList[index].label, favorite: changed }),
+                credentials: 'include', // to include cookies
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+
+        const res = await request.json();
+
+        if(res.error) {
+            return;
+        }
+
+        updatedLikes[index] = changed
         setLikedList(updatedLikes);
     };
 
@@ -207,7 +305,7 @@ const SpritesCollectionPg = () => {
                     {/* Sprites Count */}
                     <section className="w-[754px] flex items-center">
                         <span className="text-[35px] ml-auto">
-                            {userData.collection}/100
+                            {creaturesList.length}/100
                         </span>
                     </section>
 
@@ -261,7 +359,7 @@ const SpritesCollectionPg = () => {
                                     {/* Spacer to push image down */}
                                     <div className="flex-grow" />
                                     {/* Sprites */}
-                                    <Link key={creature.to} to={creature.to}>
+                                    <Link key={creature.to} to={creature.to} state={{ id: creature.label }}>
                                         <img
                                             src={creature.src}
                                             alt={creature.label}

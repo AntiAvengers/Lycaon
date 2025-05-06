@@ -35,10 +35,8 @@ const InGameCurrencyTracker = () => {
     //Listening for changes in any of the currencies (Shards, Keys, Pages)
     useEffect(() => {
         if(connectionStatus == 'connected') {
-            console.log('Updating Currencies');
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
-            console.log(address);
             const keys_ref = ref(database, `users/${hash}/keys`);
             const pages_ref = ref(database, `users/${hash}/pages`);
             const shards_ref = ref(database, `users/${hash}/shards`);

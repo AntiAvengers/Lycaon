@@ -1,33 +1,106 @@
 import { useState, useEffect } from "react";
 
-const foods = [
-    {
-        src: "/assets/foods/cherries.svg",
-        label: "Cherries",
-        value: 1,
-        price: 20,
-    },
-    {
-        src: "/assets/foods/apple.svg",
-        label: "Apple",
-        value: 2,
-        price: 40,
-    },
-    { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 100 },
-    { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 500 },
-];
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
+
+import SHA256 from 'crypto-js/sha256';
+
+import { useCurrentWallet} from '@mysten/dapp-kit';
+
+// const foods = [
+//     { src: "/assets/foods/apple.svg", label: "Apple", value: 1, price: 5 },
+//     {
+//         src: "/assets/foods/cherries.svg",
+//         label: "Cherries",
+//         value: 2,
+//         price: 10,
+//     },
+//     { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 25 },
+//     { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 50 },
+// ];
+
+const food_SVGs = {
+    Apples: '/assets/foods/apple.svg',
+    Cherries: '/assets/foods/cherries.svg',
+    Chicken: '/assets/foods/meat.svg',
+    Steak: '/assets/foods/steak.svg'
+}
 
 const PantryPg = () => {
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
     const [buy, setBuy] = useState(false); //buy popup
     const [selectedFood, setSelectedFood] = useState(null);
     const [purchaseConfirmed, setPurchaseConfirmed] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    const [foods, setFoods] = useState([]);
+    const [error, setError] = useState(false);
+
+    const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+            ? import.meta.env.VITE_DEV_URL
+            : '';
+
+    const purchase_food = async(food_type, amount) => {
+        const URL = API_BASE_URL + "game/pantry/buy";
+        const request = await fetchWithAuth(
+            URL,
+            {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ food_type, amount }),
+                credentials: 'include', // to include cookies
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+
+        const res = await request.json();
+
+        if(res.error) {
+            setError(res.error);
+            return;
+        }
+
+        if (!purchaseConfirmed) setPurchaseConfirmed(true);
+    }
+
+    useEffect(() => {
+        const URL = API_BASE_URL + "game/pantry/get";
+
+        fetchWithAuth( URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+            .then((request) => {
+                request.json()
+                .then((res) => {
+                    if(res.error) {
+                        //???????
+                        setError(res.error);
+                        return;
+                    }
+                    const obj = res.response;
+                    const output = [];
+                    for(const key in obj) {
+                        output.push({
+                            label: key,
+                            value: obj[key].value,
+                            price: obj[key].cost,
+                            src: food_SVGs[key]
+                        });
+                    }
+                    setFoods(output);
+                });
+            });
+    }, []);
 
     //closes buy popup
     const closeBuy = () => {
         setBuy(false);
         setSelectedFood(null);
         setPurchaseConfirmed(false);
+        setError(false);
     };
 
     //handles food purchased
@@ -99,7 +172,10 @@ const PantryPg = () => {
                         />
                         <section className="flex flex-col items-center gap-2">
                             {/* Purchasing */}
-                            {!purchaseConfirmed ? (
+                            {error ? 
+                            (<p className="text-[25px] text-[#FCF4EF]">
+                                {error}
+                            </p>) : !purchaseConfirmed ? (
                                 <>
                                     <section className="flex flex-row items-center gap-2">
                                         <label className="text-white">
@@ -141,18 +217,18 @@ const PantryPg = () => {
 
                         <button
                             onClick={() => {
-                                if (!purchaseConfirmed)
-                                    setPurchaseConfirmed(true);
+                                purchase_food(selectedFood.label, quantity)
                             }}
-                            disabled={purchaseConfirmed}
+                            // disabled={error != false || purchaseConfirmed}
+                            disabled={error || purchaseConfirmed}
                             className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
                              ${
-                                 purchaseConfirmed
+                                 (error || purchaseConfirmed)
                                      ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                                      : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                              }`}
                         >
-                            {purchaseConfirmed
+                            {error ? `${selectedFood.price * quantity} Shards` : purchaseConfirmed
                                 ? "Thank you for your purchase!"
                                 : "Confirm Purchase"}
                         </button>

@@ -7,7 +7,7 @@ const ProtectedRoutes = () => {
   const [isChecking, setIsChecking] = useState(true);
 
   //Comment the line below to enable auth
-  return <Outlet />;
+  // return <Outlet />;
 
   //Auth
   useEffect(() => {

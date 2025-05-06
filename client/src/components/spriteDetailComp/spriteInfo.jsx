@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
     const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        console.log('RUNNING USE_EFFECT in SpritesInfo');
+        setName(sprite.name);
+    }, [name]);
 
     const handleDoubleClick = () => {
         setIsEditing(true);
@@ -41,10 +46,11 @@ const SpritesInfo = ({ sprite }) => {
                     className="w-[287px] text-[50px] cursor-pointer truncate"
                     onDoubleClick={handleDoubleClick}
                 >
-                    {name}
+                    {/* {name} */}
+                    {sprite.name}
                 </h1>
             )}
-            <p className="text-[25px] pb-[3px]">{sprite.age} days old</p>
+            <p className="text-[25px] pb-[3px]">{sprite.age}</p>
             <section className="flex flex-row justify-between">
                 <p className="text-[25px]">
                     {sprite.personality.map((trait, index) => (
