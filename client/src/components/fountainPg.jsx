@@ -3,6 +3,7 @@ import { fetchWithAuth } from "../api/fetchWithAuth";
 import { database } from "../firebase/firebaseConfig";
 import { ref, onValue } from "firebase/database";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 import SHA256 from "crypto-js/sha256";
 
@@ -169,13 +170,13 @@ const FountainPg = () => {
                     <div className="w-[100%] flex flex-row justify-between">
                         <button
                             onClick={() => handlePull(1)}
-                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[25px] text-[#FFFFFF] cursor-pointer"
+                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#FFFFFF] cursor-pointer"
                         >
                             1 Page
                         </button>
                         <button
                             onClick={() => handlePull(10)}
-                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[25px] text-[#FFFFFF] cursor-pointer"
+                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#FFFFFF] cursor-pointer"
                         >
                             10 Pages
                         </button>
@@ -252,29 +253,36 @@ const FountainPg = () => {
 
             {/* Pull Popup  */}
             {videoEnded && pulledSprites.length > 0 && (
-                <div className="w-[331px] h-[434px] max-h-[434px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[20px] flex flex-col items-center">
+                <div className="w-[518px] h-[466px] max-h-[466px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#4A63E4] z-50 rounded-[15px] p-[20px] flex flex-col items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
                         onClick={closePullPopup}
-                        className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                        className="absolute top-[15px] right-[15px] cursor-pointer w-[40px] h-[40px]"
                     />
-                    <h2 className="text-[40px] font-bold mt-[30px] mb-[10px]">
-                        You just pulled . . .
-                    </h2>
                     {pulledSprites.length === 1 ? (
-                        <div className="flex flex-col items-center mt-4">
+                        <div className="h-full flex flex-col items-center justify-center gap-[25px] text-[#FFFFFF]">
                             <img
                                 src={pulledSprites[0].still}
                                 alt={pulledSprites[0].name}
-                                className="w-[150px] h-[150px] mb-2"
+                                className="w-[160px] h-[160px] mb-2"
                             />
-                            <p className="text-[35px]">
-                                {pulledSprites[0].name}
-                            </p>
-                            <p className="text-[25px]">
-                                {pulledSprites[0].rank}
-                            </p>
+                            <div className="text-center text-[50px] leading-none">
+                                <p>Congrats!</p>
+                                <p>
+                                    You obtained a{" "}
+                                    <span className="text-yellow-400">
+                                        {pulledSprites[0].name}
+                                    </span>
+                                    .
+                                </p>
+                            </div>
+                            <Link
+                                to="collection"
+                                className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#273472] cursor-pointer"
+                            >
+                                View in Collection
+                            </Link>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-4">
