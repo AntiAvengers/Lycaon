@@ -3,28 +3,23 @@ import { useState, useEffect } from "react";
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
-import { useCurrentWallet} from '@mysten/dapp-kit';
-
-// const foods = [
-//     { src: "/assets/foods/apple.svg", label: "Apple", value: 1, price: 5 },
-//     {
-//         src: "/assets/foods/cherries.svg",
-//         label: "Cherries",
-//         value: 2,
-//         price: 10,
-//     },
-//     { src: "/assets/foods/meat.svg", label: "Chicken", value: 3, price: 25 },
-//     { src: "/assets/foods/steak.svg", label: "Steak", value: 4, price: 50 },
-// ];
+import { useCurrentWallet } from "@mysten/dapp-kit";
 
 const food_SVGs = {
-    Apple: '/assets/foods/apple.svg',
-    Cherry: '/assets/foods/cherries.svg',
-    Chicken: '/assets/foods/meat.svg',
-    Steak: '/assets/foods/steak.svg'
-}
+    Cherry: "/assets/foods/cherries.svg",
+    Apple: "/assets/foods/apple.svg",
+    Chicken: "/assets/foods/meat.svg",
+    Steak: "/assets/foods/steak.svg",
+};
+
+const initialFoodList = [
+    { src: "/assets/foods/apple.svg", label: "apple", amt: 4, value: 1 },
+    { src: "/assets/foods/cherries.svg", label: "cherries", amt: 56, value: 2 },
+    { src: "/assets/foods/meat.svg", label: "chicken", amt: 100, value: 3 },
+    { src: "/assets/foods/steak.svg", label: "steak", amt: 10, value: 4 },
+];
 
 const PantryPg = () => {
     //Access Token (JWT)
@@ -39,19 +34,20 @@ const PantryPg = () => {
     const [foods, setFoods] = useState([]);
     const [error, setError] = useState(false);
 
-    const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+    const API_BASE_URL =
+        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
             ? import.meta.env.VITE_DEV_URL
-            : '';
+            : "";
 
-    const purchase_food = async(food_type, amount) => {
+    const purchase_food = async (food_type, amount) => {
         const URL = API_BASE_URL + "game/pantry/buy";
         const request = await fetchWithAuth(
             URL,
             {
-                method: 'POST',
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ food_type, amount }),
-                credentials: 'include', // to include cookies
+                credentials: "include", // to include cookies
             },
             accessToken,
             refreshAccessToken,
@@ -60,38 +56,42 @@ const PantryPg = () => {
 
         const res = await request.json();
 
-        if(res.error) {
+        if (res.error) {
             setError(res.error);
             return;
         }
 
         if (!purchaseConfirmed) setPurchaseConfirmed(true);
-    }
+    };
 
     useEffect(() => {
         const URL = API_BASE_URL + "game/pantry/get";
 
-        fetchWithAuth(URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
-            .then((request) => {
-                request.json()
-                .then((res) => {
-                    if(res.error) {
-                        setError(res.error);
-                        return;
-                    }
-                    const obj = res.response;
-                    const output = [];
-                    for(const key in obj) {
-                        output.push({
-                            label: key,
-                            value: obj[key].value,
-                            price: obj[key].cost,
-                            src: food_SVGs[key]
-                        });
-                    }
-                    setFoods(output);
-                });
+        fetchWithAuth(
+            URL,
+            { method: "POST", credentials: "include" },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        ).then((request) => {
+            request.json().then((res) => {
+                if (res.error) {
+                    setError(res.error);
+                    return;
+                }
+                const obj = res.response;
+                const output = [];
+                for (const key in obj) {
+                    output.push({
+                        label: key,
+                        value: obj[key].value,
+                        price: obj[key].cost,
+                        src: food_SVGs[key],
+                    });
+                }
+                setFoods(output);
             });
+        });
     }, []);
 
     //closes buy popup
@@ -120,6 +120,21 @@ const PantryPg = () => {
     return (
         <div className="w-[1150px] h-[550px] flex flex-col text-[#FFFFFF]">
             <h1 className="text-start text-[75px]">Pantry</h1>
+            {/* User Pantry Inventory */}
+            <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
+                <ul className="w-full h-full flex flex-row items-center justify-evenly">
+                    {initialFoodList.map((food) => (
+                        <li key={food.label} className="flex flex-row items-center">
+                            <img
+                                className="w-[25px] h-[25px]"
+                                src={food.src}
+                                alt={food.label}
+                            />
+                            <span>{food.amt}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <div className="flex-1 flex items-center justify-center">
                 {/* Pantry List */}
                 <ul className="w-full flex flex-row justify-between">
@@ -138,12 +153,14 @@ const PantryPg = () => {
                             </section>
                             <section className="h-[49px] bg-[#4A63E4] rounded-b-[10px] flex flex-row justify-center items-center gap-[30px] text-[25px] leading-none">
                                 <div className="flex flex-row items-center gap-[5px]">
-                                    <img 
-                                    className="w-[21px] h-[23px]"
-                                    src="/assets/icons/shard.svg" alt="shardIcon" />
-                                 <span>{food.price}</span>   
+                                    <img
+                                        className="w-[21px] h-[23px]"
+                                        src="/assets/icons/shard.svg"
+                                        alt="shardIcon"
+                                    />
+                                    <span>{food.price}</span>
                                 </div>
-                                
+
                                 <span>{food.label}</span>
                             </section>
                         </li>
@@ -171,10 +188,11 @@ const PantryPg = () => {
                         />
                         <section className="flex flex-col items-center gap-2">
                             {/* Purchasing */}
-                            {error ? 
-                            (<p className="text-[25px] text-[#FCF4EF]">
-                                {error}
-                            </p>) : !purchaseConfirmed ? (
+                            {error ? (
+                                <p className="text-[25px] text-[#FCF4EF]">
+                                    {error}
+                                </p>
+                            ) : !purchaseConfirmed ? (
                                 <>
                                     <section className="flex flex-row items-center gap-2">
                                         <label className="text-white">
@@ -208,9 +226,20 @@ const PantryPg = () => {
                             ) : (
                                 // Purchased
                                 <p className="text-[22px] text-[#FCF4EF] text-center">
-                                    You bought {quantity} {selectedFood.label.charAt(selectedFood.label.length - 1) == 'y' && quantity > 1 ? selectedFood.label.slice(0,-1) : selectedFood.label}
-                                    {quantity > 1 && selectedFood.label.charAt(selectedFood.label.length - 1) == 'y' ? "ies" 
-                                        : quantity > 1 ? "s" : ""}
+                                    You bought {quantity}{" "}
+                                    {selectedFood.label.charAt(
+                                        selectedFood.label.length - 1
+                                    ) == "y" && quantity > 1
+                                        ? selectedFood.label.slice(0, -1)
+                                        : selectedFood.label}
+                                    {quantity > 1 &&
+                                    selectedFood.label.charAt(
+                                        selectedFood.label.length - 1
+                                    ) == "y"
+                                        ? "ies"
+                                        : quantity > 1
+                                        ? "s"
+                                        : ""}
                                     ! 🎉
                                 </p>
                             )}
@@ -218,18 +247,20 @@ const PantryPg = () => {
 
                         <button
                             onClick={() => {
-                                purchase_food(selectedFood.label, quantity)
+                                purchase_food(selectedFood.label, quantity);
                             }}
                             // disabled={error != false || purchaseConfirmed}
                             disabled={error || purchaseConfirmed}
                             className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
                              ${
-                                 (error || purchaseConfirmed)
+                                 error || purchaseConfirmed
                                      ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                                      : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                              }`}
                         >
-                            {error ? `${selectedFood.price * quantity} Shards` : purchaseConfirmed
+                            {error
+                                ? `${selectedFood.price * quantity} Shards`
+                                : purchaseConfirmed
                                 ? "Thank you for your purchase!"
                                 : "Confirm Purchase"}
                         </button>

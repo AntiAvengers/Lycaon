@@ -381,7 +381,7 @@ const SpritesCollectionPg = () => {
 
                                 {/* Cancel Popup */}
                                 {cancelPopup && (
-                                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
+                                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-md z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
                                         <img
                                             src="/assets/icons/closeBtn.svg"
                                             alt="closeBtn"
