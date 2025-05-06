@@ -8,29 +8,14 @@ import SHA256 from "crypto-js/sha256";
 
 import { useCurrentWallet } from "@mysten/dapp-kit";
 
-// let rates = [
-//     { name: "Littles", percentage: 0.52 },
-//     { name: "Familiar", percentage: 0.31 },
-//     { name: "Noble", percentage: 0.12 },
-//     { name: "Elite", percentage: 0.045 },
-//     { name: "Mythic", percentage: 0.005 },
-// ];
-
-// const sprite = {
-//     name: "Slime",
-//     rank: "Elite",
-//     src: "/assets/sprites/slime-sprite.gif",
-//     still: "/assets/stillSprites/still-slime.svg",
-//     details:
-//         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus libero sit amet egestas accumsan. Sed massa sem, convallis et fringilla lacinia, faucibus sed augue.",
-// };
-
 const FountainPg = () => {
     const [showRate, setShowRate] = useState(false);
     const [pulledSprites, setPulledSprites] = useState([]);
     const [pages, setPages] = useState(-1);
     const [rates, setRates] = useState([]);
     const [showError, setShowError] = useState(false);
+    const [showVideo, setShowVideo] = useState(false);
+    const [videoEnded, setVideoEnded] = useState(false);
 
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
@@ -43,6 +28,9 @@ const FountainPg = () => {
 
     //Popup message for Pull Btns
     const handlePull = async (amount) => {
+        setShowVideo(true); // show the animation
+        setVideoEnded(false); // reset in case it's been set
+
         const ten_pull = amount == 1 ? false : true;
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
@@ -73,12 +61,12 @@ const FountainPg = () => {
             const src =
                 obj.type == "slime"
                     ? "/assets/sprites/slime-sprite.gif"
-                    : "/assets/sprites/celestial-sprite.png";
+                    : "/assets/sprites/baby-fire-wolf.png";
 
             const still =
                 obj.type == "slime"
                     ? "/assets/stillSprites/still-slime.svg"
-                    : "/assets/sprites/celestial-sprite.png";
+                    : "/assets/sprites/baby-fire-wolf.png";
 
             const output = {
                 id: crypto.randomUUID(),
@@ -143,7 +131,7 @@ const FountainPg = () => {
 
             return () => unsubscribe();
         }
-    }, [connectionStatus])
+    }, [connectionStatus]);
 
     //Background
     useEffect(() => {
@@ -156,13 +144,13 @@ const FountainPg = () => {
     return (
         <div>
             {/* Pull Area */}
-            <div className="w-[619px] h-[447px] bg-[#FFFFFF]/60 fixed top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[10px]">
-                <section className="h-[390px] flex flex-col items-center justify-evenly">
-                    <div className="flex flex-col items-center justify-start">
+            <div className="w-[619px] h-[447px] bg-[#FFFFFF]/90 flex items-center justify-center rounded-[10px] relative">
+                <section className="h-[390px] flex flex-col items-center justify-center gap-[15px]">
+                    <div className="flex flex-col items-center leading-none">
                         <img
                             src="/assets/icons/scroll.svg"
                             alt="spritePull"
-                            className="w-[150px] h-[150px]"
+                            className="w-[100px] h-[100px]"
                         />
                         <p className="text-[80px]">
                             {pages >= 0
@@ -171,8 +159,14 @@ const FountainPg = () => {
                         </p>
                     </div>
 
+                    <p className="w-[403px] text-[25px] text-center leading-tight">
+                        Each page of the Codex Bestiarum stirs forgotten sprites
+                        to rise—draw them forth if you dare, but know this: to
+                        pull is to wager with fate itself.
+                    </p>
+
                     {/* Pulling Btns */}
-                    <div className="w-[65%] flex flex-row justify-between">
+                    <div className="w-[100%] flex flex-row justify-between">
                         <button
                             onClick={() => handlePull(1)}
                             className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[25px] text-[#FFFFFF] cursor-pointer"
@@ -241,8 +235,23 @@ const FountainPg = () => {
                 </div>
             )}
 
+            {/* Pulling Video */}
+            {showVideo && !videoEnded && (
+                <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+                    <video
+                        src="/assets/bg/pull-sprite.mp4"
+                        autoPlay
+                        onEnded={() => {
+                            setVideoEnded(true);
+                            setShowVideo(false); // hide the video container
+                        }}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            )}
+
             {/* Pull Popup  */}
-            {pulledSprites.length > 0 && (
+            {videoEnded && pulledSprites.length > 0 && (
                 <div className="w-[331px] h-[434px] max-h-[434px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[20px] flex flex-col items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"

@@ -15,7 +15,7 @@ import { useCurrentWallet} from '@mysten/dapp-kit';
 
 import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
 
-const userData = { collection: 30 };
+// const userData = { collection: 30 };
 
 /* 
     {
