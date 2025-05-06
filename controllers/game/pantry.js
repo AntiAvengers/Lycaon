@@ -13,17 +13,19 @@ const pantry = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/p
 export const buy_food = async (req, res) => {
     const { address } = req.user;
     const { food_type, amount } = req.body;
-    console.log(food_type, amount);
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
-    const pantry_ref = database.ref(`pantry/${hashed}`);
-    const snapshot = await pantry_ref.once("value");
-    const user_pantry = snapshot.val();
+    let pantry_ref = database.ref(`pantry/${hashed}`);
+    let snapshot = await pantry_ref.once("value");
 
     if(!snapshot.exists()) {
         const schema = {};
         for(const key in pantry) { schema[key] = 0; }
         pantry_ref.update(schema); 
+        pantry_ref = database.ref(`pantry/${hashed}`);
+        snapshot = await pantry_ref.once("value");
     }
+    
+    const user_pantry = snapshot.val();
 
     const shards_ref = database.ref(`users/${hashed}/shards`);
     const shards_snapshot = await shards_ref.once("value");
@@ -33,11 +35,22 @@ export const buy_food = async (req, res) => {
         return res.status(400).json({ error: "You do not have enough Shards!" });
     }
     
-    shards_ref.set(shards - cost);
+    shards_ref.set(shards - (cost * amount));
     pantry_ref.update({ [food_type]: user_pantry[food_type] + amount });
     return res.status(200).json({ response: { food_type, amount, cost: cost * amount } });
 }
 
-export const get_pantry = (req, res) => {
+export const get_pantry = async (req, res) => {
+    const { address } = req.user;
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+    let pantry_ref = database.ref(`pantry/${hashed}`);
+    let snapshot = await pantry_ref.once("value");
+    if(!snapshot.exists()) {
+        const schema = {};
+        for(const key in pantry) { schema[key] = 0; }
+        pantry_ref.update(schema); 
+        pantry_ref = database.ref(`pantry/${hashed}`);
+        snapshot = await pantry_ref.once("value");
+    }
     return res.status(200).json({ response: pantry });
 }

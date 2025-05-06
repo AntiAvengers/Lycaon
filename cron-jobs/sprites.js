@@ -32,11 +32,17 @@ cron.schedule(schedule, async () => {
                 const { shards } = users[user_id];
                 let shards_to_add = 0;
                 for(const index in collections[user_id]) {
-                    const { type, rarity, hunger } = collections[user_id][index];
-                    if(hunger > 0) {
+                    const { type, rarity, hunger, experience, on_marketplace } = collections[user_id][index];
+                    if(hunger > 0 && !on_marketplace) {
                         shards_to_add += (300 * ref[rarity].id);
+                        let new_experience = experience < 42 ? experience + 1 : experience;
+                        const evolve = new_experience >= 42 && !minted_ID ? true : false;
                         database.ref(`collections/${user_id}/${index}`)
-                            .update({ hunger: hunger - 1 < 0 ? 0 : hunger - 1 });
+                            .update({ 
+                                hunger: hunger - 1 < 0 ? 0 : hunger - 1,
+                                experience: new_experience,
+                                can_evolve: evolve
+                            });
                     }
                 }
                 if(shards_to_add > 0) {

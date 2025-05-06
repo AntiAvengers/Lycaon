@@ -20,8 +20,8 @@ import { useCurrentWallet} from '@mysten/dapp-kit';
 // ];
 
 const food_SVGs = {
-    Apples: '/assets/foods/apple.svg',
-    Cherries: '/assets/foods/cherries.svg',
+    Apple: '/assets/foods/apple.svg',
+    Cherry: '/assets/foods/cherries.svg',
     Chicken: '/assets/foods/meat.svg',
     Steak: '/assets/foods/steak.svg'
 }
@@ -71,12 +71,11 @@ const PantryPg = () => {
     useEffect(() => {
         const URL = API_BASE_URL + "game/pantry/get";
 
-        fetchWithAuth( URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+        fetchWithAuth(URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
             .then((request) => {
                 request.json()
                 .then((res) => {
                     if(res.error) {
-                        //???????
                         setError(res.error);
                         return;
                     }
@@ -195,8 +194,10 @@ const PantryPg = () => {
                             ) : (
                                 // Purchased
                                 <p className="text-[22px] text-[#FCF4EF] text-center">
-                                    You bought {quantity} {selectedFood.label}
-                                    {quantity > 1 ? "s" : ""}! 🎉
+                                    You bought {quantity} {selectedFood.label.charAt(selectedFood.label.length - 1) == 'y' && quantity > 1 ? selectedFood.label.slice(0,-1) : selectedFood.label}
+                                    {quantity > 1 && selectedFood.label.charAt(selectedFood.label.length - 1) == 'y' ? "ies" 
+                                        : quantity > 1 ? "s" : ""}
+                                    ! 🎉
                                 </p>
                             )}
                         </section>

@@ -58,8 +58,11 @@ export const update_sprite = async (req, res) => {
             const pantry_snapshot = await pantry_ref.once("value");
             const { [food_type]: num } = pantry_snapshot.val()
             if(num > 0) {
-                pantry_ref.update({ [food_type]: (num - 1) });
                 const { hunger } = snapshot.val()
+                if(hunger >= 8) {
+                    return res.status(200).json({ response: `Sprite is already full!` });
+                }
+                pantry_ref.update({ [food_type]: (num - 1) });
                 update_obj.hunger = Math.min(8, (hunger + pantry[food_type].value));
             }
         }
@@ -176,7 +179,8 @@ export const execute_mint_tx = async (req, res) => {
         digest: result.digest,
         options: {
             showObjectChanges: true,
-            showEffects: true
+            showEffects: true,
+            showRawEffects: true
         },
     });
 
@@ -185,6 +189,9 @@ export const execute_mint_tx = async (req, res) => {
     }
 
     console.log(result);
+    console.log('---------------------------------');
+    console.log(transaction);
+    console.log('---------------------------------');
     console.log(transaction.effects.created);
 
     if(transaction.objectChanges) {

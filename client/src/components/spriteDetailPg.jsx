@@ -9,7 +9,7 @@ import SHA256 from 'crypto-js/sha256';
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
-import { useCurrentWallet} from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
 
 import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
 
@@ -42,8 +42,8 @@ const sprite = {
 };
 
 const food_SVGs = {
-    Apples: '/assets/foods/apple.svg',
-    Cherries: '/assets/foods/cherries.svg',
+    Apple: '/assets/foods/apple.svg',
+    Cherry: '/assets/foods/cherries.svg',
     Chicken: '/assets/foods/meat.svg',
     Steak: '/assets/foods/steak.svg'
 }
@@ -69,6 +69,8 @@ const SpritesDetailPg = () => {
     const location = useLocation();
     const { id } = location.state;
 
+    const { mutateAsync: signTransaction } = useSignTransaction();
+
     //Setting State for - All Food Values
     useEffect(() => {
         const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
@@ -82,7 +84,7 @@ const SpritesDetailPg = () => {
         const LORE_URL = API_BASE_URL + "users/sprites/get-lore";
         fetchWithAuth(LORE_URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
             .then((request) => request.json())
-            .then((res) => { console.log('LORE?:', res.response); setLore(res.response) });
+            .then((res) => setLore(res.response));
     }, [])
 
     //Setting State for - Hunger, Pantry Inventory
@@ -97,24 +99,27 @@ const SpritesDetailPg = () => {
 
             const unsubscribe_sprite = onValue(sprite_ref, (snapshot) => {
                 const sprite_snapshot = snapshot.val();
-                const { date_of_birth, hunger, type, stage, traits, minted_ID, marketplace_UUID, can_evolve } = sprite_snapshot;
+                const { date_of_birth, hunger, type, stage, traits, minted_ID, on_marketplace, can_evolve } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
                 const personality = Object.values(traits)
                     .filter(t => t !== "?");
+                const name = type.charAt(0).toUpperCase() + type.slice(1);
 
                 setSpriteInfo({ 
-                    name: type,
+                    name: name,
                     age: getAge(date_of_birth),
                     src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
                     details: details || 'NO INFO FOUND',
                     mint: minted_ID,
-                    marketplace: marketplace_UUID,
+                    marketplace: on_marketplace,
                     evo: can_evolve
                 });
-                setMarket(marketplace_UUID);
-                setMinted(minted_ID);
+                //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
+                //Wait no it's not....this should still be false during the minting process
+                setMarket(on_marketplace);
+                setMinted(!minted_ID ? false : true);
                 setHunger(hunger);
             });
 
@@ -160,13 +165,128 @@ const SpritesDetailPg = () => {
         setShowMint(false);
     };
 
-    const handleMint = () => {
-        setMinted(true);
+    const handleMint = async () => {
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+        ? import.meta.env.VITE_DEV_URL
+        : '';
+        const REQUEST_URL = API_BASE_URL + "users/sprites/request_mint_tx";
+        const mint_tx = await fetchWithAuth(
+            REQUEST_URL, 
+            { 
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: id }),
+                credentials: 'include'
+            }, 
+            accessToken, 
+            refreshAccessToken, 
+            setAccessToken
+        );
+
+        const tx = await mint_tx.json();
+
+        if(tx.error) {
+            console.error(tx.error);
+            return;
+        }
+
+        const { transactionBlock } = tx;
+
+        const { bytes, signature, reportTransactionEffects } = await signTransaction({
+            transaction: transactionBlock,
+            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
+        });
+        
+        const EXECUTE_URL = API_BASE_URL + "users/sprites/execute_mint_tx";
+
+        const exec_mint_tx = await fetchWithAuth(
+            EXECUTE_URL, 
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bytes, signature, id: id }),
+                credentials: 'include'
+            },
+            accessToken, 
+            refreshAccessToken, 
+            setAccessToken
+        );
+
+        const results = await exec_mint_tx.json();
+        const { rawEffects } = results.response;
+        console.log('RAW EFFECTS:', rawEffects);
+
+        if(rawEffects) {
+            setMinted(true);
+            reportTransactionEffects(rawEffects);
+            return true;
+        }
     };
 
+    const handleSell = async (asking_price) => {
+        console.log('Running handleSell() on spriteDetailPg');
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+            ? import.meta.env.VITE_DEV_URL
+            : '';
+        const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_listing_tx";
+        console.log(id);
+        const mint_tx = await fetchWithAuth(
+            REQUEST_URL, 
+            { 
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: id, asking_price: asking_price }),
+                credentials: 'include'
+            }, 
+            accessToken, 
+            refreshAccessToken, 
+            setAccessToken
+        );
 
-    const handleSell = () => {
-        setMarket(true);
+        const tx = await mint_tx.json();
+        console.log(tx);
+
+        if(tx.error) {
+            console.error(tx.error);
+            return;
+        }
+    
+        const { transactionBlock } = tx;
+
+        const { bytes, signature, reportTransactionEffects } = await signTransaction({
+            transaction: transactionBlock,
+            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
+        });
+
+        
+        if(!signature) {
+            console.error("SOMETHING WENT WRONG");
+        }
+        
+        const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_listing_tx";
+
+        const exec_mint_tx = await fetchWithAuth(
+            EXECUTE_URL, 
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bytes, signature, id: id, asking_price: asking_price }),
+                credentials: 'include'
+            },
+            accessToken, 
+            refreshAccessToken, 
+            setAccessToken
+        );
+
+        const results = await exec_mint_tx.json();
+        const { rawEffects } = results.response;
+
+        if(rawEffects) {
+            console.log('rawEffects True: for handleSell');
+            reportTransactionEffects(rawEffects);
+            setMarket(true);
+            return true;
+        }
     };
 
     const handleFeed = async (foodLabel) => {
@@ -272,6 +392,7 @@ const SpritesDetailPg = () => {
                 </div>
             )}
 
+
             {/* Sprite */}
             <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
@@ -292,7 +413,7 @@ const SpritesDetailPg = () => {
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
                     <MintPg
                         onClose={closeMint}
-                        sprite={sprite}
+                        sprite={spriteInfo}
                         onMint={handleMint}
                         onSell={handleSell}
                         minted = {minted}

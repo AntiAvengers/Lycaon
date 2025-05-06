@@ -50,12 +50,13 @@ const default_collection = {
   can_evolve: false,
   date_of_birth: Date.now(),
   hunger: 8,
+  experience: 0,
   traits: {
     0: "?",
     1: "?"
   },
   minted_ID: false,
-  marketplace_UUID: false,
+  on_marketplace: false,
 }
 
 //Game rules
