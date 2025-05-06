@@ -11,7 +11,7 @@ import { ref, onValue } from 'firebase/database';
 
 import SHA256 from 'crypto-js/sha256';
 
-import { useCurrentWallet} from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
 
 import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
 
@@ -116,8 +116,10 @@ const SpritesCollectionPg = () => {
 
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
+    const { mutateAsync: signTransaction } = useSignTransaction();
+
     //set to [-1] because otherwise while getting info from database, it shows the "you have no sprites" part
-    const [creaturesList, setCreatures] = useState([-1]);
+    const [creaturesList, setCreatures] = useState([]);
 
     const [likedList, setLikedList] = useState(
         Array(creaturesList.length).fill(false)
@@ -126,6 +128,8 @@ const SpritesCollectionPg = () => {
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
     const [cancelPopup, setCancelPopup] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [disableButton, setDisableButton] = useState(false);
 
     //Firebase Database - Collection of Sprites
     useEffect(() => {       
@@ -146,7 +150,7 @@ const SpritesCollectionPg = () => {
                 let i = 0;
                 
                 for(const key in collections) {
-                    const { favorite, hunger, minted_ID, rarity, type, stage, marketplace_UUID } = collections[key];
+                    const { favorite, minted_ID, rarity, type, stage, on_marketplace } = collections[key];
 
                     if(favorite) {
                         updated_likes[i] = favorite;
@@ -155,12 +159,12 @@ const SpritesCollectionPg = () => {
                     const info = {
                         src: getCreatureImage(type, stage),
                         still: getCreatureStillImage(type, stage),
-                        label: key,
+                        label: key, //UUID
                         to: "/collection/spriteDetail",
                         rank: rarity,
                         name: type,
                         mint: minted_ID,
-                        marketplace: marketplace_UUID,
+                        marketplace: on_marketplace
                     }
 
                     updated_creatures.push(info);
@@ -169,6 +173,7 @@ const SpritesCollectionPg = () => {
                 }
                 setCreatures(updated_creatures);
                 setLikedList(updated_likes);
+                setIsLoading(false);
             });
 
             return () => unsubscribe();
@@ -227,23 +232,90 @@ const SpritesCollectionPg = () => {
     };
 
     // Cancel marketplace listing
-    const handleCancelListing = (creature) => {
-        if (creature.marketplace) {
-            const updated = creaturesList.map((c) =>
-                c.label === creature.label ? { ...c, marketplace: false } : c
+    const handleCancelListing = async (creature) => {
+        try {
+            setDisableButton(true);
+            const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+                ? import.meta.env.VITE_DEV_URL
+                : '';
+            const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_cancel_tx";
+    
+            console.log(creature.label);
+    
+            const cancel_tx = await fetchWithAuth(
+                REQUEST_URL, 
+                { 
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: creature.label }),
+                    credentials: 'include'
+                }, 
+                accessToken, 
+                refreshAccessToken, 
+                setAccessToken
             );
-            setCreatures(updated);
-            setCancelPopup(null);
-            console.log(`${creature.name} was removed from the marketplace.`);
-        } else {
-            console.log(`${creature.name} is not listed on the marketplace.`);
+    
+            const tx = await cancel_tx.json();
+            console.log(tx);
+    
+            if(tx.error) {
+                console.error(tx.error);
+                return;
+            }
+        
+            const { transactionBlock } = tx;
+    
+            const { bytes, signature, reportTransactionEffects } = await signTransaction({
+                transaction: transactionBlock,
+                chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
+            });
+            
+            const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_cancel_tx";
+    
+            const exec_cancel_tx = await fetchWithAuth(
+                EXECUTE_URL, 
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bytes, signature, id: creature.label }),
+                    credentials: 'include'
+                },
+                accessToken, 
+                refreshAccessToken, 
+                setAccessToken
+            );
+    
+            const results = await exec_cancel_tx.json();
+            const { rawEffects } = results.response;
+    
+            if(rawEffects) {
+                reportTransactionEffects(rawEffects);
+                setCancelPopup(null);
+                setDisableButton(false);
+                return true;
+            }
+        } catch(err) {
+            if(err.shape.message.includes("User rejected the request")) {
+                setDisableButton(false);
+            }
         }
+        
+        // if (creature.marketplace) {
+        //     const updated = creaturesList.map((c) =>
+        //         c.label === creature.label ? { ...c, marketplace: false } : c
+        //     );
+        //     setCreatures(updated);
+        //     setCancelPopup(null);
+        //     console.log(`${creature.name} was removed from the marketplace.`);
+        // } else {
+        //     console.log(`${creature.name} is not listed on the marketplace.`);
+        // }
     };
 
     return (
         <div className="w-full flex flex-col items-center justify-start">
-            {/* User has no sprites */}
-            {creaturesList.length === 0 && (
+            {/* If user has no creatures */}
+            {(creaturesList.length === 0 && !isLoading) && (
                 <div
                     className="w-[890px] h-[598px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                     bg-[#FEFAF3] text-[#000000] text-[37px] text-center px-[40px] py-[20px] leading-none rounded-[20px] shadow-lg z-50 flex flex-col items-center justify-center gap-[40px]"
@@ -265,8 +337,8 @@ const SpritesCollectionPg = () => {
                 </div>
             )}
 
-            {/* User with sprites */}
-            {creaturesList.length > 0 && (
+            {/* Only show content below if there are creatures */}
+            {(creaturesList.length > 0 && !isLoading) && (
                 <>
                     <h1 className="text-[80px] text-center">
                         Sprites Collection
@@ -402,7 +474,9 @@ const SpritesCollectionPg = () => {
                                             onClick={() =>
                                                 handleCancelListing(cancelPopup)
                                             }
-                                            className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                            // className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                            className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
+                                                ${disableButton ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none" : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"}`}
                                         >
                                             Confirm
                                         </button>

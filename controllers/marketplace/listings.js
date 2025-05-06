@@ -28,17 +28,14 @@ export const request_listing_tx = async (req, res) => {
 
     try {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
-        const collections = database.ref(`collections/${hashed}`);
-        const snapshot = await collections.orderByChild("id").equalTo(id).once("value");
+        const collections = database.ref(`collections/${hashed}/${id}`);
+        const snapshot = await collections.once("value");
         
         if(!snapshot.exists()) {
             return res.status(400).json({ error: "Sprite ID does not exist for player" });
         }
 
-        const key = Object.keys(snapshot.val())[0];
-        const sprite = await collections.child(key).once("value");
-
-        const { minted_ID } = sprite.val();
+        const { minted_ID } = snapshot.val();
 
         if(!minted_ID) {
             return res.status(400).json({ error: "You can only list a minted creature!" });
@@ -54,7 +51,7 @@ export const request_listing_tx = async (req, res) => {
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CREATE_FUNCTION}`,
             arguments: [
                 tx.object(minted_ID),
-                tx.pure(asking_price)
+                tx.pure.u64(asking_price)
             ],
         });
 
@@ -69,6 +66,7 @@ export const request_listing_tx = async (req, res) => {
 
         const serialized = await tx.toJSON();
 
+        console.log('. . . Created Marketplace Listing Transaction for address', address);
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {
         console.log(err);
@@ -77,7 +75,7 @@ export const request_listing_tx = async (req, res) => {
 }
 
 export const execute_listing_tx = async (req, res) => {
-    const { bytes, signature, id, asking_price } = req.body;
+    const { bytes, signature, id } = req.body;
     const { address } = req.user;
 
     if(!bytes) {
@@ -108,7 +106,8 @@ export const execute_listing_tx = async (req, res) => {
         options: {
             showInputs: true,
             showObjectChanges: true,
-            showEffects: true
+            showEffects: true,
+            showRawEffects: true
         },
     });
 
@@ -159,19 +158,13 @@ export const execute_listing_tx = async (req, res) => {
             const marketplace_ref = database.ref(`marketplace/${hashed}`);
             const snapshot = await marketplace_ref.once("value");
 
-            //NEED TO ADD LISTING_UUID TO COLLECTION/${HASHED}/${UUID} -> as a property in sprite stats, defaults to false
+            marketplace_ref.update({ [id]: listing_obj });
 
-            //First listing
-            if(!snapshot.exists()) {
-                marketplace_ref.set({ [0]: listing_obj });
-                return res.status(200).json({ response: listing_obj });
-            }
-
-            const listings = snapshot.val();
-            const len = Object.keys(listings).length;
-            marketplace_ref.update({ [len]: listing_obj });
-            console.log('. . . Executing Listing of Sprite for address', address);
-            return res.status(200).json({ response: listing_obj });
+            const collections_ref = database.ref(`collections/${hashed}/${id}`);
+            collections_ref.update({ on_marketplace: true });
+            console.log('. . . Executing Marketplace Listing of Sprite for address', address);
+            console.log('. . . . . . Updating Sprite Info - Marketplace UUID:', id)
+            return res.status(200).json({ response: transaction });
         }
     }
 }
@@ -213,7 +206,8 @@ export const execute_buy_tx = async (req, res) => {
         options: {
             showInputs: true,
             showObjectChanges: true,
-            showEffects: true
+            showEffects: true,
+            showRawEffects: true
         },
     });
 
@@ -235,24 +229,20 @@ export const request_cancel_tx = async (req, res) => {
         const hashed = crypto.createHash('sha256').update(address).digest('hex');
         const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
         const snapshot = await marketplace_ref.once("value");
-        // const snapshot = await marketplace_ref.orderByChild("id").equalTo(id).once("value");
         
         if(!snapshot.exists()) {
             return res.status(400).json({ error: "Listing does not exist for player" });
         }
 
         const listing = snapshot.val();
-        const { id: objectId } = listing;
-
-        console.log('LISTING:');
-        console.log(listing);
+        const { id: object_ID } = listing;
 
         //Move Module
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CANCEL_FUNCTION}`,
             arguments: [
-                tx.object(minted_ID)
+                tx.object(object_ID)
             ],
         });
 
@@ -267,6 +257,7 @@ export const request_cancel_tx = async (req, res) => {
 
         const serialized = await tx.toJSON();
 
+        console.log('REQUEST FOR CANCELLATION APPROVED');
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {
         console.log(err);
@@ -275,7 +266,8 @@ export const request_cancel_tx = async (req, res) => {
 }
 
 export const execute_cancel_tx = async (req, res) => {
-    const { bytes, signature } = req.body;
+    console.log('EXECUTING CANCEL TRANSACTION');
+    const { bytes, signature, id } = req.body;
     const { address } = req.user;
 
     if(!bytes) {
@@ -306,7 +298,8 @@ export const execute_cancel_tx = async (req, res) => {
         options: {
             showInputs: true,
             showObjectChanges: true,
-            showEffects: true
+            showEffects: true,
+            showRawEffects: true
         },
     });
 
@@ -317,7 +310,16 @@ export const execute_cancel_tx = async (req, res) => {
     console.dir(result, { depth: null, colors: true });
     console.dir(transaction, { depth: null, colors: true });
 
-    //Missing DB update logic
+    //Delete Market Listing
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+    const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
+    marketplace_ref.remove();
+
+    //Change collection on_market to false
+    const collections_ref = database.ref(`collections/${hashed}/${id}`);
+    collections_ref.update({ on_marketplace: false });
+
+    return res.status(200).json({ response: transaction });
 }
 
 //Backend API calls

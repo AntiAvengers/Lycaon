@@ -77,7 +77,7 @@ const SpritesInfo = ({ sprite }) => {
 SpritesInfo.propTypes = {
     sprite: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        age: PropTypes.number.isRequired,
+        age: PropTypes.string.isRequired,
         personality: PropTypes.arrayOf(PropTypes.string).isRequired,
         details: PropTypes.string.isRequired,
         evo: PropTypes.bool.isRequired,

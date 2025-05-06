@@ -1,10 +1,10 @@
 {
-    "Apples": {
+    "Apple": {
         "id": 1,
         "value": 1,
         "cost": 500
     },
-    "Cherries": {
+    "Cherry": {
         "id": 2,
         "value": 2,
         "cost": 900

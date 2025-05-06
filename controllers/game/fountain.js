@@ -49,11 +49,12 @@ function pull_sprite() {
         rarity: sprite_result.rarity_title,
         stage: 0,
         can_evolve: false,
+        experience: 0,
         date_of_birth: Date.now(),
         hunger: 8,
         traits: { 0: "?", 1: "?" },
         minted_ID: false,
-        marketplace_UUID: false,
+        on_marketplace: false,
     }
 
     return sprite;

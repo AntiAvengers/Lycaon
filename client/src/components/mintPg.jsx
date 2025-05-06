@@ -194,23 +194,60 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
     const [isMinting, setIsMinting] = useState(false);
     const [putOnMarket, setPutOnMarket] = useState(false);
     const [salePrice, setSalePrice] = useState("");
+    const [onMarket, setOnMarket] = useState(false);
+    const [disableButton, setDisableButton] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleMint = () => {
-        setIsMinting(true);
+    const handleMint = async () => {
+        try {
+            setDisableButton(true);
 
-        setTimeout(() => {
-            setIsMinting(false);
-            onMint(); // <-- this updates sprite.mint to true
-        }, 4000);
+            const mint_tx = await onMint();
+            console.log(mint_tx);
+            if(!mint_tx) return;
+            setIsMinting(true);
+    
+            setTimeout(() => {
+                setIsMinting(false);
+                setDisableButton(false);
+            }, 4000);
+        } catch(err) {
+            if(err.shape.message.includes("User rejected the request")) {
+                setDisableButton(false);
+            }
+        }
+        
+
+        //ORIGINAL
+        // setIsMinting(true);
+
+        // setTimeout(() => {
+        //     setIsMinting(false);
+        //     onMint(); // <-- this updates sprite.mint to true
+        // }, 4000);
     };
 
-    const handleConfirmSell = () => {
-        // Handle confirming the sale
-        console.log("Confirmed listing on marketplace!");
-        onSell();
+    const handleConfirmSell = async() => {
+        try {
+            setDisableButton(true);
+
+            // Handle confirming the sale
+            console.log('I just clicked confirm sell at mintPg.jsx');
+            const listing_tx = await onSell(salePrice);
+            //This is console logging "undefined"....interesting
+            console.log(listing_tx);
+            if(!listing_tx) return;
+            setOnMarket(true);
+            setDisableButton(false);
+            console.log("Confirmed listing on marketplace!");
+        } catch(err) {
+            if(err.shape.message.includes("User rejected the request")) {
+                setDisableButton(false);
+            }
+        }
+        
     };
 
     return (
@@ -222,7 +259,8 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                 className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
             />
             <h1 className="text-[35px] text-[#FCF4EF] leading-none">
-                Mint {sprite.name}
+                {/* Mint {sprite.name} */}
+                {sprite.name}
             </h1>
 
             {/* Sprite Image */}
@@ -249,7 +287,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
 
             {/* Text Area */}
             <section className="w-full h-[101px] bg-[#242C53] flex flex-col items-center justify-center text-[#FCF4EF] text-[25px] text-center px-4">
-                {!(minted || sprite.mint) ? (
+                {!(minted || sprite.mint) || isMinting ? (
                     <p>
                         {isMinting
                             ? `Minting ${sprite.name}...`
@@ -306,7 +344,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                     ((minted || sprite.mint) &&
                         !(market || sprite.marketplace) &&
                         putOnMarket &&
-                        (salePrice === "" || Number(salePrice) <= 0))
+                        (salePrice === "" || Number(salePrice) <= 0 || onMarket))
                 }
                 onClick={() => {
                     if (
@@ -314,6 +352,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                         !(market || sprite.marketplace)
                     ) {
                         handleMint();
+                        return;
                     } else if (
                         (minted || sprite.mint) &&
                         !(market || sprite.marketplace) &&
@@ -335,11 +374,11 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                     }
                 }}
                 className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer ${
-                    isMinting ||
+                    isMinting || disableButton ||
                     ((minted || sprite.mint) &&
                         !(market || sprite.marketplace) &&
                         putOnMarket &&
-                        (salePrice === "" || Number(salePrice) <= 0)) ||
+                        (salePrice === "" || Number(salePrice) <= 0 || disableButton)) ||
                     (location.pathname == "/marketplace" &&
                         (market || sprite.marketplace))
                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none"
