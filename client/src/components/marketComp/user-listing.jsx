@@ -1,81 +1,132 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MintPg from "../mintPg";
 
-const creaturesList = [
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature1",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Egg",
-        name: "Nemo",
-        mint: false,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature2",
-        to: "/collection/spriteDetail",
-        rank: "Littles",
-        stage: "Basic",
-        name: "Slimey",
-        mint: false,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature3",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Adult",
-        name: "Nemo",
-        mint: false,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature4",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Egg",
-        name: "Nemo",
-        mint: false,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature5",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Egg",
-        name: "Nemo",
-        mint: false,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature6",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Egg",
-        name: "Nemo",
-        mint: false,
-        marketplace: false,
-    },
-];
+import { database } from '../../firebase/firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+
+import SHA256 from 'crypto-js/sha256';
+
+import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
+
+import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
+
+// const creaturesList = [
+//     {
+//         src: "/assets/sprites/celestial-sprite.png",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature1",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Egg",
+//         name: "Nemo",
+//         mint: false,
+//         marketplace: false,
+//     },
+//     {
+//         src: "/assets/sprites/slime-sprite.gif",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature2",
+//         to: "/collection/spriteDetail",
+//         rank: "Littles",
+//         stage: "Basic",
+//         name: "Slimey",
+//         mint: false,
+//         marketplace: false,
+//     },
+//     {
+//         src: "/assets/sprites/celestial-sprite.png",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature3",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Adult",
+//         name: "Nemo",
+//         mint: false,
+//         marketplace: false,
+//     },
+//     {
+//         src: "/assets/star.png",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature4",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Egg",
+//         name: "Nemo",
+//         mint: false,
+//         marketplace: false,
+//     },
+//     {
+//         src: "/assets/sprites/slime-sprite.gif",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature5",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Egg",
+//         name: "Nemo",
+//         mint: false,
+//         marketplace: false,
+//     },
+//     {
+//         src: "/assets/star.png",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature6",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Egg",
+//         name: "Nemo",
+//         mint: false,
+//         marketplace: false,
+//     },
+// ];
 
 const UserListing = () => {
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
     const [showMint, setShowMint] = useState(false);
-    const [sprite, setSprites] = useState(creaturesList);
+    const [sprite, setSprites] = useState([]);
     const [selectedSprite, setSelectedSprite] = useState(null);
     const [cancelPopup, setCancelPopup] = useState(null);
+
+    useEffect(() => {       
+        if(connectionStatus == 'connected') {
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const collections_ref = ref(database, `collections/${hash}`);
+
+            const unsubscribe = onValue(collections_ref, (snapshot) => {
+                //Initial State of "creatures" is set to [],
+                if(!snapshot.val()) return;
+
+                //Otherwise iterate through collection and update creatures state
+                const collections = snapshot.val();
+
+                // const updated_likes = [...likedList];
+                const updated_creatures = [];
+                
+                for(const key in collections) {
+                    const { minted_ID, rarity, type, stage, on_marketplace } = collections[key];
+
+                    const info = {
+                        src: getCreatureImage(type, stage),
+                        still: getCreatureStillImage(type, stage),
+                        label: key, //UUID
+                        to: "/collection/spriteDetail",
+                        rank: rarity,
+                        stage: stage == 0 ? 'Egg' : stage == 1 ? 'Basic?' : 'Adult?',
+                        name: type,
+                        mint: minted_ID,
+                        marketplace: on_marketplace
+                    }
+
+                    updated_creatures.push(info);
+                }
+                setSprites(updated_creatures);
+            });
+
+            return () => unsubscribe();
+        }
+    }, [connectionStatus]);
 
     const handleMintClick = (clickedSprite) => {
         setSelectedSprite(clickedSprite);
@@ -127,7 +178,7 @@ const UserListing = () => {
 
     return (
         <div className="w-[1261px] h-[337px] bg-[#FEFAF4] rounded-[10px]">
-            {creaturesList.length === 0 && (
+            {sprite.length === 0 && (
                 <div className="h-full flex flex-col items-center justify-center leading-none">
                     <section className="text-center text-[#000000] text-[37px] pb-[20px]">
                         <p>You do not have any sprites!</p>
@@ -143,7 +194,7 @@ const UserListing = () => {
                     </Link>
                 </div>
             )}
-            {creaturesList.length > 0 && (
+            {sprite.length > 0 && (
                 <div className="h-full px-[80px] py-[10px] flex flex-col justify-around">
                     <h1 className="text-[40px]">Your Sprites</h1>
                     <ul className="flex flex-row items-center justify-between">
