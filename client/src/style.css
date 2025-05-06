@@ -11,7 +11,8 @@
 
 html,
 body {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
 }
 
 body {
@@ -69,6 +70,14 @@ body.pantry-bg {
     overflow-x: hidden;
 }
 
+body.collection-bg {
+    background: url("/assets/bg/collection-bg.png") no-repeat top center scroll;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 #app {
     /* width: 100%; */
     height: 100vh;
@@ -98,3 +107,4 @@ body.pantry-bg {
         transform: translate(-50%, -50%) translateY(-30px);
     }
 }
+

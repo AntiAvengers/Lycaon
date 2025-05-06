@@ -6,109 +6,18 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
-import { database } from '../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
-import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
+import {
+    getCreatureImage,
+    getCreatureStillImage,
+} from "../utils/getCreatureAsset";
 
-// const userData = { collection: 30 };
-
-/* 
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature1",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature2",
-        to: "/collection/spriteDetail",
-        rank: "Littles",
-        name: "Slimey",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature3",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature4",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: true,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature5",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: true,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature6",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature7",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature8",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-    {
-        src: "/assets/star.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature9",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        name: "Nemo",
-        mint: true,
-        marketplace: false,
-    },
-*/
 
 const SpritesCollectionPg = () => {
     //Access Token (JWT)
@@ -132,15 +41,15 @@ const SpritesCollectionPg = () => {
     const [disableButton, setDisableButton] = useState(false);
 
     //Firebase Database - Collection of Sprites
-    useEffect(() => {       
-        if(connectionStatus == 'connected') {
+    useEffect(() => {
+        if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const collections_ref = ref(database, `collections/${hash}`);
 
             const unsubscribe = onValue(collections_ref, (snapshot) => {
                 //Initial State of "creatures" is set to [],
-                if(!snapshot.val()) return;
+                if (!snapshot.val()) return;
 
                 //Otherwise iterate through collection and update creatures state
                 const collections = snapshot.val();
@@ -148,11 +57,18 @@ const SpritesCollectionPg = () => {
                 const updated_likes = [...likedList];
                 const updated_creatures = [];
                 let i = 0;
-                
-                for(const key in collections) {
-                    const { favorite, minted_ID, rarity, type, stage, on_marketplace } = collections[key];
 
-                    if(favorite) {
+                for (const key in collections) {
+                    const {
+                        favorite,
+                        minted_ID,
+                        rarity,
+                        type,
+                        stage,
+                        on_marketplace,
+                    } = collections[key];
+
+                    if (favorite) {
                         updated_likes[i] = favorite;
                     }
 
@@ -164,8 +80,8 @@ const SpritesCollectionPg = () => {
                         rank: rarity,
                         name: type,
                         mint: minted_ID,
-                        marketplace: on_marketplace
-                    }
+                        marketplace: on_marketplace,
+                    };
 
                     updated_creatures.push(info);
 
@@ -198,9 +114,10 @@ const SpritesCollectionPg = () => {
             }
         }
 
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-        ? import.meta.env.VITE_DEV_URL
-        : '';
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
 
         const URL = API_BASE_URL + "users/sprites/update_sprite";
 
@@ -211,10 +128,13 @@ const SpritesCollectionPg = () => {
         const request = await fetchWithAuth(
             URL,
             {
-                method: 'POST',
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: creaturesList[index].label, favorite: changed }),
-                credentials: 'include', // to include cookies
+                body: JSON.stringify({
+                    id: creaturesList[index].label,
+                    favorite: changed,
+                }),
+                credentials: "include", // to include cookies
             },
             accessToken,
             refreshAccessToken,
@@ -223,11 +143,11 @@ const SpritesCollectionPg = () => {
 
         const res = await request.json();
 
-        if(res.error) {
+        if (res.error) {
             return;
         }
 
-        updatedLikes[index] = changed
+        updatedLikes[index] = changed;
         setLikedList(updatedLikes);
     };
 
@@ -235,87 +155,97 @@ const SpritesCollectionPg = () => {
     const handleCancelListing = async (creature) => {
         try {
             setDisableButton(true);
-            const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-                ? import.meta.env.VITE_DEV_URL
-                : '';
-            const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_cancel_tx";
-    
+            const API_BASE_URL =
+                import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                    ? import.meta.env.VITE_DEV_URL
+                    : "";
+            const REQUEST_URL =
+                API_BASE_URL + "marketplace/listings/request_cancel_tx";
+
             console.log(creature.label);
-    
+
             const cancel_tx = await fetchWithAuth(
-                REQUEST_URL, 
-                { 
-                    method: 'POST',
+                REQUEST_URL,
+                {
+                    method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id: creature.label }),
-                    credentials: 'include'
-                }, 
-                accessToken, 
-                refreshAccessToken, 
+                    credentials: "include",
+                },
+                accessToken,
+                refreshAccessToken,
                 setAccessToken
             );
-    
+
             const tx = await cancel_tx.json();
             console.log(tx);
-    
-            if(tx.error) {
+
+            if (tx.error) {
                 console.error(tx.error);
                 return;
             }
-        
+
             const { transactionBlock } = tx;
-    
-            const { bytes, signature, reportTransactionEffects } = await signTransaction({
-                transaction: transactionBlock,
-                chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-            });
-            
-            const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_cancel_tx";
-    
+
+            const { bytes, signature, reportTransactionEffects } =
+                await signTransaction({
+                    transaction: transactionBlock,
+                    chain: `sui:${
+                        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                            ? "devnet"
+                            : "testnet"
+                    }`,
+                });
+
+            const EXECUTE_URL =
+                API_BASE_URL + "marketplace/listings/execute_cancel_tx";
+
             const exec_cancel_tx = await fetchWithAuth(
-                EXECUTE_URL, 
+                EXECUTE_URL,
                 {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ bytes, signature, id: creature.label }),
-                    credentials: 'include'
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        bytes,
+                        signature,
+                        id: creature.label,
+                    }),
+                    credentials: "include",
                 },
-                accessToken, 
-                refreshAccessToken, 
+                accessToken,
+                refreshAccessToken,
                 setAccessToken
             );
-    
+
             const results = await exec_cancel_tx.json();
             const { rawEffects } = results.response;
-    
-            if(rawEffects) {
+
+            if (rawEffects) {
                 reportTransactionEffects(rawEffects);
                 setCancelPopup(null);
                 setDisableButton(false);
                 return true;
             }
-        } catch(err) {
-            if(err.shape.message.includes("User rejected the request")) {
+        } catch (err) {
+            if (err.shape.message.includes("User rejected the request")) {
                 setDisableButton(false);
             }
         }
-        
-        // if (creature.marketplace) {
-        //     const updated = creaturesList.map((c) =>
-        //         c.label === creature.label ? { ...c, marketplace: false } : c
-        //     );
-        //     setCreatures(updated);
-        //     setCancelPopup(null);
-        //     console.log(`${creature.name} was removed from the marketplace.`);
-        // } else {
-        //     console.log(`${creature.name} is not listed on the marketplace.`);
-        // }
+
     };
+
+    //Background
+    useEffect(() => {
+        document.body.classList.add("collection-bg");
+        return () => {
+            document.body.classList.remove("collection-bg");
+        };
+    }, []);
 
     return (
         <div className="w-full flex flex-col items-center justify-start">
             {/* If user has no creatures */}
-            {(creaturesList.length === 0 && !isLoading) && (
+            {creaturesList.length === 0 && !isLoading && (
                 <div
                     className="w-[890px] h-[598px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                     bg-[#FEFAF3] text-[#000000] text-[37px] text-center px-[40px] py-[20px] leading-none rounded-[20px] shadow-lg z-50 flex flex-col items-center justify-center gap-[40px]"
@@ -338,16 +268,12 @@ const SpritesCollectionPg = () => {
             )}
 
             {/* Only show content below if there are creatures */}
-            {(creaturesList.length > 0 && !isLoading) && (
+            {creaturesList.length > 0 && !isLoading && (
                 <>
-                    <h1 className="text-[80px] text-center">
-                        Sprites Collection
-                    </h1>
-
                     {/* Like Error Message */}
                     {popupMessage && (
                         <div
-                            className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                            className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                     bg-[#EA1A26] text-[#FFFFFF] text-[30px] tracking-[2px] p-[20px] rounded-lg shadow-lg z-50 
                     transition-opacity duration-1000 ease-in-out
                     ${isFading ? "opacity-0" : "opacity-100"}`}
@@ -431,7 +357,11 @@ const SpritesCollectionPg = () => {
                                     {/* Spacer to push image down */}
                                     <div className="flex-grow" />
                                     {/* Sprites */}
-                                    <Link key={creature.to} to={creature.to} state={{ id: creature.label }}>
+                                    <Link
+                                        key={creature.to}
+                                        to={creature.to}
+                                        state={{ id: creature.label }}
+                                    >
                                         <img
                                             src={creature.src}
                                             alt={creature.label}
@@ -476,7 +406,11 @@ const SpritesCollectionPg = () => {
                                             }
                                             // className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                                             className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
-                                                ${disableButton ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none" : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"}`}
+                                                ${
+                                                    disableButton
+                                                        ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none"
+                                                        : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                                }`}
                                         >
                                             Confirm
                                         </button>

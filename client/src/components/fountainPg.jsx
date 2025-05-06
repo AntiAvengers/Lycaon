@@ -29,8 +29,11 @@ const FountainPg = () => {
 
     //Popup message for Pull Btns
     const handlePull = async (amount) => {
-        setShowVideo(true); // show the animation
-        setVideoEnded(false); // reset in case it's been set
+
+        if (pages.length > 0) {
+            setShowVideo(true); // show the animation
+            setVideoEnded(false); // reset in case it's been set
+        }
 
         const ten_pull = amount == 1 ? false : true;
         const API_BASE_URL =
@@ -221,7 +224,7 @@ const FountainPg = () => {
 
             {/* Not Enough Pages Popup */}
             {showError && (
-                <div className="w-[331px] h-[434px] max-h-[234px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[20px] flex flex-col items-center">
+                <div className="w-[400px] h-[450px] max-h-[234px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#4A63E4] z-50 rounded-[10px] p-[20px] text-[#FFFFFF] flex flex-col items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeError"
@@ -230,7 +233,7 @@ const FountainPg = () => {
                     />
                     <div className="flex flex-col items-center mt-4">
                         <h2 className="text-[40px] font-bold mt-[30px] mb-[10px] text-center">
-                            You do not have enough pages!
+                            Sorry, you do not have enough pages!
                         </h2>
                     </div>
                 </div>
@@ -272,7 +275,8 @@ const FountainPg = () => {
                                 <p>
                                     You obtained a{" "}
                                     <span className="text-yellow-400">
-                                       {pulledSprites[0].rank} {pulledSprites[0].name}
+                                        {pulledSprites[0].rank}{" "}
+                                        {pulledSprites[0].name}
                                     </span>
                                     .
                                 </p>
@@ -303,7 +307,7 @@ const FountainPg = () => {
                                             className="w-[80px] h-[80px]"
                                         />
                                         <p className="text-[20px] font-semibold">
-                                        {s.rank} {s.name}
+                                            {s.rank} {s.name}
                                         </p>
                                     </div>
                                 ))}
