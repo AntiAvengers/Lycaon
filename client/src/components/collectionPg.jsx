@@ -18,7 +18,6 @@ import {
     getCreatureStillImage,
 } from "../utils/getCreatureAsset";
 
-
 const SpritesCollectionPg = () => {
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
@@ -103,7 +102,7 @@ const SpritesCollectionPg = () => {
 
         if (!updatedLikes[index]) {
             if (currentLikesCount >= 3) {
-                setPopupMessage("You can only like up to 3 items!");
+                setPopupMessage("You can only like up to 3 Sprites!");
                 setIsFading(false); // reset if re-triggered quickly
                 setTimeout(() => setIsFading(true), 1000);
                 setTimeout(() => {
@@ -231,7 +230,6 @@ const SpritesCollectionPg = () => {
                 setDisableButton(false);
             }
         }
-
     };
 
     //Background
@@ -243,7 +241,7 @@ const SpritesCollectionPg = () => {
     }, []);
 
     return (
-        <div className="w-full flex flex-col items-center justify-start">
+        <div className="w-full flex flex-col items-center justify-start gap-[10px]">
             {/* If user has no creatures */}
             {creaturesList.length === 0 && !isLoading && (
                 <div
@@ -302,17 +300,17 @@ const SpritesCollectionPg = () => {
 
                     {/* Sprites Count */}
                     <section className="w-[754px] flex items-center">
-                        <span className="text-[35px] ml-auto">
+                        <span className="text-[35px] ml-auto text-[#FFFFFF]">
                             {creaturesList.length}/100
                         </span>
                     </section>
 
                     {/* All Sprites */}
-                    <ul className="w-[754px] grid grid-cols-3 gap-[25px]">
+                    <ul className="w-[810px] h-[1050px] grid grid-cols-3 gap-[25px] overflow-y-auto px-[20px]">
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
-                                className="relative flex flex-col items-start justify-between"
+                                className="relative flex flex-col items-start"
                             >
                                 {/* Badge for Cancel? + Listed*/}
                                 {creature.marketplace && (
@@ -332,7 +330,7 @@ const SpritesCollectionPg = () => {
                                 )}
 
                                 <div
-                                    className={`w-full h-[219px] bg-[#FCF4E7]/50 flex flex-col justify-between items-center p-2 relative 
+                                    className={`w-full h-[219px] bg-[#FEFAF3] flex flex-col justify-between items-center p-2 relative 
                                      ${
                                          creature.marketplace
                                              ? "opacity-50 grayscale pointer-events-none"
@@ -351,7 +349,9 @@ const SpritesCollectionPg = () => {
                                                 style={{ color: "#EA1A26" }}
                                             />
                                         ) : (
-                                            <FavoriteBorderIcon />
+                                            <FavoriteBorderIcon
+                                                style={{ color: "#EA1A26" }}
+                                            />
                                         )}
                                     </button>
                                     {/* Spacer to push image down */}
@@ -370,8 +370,8 @@ const SpritesCollectionPg = () => {
                                     </Link>
                                 </div>
                                 {/* Sprites Descipt */}
-                                <div className="flex flex-col items-start">
-                                    <span className="text-[15px] font-bold mt-2">
+                                <div className="w-full flex flex-col items-start justify-center bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
+                                    <span className="text-[18px] font-bold mt-2">
                                         {creature.rank}
                                     </span>
                                     <span className="text-[25px]">
@@ -404,7 +404,6 @@ const SpritesCollectionPg = () => {
                                             onClick={() =>
                                                 handleCancelListing(cancelPopup)
                                             }
-                                            // className="w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                                             className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
                                                 ${
                                                     disableButton
