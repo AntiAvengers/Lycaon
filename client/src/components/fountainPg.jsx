@@ -272,36 +272,48 @@ const FountainPg = () => {
                                 <p>
                                     You obtained a{" "}
                                     <span className="text-yellow-400">
-                                        {pulledSprites[0].name}
+                                       {pulledSprites[0].rank} {pulledSprites[0].name}
                                     </span>
                                     .
                                 </p>
                             </div>
                             <Link
-                                to="collection"
+                                to="/collection"
                                 className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#273472] cursor-pointer"
                             >
                                 View in Collection
                             </Link>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-4">
-                            {pulledSprites.map((s) => (
-                                <div
-                                    key={s.id}
-                                    className="flex flex-col items-center"
-                                >
-                                    <img
-                                        src={s.still}
-                                        alt={s.name}
-                                        className="w-[80px] h-[80px]"
-                                    />
-                                    <p className="text-[20px] font-semibold">
-                                        {s.name}
-                                    </p>
-                                    <p className="text-[16px]">{s.rank}</p>
-                                </div>
-                            ))}
+                        <div className="flex flex-col items-center gap-[20px]">
+                            <div className="text-center text-[50px] leading-none">
+                                <p>Congrats!</p>
+                                <p>You have obtained . . .</p>
+                            </div>
+
+                            <div className=" grid grid-cols-2 gap-4">
+                                {pulledSprites.map((s) => (
+                                    <div
+                                        key={s.id}
+                                        className="flex flex-col items-center"
+                                    >
+                                        <img
+                                            src={s.still}
+                                            alt={s.name}
+                                            className="w-[80px] h-[80px]"
+                                        />
+                                        <p className="text-[20px] font-semibold">
+                                        {s.rank} {s.name}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                            <Link
+                                to="/collection"
+                                className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#273472] cursor-pointer"
+                            >
+                                View in Collection
+                            </Link>
                         </div>
                     )}
                 </div>
