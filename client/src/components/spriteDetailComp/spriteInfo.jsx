@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { fetchWithAuth } from "../../api/fetchWithAuth";
+import { useAuth } from "../../context/AuthContext";
 
 const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
     const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        console.log('RUNNING USE_EFFECT in SpritesInfo');
-        setName(sprite.name);
-    }, [name]);
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
 
     const handleDoubleClick = () => {
         setIsEditing(true);
     };
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         setName(e.target.value);
     };
 
@@ -22,8 +22,31 @@ const SpritesInfo = ({ sprite }) => {
         setIsEditing(false);
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
+            const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+            ? import.meta.env.VITE_DEV_URL
+            : '';
+
+            const URL = API_BASE_URL + "users/sprites/update_sprite";
+
+            console.log(sprite);
+            console.log(sprite.id, e.target.value);
+
+            const request = await fetchWithAuth(
+                URL,
+                {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: sprite.id, nickname: e.target.value }),
+                    credentials: 'include', // to include cookies
+                },
+                accessToken,
+                refreshAccessToken,
+                setAccessToken
+            );
+
+            const res = await request.json();
             setIsEditing(false);
         }
     };
@@ -38,7 +61,6 @@ const SpritesInfo = ({ sprite }) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
-                    maxLength={30}
                     autoFocus
                 />
             ) : (
@@ -46,8 +68,8 @@ const SpritesInfo = ({ sprite }) => {
                     className="w-[287px] text-[50px] cursor-pointer truncate"
                     onDoubleClick={handleDoubleClick}
                 >
-                    {/* {name} */}
-                    {sprite.name}
+                    {name}
+                    {/* {sprite.name} */}
                 </h1>
             )}
             <p className="text-[25px] pb-[3px]">{sprite.age}</p>
@@ -62,7 +84,8 @@ const SpritesInfo = ({ sprite }) => {
                         </span>
                     ))}
                 </p>
-                {sprite.evo && (
+                {/* Added !sprite.mint because once a sprite is minted, it's locked in? */}
+                {(sprite.evo && !sprite.mint) && (
                     <button className="w-contain h-[35px] bg-[#4A63E4] px-[15px] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center">
                         Evolve
                     </button>

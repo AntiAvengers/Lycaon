@@ -99,14 +99,15 @@ const SpritesDetailPg = () => {
 
             const unsubscribe_sprite = onValue(sprite_ref, (snapshot) => {
                 const sprite_snapshot = snapshot.val();
-                const { date_of_birth, hunger, type, stage, traits, minted_ID, on_marketplace, can_evolve } = sprite_snapshot;
+                const { date_of_birth, hunger, type, stage, traits, minted_ID, on_marketplace, can_evolve, nickname } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
                 const personality = Object.values(traits)
                     .filter(t => t !== "?");
                 const name = type.charAt(0).toUpperCase() + type.slice(1);
 
                 setSpriteInfo({ 
-                    name: name,
+                    id: id,
+                    name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
