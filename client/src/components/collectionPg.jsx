@@ -283,7 +283,7 @@ const SpritesCollectionPg = () => {
                     )}
 
                     {/* Showcase - Liked Creatures */}
-                    <section className="w-[702px] h-[260px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
+                    <section className="w-[755px] h-[500px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
                         <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
                             {creaturesList
                                 .filter((_, idx) => likedList[idx]) // only liked

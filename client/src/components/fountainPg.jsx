@@ -29,8 +29,8 @@ const FountainPg = () => {
 
     //Popup message for Pull Btns
     const handlePull = async (amount) => {
-
-        if (pages.length > 0) {
+        
+        if (pages > 0) {
             setShowVideo(true); // show the animation
             setVideoEnded(false); // reset in case it's been set
         }
