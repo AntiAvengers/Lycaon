@@ -267,7 +267,7 @@ const PantryPg = () => {
                              ${
                                  error || purchaseConfirmed
                                      ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
-                                     : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                                     : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                              }`}
                         >
                             {error

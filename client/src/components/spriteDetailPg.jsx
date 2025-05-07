@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
-import { database } from '../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
-import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import { getCreatureImage, getCreatureStillImage } from "../utils/getCreatureAsset";
+import {
+    getCreatureImage,
+    getCreatureStillImage,
+} from "../utils/getCreatureAsset";
 
 import FoodInventory from "./spriteDetailComp/foodInventory";
 import SpritesInfo from "./spriteDetailComp/spriteInfo";
@@ -42,11 +45,11 @@ const sprite = {
 };
 
 const food_SVGs = {
-    Apple: '/assets/foods/apple.svg',
-    Cherry: '/assets/foods/cherries.svg',
-    Chicken: '/assets/foods/meat.svg',
-    Steak: '/assets/foods/steak.svg'
-}
+    Apple: "/assets/foods/apple.svg",
+    Cherry: "/assets/foods/cherries.svg",
+    Chicken: "/assets/foods/meat.svg",
+    Steak: "/assets/foods/steak.svg",
+};
 
 const SpritesDetailPg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -63,7 +66,7 @@ const SpritesDetailPg = () => {
     const [market, setMarket] = useState(sprite.marketplace);
     const [showAmount, setShowAmount] = useState(null);
     const [foodValues, setFoodValues] = useState({});
-    const [lore, setLore] = useState('');
+    const [lore, setLore] = useState("");
     const [spriteInfo, setSpriteInfo] = useState(null);
 
     const location = useLocation();
@@ -73,23 +76,36 @@ const SpritesDetailPg = () => {
 
     //Setting State for - All Food Values
     useEffect(() => {
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-            ? import.meta.env.VITE_DEV_URL
-            : '';
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
         const URL = API_BASE_URL + "game/pantry/get";
-        fetchWithAuth(URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+        fetchWithAuth(
+            URL,
+            { method: "POST", credentials: "include" },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        )
             .then((request) => request.json())
             .then((res) => setFoodValues(res.response));
-        
+
         const LORE_URL = API_BASE_URL + "users/sprites/get-lore";
-        fetchWithAuth(LORE_URL, { method: 'POST', credentials: 'include' }, accessToken, refreshAccessToken, setAccessToken)
+        fetchWithAuth(
+            LORE_URL,
+            { method: "POST", credentials: "include" },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        )
             .then((request) => request.json())
             .then((res) => setLore(res.response));
-    }, [])
+    }, []);
 
     //Setting State for - Hunger, Pantry Inventory
-    useEffect(() => {       
-        if(connectionStatus == 'connected') {
+    useEffect(() => {
+        if (connectionStatus == "connected") {
             if (Object.keys(foodValues).length === 0) return;
 
             const address = currentWallet.accounts[0].address;
@@ -99,23 +115,34 @@ const SpritesDetailPg = () => {
 
             const unsubscribe_sprite = onValue(sprite_ref, (snapshot) => {
                 const sprite_snapshot = snapshot.val();
-                const { date_of_birth, hunger, type, stage, traits, minted_ID, on_marketplace, can_evolve, nickname } = sprite_snapshot;
+                const {
+                    date_of_birth,
+                    hunger,
+                    type,
+                    stage,
+                    traits,
+                    minted_ID,
+                    on_marketplace,
+                    can_evolve,
+                    nickname,
+                } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
-                const personality = Object.values(traits)
-                    .filter(t => t !== "?");
+                const personality = Object.values(traits).filter(
+                    (t) => t !== "?"
+                );
                 const name = type.charAt(0).toUpperCase() + type.slice(1);
 
-                setSpriteInfo({ 
+                setSpriteInfo({
                     id: id,
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
-                    details: details || 'NO INFO FOUND',
+                    details: details || "NO INFO FOUND",
                     mint: minted_ID,
                     marketplace: on_marketplace,
-                    evo: can_evolve
+                    evo: can_evolve,
                 });
                 //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
                 //Wait no it's not....this should still be false during the minting process
@@ -127,12 +154,12 @@ const SpritesDetailPg = () => {
             const unsubscribe_pantry = onValue(pantry_ref, (snapshot) => {
                 const pantry = snapshot.val();
                 const array = [];
-                for(const key in pantry) {
+                for (const key in pantry) {
                     array.push({
                         src: food_SVGs[key],
                         label: key,
                         amt: pantry[key],
-                        value: foodValues[key]?.value ?? 0
+                        value: foodValues[key]?.value ?? 0,
                     });
                 }
                 setFoods(array);
@@ -141,7 +168,7 @@ const SpritesDetailPg = () => {
             return () => {
                 unsubscribe_sprite();
                 unsubscribe_pantry();
-            } 
+            };
         }
     }, [connectionStatus, foodValues, lore]);
 
@@ -167,57 +194,63 @@ const SpritesDetailPg = () => {
     };
 
     const handleMint = async () => {
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-        ? import.meta.env.VITE_DEV_URL
-        : '';
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
         const REQUEST_URL = API_BASE_URL + "users/sprites/request_mint_tx";
         const mint_tx = await fetchWithAuth(
-            REQUEST_URL, 
-            { 
-                method: 'POST',
+            REQUEST_URL,
+            {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: id }),
-                credentials: 'include'
-            }, 
-            accessToken, 
-            refreshAccessToken, 
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const tx = await mint_tx.json();
 
-        if(tx.error) {
+        if (tx.error) {
             console.error(tx.error);
             return;
         }
 
         const { transactionBlock } = tx;
 
-        const { bytes, signature, reportTransactionEffects } = await signTransaction({
-            transaction: transactionBlock,
-            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-        });
-        
+        const { bytes, signature, reportTransactionEffects } =
+            await signTransaction({
+                transaction: transactionBlock,
+                chain: `sui:${
+                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                        ? "devnet"
+                        : "testnet"
+                }`,
+            });
+
         const EXECUTE_URL = API_BASE_URL + "users/sprites/execute_mint_tx";
 
         const exec_mint_tx = await fetchWithAuth(
-            EXECUTE_URL, 
+            EXECUTE_URL,
             {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ bytes, signature, id: id }),
-                credentials: 'include'
+                credentials: "include",
             },
-            accessToken, 
-            refreshAccessToken, 
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const results = await exec_mint_tx.json();
         const { rawEffects } = results.response;
-        console.log('RAW EFFECTS:', rawEffects);
+        console.log("RAW EFFECTS:", rawEffects);
 
-        if(rawEffects) {
+        if (rawEffects) {
             setMinted(true);
             reportTransactionEffects(rawEffects);
             return true;
@@ -225,65 +258,77 @@ const SpritesDetailPg = () => {
     };
 
     const handleSell = async (asking_price) => {
-        console.log('Running handleSell() on spriteDetailPg');
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-            ? import.meta.env.VITE_DEV_URL
-            : '';
-        const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_listing_tx";
+        console.log("Running handleSell() on spriteDetailPg");
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
+        const REQUEST_URL =
+            API_BASE_URL + "marketplace/listings/request_listing_tx";
         console.log(id);
         const mint_tx = await fetchWithAuth(
-            REQUEST_URL, 
-            { 
-                method: 'POST',
+            REQUEST_URL,
+            {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: id, asking_price: asking_price }),
-                credentials: 'include'
-            }, 
-            accessToken, 
-            refreshAccessToken, 
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const tx = await mint_tx.json();
         console.log(tx);
 
-        if(tx.error) {
+        if (tx.error) {
             console.error(tx.error);
             return;
         }
-    
+
         const { transactionBlock } = tx;
 
-        const { bytes, signature, reportTransactionEffects } = await signTransaction({
-            transaction: transactionBlock,
-            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-        });
+        const { bytes, signature, reportTransactionEffects } =
+            await signTransaction({
+                transaction: transactionBlock,
+                chain: `sui:${
+                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                        ? "devnet"
+                        : "testnet"
+                }`,
+            });
 
-        
-        if(!signature) {
+        if (!signature) {
             console.error("SOMETHING WENT WRONG");
         }
-        
-        const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_listing_tx";
+
+        const EXECUTE_URL =
+            API_BASE_URL + "marketplace/listings/execute_listing_tx";
 
         const exec_mint_tx = await fetchWithAuth(
-            EXECUTE_URL, 
+            EXECUTE_URL,
             {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bytes, signature, id: id, asking_price: asking_price }),
-                credentials: 'include'
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    bytes,
+                    signature,
+                    id: id,
+                    asking_price: asking_price,
+                }),
+                credentials: "include",
             },
-            accessToken, 
-            refreshAccessToken, 
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const results = await exec_mint_tx.json();
         const { rawEffects } = results.response;
 
-        if(rawEffects) {
-            console.log('rawEffects True: for handleSell');
+        if (rawEffects) {
+            console.log("rawEffects True: for handleSell");
             reportTransactionEffects(rawEffects);
             setMarket(true);
             return true;
@@ -292,48 +337,49 @@ const SpritesDetailPg = () => {
 
     const handleFeed = async (foodLabel) => {
         //API Call to get how much hunger is
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-            ? import.meta.env.VITE_DEV_URL
-            : '';
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
         const URL = API_BASE_URL + "users/sprites/update_sprite";
-        const request = await fetchWithAuth( 
-            URL, 
-            { 
-                method: 'POST', 
+        const request = await fetchWithAuth(
+            URL,
+            {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     id: id,
-                    food_type: foodLabel
+                    food_type: foodLabel,
                 }),
-                credentials: 'include', // to include cookies
-            }, 
-            accessToken, 
-            refreshAccessToken, 
+                credentials: "include", // to include cookies
+            },
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const res = await request.json();
-        if(res.response) {
+        if (res.response) {
             //Sprite Full
             if (hunger >= maxHunger || isFading) {
                 // Block feeding while fading
                 setIsFull(true);
                 setIsFading(false); // reset fade immediately
-    
+
                 // Start fading after 1.5 seconds
                 setTimeout(() => {
                     setIsFading(true);
                 }, 1000); // delay fade
-    
+
                 // Fully hide popup after 2.5 seconds
                 setTimeout(() => {
                     setIsFull(false);
                     setIsFading(false);
                 }, 2000);
-    
+
                 return; // Block feeding when full
             }
-    
+
             // setHunger((prev) => Math.min(prev + foodValue, maxHunger));
             // setFoods((prevFoods) =>
             //     prevFoods.map((food) =>
@@ -342,7 +388,7 @@ const SpritesDetailPg = () => {
             //             : food
             //     )
             // );
-    
+
             // Show "+X" for feeding effect
             setShowAmount(`+${res.response.food_value}`);
             setTimeout(() => setShowAmount(null), 1000);
@@ -358,7 +404,7 @@ const SpritesDetailPg = () => {
     }, []);
 
     return (
-        <div className="w-full h-[625px] flex flex-row justify-evenly items-center">
+        <div className="w-full h-[625px] flex flex-row justify-evenly items-center relative">
             {/* Food */}
             {/* <FoodInventory foods={foods} onFeed={(label) => handleFeed(label)} /> */}
             <FoodInventory foods={foods} onFeed={handleFeed} />
@@ -396,8 +442,6 @@ const SpritesDetailPg = () => {
                 </div>
             )}
 
-
-
             {/* Sprite Description Box*/}
             <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
@@ -412,6 +456,10 @@ const SpritesDetailPg = () => {
                         : "Mint Sprite"}
                 </button>
             </section>
+
+            <Link to="/collection" className="absolute right-[45px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]">
+                Back to Collection
+            </Link>
 
             {/* Mint Popup */}
             {showMint && (
