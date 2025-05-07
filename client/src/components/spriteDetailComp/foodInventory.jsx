@@ -12,9 +12,17 @@ const FoodInventory = ({ foods, onFeed }) => {
                     //         onFeed(food.label);
                     //     }
                     // }}
-                    onClick={() => onFeed(food.label)}
-                    className="group bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center cursor-pointer outline-[1px] outline-[#CFCFCF] transition-all shadow-[4px_4px_0_#CFCFCF]
-                    duration-300 hover:outline-[#FBBB26] hover:outline-[3px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[-4px_-4px_0_#FBBB26] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95"
+                    onClick={() => {
+                        if (food.amt > 0) {
+                            onFeed(food.label);
+                        }
+                    }}
+                    className={`group bg-[#FFFFFF] rounded-[10px] relative flex items-center justify-center outline-[1px] outline-[#CFCFCF] shadow-[4px_4px_0_#CFCFCF]
+                        transition-all duration-300 ${
+                            food.amt > 0
+                                ? "cursor-pointer hover:outline-[#FBBB26] hover:outline-[3px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[-4px_-4px_0_#FBBB26] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95"
+                                : "cursor-not-allowed opacity-50"
+                        }`}
                 >
                     <span className="absolute top-0 right-2 text-[25px]">
                         x{food.amt}
@@ -22,7 +30,9 @@ const FoodInventory = ({ foods, onFeed }) => {
                     <img
                         src={food.src}
                         alt={food.label}
-                        className="w-[84px] object-contain transform transition duration-300 ease-in-out group-hover:-translate-y-1"
+                        className={`w-[84px] object-contain transform transition duration-300 ease-in-out ${
+                            food.amt > 0 ? "hover:-translate-y-1" : ""
+                        }`}
                     />
                 </li>
             ))}
