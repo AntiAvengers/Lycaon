@@ -26,14 +26,15 @@ module 0x0::marketplace {
     }
 
     //Purchase from Listing
-    public fun buy(listing: Listing, payment: &mut Coin<SUI>, ctx: &mut TxContext) {
+    public fun buy(listing: Listing, mut payment: Coin<SUI>, ctx: &mut TxContext) {
         let Listing { mut id, sender, price } = listing;
-        assert!(coin::value(payment) >= price, E_NOT_ENOUGH);
-        let paid = coin::split(payment, price, ctx);
+        assert!(coin::value(&payment) >= price, E_NOT_ENOUGH);
+        let paid = coin::split(&mut payment, price, ctx);
         transfer::public_transfer(paid, sender);
         let sprite: sprite_token::Sprite = ofield::remove(&mut id, b"sprite");
         object::delete(id);
         transfer::public_transfer(sprite, ctx.sender());
+        transfer::public_transfer(payment, ctx.sender());
     }
 
     //Cancel Listing if Owner

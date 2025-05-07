@@ -33,6 +33,12 @@ const SuiWallet = () => {
         };
       
         fetchBalance();
+        
+        const interval = setInterval(async () => {
+          await fetchBalance();
+        }, 5000);
+      
+        return () => clearInterval(interval);
       }, [account]);
 
     return (
