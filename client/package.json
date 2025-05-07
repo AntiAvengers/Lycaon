@@ -33,17 +33,20 @@
         "@mui/material": "^6.4.8",
         "@mysten/dapp-kit": "^0.14.53",
         "@mysten/sui": "^1.29.0",
+        "@tailwindcss/postcss": "^4.1.5",
         "@tanstack/react-query": "^5.74.11",
+        "autoprefixer": "^10.4.21",
         "crypto-js": "^4.2.0",
         "firebase": "^11.6.1",
         "phaser": "^3.88.2",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^7.3.0",
+        "tailwindcss": "^4.1.5",
         "uuid": "^11.1.0"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.0.15",
+        "@tailwindcss/vite": "^4.1.5",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@vitejs/plugin-react": "^4.3.4",
@@ -51,7 +54,6 @@
         "eslint-plugin-react": "^7.34.2",
         "eslint-plugin-react-hooks": "^4.6.2",
         "eslint-plugin-react-refresh": "^0.4.7",
-        "tailwindcss": "^4.0.15",
         "terser": "^5.28.1",
         "vite": "^6.2.2"
     }
