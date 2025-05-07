@@ -124,7 +124,10 @@ const PantryPg = () => {
             <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
                 <ul className="w-full h-full flex flex-row items-center justify-evenly">
                     {initialFoodList.map((food) => (
-                        <li key={food.label} className="flex flex-row items-center">
+                        <li
+                            key={food.label}
+                            className="flex flex-row items-center"
+                        >
                             <img
                                 className="w-[25px] h-[25px]"
                                 src={food.src}
@@ -171,33 +174,33 @@ const PantryPg = () => {
             {/* Purchase Popup */}
             {buy && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
-                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-evenly">
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] text-[#FCF4EF] leading-none rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[15px]">
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"
                             onClick={closeBuy}
                             className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
-                        <h1 className="text-[30px] text-[#FCF4EF]">
-                            Buy {selectedFood.label}
-                        </h1>
-                        <img
-                            src={selectedFood.src}
-                            alt={selectedFood.label}
-                            className="w-[160px] h-[160px]"
-                        />
-                        <section className="flex flex-col items-center gap-2">
+                        <section className="text-[35px] text-center">
+                            <p>Confirm to buy </p>
+                            <p>{selectedFood.label}</p>
+                        </section>
+                        <section className="bg-[#F7F7F7] rounded-full p-[25px]">
+                            <img
+                                src={selectedFood.src}
+                                alt={selectedFood.label}
+                                className="w-[100px] h-[100px]"
+                            />
+                        </section>
+
+                        <section className="w-full h-[100px] bg-[#242C53] flex flex-col items-center justify-evenly text-[25px] text-[#FCF4EF] leading-none">
                             {/* Purchasing */}
                             {error ? (
-                                <p className="text-[25px] text-[#FCF4EF]">
-                                    {error}
-                                </p>
+                                <p>{error}</p>
                             ) : !purchaseConfirmed ? (
                                 <>
-                                    <section className="flex flex-row items-center gap-2">
-                                        <label className="text-white">
-                                            Amount
-                                        </label>
+                                    <section className="flex flex-row items-center gap-[50px]">
+                                        <label>Amount</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -215,17 +218,26 @@ const PantryPg = () => {
                                                     setQuantity(value);
                                                 }
                                             }}
-                                            className="no-spinner w-[50px] h-[25px] border-b-[1px] border-white outline-none bg-transparent text-end text-white"
+                                            className="no-spinner w-[40px] h-[25px] border-b-[1px] border-white outline-none bg-transparent text-center text-white"
                                         />
                                     </section>
-                                    <p className="text-[25px] text-[#FCF4EF]">
-                                        Total: {selectedFood.price * quantity}
-                                        {""} Shards
-                                    </p>
+                                    <section className="flex flex-row items-center gap-[40px]">
+                                        <p>Total Price</p>
+                                        <p className="flex flex-row gap-[5px]">
+                                            <span className="border-b-[1px] max-w-[70px] truncate">
+                                                {selectedFood.price * quantity}{" "}
+                                            </span>
+                                            <img
+                                                className="w-[21px] h-[22px]"
+                                                src="/assets/icons/shard.svg"
+                                                alt="shardIcon"
+                                            />
+                                        </p>
+                                    </section>
                                 </>
                             ) : (
                                 // Purchased
-                                <p className="text-[22px] text-[#FCF4EF] text-center">
+                                <p className="text-[25px] text-[#FCF4EF] text-center">
                                     You bought {quantity}{" "}
                                     {selectedFood.label.charAt(
                                         selectedFood.label.length - 1
@@ -262,7 +274,7 @@ const PantryPg = () => {
                                 ? `${selectedFood.price * quantity} Shards`
                                 : purchaseConfirmed
                                 ? "Thank you for your purchase!"
-                                : "Confirm Purchase"}
+                                : "Confirm"}
                         </button>
                     </div>
                 </div>
