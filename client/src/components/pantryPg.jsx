@@ -118,8 +118,8 @@ const PantryPg = () => {
     }, []);
 
     return (
-        <div className="w-[1150px] h-[550px] flex flex-col text-[#FFFFFF]">
-            <h1 className="text-start text-[75px]">Pantry</h1>
+        <div className="w-[1150px] h-[550px] flex flex-col justify-start gap-[35px] text-[#FFFFFF]">
+            <h1 className="text-start text-[75px] leading-none">Pantry</h1>
             {/* User Pantry Inventory */}
             <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
                 <ul className="w-full h-full flex flex-row items-center justify-evenly">
@@ -138,7 +138,7 @@ const PantryPg = () => {
                     ))}
                 </ul>
             </div>
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex items-center justify-center">
                 {/* Pantry List */}
                 <ul className="w-full flex flex-row justify-between">
                     {foods.map((food) => (
