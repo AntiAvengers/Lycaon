@@ -48,8 +48,14 @@ const SpritesCollectionPg = () => {
 
             const unsubscribe = onValue(collections_ref, (snapshot) => {
                 //Initial State of "creatures" is set to [],
-                if (!snapshot.val()) return;
-
+                if(!snapshot.exists()) {
+                    setIsLoading(false);
+                    return;
+                }
+                if (!snapshot.val()) {
+                    setIsLoading(false);
+                    return;
+                }
                 //Otherwise iterate through collection and update creatures state
                 const collections = snapshot.val();
 

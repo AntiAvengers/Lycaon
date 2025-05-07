@@ -6,6 +6,7 @@ import SHA256 from 'crypto-js/sha256';
 
 import { useConnectWallet, useCurrentWallet, useWallets, useSignPersonalMessage } from '@mysten/dapp-kit';
 
+import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
 // const showcase = [
 //     {
 //         src: "/assets/sprites/celestial-sprite.png",
@@ -21,14 +22,15 @@ import { useConnectWallet, useCurrentWallet, useWallets, useSignPersonalMessage 
 //     },
 // ];
 
-const showcase = [];
-
 const ShowcaseBox = () => {
     const wallets = useWallets();
 	const { mutate: connect } = useConnectWallet();
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
+    const [showcase, setShowcase] = useState([]);
+
     useEffect(() => {
+        const array = [];
         if(connectionStatus == 'connected') {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
@@ -38,15 +40,11 @@ const ShowcaseBox = () => {
                 if(!snapshot.val()) return;
 
                 const data = snapshot.val();
-                console.log(data);
                 for(const key in data) {
-                    const { type } = data[key];
-                    //There's a better way but for now
-                    const src = type.toLowerCase() == 'slime' 
-                        ? '/assets/sprites/slime-sprite.gif'
-                        : '/assets/sprites/celestial-sprite.png'
-                    showcase.push({ src: src, label: type });
+                    const { type, stage } = data[key];
+                    array.push({ src: getCreatureImage(type, stage), label: type });
                 }
+                setShowcase(array);
             });
 
             return () => unsubscribe();

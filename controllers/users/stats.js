@@ -36,3 +36,16 @@ export const get_user_pantry = async (req, res) => {
     const snapshot = await pantry_ref.once("value");
     return res.status(200).json({ response: snapshot.val() });
 }
+
+export const set_notification_as_read = async (req, res) => {
+    console.log('SETTING NOTIFICATION AS READ');
+    const { id } = req.body;
+    const { address } = req.user;
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+    const notifications_ref = database.ref(`notifications/${hashed}/${id}`);
+    const snapshot = await notifications_ref.once("value");
+    if(snapshot.exists()) {
+        notifications_ref.update({ read: true });
+    }
+    return res.status(200).json({ response: true });
+}

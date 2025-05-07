@@ -10,6 +10,7 @@ module 0x0::sprite_token {
         id: UID,
         sprite_type: string::String,
         sprite_rarity: string::String, 
+        sprite_stage: string::String,
     }
 
     public fun mint(message: vector<u8>, signature: vector<u8>, public_key: vector<u8>, admin: &mut registry_table::UUIDRegistry, clock: &Clock, ctx: &mut TxContext) {
@@ -19,11 +20,12 @@ module 0x0::sprite_token {
 
         //Deserialize the original message
         let mut ticket = bcs::new(message);
-        let (uuid, expiration, sprite_type, sprite_rarity) = (
+        let (uuid, expiration, sprite_type, sprite_rarity, sprite_stage) = (
             ticket.peel_vec_u8(),
             ticket.peel_u64(),
             ticket.peel_vec_u8(),
-            ticket.peel_vec_u8()
+            ticket.peel_vec_u8(),
+            ticket.peel_vec_u8(),
         );
 
         //Check if the expiration time has passed
@@ -41,6 +43,7 @@ module 0x0::sprite_token {
             id: object::new(ctx),
             sprite_type: sprite_type.to_string(),
             sprite_rarity: sprite_rarity.to_string(),
+            sprite_stage: sprite_stage.to_string()
         };
         let sender = ctx.sender();
         transfer::transfer(sprite, sender);

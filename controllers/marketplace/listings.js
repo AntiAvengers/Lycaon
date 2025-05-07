@@ -144,14 +144,15 @@ export const execute_listing_tx = async (req, res) => {
                 })
                 [0].value;
             
-            const { sprite_rarity, sprite_type } = sprite_data.data.content.fields.value.fields;
+            const { sprite_rarity, sprite_type, sprite_stage } = sprite_data.data.content.fields.value.fields;
 
             const listing_obj = {
                 id: listing_object_ID,
-                // owner: address,
+                owner: address,
                 price: parseInt(listing_price),
                 type: sprite_type,
-                rarity: sprite_rarity
+                rarity: sprite_rarity,
+                stage: sprite_stage,
             }
 
             const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -170,12 +171,57 @@ export const execute_listing_tx = async (req, res) => {
 }
 
 export const request_buy_tx = async (req, res) => {
-    const { id } = req.body;
+    const { id, price } = req.body;
     const { address } = req.user;
+
+    try {
+        const hashed = crypto.createHash('sha256').update(address).digest('hex');
+        const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
+        const snapshot = await marketplace_ref.once("value");
+        
+        if(!snapshot.exists()) {
+            return res.status(400).json({ error: "Listing does not exist for player" });
+        }
+
+        const listing = snapshot.val();
+        const { id: object_ID } = listing;
+
+        //Move Module
+        const tx = new Transaction();
+
+        //Price = MIST, need to convert to SUI coins (1 billion MIST = 1 SUI)
+        const amount_to_send = price * 1_000_000_000;
+
+        const splitCoin = tx.splitCoins(tx.gas, [amount_to_send]);
+
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE_NAME}::${BUY_FUNCTION}`,
+            arguments: [
+                tx.object(object_ID),
+                splitCoin
+            ]
+        });
+
+        tx.setGasBudget(1_000_000_000);
+        
+        const simulation = await client.devInspectTransactionBlock({
+            sender: address,
+            transactionBlock: tx,
+        });
+
+        if(simulation.effects.status.status == 'failure') throw simulation.effects.status.error;
+
+        const serialized = await tx.toJSON();
+
+        return res.status(200).json({ transactionBlock: serialized });
+    } catch(err) {
+        console.log(err);
+        return res.status(400).json({ error: err });
+    }
 }
 
 export const execute_buy_tx = async (req, res) => {
-    const { bytes, signature } = req.body;
+    const { bytes, signature, owner, id } = req.body;
     const { address } = req.user;
 
     if(!bytes) {
@@ -198,6 +244,7 @@ export const execute_buy_tx = async (req, res) => {
     });
 
     if(result.effects.status.status != "success") {
+        console.dir(result, { depth: null, colors: true });
         return res.status(503).json({ error: result.effects.status.status });
     }
 
@@ -219,6 +266,37 @@ export const execute_buy_tx = async (req, res) => {
     console.dir(transaction, { depth: null, colors: true });
 
     //Missing DB update logic
+
+    //Transfer Sprite from Collection from Seller to Buyer
+    const hashed = crypto.createHash('sha256').update(owner).digest('hex');
+    const collections_ref = database.ref(`collections/${hashed}/${id}`);
+    const collections_snapshot = await collections_ref.once("value");
+    const sprite = collections_snapshot.val();
+    sprite.on_marketplace = false;
+
+    collections_ref.remove();
+
+    const bHashed = crypto.createHash('sha256').update(address).digest('hex');
+    const buyer_ref = database.ref(`collections/${bHashed}`);
+    buyer_ref.update({ [id]: sprite });
+
+    //Delete Market Listing
+    const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
+    marketplace_ref.remove();
+
+    const notifications_ref = database.ref(`notifications/${hashed}`)
+    const notifications_snapshot = await notifications_ref.once("value");
+    const notifications_list = notifications_snapshot.val();
+    const total = !notifications_list ? 0 : Object.keys(notifications_list).length;
+    const notification = {
+        id: total + 1,
+        message: `Your Sprite "${sprite.nickname.length > 0 ? sprite.nickname : sprite.type}" has been sold. Congrats!`,
+        read: false,
+        timestamp: Date.now()
+    }
+    notifications_ref.push(notification);
+    
+    return res.status(200).json({ response: transaction });
 }
 
 export const request_cancel_tx = async (req, res) => {
@@ -266,7 +344,6 @@ export const request_cancel_tx = async (req, res) => {
 }
 
 export const execute_cancel_tx = async (req, res) => {
-    console.log('EXECUTING CANCEL TRANSACTION');
     const { bytes, signature, id } = req.body;
     const { address } = req.user;
 

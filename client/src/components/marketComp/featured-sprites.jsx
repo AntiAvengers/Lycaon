@@ -1,29 +1,31 @@
-const featuredSprites = [
-    {
-        src: "/assets/sprites/celestial-sprite.png",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature1",
-        to: "/collection/spriteDetail",
-        rank: "Elite",
-        stage: "Egg",
-        name: "Alexanders Maximillian Theodore",
-        mint: true,
-        marketplace: true,
-        price: 900,
-    },
-    {
-        src: "/assets/sprites/slime-sprite.gif",
-        still: "/assets/stillSprites/still-slime.svg",
-        label: "creature2",
-        to: "/collection/spriteDetail",
-        rank: "Littles",
-        name: "Slimey",
-        stage: "Basic",
-        mint: true,
-        marketplace: true,
-        price: 1000,
-    },
-];
+// const featuredSprites = [
+//     {
+//         src: "/assets/sprites/celestial-sprite.png",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature1",
+//         to: "/collection/spriteDetail",
+//         rank: "Elite",
+//         stage: "Egg",
+//         name: "Alexanders Maximillian Theodore",
+//         mint: true,
+//         marketplace: true,
+//         price: 900,
+//     },
+//     {
+//         src: "/assets/sprites/slime-sprite.gif",
+//         still: "/assets/stillSprites/still-slime.svg",
+//         label: "creature2",
+//         to: "/collection/spriteDetail",
+//         rank: "Littles",
+//         name: "Slimey",
+//         stage: "Basic",
+//         mint: true,
+//         marketplace: true,
+//         price: 1000,
+//     },
+// ];
+
+const featuredSprites = [];
 
 const FeaturedSprites = () => {
     return (

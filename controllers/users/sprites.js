@@ -89,7 +89,8 @@ export const request_mint_tx = async (req, res) => {
             return res.status(400).json({ error: "Sprite ID does not exist for player" });
         }
 
-        const { minted_ID, type, rarity } = snapshot.val();
+        const { minted_ID, type, rarity, stage } = snapshot.val();
+        const stage_to_string = stage == 0 ? 'Egg' : stage == 1 ? 'Basic' : 'Adult';
 
         if(minted_ID) {
             return res.status(400).json({ error: "Sprite is already minted!" });
@@ -102,13 +103,15 @@ export const request_mint_tx = async (req, res) => {
             expiration: bcs.u64(),
             sprite_type: bcs.byteVector(),
             sprite_rarity: bcs.byteVector(),
+            sprite_stage: bcs.byteVector()
         });
 
         const struct = MyStruct.serialize({ 
             uuid: new TextEncoder().encode(uuid),
             expiration: Date.now() + (1000 * 60 * 5),
             sprite_type: new TextEncoder().encode(type),
-            sprite_rarity: new TextEncoder().encode(rarity)
+            sprite_rarity: new TextEncoder().encode(rarity),
+            sprite_stage: new TextEncoder().encode(stage_to_string)
         })
         .toBytes();
 

@@ -3,9 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { getAuth, signOut } from 'firebase/auth';
 import { app, database } from '../firebase/firebaseConfig.js';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, set } from 'firebase/database';
 import SHA256 from 'crypto-js/sha256';
 import { useCurrentWallet} from '@mysten/dapp-kit';
+
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
 
 import InGameCurrencyTracker from "./headerComp/inGameCurrencyTracker.jsx";
 import SuiWallet from "./headerComp/suiWallet.jsx";
@@ -17,6 +20,9 @@ const user = { name: "Evasdfasdfasdfasd" };
 
 const Header = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
+
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
 
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
@@ -47,11 +53,12 @@ const Header = () => {
             const hash = SHA256(address).toString();
             const notifications_ref = ref(database, `notifications/${hash}`);
 
-            let notifications = [];
             const unsubscribe = onValue(notifications_ref, (snapshot) => {
+                let notifications = [];
                 if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
                 const data = snapshot.val();
                 for(const key in data) {
+                    const { message, read, timestamp } = data[key];
                     notifications.push({
                         id: key,
                         message,
@@ -66,6 +73,29 @@ const Header = () => {
             return () => unsubscribe()
         }
     }, [connectionStatus])
+
+    const handleNotification = async (id) => {
+        console.log(id);
+        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+          ? import.meta.env.VITE_DEV_URL
+          : '';
+          
+        const URL = API_BASE_URL + "users/stats/set-notification-as-read";
+        const request = await fetchWithAuth(
+            URL,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: id
+                }),
+                credentials: "include", // to include cookies
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+    }
 
     //Logout
     const logout = async () => {
@@ -240,6 +270,7 @@ const Header = () => {
                                             key={n.id}
                                             onMouseEnter={() => {
                                                 if (!n.read) {
+                                                    handleNotification(n.id);
                                                     setNotifications((prev) =>
                                                         prev.map((notif, i) =>
                                                             i === index
