@@ -175,7 +175,7 @@ const AllListing = () => {
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: sprite.label, price: sprite.price }),
+                    body: JSON.stringify({ id: sprite.label, price: sprite.price, owner: sprite.owner }),
                     credentials: "include",
                 },
                 accessToken,
