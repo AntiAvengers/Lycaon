@@ -247,12 +247,12 @@ const SpritesCollectionPg = () => {
     }, []);
 
     return (
-        <div className="w-full flex flex-col items-center justify-start gap-[10px]">
+        <div className="w-full flex flex-col items-center justify-start gap-[10px] relative">
             {/* If user has no creatures */}
             {creaturesList.length === 0 && !isLoading && (
                 <div
-                    className="w-[890px] h-[598px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-                    bg-[#FEFAF3] text-[#000000] text-[37px] text-center px-[40px] py-[20px] leading-none rounded-[20px] shadow-lg z-50 flex flex-col items-center justify-center gap-[40px]"
+                    className="w-[890px] h-[598px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                    bg-[#FEFAF3] text-[#000000] text-[50px] text-center px-[40px] py-[20px] leading-none rounded-[20px] shadow-lg flex flex-col items-center justify-center gap-[40px]"
                 >
                     <span>0/100</span>
                     <section>
