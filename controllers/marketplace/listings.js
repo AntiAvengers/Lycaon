@@ -165,7 +165,7 @@ export const execute_listing_tx = async (req, res) => {
             marketplace_ref.update({ [id]: listing_obj });
 
             const collections_ref = database.ref(`collections/${hashed}/${id}`);
-            collections_ref.update({ on_marketplace: true });
+            collections_ref.update({ on_marketplace: true, favorite: false });
             console.log('. . . Executing Marketplace Listing of Sprite for address', address);
             console.log('. . . . . . Updating Sprite Info - Marketplace UUID:', id)
             return res.status(200).json({ response: transaction });
@@ -279,6 +279,7 @@ export const execute_buy_tx = async (req, res) => {
     const collections_snapshot = await collections_ref.once("value");
     const sprite = collections_snapshot.val();
     sprite.on_marketplace = false;
+    sprite.favorite = false;
 
     collections_ref.remove();
 
