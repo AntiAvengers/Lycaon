@@ -45,13 +45,16 @@ export const request_listing_tx = async (req, res) => {
             return res.status(400).json({ error: "Asking price must be a positive number" });
         }
 
+        //Converting asking price from MIST to SUI coins
+        const SUI_price = asking_price * 1_000_000_000;
+
         //Move Module
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE_NAME}::${CREATE_FUNCTION}`,
             arguments: [
                 tx.object(minted_ID),
-                tx.pure.u64(asking_price)
+                tx.pure.u64(SUI_price)
             ],
         });
 
@@ -142,7 +145,7 @@ export const execute_listing_tx = async (req, res) => {
                     }
                     return false;
                 })
-                [0].value;
+                [0].value / 1_000_000_000; //MIST -> Converting back SUI
             
             const { sprite_rarity, sprite_type, sprite_stage } = sprite_data.data.content.fields.value.fields;
 
@@ -162,7 +165,7 @@ export const execute_listing_tx = async (req, res) => {
             marketplace_ref.update({ [id]: listing_obj });
 
             const collections_ref = database.ref(`collections/${hashed}/${id}`);
-            collections_ref.update({ on_marketplace: true });
+            collections_ref.update({ on_marketplace: true, favorite: false });
             console.log('. . . Executing Marketplace Listing of Sprite for address', address);
             console.log('. . . . . . Updating Sprite Info - Marketplace UUID:', id)
             return res.status(200).json({ response: transaction });
@@ -171,11 +174,11 @@ export const execute_listing_tx = async (req, res) => {
 }
 
 export const request_buy_tx = async (req, res) => {
-    const { id, price } = req.body;
+    const { id, price, owner } = req.body;
     const { address } = req.user;
 
     try {
-        const hashed = crypto.createHash('sha256').update(address).digest('hex');
+        const hashed = crypto.createHash('sha256').update(owner).digest('hex');
         const marketplace_ref = database.ref(`marketplace/${hashed}/${id}`);
         const snapshot = await marketplace_ref.once("value");
         
@@ -190,6 +193,11 @@ export const request_buy_tx = async (req, res) => {
         const tx = new Transaction();
 
         //Price = MIST, need to convert to SUI coins (1 billion MIST = 1 SUI)
+        const gas_budget = (price + 1) * 1_000_000_000;
+        console.log('GAS BUDGET:', gas_budget);
+
+        tx.setGasBudget(gas_budget);
+
         const amount_to_send = price * 1_000_000_000;
 
         const splitCoin = tx.splitCoins(tx.gas, [amount_to_send]);
@@ -202,8 +210,6 @@ export const request_buy_tx = async (req, res) => {
             ]
         });
 
-        tx.setGasBudget(1_000_000_000);
-        
         const simulation = await client.devInspectTransactionBlock({
             sender: address,
             transactionBlock: tx,
@@ -273,6 +279,7 @@ export const execute_buy_tx = async (req, res) => {
     const collections_snapshot = await collections_ref.once("value");
     const sprite = collections_snapshot.val();
     sprite.on_marketplace = false;
+    sprite.favorite = false;
 
     collections_ref.remove();
 
