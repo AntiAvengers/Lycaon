@@ -3,86 +3,20 @@ import { Link } from "react-router-dom";
 import MintPg from "../mintPg";
 import { getAge } from "../../utils/getAge";
 
-import { database } from '../../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
 
-import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
-
-// const creaturesList = [
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature1",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         stage: "Egg",
-//         name: "Nemo",
-//         mint: false,
-//         marketplace: false,
-//     },
-//     {
-//         src: "/assets/sprites/slime-sprite.gif",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature2",
-//         to: "/collection/spriteDetail",
-//         rank: "Littles",
-//         stage: "Basic",
-//         name: "Slimey",
-//         mint: false,
-//         marketplace: false,
-//     },
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature3",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         stage: "Adult",
-//         name: "Nemo",
-//         mint: false,
-//         marketplace: false,
-//     },
-//     {
-//         src: "/assets/star.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature4",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         stage: "Egg",
-//         name: "Nemo",
-//         mint: false,
-//         marketplace: false,
-//     },
-//     {
-//         src: "/assets/sprites/slime-sprite.gif",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature5",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         stage: "Egg",
-//         name: "Nemo",
-//         mint: false,
-//         marketplace: false,
-//     },
-//     {
-//         src: "/assets/star.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature6",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         stage: "Egg",
-//         name: "Nemo",
-//         mint: false,
-//         marketplace: false,
-//     },
-// ];
+import {
+    getCreatureImage,
+    getCreatureStillImage,
+} from "../../utils/getCreatureAsset";
 
 const UserListing = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -98,44 +32,61 @@ const UserListing = () => {
     const [cancelPopup, setCancelPopup] = useState(null);
     const [disableButton, setDisableButton] = useState(false);
 
-    useEffect(() => {       
-        if(connectionStatus == 'connected') {
+    useEffect(() => {
+        if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const collections_ref = ref(database, `collections/${hash}`);
 
-            const unsubscribe_collections = onValue(collections_ref, (snapshot) => {
-                //Initial State of "creatures" is set to [],
-                if(!snapshot.val()) return;
+            const unsubscribe_collections = onValue(
+                collections_ref,
+                (snapshot) => {
+                    //Initial State of "creatures" is set to [],
+                    if (!snapshot.val()) return;
 
-                //Otherwise iterate through collection and update creatures state
-                const collections = snapshot.val();
+                    //Otherwise iterate through collection and update creatures state
+                    const collections = snapshot.val();
 
-                // const updated_likes = [...likedList];
-                const updated_creatures = [];
-                
-                for(const key in collections) {
-                    const { date_of_birth, minted_ID, rarity, type, stage, on_marketplace, nickname, can_evolve } = collections[key];
+                    // const updated_likes = [...likedList];
+                    const updated_creatures = [];
 
-                    const info = {
-                        id: key,
-                        age: getAge(date_of_birth),
-                        name: nickname.length > 0 ? nickname : type,
-                        src: getCreatureImage(type, stage),
-                        still: getCreatureStillImage(type, stage),
-                        label: key, //UUID
-                        to: "/collection/spriteDetail",
-                        rank: rarity,
-                        stage: stage == 0 ? 'Egg' : stage == 1 ? 'Basic?' : 'Adult?',
-                        mint: minted_ID,
-                        marketplace: on_marketplace,
-                        evo: can_evolve
+                    for (const key in collections) {
+                        const {
+                            date_of_birth,
+                            minted_ID,
+                            rarity,
+                            type,
+                            stage,
+                            on_marketplace,
+                            nickname,
+                            can_evolve,
+                        } = collections[key];
+
+                        const info = {
+                            id: key,
+                            age: getAge(date_of_birth),
+                            name: nickname.length > 0 ? nickname : type,
+                            src: getCreatureImage(type, stage),
+                            still: getCreatureStillImage(type, stage),
+                            label: key, //UUID
+                            to: "/collection/spriteDetail",
+                            rank: rarity,
+                            stage:
+                                stage == 0
+                                    ? "Egg"
+                                    : stage == 1
+                                    ? "Basic?"
+                                    : "Adult?",
+                            mint: minted_ID,
+                            marketplace: on_marketplace,
+                            evo: can_evolve,
+                        };
+
+                        updated_creatures.push(info);
                     }
-
-                    updated_creatures.push(info);
+                    setSprites(updated_creatures);
                 }
-                setSprites(updated_creatures);
-            });
+            );
 
             return () => unsubscribe_collections();
         }
@@ -152,56 +103,66 @@ const UserListing = () => {
     };
 
     const handleMint = async () => {
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-            ? import.meta.env.VITE_DEV_URL
-            : '';
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
         const REQUEST_URL = API_BASE_URL + "users/sprites/request_mint_tx";
         const mint_tx = await fetchWithAuth(
-            REQUEST_URL, 
-            { 
-                method: 'POST',
+            REQUEST_URL,
+            {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: selectedSprite.id }),
-                credentials: 'include'
-            }, 
-            accessToken, 
-            refreshAccessToken, 
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const tx = await mint_tx.json();
 
-        if(tx.error) {
+        if (tx.error) {
             console.error(tx.error);
             return;
         }
 
         const { transactionBlock } = tx;
 
-        const { bytes, signature, reportTransactionEffects } = await signTransaction({
-            transaction: transactionBlock,
-            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-        });
-        
+        const { bytes, signature, reportTransactionEffects } =
+            await signTransaction({
+                transaction: transactionBlock,
+                chain: `sui:${
+                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                        ? "devnet"
+                        : "testnet"
+                }`,
+            });
+
         const EXECUTE_URL = API_BASE_URL + "users/sprites/execute_mint_tx";
 
         const exec_mint_tx = await fetchWithAuth(
-            EXECUTE_URL, 
+            EXECUTE_URL,
             {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bytes, signature, id: selectedSprite.id }),
-                credentials: 'include'
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    bytes,
+                    signature,
+                    id: selectedSprite.id,
+                }),
+                credentials: "include",
             },
-            accessToken, 
-            refreshAccessToken, 
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const results = await exec_mint_tx.json();
         const { rawEffects } = results.response;
 
-        if(rawEffects) {
+        if (rawEffects) {
             // setMinted(true);
             closeMint();
             reportTransactionEffects(rawEffects);
@@ -217,60 +178,76 @@ const UserListing = () => {
     };
 
     const handleSell = async (asking_price) => {
-        console.log('Running handleSell() on spriteDetailPg');
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-            ? import.meta.env.VITE_DEV_URL
-            : '';
-        const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_listing_tx";
+        console.log("Running handleSell() on spriteDetailPg");
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
+        const REQUEST_URL =
+            API_BASE_URL + "marketplace/listings/request_listing_tx";
         const mint_tx = await fetchWithAuth(
-            REQUEST_URL, 
-            { 
-                method: 'POST',
+            REQUEST_URL,
+            {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: selectedSprite.id, asking_price: asking_price }),
-                credentials: 'include'
-            }, 
-            accessToken, 
-            refreshAccessToken, 
+                body: JSON.stringify({
+                    id: selectedSprite.id,
+                    asking_price: asking_price,
+                }),
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const tx = await mint_tx.json();
         console.log(tx);
 
-        if(tx.error) {
+        if (tx.error) {
             console.error(tx.error);
             return;
         }
-    
+
         const { transactionBlock } = tx;
 
-        const { bytes, signature, reportTransactionEffects } = await signTransaction({
-            transaction: transactionBlock,
-            chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-        });
-        
-        const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_listing_tx";
+        const { bytes, signature, reportTransactionEffects } =
+            await signTransaction({
+                transaction: transactionBlock,
+                chain: `sui:${
+                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                        ? "devnet"
+                        : "testnet"
+                }`,
+            });
+
+        const EXECUTE_URL =
+            API_BASE_URL + "marketplace/listings/execute_listing_tx";
 
         const exec_mint_tx = await fetchWithAuth(
-            EXECUTE_URL, 
+            EXECUTE_URL,
             {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bytes, signature, id: selectedSprite.id, asking_price: asking_price }),
-                credentials: 'include'
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    bytes,
+                    signature,
+                    id: selectedSprite.id,
+                    asking_price: asking_price,
+                }),
+                credentials: "include",
             },
-            accessToken, 
-            refreshAccessToken, 
+            accessToken,
+            refreshAccessToken,
             setAccessToken
         );
 
         const results = await exec_mint_tx.json();
         const { rawEffects } = results.response;
 
-        if(rawEffects) {
+        if (rawEffects) {
             closeMint();
-            console.log('rawEffects True: for handleSell');
+            console.log("rawEffects True: for handleSell");
             reportTransactionEffects(rawEffects);
             // setMarket(true);
             return true;
@@ -290,66 +267,74 @@ const UserListing = () => {
     const handleCancelListing = async (label) => {
         try {
             setDisableButton(true);
-            const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-                ? import.meta.env.VITE_DEV_URL
-                : '';
-            const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_cancel_tx";
-    
+            const API_BASE_URL =
+                import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                    ? import.meta.env.VITE_DEV_URL
+                    : "";
+            const REQUEST_URL =
+                API_BASE_URL + "marketplace/listings/request_cancel_tx";
+
             const cancel_tx = await fetchWithAuth(
-                REQUEST_URL, 
-                { 
-                    method: 'POST',
+                REQUEST_URL,
+                {
+                    method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id: label }),
-                    credentials: 'include'
-                }, 
-                accessToken, 
-                refreshAccessToken, 
+                    credentials: "include",
+                },
+                accessToken,
+                refreshAccessToken,
                 setAccessToken
             );
-    
+
             const tx = await cancel_tx.json();
             console.log(tx);
-    
-            if(tx.error) {
+
+            if (tx.error) {
                 console.error(tx.error);
                 return;
             }
-        
+
             const { transactionBlock } = tx;
-    
-            const { bytes, signature, reportTransactionEffects } = await signTransaction({
-                transaction: transactionBlock,
-                chain: `sui:${import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet'}`,
-            });
-            
-            const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_cancel_tx";
-    
+
+            const { bytes, signature, reportTransactionEffects } =
+                await signTransaction({
+                    transaction: transactionBlock,
+                    chain: `sui:${
+                        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                            ? "devnet"
+                            : "testnet"
+                    }`,
+                });
+
+            const EXECUTE_URL =
+                API_BASE_URL + "marketplace/listings/execute_cancel_tx";
+
             const exec_cancel_tx = await fetchWithAuth(
-                EXECUTE_URL, 
+                EXECUTE_URL,
                 {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ bytes, signature, id: label }),
-                    credentials: 'include'
+                    credentials: "include",
                 },
-                accessToken, 
-                refreshAccessToken, 
+                accessToken,
+                refreshAccessToken,
                 setAccessToken
             );
-    
+
             const results = await exec_cancel_tx.json();
             const { rawEffects } = results.response;
-    
-            if(rawEffects) {
+
+            if (rawEffects) {
                 reportTransactionEffects(rawEffects);
                 setCancelPopup(null);
                 setDisableButton(false);
                 return true;
             }
-        } catch(err) {
+        } catch (err) {
             console.log(err);
-            if(err.shape.message.includes("User rejected the request")) {
+            if (err.shape.message.includes("User rejected the request")) {
                 setDisableButton(false);
             }
         }
@@ -391,7 +376,15 @@ const UserListing = () => {
             {sprite.length > 0 && (
                 <div className="h-full px-[80px] py-[10px] flex flex-col justify-around">
                     <h1 className="text-[40px]">Your Sprites</h1>
-                    <ul className="flex flex-row items-center justify-between">
+                    <ul
+                        className={`flex flex-row items-center ${
+                            sprite.length === 1
+                                ? "gap-[0px]"
+                                : sprite.length === 2
+                                ? "gap-[125px]"
+                                : "justify-between"
+                        } w-full`}
+                    >
                         {sprite.slice(0, 3).map((sprite) => (
                             <li
                                 key={sprite.label}
@@ -474,7 +467,11 @@ const UserListing = () => {
                                     handleCancelListing(cancelPopup.label)
                                 }
                                 className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
-                                    ${disableButton ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none" : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"}`}
+                                    ${
+                                        disableButton
+                                            ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none"
+                                            : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                                    }`}
                             >
                                 Confirm
                             </button>
