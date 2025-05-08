@@ -378,13 +378,15 @@ const SpritesCollectionPg = () => {
                                     </Link>
                                 </div>
                                 {/* Sprites Descipt */}
-                                <div className="w-full h-[80px] flex flex-col items-start justify-center bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
-                                    <section className="text-[18px]" >
-                                        <span>{creature.rank}</span>
-                                        <span>{creature.name}</span>
+                                <div className="w-full h-[80px] flex flex-col items-start justify-between bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
+                                    <section className="text-[18px] flex flex-row justify-start gap-[10px]">
+                                        <span className="uppercase">
+                                            {creature.rank}
+                                        </span>
+                                        <span className="capitalize" >{creature.name}</span>
                                     </section>
 
-                                    <span>
+                                    <span className="text-[25px]" >
                                         {creature.nickname || creature.name}
                                     </span>
                                 </div>
