@@ -174,7 +174,7 @@ export const execute_listing_tx = async (req, res) => {
 }
 
 export const request_buy_tx = async (req, res) => {
-    const { id, price, owner } = req.body;
+    const { id, price, owner, coins } = req.body;
     const { address } = req.user;
 
     try {
@@ -192,13 +192,8 @@ export const request_buy_tx = async (req, res) => {
         //Move Module
         const tx = new Transaction();
 
-        //Price = MIST, need to convert to SUI coins (1 billion MIST = 1 SUI)
-        const gas_budget = (price + 1) * 1_000_000_000;
-        console.log('GAS BUDGET:', gas_budget);
-
-        tx.setGasBudget(gas_budget);
-
-        const amount_to_send = price * 1_000_000_000;
+        const amount_to_send = price * 1_000_000_000; // Convert to MIST (1 SUI = 1,000,000,000 MIST)
+        const gas_amount = 100_000_000; // Specify gas amount in MIST (example value)
 
         const splitCoin = tx.splitCoins(tx.gas, [amount_to_send]);
 
@@ -209,6 +204,8 @@ export const request_buy_tx = async (req, res) => {
                 splitCoin
             ]
         });
+
+        tx.setGasBudget(gas_amount);
 
         const simulation = await client.devInspectTransactionBlock({
             sender: address,

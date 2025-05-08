@@ -8,7 +8,7 @@ import SHA256 from 'crypto-js/sha256';
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
 
-import { useCurrentWallet, useSignTransaction } from '@mysten/dapp-kit';
+import { useCurrentWallet, useSignTransaction, useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 
 import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
 
@@ -106,12 +106,38 @@ const AllListing = () => {
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
 
+    const account = useCurrentAccount();
+    const client = useSuiClient();
+
     const [filter, setFilter] = useState("all");
     const [showFilters, setShowFilters] = useState(false);
     const [sortOrder, setSortOrder] = useState("asc");
     const [creaturesList, setCreaturesList] = useState([]);
     const [filteredCreatures, setFilteredCreatures] = useState([]);
     const [disableButton, setDisableButton] = useState(false);
+    const [coins, setCoins] = useState([]);
+
+    useEffect(() => {
+        const fetchCoins = async () => {
+          if (!account?.address) return;
+    
+          try {
+            const result = await client.getCoins({
+              owner: account.address,
+              coinType: '0x2::sui::SUI',
+            });
+
+            const array = result.data;
+            console.log('ALL COINS:', array);
+
+            setCoins(array); //coinObjectId
+          } catch (err) {
+            console.error('Failed to fetch coins:', err);
+          }
+        };
+    
+        fetchCoins();
+      }, [account, client]);
 
     useEffect(() => {       
         if(connectionStatus == 'connected') {
@@ -170,12 +196,20 @@ const AllListing = () => {
                     : "";
             const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_buy_tx";
 
+            console.log(coins);
+            console.log('BALANCE:', coins.balance);
+
             const buy_tx = await fetchWithAuth(
                 REQUEST_URL,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: sprite.label, price: sprite.price, owner: sprite.owner }),
+                    body: JSON.stringify({ 
+                        id: sprite.label, 
+                        price: sprite.price, 
+                        owner: sprite.owner, 
+                        coins: coins
+                    }),
                     credentials: "include",
                 },
                 accessToken,
@@ -186,6 +220,7 @@ const AllListing = () => {
             const tx = await buy_tx.json();
 
             if (tx.error) {
+                setDisableButton(false);
                 console.error(tx.error);
                 return;
             }
@@ -223,6 +258,11 @@ const AllListing = () => {
             );
 
             const results = await exec_buy_tx.json();
+            if(!results.response.rawEffects) {
+                setDisableButton(false);
+                return;
+            }
+
             const { rawEffects } = results.response;
 
             if (rawEffects) {
