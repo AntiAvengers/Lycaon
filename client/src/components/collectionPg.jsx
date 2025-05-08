@@ -48,7 +48,7 @@ const SpritesCollectionPg = () => {
 
             const unsubscribe = onValue(collections_ref, (snapshot) => {
                 //Initial State of "creatures" is set to [],
-                if(!snapshot.exists()) {
+                if (!snapshot.exists()) {
                     setIsLoading(false);
                     return;
                 }
@@ -71,6 +71,7 @@ const SpritesCollectionPg = () => {
                         type,
                         stage,
                         on_marketplace,
+                        nickname,
                     } = collections[key];
 
                     if (favorite) {
@@ -84,6 +85,7 @@ const SpritesCollectionPg = () => {
                         to: "/collection/spriteDetail",
                         rank: rarity,
                         name: type,
+                        nickname: nickname,
                         mint: minted_ID,
                         marketplace: on_marketplace,
                     };
@@ -316,7 +318,7 @@ const SpritesCollectionPg = () => {
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
-                                className="relative flex flex-col items-start"
+                                className="relative h-[312px] flex flex-col items-start"
                             >
                                 {/* Badge for Cancel? + Listed*/}
                                 {creature.marketplace && (
@@ -376,12 +378,14 @@ const SpritesCollectionPg = () => {
                                     </Link>
                                 </div>
                                 {/* Sprites Descipt */}
-                                <div className="w-full flex flex-col items-start justify-center bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
-                                    <span className="text-[18px] font-bold mt-2">
-                                        {creature.rank}
-                                    </span>
-                                    <span className="text-[25px]">
-                                        {creature.name}
+                                <div className="w-full h-[80px] flex flex-col items-start justify-center bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
+                                    <section className="text-[18px]" >
+                                        <span>{creature.rank}</span>
+                                        <span>{creature.name}</span>
+                                    </section>
+
+                                    <span>
+                                        {creature.nickname || creature.name}
                                     </span>
                                 </div>
 
