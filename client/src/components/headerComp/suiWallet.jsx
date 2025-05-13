@@ -36,7 +36,7 @@ const SuiWallet = () => {
         
         const interval = setInterval(async () => {
           await fetchBalance();
-        }, 5000);
+        }, 1000);
       
         return () => clearInterval(interval);
       }, [account]);

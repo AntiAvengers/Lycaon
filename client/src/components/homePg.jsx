@@ -1,10 +1,83 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { database } from '../firebase/firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { useAuth } from "../context/AuthContext";
+
+import SHA256 from 'crypto-js/sha256';
+
+import { useCurrentWallet, useCurrentAccount } from '@mysten/dapp-kit';
+
 const HomePg = () => {
+    const { currentWallet, connectionStatus } = useCurrentWallet();
+
+    //Access Token (JWT)
+    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+
     const [showNamePopup, setShowNamePopup] = useState(false); //new user Name popup
     const [showWelcomePopup, setShowWelcomePopup] = useState(false); //welcome popup
     const [playerName, setPlayerName] = useState(""); //Username
+
+    const handleKeyDown = (e) => {
+        if(e.key == 'Enter') {
+            setPlayerProfileName(playerName);
+        }
+    }
+
+    const setPlayerProfileName = async (name) => {
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
+        const REQUEST_URL = API_BASE_URL + "users/stats/set-profile-name";
+        const request = await fetchWithAuth(
+            REQUEST_URL,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    profile_name: name
+                }),
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+        const GIFT_URL = API_BASE_URL + "users/stats/get-welcome-gift";
+        const gift = await fetchWithAuth(
+            GIFT_URL,
+            {   
+                method: "POST",
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+        setShowWelcomePopup(true);
+    }
+
+    useEffect(() => {       
+            if(connectionStatus == 'connected') {
+                const address = currentWallet.accounts[0].address;
+                const hash = SHA256(address).toString();
+                const users_ref = ref(database, `users/${hash}/profile_name`);
+    
+                const unsubscribe = onValue(users_ref, (snapshot) => {
+                    if(snapshot.val() == "") {
+                        setShowNamePopup(true);
+                    } else {
+                        setPlayerName(snapshot.val());
+                    }
+                });
+    
+                return () => unsubscribe();
+            }
+        }, [connectionStatus]);
 
     // Popup for Name
     useEffect(() => {
@@ -147,6 +220,7 @@ const HomePg = () => {
                         required
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         placeholder="Enter your name"
                         className="px-4 py-3 mb-4 rounded-[8px] text-[25px] text-white w-[280px] text-center outline-none focus:ring-2 focus:ring-[#FBBB26] shadow-md placeholder-gray-400"
                     />
@@ -160,6 +234,7 @@ const HomePg = () => {
                         onClick={() => {
                             if (playerName.trim()) {
                                 setShowNamePopup(false);
+                                setPlayerProfileName(playerName);
                                 setShowWelcomePopup(true);
                             }
                         }}

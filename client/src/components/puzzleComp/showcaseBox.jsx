@@ -49,7 +49,7 @@ const ShowcaseBox = () => {
 
             return () => unsubscribe();
         }
-    }, []);
+    }, [connectionStatus]);
 
     return (
         <div className="w-full h-[253.06px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">

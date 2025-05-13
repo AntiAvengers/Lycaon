@@ -15,6 +15,7 @@ const LeaderboardBox = () => {
                     output.push(board[key]);
                 }
             }
+            output.sort((a,b) => a.score > b.score ? -1 : 1);
             setLeaderboard(output);
         });
 
