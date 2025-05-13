@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { getAuth, signOut } from 'firebase/auth';
-import { app, database } from '../firebase/firebaseConfig.js';
-import { ref, onValue, set } from 'firebase/database';
-import SHA256 from 'crypto-js/sha256';
-import { useCurrentWallet} from '@mysten/dapp-kit';
+import { getAuth, signOut } from "firebase/auth";
+import { app, database } from "../firebase/firebaseConfig.js";
+import { ref, onValue, set } from "firebase/database";
+import SHA256 from "crypto-js/sha256";
+import { useCurrentWallet } from "@mysten/dapp-kit";
 
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
@@ -30,14 +30,6 @@ const Header = () => {
     const [notifications, setNotifications] = useState([]);
     const [profileName, setProfileName] = useState("");
 
-    /* 
-        [
-            { id: 1, message: "New message: You sprite nemo has been sold. Congrats!", read: false },
-            { id: 2, message: "Friend request: David has requested to be friends", read: false },
-            { id: 3, message: "Update available: Server was just updated at 1PM", read: true },
-        ]   
-    */
-
     const [notificationOpen, setNotificationOpen] = useState(false);
 
     const menuRef1 = useRef(null); //menu
@@ -49,47 +41,63 @@ const Header = () => {
 
     //Updates Notification State
     useEffect(() => {
-        if(connectionStatus == 'connected') {
+        if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const notifications_ref = ref(database, `notifications/${hash}`);
             const users_ref = ref(database, `users/${hash}/profile_name`);
 
             const profile_name_unsubscribe = onValue(users_ref, (snapshot) => {
-                if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
+                if (
+                    !snapshot.exists() ||
+                    snapshot.val() == undefined ||
+                    snapshot.val() == null
+                )
+                    return;
                 setProfileName(snapshot.val());
             });
 
-            const notifications_unsubscribe = onValue(notifications_ref, (snapshot) => {
-                let notifications = [];
-                if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
-                const data = snapshot.val();
-                for(const key in data) {
-                    const { message, read, timestamp } = data[key];
-                    notifications.push({
-                        id: key,
-                        message,
-                        read,
-                        timestamp
-                    });
+            const notifications_unsubscribe = onValue(
+                notifications_ref,
+                (snapshot) => {
+                    let notifications = [];
+                    if (
+                        !snapshot.exists() ||
+                        snapshot.val() == undefined ||
+                        snapshot.val() == null
+                    )
+                        return;
+                    const data = snapshot.val();
+                    for (const key in data) {
+                        const { message, read, timestamp } = data[key];
+                        notifications.push({
+                            id: key,
+                            message,
+                            read,
+                            timestamp,
+                        });
+                    }
+                    notifications.sort((a, b) =>
+                        a.timestamp > b.timestamp ? -1 : 1
+                    );
+                    setNotifications(notifications);
                 }
-                notifications.sort((a,b) => a.timestamp > b.timestamp ? -1 : 1);
-                setNotifications(notifications);
-            });
+            );
 
             return () => {
                 profile_name_unsubscribe();
                 notifications_unsubscribe();
-            }
+            };
         }
     }, [connectionStatus]);
 
     const handleNotification = async (id) => {
         console.log(id);
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-          ? import.meta.env.VITE_DEV_URL
-          : '';
-          
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
+
         const URL = API_BASE_URL + "users/stats/set-notification-as-read";
         const request = await fetchWithAuth(
             URL,
@@ -97,7 +105,7 @@ const Header = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    id: id
+                    id: id,
                 }),
                 credentials: "include", // to include cookies
             },
@@ -105,22 +113,23 @@ const Header = () => {
             refreshAccessToken,
             setAccessToken
         );
-    }
+    };
 
     //Logout
     const logout = async () => {
         //Delete Refresh Token
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-          ? import.meta.env.VITE_DEV_URL
-          : '';
-          
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "";
+
         const URL = API_BASE_URL + "auth/logout/";
-        await fetch(URL, { method: 'POST', credentials: 'include' });
+        await fetch(URL, { method: "POST", credentials: "include" });
 
         //Logout of Firebase
         const auth = getAuth(app);
         signOut(auth);
-    }
+    };
 
     // Game Logo directory
     const handleHomeClick = () => {
@@ -196,7 +205,7 @@ const Header = () => {
 
     return (
         <header className="sticky top-0 z-50 sm:h-[75px] text-[#FCF4E7] flex justify-center items-center">
-            <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md mx-0 md:mx-[10px] sm:mx-0">
+            <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md/40 mx-0 md:mx-[10px] sm:mx-0">
                 {/* Left Section: Menu and Logo */}
                 <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
                     {/* Menu */}
@@ -243,20 +252,11 @@ const Header = () => {
                 </section>
 
                 {/* Right Section: Currency, Wallet, UserName, Notification, Logout*/}
-                <section className="flex flex-row gap-[9px] sm:gap-[14px] items-center">
+                <section className="flex flex-row gap-[10px] sm:gap-[20px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
-                    {/* UserName when Set */}
-                    {profileName && (
-                        <span className="text-[25px] max-w-[125px] truncate">
-                            {profileName}
-                        </span>
-                    )}
                     {/* Notification */}
-                    <section
-                        className="relative pr-[10px]"
-                        ref={notificationRef}
-                    >
+                    <section className="relative" ref={notificationRef}>
                         <button onClick={toggleNotificationDropdown}>
                             <Badge
                                 badgeContent={
@@ -269,9 +269,9 @@ const Header = () => {
                         </button>
 
                         {notificationOpen && (
-                            <div className="absolute right-0 mt-[7px] w-[300px] max-w-[300px] bg-white text-black rounded-lg shadow-xl z-50">
+                            <div className="absolute right-0 top-[32px] mt-[7px] w-[350px] max-w-[350px] bg-[#273472] rounded-b-[10px] shadow-xl z-50 text-[20px]">
                                 {notifications.length === 0 ? (
-                                    <div className="p-4 text-gray-500">
+                                    <div className="p-4 text-[#FCF4E7]">
                                         No notifications
                                     </div>
                                 ) : (
@@ -293,9 +293,9 @@ const Header = () => {
                                                     );
                                                 }
                                             }}
-                                            className={`px-4 py-2 cursor-pointer rounded-lg hover:bg-gray-100 transition-colors duration-300 text-wrap ${
+                                            className={`px-4 py-2 cursor-pointer rounded-b-[10px] hover:bg-[#1A265D] transition-colors duration-300 text-wrap ${
                                                 n.read
-                                                    ? "text-gray-600"
+                                                    ? "text-[#FCF4E7]"
                                                     : "text-[#EA1A26]"
                                             }`}
                                         >
@@ -306,7 +306,12 @@ const Header = () => {
                             </div>
                         )}
                     </section>
-
+                    {/* UserName when Set */}
+                    {profileName && (
+                        <span className="text-[25px] max-w-[125px] truncate">
+                            {profileName}
+                        </span>
+                    )}
                     {/* Logout */}
                     <div
                         className="relative"
@@ -319,12 +324,10 @@ const Header = () => {
                                 <Link
                                     to="/"
                                     aria-label="Logs Out back to SignIn"
-                                    onClick={() => 
-                                        { 
-                                            setProfile(false);
-                                            logout();
-                                        }
-                                    }
+                                    onClick={() => {
+                                        setProfile(false);
+                                        logout();
+                                    }}
                                     className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
                                 >
                                     Log Out
