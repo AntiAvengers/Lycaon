@@ -421,8 +421,8 @@ const UserListing = () => {
                                     >
                                         {sprite.mint
                                             ? sprite.marketplace
-                                                ? "On Marketplace"
-                                                : "Sell on Marketplace"
+                                                ? "On Market"
+                                                : "Sell on Market"
                                             : "Start Minting"}
                                     </button>
                                     {sprite.marketplace && (
@@ -432,7 +432,7 @@ const UserListing = () => {
                                             }
                                             className="underline cursor-pointer hover:text-[#FBBB26]"
                                         >
-                                            Cancel?
+                                            Cancel
                                         </button>
                                     )}
                                 </section>
@@ -460,7 +460,7 @@ const UserListing = () => {
                                 {cancelPopup.name}
                             </span>
                             <p className="text-[25px] text-center">
-                                Would you like to take it off the marketplace?
+                                Would you like to take it off the market?
                             </p>
                             <button
                                 onClick={() =>

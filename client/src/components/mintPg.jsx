@@ -219,7 +219,6 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
             }
         }
         
-
         //ORIGINAL
         // setIsMinting(true);
 
@@ -326,13 +325,13 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                     ) : (
                         <div className="leading-none">
                             <p>{sprite.name} minted successfully!</p>
-                            <p>Do you want to sell it on the marketplace?</p>
+                            <p>Do you want to sell it on the market?</p>
                         </div>
                     )
                 ) : (
                     <div className="leading-tight">
                         <p>{sprite.name} is now listed!</p>
-                        <p>View it in the marketplace.</p>
+                        <p>View it in the market.</p>
                     </div>
                 )}
             </section>
@@ -368,9 +367,9 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                     } else if (
                         (minted || sprite.mint) &&
                         (market || sprite.marketplace) &&
-                        location.pathname !== "/marketplace"
+                        location.pathname !== "/market"
                     ) {
-                        navigate("/marketplace");
+                        navigate("/market");
                     }
                 }}
                 className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer ${
@@ -379,7 +378,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                         !(market || sprite.marketplace) &&
                         putOnMarket &&
                         (salePrice === "" || Number(salePrice) <= 0 || disableButton)) ||
-                    (location.pathname == "/marketplace" &&
+                    (location.pathname == "/market" &&
                         (market || sprite.marketplace))
                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none"
                         : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
@@ -387,10 +386,10 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
             >
                 {minted || sprite.mint
                     ? market || sprite.marketplace
-                        ? "View Marketplace"
+                        ? "View Market"
                         : putOnMarket
                         ? "Confirm"
-                        : "Sell on marketplace"
+                        : "Sell on Market"
                     : isMinting
                     ? "Minting"
                     : "Mint"}

@@ -200,7 +200,7 @@ const Header = () => {
         { to: "/fountain", label: "Fountain" },
         { to: "/collection", label: "Collection" },
         { to: "/pantry", label: "Pantry" },
-        { to: "/marketplace", label: "Market" },
+        { to: "/market", label: "Market" },
     ];
 
     return (

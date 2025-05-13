@@ -47,7 +47,7 @@ const App = () => {
                         <Route path="/collection" element={<Layout><CollectionPg /></Layout>} />
                         <Route path="/collection/spriteDetail" element={<Layout><SpritesDetailPg /></Layout>} />
                         <Route path="/pantry" element={<Layout><PantryPg /></Layout>} />
-                        <Route path="/marketplace" element={<Layout><MarketPg /></Layout>} />
+                        <Route path="/market" element={<Layout><MarketPg /></Layout>} />
                         <Route path="*" element={<Layout><NotFoundPg /></Layout>} />
                     </Route>
                 </Routes>

@@ -157,14 +157,14 @@ const HomePg = () => {
 
             {/* Market Group */}
             <div className="group">
-                <Link to="/marketplace">
+                <Link to="/market">
                     <img
                         className="absolute top-1/2 right-[1%] transform -translate-y-[74%] cursor-pointer"
                         src="/assets/icons/market.png"
                         alt="marketIcon"
                     />
                     <span className="absolute top-1/2 right-[10%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        Marketplace
+                        Market
                     </span>
                 </Link>
             </div>
