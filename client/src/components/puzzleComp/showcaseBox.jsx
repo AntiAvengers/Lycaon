@@ -7,20 +7,6 @@ import SHA256 from 'crypto-js/sha256';
 import { useConnectWallet, useCurrentWallet, useWallets, useSignPersonalMessage } from '@mysten/dapp-kit';
 
 import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
-// const showcase = [
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         label: "creature1",
-//     },
-//     {
-//         src: "/assets/sprites/slime-sprite.gif",
-//         label: "creature2",
-//     },
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         label: "creature3",
-//     },
-// ];
 
 const ShowcaseBox = () => {
     const wallets = useWallets();
@@ -52,8 +38,8 @@ const ShowcaseBox = () => {
     }, [connectionStatus]);
 
     return (
-        <div className="w-full h-[253.06px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
-            <ul className="h-full flex flex-row justify-between items-end pb-[8px]">
+        <div className="w-full h-[253px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
+            <ul className="h-full flex flex-row justify-evenly items-end pb-[8px]">
                 {showcase.length > 0 && showcase.map((creature) => (
                     <li key={creature.label}>
                         <img
