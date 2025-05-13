@@ -29,7 +29,6 @@ const FountainPg = () => {
 
     //Popup message for Pull Btns
     const handlePull = async (amount) => {
-        
         if (pages > 0) {
             setShowVideo(true); // show the animation
             setVideoEnded(false); // reset in case it's been set
@@ -55,7 +54,7 @@ const FountainPg = () => {
 
         const res = await request.json();
         if (res.error) {
-            setShowError(true);
+            // setShowError(true);
             console.log(res.error);
             return;
         }
@@ -94,7 +93,18 @@ const FountainPg = () => {
 
     //Closes Pull Popup
     const closePullPopup = () => setPulledSprites([]);
-    const closeErrorPopup = () => setShowError(false);
+    // const closeErrorPopup = () => setShowError(false);
+
+    //0 pages deactivates pull btns
+    useEffect(() => {
+        if (pages <= 0) {
+            console.log("true", pages);
+            setShowError(true);
+        } else {
+            console.log("false", pages);
+            setShowError(false); // Optional: reset error if pages increase
+        }
+    }, [pages]);
 
     //Setting pull rates from server
     useEffect(() => {
@@ -156,11 +166,18 @@ const FountainPg = () => {
                             alt="spritePull"
                             className="w-[100px] h-[100px]"
                         />
-                        <p className="text-[80px]">
-                            {pages >= 0
-                                ? `${pages} Page${pages == 1 ? "" : "s"}`
-                                : `0 Pages`}
-                        </p>
+                        <div className="text-center">
+                            <p className="text-[80px]">
+                                {pages >= 0
+                                    ? `${pages} Page${pages === 1 ? "" : "s"}`
+                                    : "0 Page"}
+                            </p>
+                            {pages <= 0 && (
+                                <p className="text-[25px] text-[#EA1A26]">
+                                    Play puzzles to earn pages!
+                                </p>
+                            )}
+                        </div>
                     </div>
 
                     <p className="w-[403px] text-[25px] text-center leading-tight">
@@ -173,13 +190,25 @@ const FountainPg = () => {
                     <div className="w-[100%] flex flex-row justify-between">
                         <button
                             onClick={() => handlePull(1)}
-                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#FFFFFF] cursor-pointer"
+                            disabled={pages < 1}
+                            className={`w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
+                                ${
+                                    showError
+                                        ? "bg-gray-400 text-gray-200 cursor-not-allowed shadow-none"
+                                        : "bg-[#4A63E4] hover:bg-[#1D329F] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                                }`}
                         >
                             1 Page
                         </button>
                         <button
                             onClick={() => handlePull(10)}
-                            className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#FFFFFF] cursor-pointer"
+                            disabled={pages < 10}
+                            className={`w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
+                                ${
+                                    showError
+                                        ? "bg-gray-400 text-gray-200 cursor-not-allowed shadow-none"
+                                        : "bg-[#4A63E4] hover:bg-[#1D329F] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                                }`}
                         >
                             10 Pages
                         </button>
@@ -189,26 +218,26 @@ const FountainPg = () => {
                 {/* Rate Detail Popup */}
                 <button
                     onClick={handleRate}
-                    className="absolute right-[25px] bottom-[10px] underline text-[25px] cursor-pointer"
+                    className="absolute right-[20px] bottom-[5px] underline text-[25px] cursor-pointer"
                 >
                     Rate Details
                 </button>
                 {showRate && (
-                    <div className="w-[407px] h-[304px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center justify-between">
+                    <div className="w-[450px] h-[350px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center gap-[24px]">
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"
                             onClick={closeRate}
-                            className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                            className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
                         <h1 className="text-[40px]">Sprite Rates</h1>
-                        <section className="h-[75%] flex flex-col items-center justify-between text-[25px]">
+                        <section className="h-[225px] flex flex-col items-center justify-between text-[25px]">
                             <p>Each sprite rarity have their own rates.</p>
                             <div>
                                 {rates.map((rate) => (
                                     <ul
                                         key={rate.name}
-                                        className="leading-tight"
+                                        className="leading-[33px]"
                                     >
                                         <li>
                                             {rate.name} ={" "}
@@ -223,7 +252,7 @@ const FountainPg = () => {
             </div>
 
             {/* Not Enough Pages Popup */}
-            {showError && (
+            {/* {showError && (
                 <div className="w-[400px] h-[450px] max-h-[234px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#4A63E4] z-50 rounded-[10px] p-[20px] text-[#FFFFFF] flex flex-col items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
@@ -237,7 +266,7 @@ const FountainPg = () => {
                         </h2>
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* Pulling Video */}
             {showVideo && !videoEnded && (
