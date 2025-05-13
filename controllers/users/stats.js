@@ -38,7 +38,6 @@ export const get_user_pantry = async (req, res) => {
 }
 
 export const set_notification_as_read = async (req, res) => {
-    console.log('SETTING NOTIFICATION AS READ');
     const { id } = req.body;
     const { address } = req.user;
     const hashed = crypto.createHash('sha256').update(address).digest('hex');
@@ -48,4 +47,32 @@ export const set_notification_as_read = async (req, res) => {
         notifications_ref.update({ read: true });
     }
     return res.status(200).json({ response: true });
+}
+
+export const set_profile_name = async (req, res) => {
+    const { profile_name } = req.body;
+    const { address } = req.user;
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+    const users_ref = database.ref(`users/${hashed}`);
+    users_ref.update({ profile_name: profile_name });
+    return res.status(200).json({ response: profile_name });
+}
+
+export const get_welcome_gift = async (req, res) => {
+    const { address } = req.user;
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+    const users_ref = database.ref(`users/${hashed}`);
+    const snapshot = await users_ref.once("value");
+    const { profile_name, pages, shards } = snapshot.val();
+
+    if(pages !== 0 && shards !== 0) {
+        return res.status(200).json({ error: "Player has already received welcome gift" });
+    }
+
+    users_ref.update({
+        pages: 4, 
+        shards: 500,
+    });
+    
+    return res.status(200).json({ response: "OK" });
 }

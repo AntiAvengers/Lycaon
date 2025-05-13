@@ -28,6 +28,7 @@ const Header = () => {
     const [profile, setProfile] = useState(false); //logout
     const [message, setMessage] = useState(""); //puzzle message
     const [notifications, setNotifications] = useState([]);
+    const [profileName, setProfileName] = useState("");
 
     /* 
         [
@@ -52,8 +53,14 @@ const Header = () => {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const notifications_ref = ref(database, `notifications/${hash}`);
+            const users_ref = ref(database, `users/${hash}/profile_name`);
 
-            const unsubscribe = onValue(notifications_ref, (snapshot) => {
+            const profile_name_unsubscribe = onValue(users_ref, (snapshot) => {
+                if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
+                setProfileName(snapshot.val());
+            });
+
+            const notifications_unsubscribe = onValue(notifications_ref, (snapshot) => {
                 let notifications = [];
                 if(!snapshot.exists() || snapshot.val() == undefined || snapshot.val() == null) return;
                 const data = snapshot.val();
@@ -70,9 +77,12 @@ const Header = () => {
                 setNotifications(notifications);
             });
 
-            return () => unsubscribe()
+            return () => {
+                profile_name_unsubscribe();
+                notifications_unsubscribe();
+            }
         }
-    }, [connectionStatus])
+    }, [connectionStatus]);
 
     const handleNotification = async (id) => {
         console.log(id);
@@ -237,9 +247,9 @@ const Header = () => {
                     <InGameCurrencyTracker />
                     <SuiWallet />
                     {/* UserName when Set */}
-                    {user.name && (
+                    {profileName && (
                         <span className="text-[25px] max-w-[125px] truncate">
-                            {user.name}
+                            {profileName}
                         </span>
                     )}
                     {/* Notification */}
