@@ -181,10 +181,16 @@ const PantryPg = () => {
                             onClick={closeBuy}
                             className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
-                        <section className="text-[35px] text-center">
-                            <p>Confirm to buy </p>
-                            <p>{selectedFood.label}</p>
-                        </section>
+                        {!purchaseConfirmed ? (
+                            <section className="text-[35px] text-center">
+                                <p>Confirm to buy </p>
+                                <p>{selectedFood.label}</p>
+                            </section>
+                        ) : (
+                            <section className="text-[35px] w-[75%] text-center">
+                                <p>Thank you for your purchase!</p>
+                            </section>
+                        )}
                         <section className="bg-[#F7F7F7] rounded-full p-[25px]">
                             <img
                                 src={selectedFood.src}
@@ -256,26 +262,24 @@ const PantryPg = () => {
                                 </p>
                             )}
                         </section>
-
-                        <button
-                            onClick={() => {
-                                purchase_food(selectedFood.label, quantity);
-                            }}
-                            // disabled={error != false || purchaseConfirmed}
-                            disabled={error || purchaseConfirmed}
-                            className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
+                        {!purchaseConfirmed && (
+                            <button
+                                onClick={() => {
+                                    purchase_food(selectedFood.label, quantity);
+                                }}
+                                disabled={error || purchaseConfirmed}
+                                className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
                              ${
                                  error || purchaseConfirmed
                                      ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                                      : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                              }`}
-                        >
-                            {error
-                                ? `${selectedFood.price * quantity} Shards`
-                                : purchaseConfirmed
-                                ? "Thank you for your purchase!"
-                                : "Confirm"}
-                        </button>
+                            >
+                                {error
+                                    ? `${selectedFood.price * quantity} Shards`
+                                    : "Confirm"}
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
