@@ -441,7 +441,7 @@ export class AnagramGame extends Scene {
         //----------------------------------------------------------
 
         this.blurOverlay = this.add
-            .rectangle(0, 0, this.scale.width, this.scale.height, 0xb0b0b0)
+            .rectangle(0, 0, this.scale.width, this.scale.height, 0x140E28)
             .setOrigin(0)
             .setDepth(199)
             .setVisible(false);

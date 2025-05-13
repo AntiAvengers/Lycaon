@@ -141,7 +141,7 @@ export class AnagramOver extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height + Math.min(this.scale.height * 0.12, 100) / 2, // Vertically center text within rectangle
-                "E  I  T  S  P",
+                "G A M E  O V E R",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.08, 65),
