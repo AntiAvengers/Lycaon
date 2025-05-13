@@ -136,6 +136,7 @@ const SpritesDetailPg = () => {
                     id: id,
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
+                    stage: stage,
                     src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,

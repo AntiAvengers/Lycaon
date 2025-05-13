@@ -388,12 +388,12 @@ const UserListing = () => {
                         {sprite.slice(0, 3).map((sprite) => (
                             <li
                                 key={sprite.label}
-                                className="flex flex-row items-center gap-[20px]"
+                                className="w-[293px] h-[143px] flex flex-row items-center gap-[20px]"
                             >
                                 <img
                                     src={sprite.still}
                                     alt={sprite.label}
-                                    className="object-contain bg-[#E9E9E9]"
+                                    className="w-[152px] object-contain bg-[#E9E9E9]"
                                 />
                                 <section className="flex flex-col items-start text-[25px]">
                                     <span>
