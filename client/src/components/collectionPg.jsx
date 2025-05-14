@@ -101,7 +101,7 @@ const SpritesCollectionPg = () => {
 
             return () => unsubscribe();
         }
-    }, [connectionStatus]);
+    }, [connectionStatus, currentWallet.accounts, likedList]);
 
     //Like sprites
     const handleToggleLike = async (index) => {
@@ -323,17 +323,17 @@ const SpritesCollectionPg = () => {
                                 {/* Badge for Cancel? + Listed*/}
                                 {creature.marketplace && (
                                     <div>
-                                        <span className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-full z-10">
-                                            Listed
-                                        </span>
                                         <button
                                             onClick={() =>
                                                 setCancelPopup(creature)
                                             }
-                                            className="absolute top-2 left-2 bg-[#FBBB26] text-black text-xs px-2 py-1 rounded-full z-10 cursor-pointer"
+                                            className="absolute top-2 right-2 bg-[#FBBB26] text-black text-xs px-2 py-1 rounded-full z-10 cursor-pointer"
                                         >
-                                            Cancel?
+                                            Cancel
                                         </button>
+                                        <span className="absolute top-2 left-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-full z-10">
+                                            Listed
+                                        </span>
                                     </div>
                                 )}
 
@@ -379,58 +379,55 @@ const SpritesCollectionPg = () => {
                                 </div>
                                 {/* Sprites Descipt */}
                                 <div className="w-full h-[80px] flex flex-col items-start justify-between bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
-                                    <section className="text-[18px] flex flex-row justify-start gap-[10px]">
-                                        <span className="uppercase">
-                                            {creature.rank}
-                                        </span>
-                                        <span className="capitalize" >{creature.name}</span>
-                                    </section>
-
-                                    <span className="text-[25px]" >
+                                    <p className="w-full text-[18px] uppercase leading-none truncate">
+                                        {creature.rank} {creature.name}
+                                    </p>
+                                    <span className="w-full text-[25px] truncate">
                                         {creature.nickname || creature.name}
                                     </span>
                                 </div>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
 
-                                {/* Cancel Popup */}
-                                {cancelPopup && (
-                                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-md z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-white leading-none">
-                                        <img
-                                            src="/assets/icons/closeBtn.svg"
-                                            alt="closeBtn"
-                                            onClick={() => setCancelPopup(null)}
-                                            className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
-                                        />
-                                        <img
-                                            src={cancelPopup.still}
-                                            alt={cancelPopup.label}
-                                            className="object-contain max-h-[150px]"
-                                        />
-                                        <span className="text-[25px]">
-                                            {cancelPopup.name}
-                                        </span>
-                                        <p className="text-[25px] text-center">
-                                            Would you like to take it off the
-                                            marketplace?
-                                        </p>
-                                        <button
-                                            onClick={() =>
-                                                handleCancelListing(cancelPopup)
-                                            }
-                                            className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
+            {/* Cancel Popup */}
+            {cancelPopup && (
+                <div className="fixed inset-0 bg-[#140E28]/60 z-50">
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-[#FCF4EF] leading-none">
+                        <img
+                            src="/assets/icons/closeBtn.svg"
+                            alt="closeBtn"
+                            onClick={() => setCancelPopup(null)}
+                            className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                        />
+                        <h1 className="w-[70%] text-[35px] text-[#FCF4EF] text-center truncate">
+                            {cancelPopup.name}
+                        </h1>
+                        <img
+                            src={cancelPopup.still}
+                            alt={cancelPopup.label}
+                            className="object-contain w-[150px] h-[150px] max-h-[150px]"
+                        />
+                        <section className="w-full h-[101px] bg-[#242C53] flex flex-col items-center justify-center text-[#FCF4EF] text-[25px] text-center px-4">
+                            <p className="w-[90%] text-[25px] text-center">
+                                Would you like to take it off the market?
+                            </p>
+                        </section>
+                        <button
+                            onClick={() => handleCancelListing(cancelPopup)}
+                            className={`w-fit h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer
                                                 ${
                                                     disableButton
                                                         ? "bg-gray-400 text-white shadow-none cursor-not-allowed pointer-events-none"
                                                         : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                                                 }`}
-                                        >
-                                            Confirm
-                                        </button>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </>
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );

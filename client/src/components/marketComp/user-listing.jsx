@@ -452,15 +452,15 @@ const UserListing = () => {
             {cancelPopup && (
                 <div className="fixed inset-0 bg-[#140E28]/60 z-50">
                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[20px] text-[#FCF4EF] leading-none">
-                        <h1 className="w-[70%] text-[35px] text-[#FCF4EF] text-center truncate">
-                            {cancelPopup.name}
-                        </h1>
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"
                             onClick={() => setCancelPopup(null)}
                             className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
+                        <h1 className="w-[70%] text-[35px] text-[#FCF4EF] text-center truncate">
+                            {cancelPopup.name}
+                        </h1>
                         <img
                             src={cancelPopup.still}
                             alt={cancelPopup.label}
@@ -504,4 +504,5 @@ const UserListing = () => {
 };
 
 export default UserListing;
+
 
