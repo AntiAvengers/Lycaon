@@ -103,9 +103,9 @@ export class AnagramOver extends Scene {
         // Create the mute button in the scene
         if (!this.muteButton) {
             this.muteButton = this.add
-                .image(this.scale.width - 30, this.scale.height - 30, "star")
+                .image(this.scale.width - 30, this.scale.height - 30, "sound")
                 .setOrigin(0.5)
-                .setScale(0.5)
+                .setScale(1)
                 .setInteractive()
                 .setDepth(198);
 

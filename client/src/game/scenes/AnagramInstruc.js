@@ -66,9 +66,9 @@ export class AnagramInstruc extends Scene {
         // Mute Btn
         if (!this.muteButton) {
             this.muteButton = this.add
-                .image(this.scale.width - 30, this.scale.height - 30, "star")
+                .image(this.scale.width - 30, this.scale.height - 30, "sound")
                 .setOrigin(0.5)
-                .setScale(0.5)
+                .setScale(1)
                 .setInteractive()
                 .setDepth(200);
 

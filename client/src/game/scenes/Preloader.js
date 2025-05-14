@@ -33,8 +33,9 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('star', 'star.png');
+        this.load.image('sound', '/icons/sound-control.svg')
         this.load.image('warning', '/icons/warning.svg')
-        this.load.image('help', '/icons/help.svg')
+        this.load.image('help', '/icons/help-icon.svg')
         this.load.image('key', '/icons/key.svg')
         this.load.image('scroll', '/icons/scroll.svg')
         this.load.image('reward-bg', '/bg/reward-bg.svg')
