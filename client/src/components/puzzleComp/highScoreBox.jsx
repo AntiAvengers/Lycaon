@@ -35,7 +35,7 @@ const HighscoreBox = () => {
 
             return () => unsubscribe();
         }
-    }, [connectionStatus, currentWallet.accounts]);
+    }, [connectionStatus]);
 
     return (
         <div className="w-full h-[81px] pt-[5px] bg-[url('/assets/bg/highscore.png')] bg-cover bg-center flex flex-col justify-between items-center ">

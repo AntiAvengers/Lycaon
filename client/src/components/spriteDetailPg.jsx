@@ -407,8 +407,12 @@ const SpritesDetailPg = () => {
     return (
         <div className="w-full h-[625px] flex flex-row justify-evenly items-center relative">
             {/* Food Inventory */}
-            <section className="flex flex-col" >
-                <FoodInventory foods={foods} onFeed={handleFeed} />
+            <section className="flex flex-col">
+                <FoodInventory
+                    foods={foods}
+                    onFeed={handleFeed}
+                    // disabled={spriteInfo.stage == 0}
+                />
                 <Link
                     to="/pantry"
                     className="mt-[25px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
