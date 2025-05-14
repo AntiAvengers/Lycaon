@@ -406,9 +406,16 @@ const SpritesDetailPg = () => {
 
     return (
         <div className="w-full h-[625px] flex flex-row justify-evenly items-center relative">
-            {/* Food */}
-            {/* <FoodInventory foods={foods} onFeed={(label) => handleFeed(label)} /> */}
-            <FoodInventory foods={foods} onFeed={handleFeed} />
+            {/* Food Inventory */}
+            <section className="flex flex-col" >
+                <FoodInventory foods={foods} onFeed={handleFeed} />
+                <Link
+                    to="/pantry"
+                    className="mt-[25px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
+                >
+                    Go to Pantry
+                </Link>
+            </section>
             {/* Food Meter and Sprite Gif */}
             <section className="w-[496px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
@@ -458,7 +465,10 @@ const SpritesDetailPg = () => {
                 </button>
             </section>
 
-            <Link to="/collection" className="absolute right-[45px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]">
+            <Link
+                to="/collection"
+                className="absolute right-[45px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
+            >
                 Back to Collection
             </Link>
 
