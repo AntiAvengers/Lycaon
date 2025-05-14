@@ -16,8 +16,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 
-const user = { name: "Evasdfasdfasdfasd" };
-
 const Header = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
 

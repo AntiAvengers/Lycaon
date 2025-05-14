@@ -1,103 +1,24 @@
 import { useState, useMemo, useEffect } from "react";
 
-import { database } from '../../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
 
-import { useCurrentWallet, useSignTransaction, useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import {
+    useCurrentWallet,
+    useSignTransaction,
+    useCurrentAccount,
+    useSuiClient,
+} from "@mysten/dapp-kit";
 
-import { getCreatureImage, getCreatureStillImage } from "../../utils/getCreatureAsset";
-
-// const creaturesList = [
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature1",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Alexanders Maximillian Theodore",
-//         stage: "Egg",
-//         mint: true,
-//         marketplace: true,
-//         price: 900,
-//     },
-//     {
-//         src: "/assets/sprites/slime-sprite.gif",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature2",
-//         to: "/collection/spriteDetail",
-//         rank: "Littles",
-//         name: "Slimey",
-//         stage: "Basic",
-//         mint: true,
-//         marketplace: true,
-//         price: 1000,
-//     },
-//     {
-//         src: "/assets/sprites/celestial-sprite.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature3",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Nemo",
-//         stage: "Adult",
-//         mint: true,
-//         marketplace: true,
-//         price: 1500,
-//     },
-//     {
-//         src: "/assets/star.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature4",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Nemo",
-//         stage: "Egg",
-//         mint: true,
-//         marketplace: true,
-//         price: 900,
-//     },
-//     {
-//         src: "/assets/sprites/slime-sprite.gif",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature5",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Nemo",
-//         stage: "Adult",
-//         mint: true,
-//         marketplace: true,
-//         price: 2000,
-//     },
-//     {
-//         src: "/assets/star.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature6",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Nemo",
-//         stage: "Basic",
-//         mint: true,
-//         marketplace: true,
-//         price: 900,
-//     },
-//     {
-//         src: "/assets/star.png",
-//         still: "/assets/stillSprites/still-slime.svg",
-//         label: "creature7",
-//         to: "/collection/spriteDetail",
-//         rank: "Elite",
-//         name: "Nemo",
-//         stage: "Egg",
-//         mint: true,
-//         marketplace: true,
-//         price: 900,
-//     },
-// ];
+import {
+    getCreatureImage,
+    getCreatureStillImage,
+} from "../../utils/getCreatureAsset";
 
 const AllListing = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -119,45 +40,47 @@ const AllListing = () => {
 
     useEffect(() => {
         const fetchCoins = async () => {
-          if (!account?.address) return;
-    
-          try {
-            const result = await client.getCoins({
-              owner: account.address,
-              coinType: '0x2::sui::SUI',
-            });
+            if (!account?.address) return;
 
-            const array = result.data;
-            console.log('ALL COINS:', array);
+            try {
+                const result = await client.getCoins({
+                    owner: account.address,
+                    coinType: "0x2::sui::SUI",
+                });
 
-            setCoins(array); //coinObjectId
-          } catch (err) {
-            console.error('Failed to fetch coins:', err);
-          }
+                const array = result.data;
+                console.log("ALL COINS:", array);
+
+                setCoins(array); //coinObjectId
+            } catch (err) {
+                console.error("Failed to fetch coins:", err);
+            }
         };
-    
-        fetchCoins();
-      }, [account, client]);
 
-    useEffect(() => {       
-        if(connectionStatus == 'connected') {
+        fetchCoins();
+    }, [account, client]);
+
+    useEffect(() => {
+        if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const marketplace_ref = ref(database, `marketplace`);
 
             const unsubscribe = onValue(marketplace_ref, (snapshot) => {
                 //Initial State of "marketplace" is set to [],
-                if(!snapshot.val()) return;
+                if (!snapshot.val()) return;
 
                 //Otherwise iterate through collection and update creatures state
                 const users = snapshot.val();
                 const updated_creatures = [];
-                for(const key in users) {
+                for (const key in users) {
                     // if(key !== hash && key !== '_init') {
-                    if(key !== '_init') {
-                        for(const prop in users[key]) {
-                            const { id, owner, rarity, type, price, stage } = users[key][prop];
-                            const stage_to_num = stage == 'Egg' ? 0 : stage == 'Basic' ? 1 : 2;
+                    if (key !== "_init") {
+                        for (const prop in users[key]) {
+                            const { id, owner, rarity, type, price, stage } =
+                                users[key][prop];
+                            const stage_to_num =
+                                stage == "Egg" ? 0 : stage == "Basic" ? 1 : 2;
                             updated_creatures.push({
                                 owner: owner,
                                 label: prop,
@@ -168,7 +91,10 @@ const AllListing = () => {
                                 marketplace: true,
                                 mint: true,
                                 src: getCreatureImage(type, stage_to_num),
-                                still:getCreatureStillImage(type, stage_to_num)
+                                still: getCreatureStillImage(
+                                    type,
+                                    stage_to_num
+                                ),
                             });
                         }
                     }
@@ -183,9 +109,27 @@ const AllListing = () => {
     useEffect(() => {
         const list = creaturesList
             .filter((creature) => filter === "all" || creature.rank === filter)
-            .sort((a, b) => sortOrder === "asc" ? a.price - b.price : b.price - a.price);
+            .sort((a, b) =>
+                sortOrder === "asc" ? a.price - b.price : b.price - a.price
+            );
         setFilteredCreatures(list);
-    }, [creaturesList])
+    }, [creaturesList, sortOrder, filter]);
+
+    // const filteredCreatures = creaturesList
+    //     .filter((creature) =>
+    //         filter === "all" ? true : creature.rank === filter
+    //     )
+    //     .sort((a, b) =>
+    //         sortOrder === "asc" ? a.price - b.price : b.price - a.price
+    //     );
+
+    // const filteredCreatures = useMemo(() => {
+    //     return creaturesList
+    //         .filter((creature) => filter === "all" || creature.rank === filter)
+    //         .sort((a, b) =>
+    //             sortOrder === "asc" ? a.price - b.price : b.price - a.price
+    //         );
+    // }, [filter, sortOrder]);
 
     const handleBuy = async (sprite) => {
         try {
@@ -194,21 +138,22 @@ const AllListing = () => {
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL
                     : "";
-            const REQUEST_URL = API_BASE_URL + "marketplace/listings/request_buy_tx";
+            const REQUEST_URL =
+                API_BASE_URL + "marketplace/listings/request_buy_tx";
 
             console.log(coins);
-            console.log('BALANCE:', coins.balance);
+            console.log("BALANCE:", coins.balance);
 
             const buy_tx = await fetchWithAuth(
                 REQUEST_URL,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        id: sprite.label, 
-                        price: sprite.price, 
-                        owner: sprite.owner, 
-                        coins: coins
+                    body: JSON.stringify({
+                        id: sprite.label,
+                        price: sprite.price,
+                        owner: sprite.owner,
+                        coins: coins,
                     }),
                     credentials: "include",
                 },
@@ -237,7 +182,8 @@ const AllListing = () => {
                     }`,
                 });
 
-            const EXECUTE_URL = API_BASE_URL + "marketplace/listings/execute_buy_tx";
+            const EXECUTE_URL =
+                API_BASE_URL + "marketplace/listings/execute_buy_tx";
 
             const exec_buy_tx = await fetchWithAuth(
                 EXECUTE_URL,
@@ -248,7 +194,7 @@ const AllListing = () => {
                         bytes,
                         signature,
                         id: sprite.label,
-                        owner: sprite.owner
+                        owner: sprite.owner,
                     }),
                     credentials: "include",
                 },
@@ -258,7 +204,7 @@ const AllListing = () => {
             );
 
             const results = await exec_buy_tx.json();
-            if(!results.response.rawEffects) {
+            if (!results.response.rawEffects) {
                 setDisableButton(false);
                 return;
             }
@@ -276,23 +222,7 @@ const AllListing = () => {
                 setDisableButton(false);
             }
         }
-    }
-
-    // const filteredCreatures = creaturesList
-    //     .filter((creature) =>
-    //         filter === "all" ? true : creature.rank === filter
-    //     )
-    //     .sort((a, b) =>
-    //         sortOrder === "asc" ? a.price - b.price : b.price - a.price
-    //     );
-
-    // const filteredCreatures = useMemo(() => {
-    //     return creaturesList
-    //         .filter((creature) => filter === "all" || creature.rank === filter)
-    //         .sort((a, b) =>
-    //             sortOrder === "asc" ? a.price - b.price : b.price - a.price
-    //         );
-    // }, [filter, sortOrder]);
+    };
 
     return (
         <div className="w-[1267px]">
@@ -382,15 +312,20 @@ const AllListing = () => {
                                         />
                                         {creature.price}
                                     </span>
-                                    <span className="text-[20px]">
-                                        {creature.stage} {creature.rank}
+                                    <span className="text-[20px] uppercase">
+                                        {creature.rank} {creature.stage}
                                     </span>
                                     <span className="text-[30px] text-wrap">
                                         {creature.name}
                                     </span>
-                                    <button className={
-                                        disableButton ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-none cursor-not-allowed pointer-events-none` : `w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer`}
-                                        onClick={() => handleBuy(creature)}>
+                                    <button
+                                        className={
+                                            disableButton
+                                                ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-none cursor-not-allowed pointer-events-none`
+                                                : `w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer`
+                                        }
+                                        onClick={() => handleBuy(creature)}
+                                    >
                                         Buy Now
                                     </button>
                                 </section>

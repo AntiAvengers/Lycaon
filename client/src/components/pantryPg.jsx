@@ -173,7 +173,7 @@ const PantryPg = () => {
 
             {/* Purchase Popup */}
             {buy && (
-                <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
+                <div className="fixed inset-0 bg-[#140E28]/60 z-50">
                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] text-[#FCF4EF] leading-none rounded-[10px] shadow-lg z-50 w-[331px] h-[434px] flex flex-col items-center justify-center gap-[15px]">
                         <img
                             src="/assets/icons/closeBtn.svg"
