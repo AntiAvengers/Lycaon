@@ -23,7 +23,7 @@ const LeaderboardBox = () => {
     }, []);
 
     return (
-        <div className="w-full h-[280px] p-1 bg-[url('/assets/bg/leaderboard-border.svg')] bg-cover bg-center flex justify-center items-center ">
+        <div className="w-full h-[280px] p-1 bg-[url('/assets/bg/leaderboard.png')] bg-cover bg-center flex justify-center items-center ">
             <div className="w-[337.02px] h-[234px] flex flex-col items-center px-[22px] gap-[13px]">
                 <h1 className="leading-none m-0 p-0 text-[40px]">
                     Leaderboard

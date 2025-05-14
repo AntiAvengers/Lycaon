@@ -34,7 +34,7 @@ body.home-bg {
 }
 
 body.puzzle-bg {
-    background: url("/assets/bg/puzzlePgBG.svg") no-repeat center center fixed;
+    background: url("/assets/bg/puzzle-bg.png") no-repeat center center fixed;
     background-size: cover;
     margin: 0;
     padding: 0;
