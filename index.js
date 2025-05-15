@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import 'dotenv/config';
+
 import express from 'express';
 import routes from './routes/index.js';
 
@@ -19,7 +21,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: ['http://localhost:8080', 'http://localhost:5167'],
+    origin: [process.env.CORS_ORIGIN],
     credentials: true,
 }));
 

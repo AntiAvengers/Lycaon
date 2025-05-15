@@ -7,7 +7,15 @@ import 'dotenv/config';
 
 import admin from 'firebase-admin';
 
-import serviceAccount from './firebase-config.json' with { type: 'json' };
+let serviceAccount;
+if(process.env.MODE == 'DEVELOPMENT') {
+  console.log('. . . Loading Local Firebase ServiceAccount (DEVELOPMENT)');
+  serviceAccount = await import('./firebase-config.json', {
+    with: { type: 'json' }
+  }).then(module => module.default);
+} else {
+  serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -39,24 +47,6 @@ const default_game_session = {
 
 const default_leaderboard = {
   word_puzzle: { _init: true } 
-}
-
-const default_collection = {
-  nickname: "",
-  favorite: false,
-  type: "",
-  rarity: "",
-  stage: 0,
-  can_evolve: false,
-  date_of_birth: Date.now(),
-  hunger: 8,
-  experience: 0,
-  traits: {
-    0: "?",
-    1: "?"
-  },
-  minted_ID: false,
-  on_marketplace: false,
 }
 
 //Game rules
@@ -149,6 +139,5 @@ export const database = admin.database();
 export const auth = admin.auth()
 export const schema = {
   default_user, 
-  default_game_session, 
-  default_collection
+  default_game_session,
 }

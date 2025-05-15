@@ -42,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 30; //DEV CHANGE THIS BACK
+        this.remainingTime = 45;
         this.wordList = [];
         this.inputText = "";
         this.letters_data = [];
@@ -605,8 +605,11 @@ export class AnagramGame extends Scene {
                 this.updateInputField();
             } else if (/^[a-zA-Z]$/.test(key)) {
                 if (this.inputText.length < 5) {
-                    this.inputText += key.toUpperCase(); // Append character to inputText
-                    this.updateInputField();
+                    //Only letters given are allowed to be used
+                    if(this.letters_data.includes(key.toUpperCase())) {
+                        this.inputText += key.toUpperCase(); // Append character to inputText
+                        this.updateInputField();
+                    }
                 } else {
                     // Show message when trying to type more than 8 characters
                     this.showErrorMessage("Maximum 5 letters allowed!");
@@ -1002,9 +1005,13 @@ export class AnagramGame extends Scene {
             this.popupBg
                 .fillStyle(0xffffff, 1)
                 .fillRoundedRect(
-                    this.scale.width / 2 - 250,
+                    // this.scale.width / 2 - 250,
+                    // this.scale.height / 2 - 160,
+                    // 500,
+                    // 340,
+                    this.scale.width / 2 - 275,
                     this.scale.height / 2 - 160,
-                    500,
+                    550,
                     340,
                     10
                 );

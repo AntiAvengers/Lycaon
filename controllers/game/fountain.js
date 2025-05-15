@@ -51,6 +51,7 @@ function pull_sprite() {
         can_evolve: false,
         experience: 0,
         date_of_birth: Date.now(),
+        date_acquired: Date.now(),
         hunger: 8,
         traits: { 0: "?", 1: "?" },
         minted_ID: false,

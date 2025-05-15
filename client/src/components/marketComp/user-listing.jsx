@@ -60,10 +60,12 @@ const UserListing = () => {
                             on_marketplace,
                             nickname,
                             can_evolve,
+                            date_acquired
                         } = collections[key];
 
                         const info = {
                             id: key,
+                            date_acquired: date_acquired,
                             age: getAge(date_of_birth),
                             name: nickname.length > 0 ? nickname : type,
                             src: getCreatureImage(type, stage),
@@ -84,6 +86,12 @@ const UserListing = () => {
 
                         updated_creatures.push(info);
                     }
+                    updated_creatures.sort((a,b) => {
+                        if(a.marketplace == b.marketplace) {
+                            return (a.date_acquired > b.date_acquired ? -1 : 1);
+                        }
+                        return (a.marketplace ? 1 : 0) > (b.marketplace ? 1 : 0) ? -1 : 1;
+                    });
                     setSprites(updated_creatures);
                 }
             );
