@@ -72,6 +72,7 @@ const SpritesCollectionPg = () => {
                         stage,
                         on_marketplace,
                         nickname,
+                        date_acquired,
                     } = collections[key];
 
                     if (favorite) {
@@ -79,6 +80,7 @@ const SpritesCollectionPg = () => {
                     }
 
                     const info = {
+                        date_acquired: date_acquired,
                         src: getCreatureImage(type, stage),
                         still: getCreatureStillImage(type, stage),
                         label: key, //UUID
@@ -94,6 +96,7 @@ const SpritesCollectionPg = () => {
 
                     i++;
                 }
+                updated_creatures.sort((a,b) => a.date_acquired > b.date_acquired ? -1 : 1);
                 setCreatures(updated_creatures);
                 setLikedList(updated_likes);
                 setIsLoading(false);

@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
     const [isEditing, setIsEditing] = useState(false);
+    const [disableButton, setDisableButton] = useState(false);
 
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
@@ -51,6 +52,32 @@ const SpritesInfo = ({ sprite }) => {
         }
     };
 
+    const handleEvolution = async () => {
+        const API_BASE_URL =
+                import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                    ? import.meta.env.VITE_DEV_URL
+                    : "";
+        const REQUEST_URL =
+            API_BASE_URL + "users/sprites/evolve-sprite";
+
+        const buy_tx = await fetchWithAuth(
+            REQUEST_URL,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: sprite.id,
+                }),
+                credentials: "include",
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+        );
+
+        const tx = await buy_tx.json();
+    }
+
     return (
         <div className="w-[305px] pr-[20px] leading-none">
             {isEditing ? (
@@ -74,22 +101,26 @@ const SpritesInfo = ({ sprite }) => {
             )}
             <p className="text-[25px] pb-[3px]">{sprite.age}</p>
             <section className="flex flex-row justify-between">
-                <p className="text-[25px]">
-                    {sprite.personality.map((trait, index) => (
+                <p className="text-[25px] mt-1">
+                    {sprite.personality.length > 0 ? sprite.personality.map((trait, index) => (
                         <span key={index}>
                             {trait}
                             {index < sprite.personality.length - 1 && (
                                 <span className="mx-2">&nbsp;</span>
                             )}
                         </span>
-                    ))}
+                    )) : "No Traits Available"}
                 </p>
                 {/* Added !sprite.mint because once a sprite is minted, it's locked in? */}
-                {(sprite.evo && !sprite.mint) && (
-                    <button className="w-contain h-[35px] bg-[#4A63E4] px-[15px] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center">
-                        Evolve
-                    </button>
-                )}
+                {sprite.stage !== 2 && <button className={
+                    sprite.evo
+                        ? "w-contain h-[35px] bg-[#4A63E4] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] px-[15px] hover:bg-[#1D329F] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center"
+                        : "w-contain h-[35px] bg-[#808080] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] px-[15px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-none cursor-not-allowed pointer-events-none text-center"
+                }
+                    onClick={() => handleEvolution()}
+                >
+                    Evolve
+                </button>}
             </section>
             <hr className="my-[15px] border-t-[1px] border-black/30" />
             <p className="text-[25px]">{sprite.details}</p>

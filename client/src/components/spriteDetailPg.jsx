@@ -67,7 +67,7 @@ const SpritesDetailPg = () => {
     const [showAmount, setShowAmount] = useState(null);
     const [foodValues, setFoodValues] = useState({});
     const [lore, setLore] = useState("");
-    const [spriteInfo, setSpriteInfo] = useState(null);
+    const [spriteInfo, setSpriteInfo] = useState(false);
 
     const location = useLocation();
     const { id } = location.state;
@@ -411,7 +411,7 @@ const SpritesDetailPg = () => {
                 <FoodInventory
                     foods={foods}
                     onFeed={handleFeed}
-                    // disabled={spriteInfo.stage == 0}
+                    disabled={spriteInfo && spriteInfo.stage == 0}
                 />
                 <Link
                     to="/pantry"

@@ -21,6 +21,7 @@ const MINT_FUNCTION = 'mint';
 
 const pantry = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/pantry.json'), 'UTF-8'));
 const sprites = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/sprites.json'), 'UTF-8'));
+const natures = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database/traits.json'), 'UTF-8'));
 
 //Basic stuff regarding Creatures
 export const get_lore = async(req, res) => {
@@ -58,8 +59,10 @@ export const update_sprite = async (req, res) => {
             const pantry_snapshot = await pantry_ref.once("value");
             const { [food_type]: num } = pantry_snapshot.val()
             if(num > 0) {
-                const { hunger } = snapshot.val()
-                if(hunger >= 8) {
+                const { hunger, stage } = snapshot.val()
+                if(stage == 0) {
+                    return res.status(400).json({ error: `Cannot feed an egg sprite` });
+                } else if(hunger >= 8) {
                     return res.status(200).json({ response: `Sprite is already full!` });
                 }
                 pantry_ref.update({ [food_type]: (num - 1) });
@@ -72,6 +75,50 @@ export const update_sprite = async (req, res) => {
     } catch(err) {
         return res.status(403).json({ error: err });
     }
+}
+
+export const evolve_sprite = async (req, res) => {
+    const { id } = req.body;
+    const { address } = req.user;
+
+    console.log(id);
+
+    if(!id) {
+        return res.status(400).json({ error: "missing ID (label) of creature from request body "});
+    }
+
+    const hashed = crypto.createHash('sha256').update(address).digest('hex');
+
+    const collections_ref = database.ref(`collections/${hashed}/${id}`);
+    const snapshot = await collections_ref.once("value");
+    const { can_evolve, traits: sprite_traits, stage } = snapshot.val();
+
+    if(!can_evolve) {
+        return res.status(400).json({ error: "Sprite cannot evolve!" });
+    }
+
+    let { traits } = natures;
+    const index = Math.floor(Math.random() * traits.length);
+
+    const updated_traits = {};
+    
+    if(sprite_traits[0] == "?") {
+        updated_traits[0] = traits[index];
+        updated_traits[1] = sprite_traits[1];
+    } else if(sprite_traits[1] == "?") {
+        updated_traits[0] = sprite_traits[0];
+        updated_traits[1] = traits[index];
+    }
+
+    collections_ref.update({
+        can_evolve: false,
+        experience: 0,
+        traits: updated_traits,
+        hunger: 8,
+        stage: stage + 1,
+    });
+
+    return res.status(200).json({ response: updated_traits });
 }
 
 //Sui Blockchain

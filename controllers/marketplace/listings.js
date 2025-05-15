@@ -174,7 +174,7 @@ export const execute_listing_tx = async (req, res) => {
 }
 
 export const request_buy_tx = async (req, res) => {
-    const { id, price, owner, coins } = req.body;
+    const { id, price, owner } = req.body;
     const { address } = req.user;
 
     try {
@@ -277,6 +277,7 @@ export const execute_buy_tx = async (req, res) => {
     const sprite = collections_snapshot.val();
     sprite.on_marketplace = false;
     sprite.favorite = false;
+    sprite.date_acquired = Date.now();
 
     collections_ref.remove();
 

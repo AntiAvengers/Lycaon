@@ -223,7 +223,7 @@ const FountainPg = () => {
                     Rate Details
                 </button>
                 {showRate && (
-                    <div className="w-[450px] h-[350px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center gap-[24px]">
+                    <div className="w-[450px] h-[370px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#FBBB26] z-50 rounded-[10px] p-[10px] flex flex-col items-center gap-[24px]">
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"

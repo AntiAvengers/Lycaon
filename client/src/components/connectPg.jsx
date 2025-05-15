@@ -60,6 +60,7 @@ const ConnectPg = () => {
                             credentials: 'include', // to include cookies
                         }
                     );
+
                     //😅 Did you know .json() is an async function and thats why it requires await? because I didn't ...
                     // console.log(await loginResponse.json());
 
@@ -94,7 +95,7 @@ const ConnectPg = () => {
                 <span className="text-[25px] sm:text-[30px]">
                     Game Requires a Slush - A Sui Wallet
                 </span>
-                {connectionStatus === 'connected' ? (
+                {connectionStatus === 'connected' || connectionStatus === 'connecting' ? (
                     <Link
                         // to={"/home"}
                         state={{ from: "/" }}
@@ -112,7 +113,7 @@ const ConnectPg = () => {
                     </Link>
                 ) : (
                 <ul>
-                    {wallets.map((wallet) => (
+                    {wallets.length > 0 && wallets.map((wallet) => wallet.name.toLowerCase()).includes("slush") ? wallets.map((wallet) => (
                         <li key={wallet.name}>
                             <Link
                                 // to={"/home"}
@@ -130,12 +131,31 @@ const ConnectPg = () => {
                                 </span>
                             </Link>
                         </li>
-                    ))}
+                    )) : (
+                        <a 
+                            href="https://chromewebstore.google.com/detail/slush-%E2%80%94-a-sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
+                        >
+                            <img
+                                src="assets/icons/sui-logo.svg"
+                                alt="sui-icon"
+                                className="w-[25px] h-[25px]"
+                            />
+                            <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
+                                Get Slush Extension
+                            </span>
+                        </a>
+                    )}
                 </ul>
                 )
                 }
+            
             </section>
-
+            <div
+                className="text-[28px] text-[#FFFFFF] -mt-10 items-center"
+            >Please note: This application does not utilize real SUI tokens and operates solely on the SUI testnet environment. All transactions and assets are for testing purposes only and hold no real-world value.</div>
             {/* About Description - Photos of Game */}
             <AboutPg />
         </div>
