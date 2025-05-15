@@ -44,7 +44,7 @@ const FoodInventory = ({ foods, onFeed, disabled }) => {
 FoodInventory.propTypes = {
     foods: PropTypes.array.isRequired,
     onFeed: PropTypes.func.isRequired,
-    // disabled: PropTypes.bool,
+    disabled: PropTypes.bool,
 };
 export default FoodInventory;
 
