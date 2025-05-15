@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+import { database } from "../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
+
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
@@ -14,13 +17,6 @@ const food_SVGs = {
     Steak: "/assets/foods/steak.svg",
 };
 
-const initialFoodList = [
-    { src: "/assets/foods/apple.svg", label: "apple", amt: 4, value: 1 },
-    { src: "/assets/foods/cherries.svg", label: "cherries", amt: 56, value: 2 },
-    { src: "/assets/foods/meat.svg", label: "chicken", amt: 100, value: 3 },
-    { src: "/assets/foods/steak.svg", label: "steak", amt: 10, value: 4 },
-];
-
 const PantryPg = () => {
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
@@ -33,6 +29,7 @@ const PantryPg = () => {
     const [quantity, setQuantity] = useState(1);
     const [foods, setFoods] = useState([]);
     const [error, setError] = useState(false);
+    const [playerFoods, setPlayerFoods] = useState([]);
 
     const API_BASE_URL =
         import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
@@ -63,6 +60,29 @@ const PantryPg = () => {
 
         if (!purchaseConfirmed) setPurchaseConfirmed(true);
     };
+
+    useEffect(() => {
+        if (connectionStatus == "connected") {
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const pantry_ref = ref(database, `pantry/${hash}`);
+
+            const unsubscribe = onValue(pantry_ref, (snapshot) => {
+                const player_foods = [];
+                const pantry = snapshot.val();
+                for(const food in pantry) {
+                    player_foods.push({
+                        label: food,
+                        src: food_SVGs[food],
+                        amt: pantry[food]
+                    })
+                }
+                setPlayerFoods(player_foods);
+            });
+            
+            return () => unsubscribe();
+        }
+    }, [connectionStatus]);
 
     useEffect(() => {
         const URL = API_BASE_URL + "game/pantry/get";
@@ -123,7 +143,7 @@ const PantryPg = () => {
             {/* User Pantry Inventory */}
             <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
                 <ul className="w-full h-full flex flex-row items-center justify-evenly">
-                    {initialFoodList.map((food) => (
+                    {playerFoods.map((food) => (
                         <li
                             key={food.label}
                             className="flex flex-row items-center"
