@@ -7,15 +7,17 @@ import 'dotenv/config';
 
 import admin from 'firebase-admin';
 
-let serviceAccount;
-if(process.env.MODE == 'DEVELOPMENT') {
-  console.log('. . . Loading Local Firebase ServiceAccount (DEVELOPMENT)');
-  serviceAccount = await import('./firebase-config.json', {
-    with: { type: 'json' }
-  }).then(module => module.default);
-} else {
-  serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
-}
+// let serviceAccount;
+// if(process.env.MODE == 'DEVELOPMENT') {
+//   console.log('. . . Loading Local Firebase ServiceAccount (DEVELOPMENT)');
+//   serviceAccount = await import('./firebase-config.json', {
+//     with: { type: 'json' }
+//   }).then(module => module.default);
+// } else {
+//   serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
+// }
+
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
