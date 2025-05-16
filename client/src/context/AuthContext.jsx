@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
     });
 
       return unsubscribe;
-    }, []);
+    }, [accessToken]);
 
   return (
     <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken }}>
