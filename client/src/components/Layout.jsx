@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "./header.jsx";
+import Header from "./Header.jsx";
 import SoundControl from "./soundControl.jsx";
 // import Footer from "./footer.jsx";
 
