@@ -6,6 +6,7 @@ module 0x0::marketplace {
 
     const E_NOT_ENOUGH: u64 = 0;
     const E_NOT_OWNER: u64 = 1;
+    const E_IS_OWNER: u64 = 2;
 
     //Struct for Listing
     public struct Listing has key {
@@ -28,6 +29,7 @@ module 0x0::marketplace {
     //Purchase from Listing
     public fun buy(listing: Listing, mut payment: Coin<SUI>, ctx: &mut TxContext) {
         let Listing { mut id, sender, price } = listing;
+        assert!(sender != ctx.sender(), E_IS_OWNER);
         assert!(coin::value(&payment) >= price, E_NOT_ENOUGH);
         let paid = coin::split(&mut payment, price, ctx);
         transfer::public_transfer(paid, sender);
