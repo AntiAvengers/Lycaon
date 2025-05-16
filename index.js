@@ -17,6 +17,7 @@ import cookieParser from 'cookie-parser';
 import './cron-jobs/index.js';
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -35,4 +36,4 @@ app.use(cookieParser());
 
 app.use(routes);
 
-app.listen(3000)
+app.listen(port);
