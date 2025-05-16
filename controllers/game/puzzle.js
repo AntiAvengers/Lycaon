@@ -8,7 +8,6 @@ const __dirname = path.dirname(__filename);
 import crypto from 'crypto';
 
 import { database, schema } from '../../database/firebaseConfig.js';
-const { default_game_session } = schema;
 
 //Picks a random puzzle and selects the appropiate controller file
 export const random = async () => {

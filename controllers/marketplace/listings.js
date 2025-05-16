@@ -340,7 +340,6 @@ export const request_cancel_tx = async (req, res) => {
 
         const serialized = await tx.toJSON();
 
-        console.log('REQUEST FOR CANCELLATION APPROVED');
         return res.status(200).json({ transactionBlock: serialized });
     } catch(err) {
         console.log(err);
