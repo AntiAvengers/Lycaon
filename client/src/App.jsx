@@ -16,8 +16,8 @@ import SpritesDetailPg from "./components/spriteDetailPg.jsx";
 import PantryPg from "./components/pantryPg.jsx";
 import MarketPg from "./components/marketPg.jsx";
 import NotFoundPg from "./components/NFP.jsx";
-import Layout from './components/layout.jsx';
-import WalletReconnect from "./components/walletReconnect.jsx";
+import Layout from './components/Layout.jsx';
+import WalletReconnect from "./components/WalletReconnect.jsx";
 
 const { networkConfig } = createNetworkConfig({
 	localnet: { url: getFullnodeUrl('localnet') },
