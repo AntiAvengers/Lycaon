@@ -94,7 +94,7 @@ const Header = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
 
         const URL = API_BASE_URL + "users/stats/set-notification-as-read";
         const request = await fetchWithAuth(
@@ -119,7 +119,7 @@ const Header = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
 
         const URL = API_BASE_URL + "auth/logout/";
         await fetch(URL, { method: "POST", credentials: "include" });

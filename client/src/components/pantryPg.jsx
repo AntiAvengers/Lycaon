@@ -34,7 +34,7 @@ const PantryPg = () => {
     const API_BASE_URL =
         import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
             ? import.meta.env.VITE_DEV_URL
-            : "";
+            : "/";
 
     const purchase_food = async (food_type, amount) => {
         const URL = API_BASE_URL + "game/pantry/buy";

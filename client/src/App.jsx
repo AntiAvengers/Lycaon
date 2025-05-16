@@ -27,7 +27,7 @@ const { networkConfig } = createNetworkConfig({
 });
 
 const queryClient = new QueryClient();
-const NODE = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? 'devnet' : 'testnet';
+const NODE = import.meta.env.VITE_APP_MODE == 'PRODUCTION' ? 'testnet' : 'devnet';
 
 const App = () => {
     return (

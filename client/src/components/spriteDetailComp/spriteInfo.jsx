@@ -27,7 +27,7 @@ const SpritesInfo = ({ sprite }) => {
         if (e.key === "Enter") {
             const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
             ? import.meta.env.VITE_DEV_URL
-            : '';
+            : '/';
 
             const URL = API_BASE_URL + "users/sprites/update_sprite";
 
@@ -56,7 +56,7 @@ const SpritesInfo = ({ sprite }) => {
         const API_BASE_URL =
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL
-                    : "";
+                    : "/";
         const REQUEST_URL =
             API_BASE_URL + "users/sprites/evolve-sprite";
 

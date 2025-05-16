@@ -127,7 +127,7 @@ const SpritesCollectionPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
 
         const URL = API_BASE_URL + "users/sprites/update_sprite";
 
@@ -168,7 +168,7 @@ const SpritesCollectionPg = () => {
             const API_BASE_URL =
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL
-                    : "";
+                    : "/";
             const REQUEST_URL =
                 API_BASE_URL + "marketplace/listings/request_cancel_tx";
 
@@ -201,9 +201,9 @@ const SpritesCollectionPg = () => {
                 await signTransaction({
                     transaction: transactionBlock,
                     chain: `sui:${
-                        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                            ? "devnet"
-                            : "testnet"
+                        import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                            ? "testnet"
+                            : "devnet"
                     }`,
                 });
 

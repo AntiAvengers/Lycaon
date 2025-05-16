@@ -38,7 +38,7 @@ const FountainPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const URL = API_BASE_URL + "game/fountain/pull";
         const request = await fetchWithAuth(
             URL,
@@ -111,7 +111,7 @@ const FountainPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const URL = API_BASE_URL + "game/fountain/get-pull-rates";
         const response = fetchWithAuth(
             URL,

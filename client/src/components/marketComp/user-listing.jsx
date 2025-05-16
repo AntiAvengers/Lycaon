@@ -114,7 +114,7 @@ const UserListing = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const REQUEST_URL = API_BASE_URL + "users/sprites/request_mint_tx";
         const mint_tx = await fetchWithAuth(
             REQUEST_URL,
@@ -142,9 +142,9 @@ const UserListing = () => {
             await signTransaction({
                 transaction: transactionBlock,
                 chain: `sui:${
-                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                        ? "devnet"
-                        : "testnet"
+                    import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                        ? "testnet"
+                        : "devnet"
                 }`,
             });
 
@@ -190,7 +190,7 @@ const UserListing = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const REQUEST_URL =
             API_BASE_URL + "marketplace/listings/request_listing_tx";
         const mint_tx = await fetchWithAuth(
@@ -223,9 +223,9 @@ const UserListing = () => {
             await signTransaction({
                 transaction: transactionBlock,
                 chain: `sui:${
-                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                        ? "devnet"
-                        : "testnet"
+                    import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                        ? "testnet"
+                        : "devnet"
                 }`,
             });
 
@@ -278,7 +278,7 @@ const UserListing = () => {
             const API_BASE_URL =
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL
-                    : "";
+                    : "/";
             const REQUEST_URL =
                 API_BASE_URL + "marketplace/listings/request_cancel_tx";
 
@@ -309,9 +309,9 @@ const UserListing = () => {
                 await signTransaction({
                     transaction: transactionBlock,
                     chain: `sui:${
-                        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                            ? "devnet"
-                            : "testnet"
+                        import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                            ? "testnet"
+                            : "devnet"
                     }`,
                 });
 

@@ -18,7 +18,7 @@ export const PhaserGame = forwardRef(function PhaserGame(
 
     const BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
     ? import.meta.env.VITE_DEV_URL
-    : '';
+    : '/';
 
     const AUTH_API_CALL = async(path, body) => {
         const URL = BASE_URL + path;

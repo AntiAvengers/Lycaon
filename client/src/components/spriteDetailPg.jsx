@@ -79,7 +79,7 @@ const SpritesDetailPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const URL = API_BASE_URL + "game/pantry/get";
         fetchWithAuth(
             URL,
@@ -198,7 +198,7 @@ const SpritesDetailPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const REQUEST_URL = API_BASE_URL + "users/sprites/request_mint_tx";
         const mint_tx = await fetchWithAuth(
             REQUEST_URL,
@@ -226,9 +226,9 @@ const SpritesDetailPg = () => {
             await signTransaction({
                 transaction: transactionBlock,
                 chain: `sui:${
-                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                        ? "devnet"
-                        : "testnet"
+                    import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                        ? "testnet"
+                        : "devnet"
                 }`,
             });
 
@@ -263,7 +263,7 @@ const SpritesDetailPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const REQUEST_URL =
             API_BASE_URL + "marketplace/listings/request_listing_tx";
         console.log(id);
@@ -294,9 +294,9 @@ const SpritesDetailPg = () => {
             await signTransaction({
                 transaction: transactionBlock,
                 chain: `sui:${
-                    import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                        ? "devnet"
-                        : "testnet"
+                    import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                        ? "testnet"
+                        : "devnet"
                 }`,
             });
 
@@ -341,7 +341,7 @@ const SpritesDetailPg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const URL = API_BASE_URL + "users/sprites/update_sprite";
         const request = await fetchWithAuth(
             URL,

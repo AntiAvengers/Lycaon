@@ -108,7 +108,7 @@ const AllListing = () => {
             const API_BASE_URL =
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL
-                    : "";
+                    : "/";
             const REQUEST_URL =
                 API_BASE_URL + "marketplace/listings/request_buy_tx";
 
@@ -143,9 +143,9 @@ const AllListing = () => {
                 await signTransaction({
                     transaction: transactionBlock,
                     chain: `sui:${
-                        import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
-                            ? "devnet"
-                            : "testnet"
+                        import.meta.env.VITE_APP_MODE == "PRODUCTION"
+                            ? "testnet"
+                            : "devnet"
                     }`,
                 });
 

@@ -31,7 +31,7 @@ const HomePg = () => {
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
-                : "";
+                : "/";
         const REQUEST_URL = API_BASE_URL + "users/stats/set-profile-name";
         const request = await fetchWithAuth(
             REQUEST_URL,

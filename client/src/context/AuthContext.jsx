@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   async function refreshAccessToken() {
-    const refresh_base_url = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? import.meta.env.VITE_DEV_URL : '';
+    const refresh_base_url = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' ? import.meta.env.VITE_DEV_URL : '/';
     const res = await fetch(refresh_base_url + `auth/login/refresh`, {
       method: 'POST',
       credentials: 'include', // send the cookie
@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
     const authenticate = async () => {
         const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
           ? import.meta.env.VITE_DEV_URL
-          : '';
+          : '/';
         const URL = API_BASE_URL + 'auth/firebase';
         try {
             const response = await fetchWithAuth(
