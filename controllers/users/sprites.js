@@ -7,8 +7,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import 'dotenv/config';
 import { client } from '../../utils/sui/config.js';
-import { get_transaction_block } from '../../utils/sui/client.js';
-// import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Transaction } from '@mysten/sui/transactions';
 import { bcs } from '@mysten/sui/bcs';
 import { database } from '../../database/firebaseConfig.js';
@@ -80,8 +78,6 @@ export const update_sprite = async (req, res) => {
 export const evolve_sprite = async (req, res) => {
     const { id } = req.body;
     const { address } = req.user;
-
-    console.log(id);
 
     if(!id) {
         return res.status(400).json({ error: "missing ID (label) of creature from request body "});

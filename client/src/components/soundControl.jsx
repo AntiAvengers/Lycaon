@@ -85,7 +85,7 @@ const SoundControl = () => {
             {/* Audio File */}
             <audio
                 ref={audioRef}
-                src="assets/sounds/mesmerizing-song-of-the-wood-thrush-156669.mp3"
+                src="assets/sounds/ambient-fantasy-314682.mp3"
                 preload="auto"
                 loop
                 muted={isMuted}
