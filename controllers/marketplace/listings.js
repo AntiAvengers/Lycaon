@@ -300,6 +300,18 @@ export const execute_buy_tx = async (req, res) => {
         timestamp: Date.now()
     }
     notifications_ref.push(notification);
+
+    const bNotifications_ref = database.ref(`notifications/${bHashed}`)
+    const bNotification_snapshot = await bNotification_ref.once("value");
+    const bNotification_list = bNotification_snapshot.val();
+    const bTotal = !bNotification_list ? 0 : Object.keys(bNotification_list).length;
+    const bNotification = {
+        id: bTotal + 1,
+        message: `You have succesfully purchased "${sprite.nickname.length > 0 ? sprite.nickname : sprite.type}". Congrats!`,
+        read: false,
+        timestamp: Date.now()
+    }
+    bNotifications_ref.push(bNotification);
     
     return res.status(200).json({ response: transaction });
 }

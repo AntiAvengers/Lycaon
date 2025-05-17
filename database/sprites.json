@@ -11,11 +11,11 @@
     "rarity_title": "Familiar",
     "lore": "FAMILIAR_LORE"
   },
-  "NOBLE_PLACEHOLDER": {
-    "type": "NOBLE_PLACEHOLDER",
+  "wolf": {
+    "type": "wolf",
     "rarity": 3,
     "rarity_title": "Noble",
-    "lore": "NOBLE_LORE"
+    "lore": "Born of a fallen star and the wrath of an ancient god, the wolf burns with unending flame as it prowls the scorched edges of the Blightlands. Its fire never dims, fueled by the souls of those who dare trespass its domain. Legends say its howl melts steel and summons storms of ash."
   },
   "ELITE_PLACEHOLDER": {
     "type": "ELITE_PLACEHOLDER",
@@ -23,10 +23,10 @@
     "rarity_title": "Elite",
     "lore": "ELITE_LORE"
   },
-  "MYTHIC_PLACEHOLDER": {
-    "type": "MYTHIC_PLACEHOLDER",
+  "dragon": {
+    "type": "dragon",
     "rarity": 5,
     "rarity_title": "Mythic",
-    "lore": "MYTHIC_LORE"
+    "lore": "Woven from the first light of the world and hidden in the ocean’s cradle, the pearl dragon is said to dream reality into being. Its opalescent scales shimmer with the memories of gods, and its song stirs the tides of time. Few have seen it and returned, their minds forever touched by visions not meant for mortals."
   }
 }

@@ -32,12 +32,12 @@ cron.schedule(schedule, async () => {
                 const { shards } = users[user_id];
                 let shards_to_add = 0;
                 for(const index in collections[user_id]) {
-                    const { type, stage, rarity, hunger, experience, on_marketplace, minted_ID } = collections[user_id][index];
+                    const { type, nickname, stage, rarity, hunger, experience, on_marketplace, minted_ID } = collections[user_id][index];
                     if(((hunger > 0 && stage >= 1) || stage == 0) && !on_marketplace) {
                         if(stage > 0) {
                             shards_to_add += (300 * ref[rarity].id);
                         }
-                        let new_experience = experience < 42 ? experience + 1 : experience;
+                        let new_experience = experience < 43 ? experience + 1 : experience;
                         const evolve = new_experience >= 42 && stage !== 2 ? true : false;
                         database.ref(`collections/${user_id}/${index}`)
                             .update({ 
@@ -45,6 +45,20 @@ cron.schedule(schedule, async () => {
                                 experience: new_experience,
                                 can_evolve: evolve
                             });
+                        
+                        if(experience == 42) {
+                            const notifications_ref = database.ref(`notifications/${user_id}`)
+                            const notifications_snapshot = await notifications_ref.once("value");
+                            const notifications_list = notifications_snapshot.val();
+                            const total = !notifications_list ? 0 : Object.keys(notifications_list).length;
+                            const notification = {
+                                id: total + 1,
+                                message: `Your Sprite "${nickname.length > 0 ? nickname : type}" can evolve!`,
+                                read: false,
+                                timestamp: Date.now()
+                            }
+                            notifications_ref.push(notification);
+                        }
                     }
                 }
                 if(shards_to_add > 0) {

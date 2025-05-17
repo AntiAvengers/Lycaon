@@ -3673,11 +3673,7 @@ fados,4446
 fads,805082
 faena,12455
 faery,234384
-fag,621374
-faggy,9131
 fagin,1269
-fagot,113053
-fags,178448
 fail,59741214
 fails,35369909
 fain,3186588
