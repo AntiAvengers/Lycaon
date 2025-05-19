@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { database } from '../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
-import { useCurrentWallet, useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentWallet, useCurrentAccount } from "@mysten/dapp-kit";
 
 const HomePg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -22,10 +22,10 @@ const HomePg = () => {
     const [playerName, setPlayerName] = useState(""); //Username
 
     const handleKeyDown = (e) => {
-        if(e.key == 'Enter') {
+        if (e.key == "Enter") {
             setPlayerProfileName(playerName);
         }
-    }
+    };
 
     const setPlayerProfileName = async (name) => {
         const API_BASE_URL =
@@ -39,7 +39,7 @@ const HomePg = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    profile_name: name
+                    profile_name: name,
                 }),
                 credentials: "include",
             },
@@ -50,7 +50,7 @@ const HomePg = () => {
         const GIFT_URL = API_BASE_URL + "users/stats/get-welcome-gift";
         const gift = await fetchWithAuth(
             GIFT_URL,
-            {   
+            {
                 method: "POST",
                 credentials: "include",
             },
@@ -59,25 +59,25 @@ const HomePg = () => {
             setAccessToken
         );
         setShowWelcomePopup(true);
-    }
+    };
 
-    useEffect(() => {       
-            if(connectionStatus == 'connected') {
-                const address = currentWallet.accounts[0].address;
-                const hash = SHA256(address).toString();
-                const users_ref = ref(database, `users/${hash}/profile_name`);
-    
-                const unsubscribe = onValue(users_ref, (snapshot) => {
-                    if(snapshot.val() == "") {
-                        setShowNamePopup(true);
-                    } else {
-                        setPlayerName(snapshot.val());
-                    }
-                });
-    
-                return () => unsubscribe();
-            }
-        }, [connectionStatus]);
+    useEffect(() => {
+        if (connectionStatus == "connected") {
+            const address = currentWallet.accounts[0].address;
+            const hash = SHA256(address).toString();
+            const users_ref = ref(database, `users/${hash}/profile_name`);
+
+            const unsubscribe = onValue(users_ref, (snapshot) => {
+                if (snapshot.val() == "") {
+                    setShowNamePopup(true);
+                } else {
+                    setPlayerName(snapshot.val());
+                }
+            });
+
+            return () => unsubscribe();
+        }
+    }, [connectionStatus]);
 
     // Popup for Name
     useEffect(() => {
@@ -118,80 +118,74 @@ const HomePg = () => {
 
     return (
         <div
-            className="flex w-full relative"
+            className="relative w-full h-auto max-w-[2200px]"
             aria-hidden={showWelcomePopup || showNamePopup}
         >
-            {/* Book Group */}
-            <div className="group">
+            {/* Book (Puzzle) */}
+            <div className="group fixed top-[15%] left-1/2 transform -translate-x-1/2 z-10">
                 <Link to="/puzzle">
                     <img
-                        className="absolute bottom-[45px] left-[51.20%] transform -translate-x-1/2 cursor-pointer group-hover:opacity-0 transition-opacity duration-200"
                         src="/assets/icons/book.svg"
                         alt="bookIcon"
+                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <img
-                        className="absolute bottom-[45px] left-[51.20%] transform -translate-x-1/2 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                        src="/assets/icons/book-hover.png"
-                        alt="bookIconHover"
-                    />
+                    <span className="absolute top-[15%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Puzzle
+                    </span>
                 </Link>
-
-                <span className="absolute bottom-[260px] left-[52%] transform -translate-x-1/2 leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    Puzzle
-                </span>
             </div>
 
-            {/* Statue Group */}
-            <div className="group z-30">
+            {/* Collection */}
+            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2">
                 <Link to="/collection">
                     <img
-                        className="absolute top-1/2 left-0 transform -translate-y-[53%] cursor-pointer"
                         src="/assets/icons/statues.png"
                         alt="statuesIcon"
+                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-1/2 left-[9%] transform -translate-y-[30%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-1/2 left-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Collection
                     </span>
                 </Link>
             </div>
 
-            {/* Market Group */}
-            <div className="group">
+            {/* Market */}
+            <div className="group fixed top-[40%] right-[0%] transform -translate-y-1/2">
                 <Link to="/market">
                     <img
-                        className="absolute top-1/2 right-[1%] transform -translate-y-[74%] cursor-pointer"
                         src="/assets/icons/market.png"
                         alt="marketIcon"
+                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-1/2 right-[10%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-1/2 right-[30%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Market
                     </span>
                 </Link>
             </div>
 
-            {/* Pantry Group */}
-            <div className="group">
+            {/* Pantry */}
+            <div className="group fixed left-[27%] top-[38%] transform -translate-y-1/2">
                 <Link to="/pantry">
                     <img
-                        className="absolute top-1/2 left-[23.5%] transform -translate-y-[75%]"
                         src="/assets/icons/tree.png"
                         alt="treeIcon"
+                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-1/2 left-[26%] transform -translate-y-[50%] leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-[50%] left-[35%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Pantry
                     </span>
                 </Link>
             </div>
 
-            {/* Fountain Group */}
-            <div className="group">
+            {/* Fountain */}
+            <div className="group fixed top-[68%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                 <Link to="/fountain">
                     <img
-                        className="absolute top-1/2 left-1/2 transform -translate-x-[47%] -translate-y-[18%]"
                         src="/assets/icons/fountain.png"
-                        alt="foundtainIcon"
+                        alt="fountainIcon"
+                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-[150px] left-[51%] transform -translate-x-1/2 leading-none text-[50px] text-[#000000] bg-white px-[15px] rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-[65%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Fountain
                     </span>
                 </Link>
