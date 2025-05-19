@@ -253,7 +253,7 @@ const FountainPg = () => {
 
             {/* Pulling Video */}
             {showVideo && !videoEnded && (
-                <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+                <div className="fixed inset-0 bg-black z-50">
                     <video
                         src="/assets/bg/pull-sprite.mp4"
                         autoPlay
@@ -261,7 +261,12 @@ const FountainPg = () => {
                             setVideoEnded(true);
                             setShowVideo(false); // hide the video container
                         }}
-                        className="w-full h-full object-cover"
+                        onClick={(e) => {
+                            e.currentTarget.pause(); // Stop the video
+                            setVideoEnded(true);
+                            setShowVideo(false);
+                        }}
+                        className="w-screen h-screen object-cover cursor-pointer"
                     />
                 </div>
             )}
