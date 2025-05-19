@@ -257,16 +257,27 @@ const Header = () => {
                     <InGameCurrencyTracker />
                     <SuiWallet />
                     {/* Notification */}
-                    <section className="relative" ref={notificationRef}>
-                        <button onClick={toggleNotificationDropdown}>
-                            <Badge
-                                badgeContent={
-                                    notifications.filter((n) => !n.read).length
-                                }
-                                color="primary"
-                            >
-                                <MailIcon className="text-white cursor-pointer" />
-                            </Badge>
+                    <section
+                        className="relative flex items-center"
+                        ref={notificationRef}
+                    >
+                        <button
+                            onClick={toggleNotificationDropdown}
+                            className="rounded-[2px] shadow-[-4px_4px_0_#1A265D] cursor-pointer"
+                        >
+                            {notifications.length === 0 ? (
+                                <img
+                                    src="/assets/icons/notification.svg"
+                                    alt="noMail"
+                                    className="w-[35px] h-[35px] rounded-[2px] shadow-xl"
+                                />
+                            ) : (
+                                <img
+                                    src="/assets/icons/notification-popup.svg"
+                                    alt="mail"
+                                    className="w-[35px] h-[35px] rounded-[2px] shadow-xl"
+                                />
+                            )}
                         </button>
 
                         {notificationOpen && (
@@ -307,39 +318,46 @@ const Header = () => {
                             </div>
                         )}
                     </section>
-                    {/* UserName when Set */}
-                    {profileName && (
-                        <span
-                            className="text-[25px] max-w-[125px] truncate"
-                            style={{
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                            }}
-                        >
-                            {profileName}
-                        </span>
-                    )}
-                    {/* Logout */}
                     <div
-                        className="relative"
+                        className="rounded-[2px] shadow-[-4px_4px_0_#1A265D] cursor-pointer"
                         ref={menuRef2}
                         onClick={toggleProfile}
                     >
-                        <AccountCircleIcon sx={{ width: 30, height: 30 }} />
-                        {profile && (
-                            <div className="absolute right-0 translate-x-[20px] mt-[7px] w-[136px] sm:w-[255px] h-auto shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
-                                <Link
-                                    to="/"
-                                    aria-label="Logs Out back to SignIn"
-                                    onClick={() => {
-                                        setProfile(false);
-                                        logout();
+                        <div className="flex flex-row items-center gap-[10px] px-[10px] shadow-xl">
+                            {/* UserName when Set */}
+                            {profileName && (
+                                <span
+                                    className="text-[25px] max-w-[125px] truncate"
+                                    style={{
+                                        textShadow:
+                                            "2px 2px 4px rgba(0, 0, 0, 0.5)",
                                     }}
-                                    className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
                                 >
-                                    Log Out
-                                </Link>
+                                    {profileName}
+                                </span>
+                            )}
+                            {/* Logout */}
+                            <div className="relative">
+                                <AccountCircleIcon
+                                    sx={{ width: 30, height: 30 }}
+                                />
+                                {profile && (
+                                    <div className="absolute right-0 translate-x-[20px] mt-[7px] w-[136px] sm:w-[255px] h-auto shadow-xl rounded-b-[10px] px-[10px] pt-[10px] pb-[20px] bg-[#273472]">
+                                        <Link
+                                            to="/"
+                                            aria-label="Logs Out back to SignIn"
+                                            onClick={() => {
+                                                setProfile(false);
+                                                logout();
+                                            }}
+                                            className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
+                                        >
+                                            Log Out
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </section>
 
