@@ -239,6 +239,9 @@ const Header = () => {
                     <button
                         onClick={handleHomeClick}
                         className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
+                        style={{
+                            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                        }}
                     >
                         <img
                             src="/assets/star.png"
@@ -250,7 +253,7 @@ const Header = () => {
                 </section>
 
                 {/* Right Section: Currency, Wallet, UserName, Notification, Logout*/}
-                <section className="flex flex-row gap-[10px] sm:gap-[20px] items-center">
+                <section className="flex flex-row gap-[15px] items-center">
                     <InGameCurrencyTracker />
                     <SuiWallet />
                     {/* Notification */}
@@ -306,7 +309,12 @@ const Header = () => {
                     </section>
                     {/* UserName when Set */}
                     {profileName && (
-                        <span className="text-[25px] max-w-[125px] truncate">
+                        <span
+                            className="text-[25px] max-w-[125px] truncate"
+                            style={{
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                            }}
+                        >
                             {profileName}
                         </span>
                     )}

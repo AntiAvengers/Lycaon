@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { database } from '../../firebase/firebaseConfig';
-import { ref, onValue } from 'firebase/database';
+import { database } from "../../firebase/firebaseConfig";
+import { ref, onValue } from "firebase/database";
 
-import SHA256 from 'crypto-js/sha256';
+import SHA256 from "crypto-js/sha256";
 
-import { useCurrentWallet } from '@mysten/dapp-kit';
+import { useCurrentWallet } from "@mysten/dapp-kit";
 
 // const userWallet = { keys: 4, pages: 10, shards: 2000 };
 
@@ -34,7 +34,7 @@ const InGameCurrencyTracker = () => {
 
     //Listening for changes in any of the currencies (Shards, Keys, Pages)
     useEffect(() => {
-        if(connectionStatus == 'connected') {
+        if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const keys_ref = ref(database, `users/${hash}/keys`);
@@ -43,36 +43,42 @@ const InGameCurrencyTracker = () => {
 
             const unsubscribe_keys = onValue(keys_ref, (snapshot) => {
                 const num_of_keys = snapshot.val() || 0;
-                if(num_of_keys == undefined || num_of_keys == null) {
-                    console.error("Internal Error: Keys not displaying properly");
+                if (num_of_keys == undefined || num_of_keys == null) {
+                    console.error(
+                        "Internal Error: Keys not displaying properly"
+                    );
                     return;
                 }
-                setKeys(num_of_keys)
+                setKeys(num_of_keys);
             });
             const unsubscribe_pages = onValue(pages_ref, (snapshot) => {
                 const num_of_pages = snapshot.val() || 0;
-                if(num_of_pages == undefined || num_of_pages == null) {
-                    console.error("Internal Error: pages not displaying properly");
+                if (num_of_pages == undefined || num_of_pages == null) {
+                    console.error(
+                        "Internal Error: pages not displaying properly"
+                    );
                     return;
                 }
-                setPages(num_of_pages)
+                setPages(num_of_pages);
             });
             const unsubscribe_shards = onValue(shards_ref, (snapshot) => {
                 const num_of_shards = snapshot.val() || 0;
-                if(num_of_shards == undefined || num_of_shards == null) {
-                    console.error("Internal Error: shards not displaying properly");
+                if (num_of_shards == undefined || num_of_shards == null) {
+                    console.error(
+                        "Internal Error: shards not displaying properly"
+                    );
                     return;
                 }
-                setShards(num_of_shards)
+                setShards(num_of_shards);
             });
 
             return () => {
                 unsubscribe_keys();
                 unsubscribe_pages();
                 unsubscribe_shards();
-            }
+            };
         }
-    }, [connectionStatus])
+    }, [connectionStatus]);
 
     // Close dropdown when clicked outside of menu
     useEffect(() => {
@@ -101,7 +107,7 @@ const InGameCurrencyTracker = () => {
                 <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-[20px] space-y-2 w-[136px] md:hidden">
                     <li className="flex justify-evenly items-center text-[25px]">
                         {/* {userWallet.keys} */}
-                        {keys !== -1 ? keys : '?'}
+                        {keys !== -1 ? keys : "?"}
                         <img
                             src="/assets/icons/key.svg"
                             alt="Key Icon"
@@ -109,7 +115,7 @@ const InGameCurrencyTracker = () => {
                         />
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
-                        {pages !== -1 ? pages : '?'}
+                        {pages !== -1 ? pages : "?"}
                         {/* {userWallet.pages} */}
                         <img
                             src="/assets/icons/scroll.svg"
@@ -118,7 +124,7 @@ const InGameCurrencyTracker = () => {
                         />
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
-                        {shards !== -1 ? shards : '?'}
+                        {shards !== -1 ? shards : "?"}
                         {/* {userWallet.shards} */}
                         <img
                             src="/assets/icons/shard.svg"
@@ -138,32 +144,34 @@ const InGameCurrencyTracker = () => {
             )}
 
             {/* Visible List (Desktop & Larger) */}
-            <ul className="hidden md:flex space-x-[10px] text-[25px]">
+            <ul
+                className="hidden md:flex gap-[15px] text-[25px]"
+                style={{
+                    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                }}
+            >
                 <li className="flex items-center">
-                    {/* {userWallet.keys} */}
-                    {keys !== -1 ? keys : '?'}
+                    {keys !== -1 ? keys : "?"}
                     <img
                         src="/assets/icons/key.svg"
                         alt="Key Icon"
-                        className="w-[25px] h-[25px] ml-[5px]"
+                        className="w-[25px] h-[25px] ml-[5px] drop-shadow-sm"
                     />
                 </li>
                 <li className="flex items-center">
-                    {/* {userWallet.pages} */}
-                    {pages !== -1 ? pages : '?'}
+                    {pages !== -1 ? pages : "?"}
                     <img
                         src="/assets/icons/scroll.svg"
                         alt="Pages Icon"
-                        className="w-[25px] h-[25px] ml-[5px]"
+                        className="w-[25px] h-[25px] ml-[5px] drop-shadow-sm"
                     />
                 </li>
                 <li className="flex items-center">
-                    {/* {userWallet.shards} */}
-                    {shards !== -1 ? shards : '?'}
+                    {shards !== -1 ? shards : "?"}
                     <img
                         src="/assets/icons/shard.svg"
                         alt="Shards Icon"
-                        className="w-[25px] h-[25px] ml-[5px]"
+                        className="w-[25px] h-[25px] ml-[5px]  drop-shadow-sm"
                     />
                 </li>
             </ul>
