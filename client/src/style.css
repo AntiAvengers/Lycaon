@@ -19,9 +19,7 @@ body {
     margin: 0;
     padding: 0;
     color: #000000;
-    background-color: #b1a7a6;
-    background: url("/assets/bg/mainBG.png") no-repeat center center fixed;
-    background-size: cover;
+    background-color: #091031;
     font-family: "CustomFont", Arial, Helvetica, sans-serif;
 }
 

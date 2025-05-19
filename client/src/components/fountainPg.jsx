@@ -251,23 +251,6 @@ const FountainPg = () => {
                 )}
             </div>
 
-            {/* Not Enough Pages Popup */}
-            {/* {showError && (
-                <div className="w-[400px] h-[450px] max-h-[234px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#4A63E4] z-50 rounded-[10px] p-[20px] text-[#FFFFFF] flex flex-col items-center">
-                    <img
-                        src="/assets/icons/closeBtn.svg"
-                        alt="closeError"
-                        onClick={closeErrorPopup}
-                        className="absolute top-[15px] right-[10px] cursor-pointer w-[40px] h-[40px]"
-                    />
-                    <div className="flex flex-col items-center mt-4">
-                        <h2 className="text-[40px] font-bold mt-[30px] mb-[10px] text-center">
-                            Sorry, you do not have enough pages!
-                        </h2>
-                    </div>
-                </div>
-            )} */}
-
             {/* Pulling Video */}
             {showVideo && !videoEnded && (
                 <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">

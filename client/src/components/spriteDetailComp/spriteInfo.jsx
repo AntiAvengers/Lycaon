@@ -88,6 +88,7 @@ const SpritesInfo = ({ sprite }) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
+                    maxLength={30}
                     autoFocus
                 />
             ) : (

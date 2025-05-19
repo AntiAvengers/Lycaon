@@ -399,18 +399,18 @@ const UserListing = () => {
                         {sprite.slice(0, 3).map((sprite) => (
                             <li
                                 key={sprite.label}
-                                className="w-[293px] h-[143px] flex flex-row items-center gap-[20px]"
+                                className="w-[293px] max-w-[293px] h-[143px] flex flex-row items-center gap-[20px]"
                             >
                                 <img
                                     src={sprite.still}
                                     alt={sprite.label}
-                                    className="w-[152px] object-contain bg-[#E9E9E9]"
+                                    className="w-[152px] max-w-[152px] h-[152px] max-h-[152px] object-contain bg-[#E9E9E9]"
                                 />
-                                <section className="flex flex-col items-start text-[25px]">
+                                <section className="max-w-[120px] flex flex-col items-start text-[25px]">
                                     <span>
                                         {sprite.stage} {sprite.rank}
                                     </span>
-                                    <span>{sprite.name}</span>
+                                    <span className="w-full truncate" >{sprite.name}</span>
                                     <button
                                         onClick={() => {
                                             if (!sprite.mint) {
@@ -424,7 +424,7 @@ const UserListing = () => {
                                             }
                                         }}
                                         disabled={sprite.marketplace}
-                                        className={`underline cursor-pointer hover:text-[#FBBB26] ${
+                                        className={`underline decoration-[1.5px] cursor-pointer hover:text-[#FBBB26] ${
                                             sprite.marketplace
                                                 ? "text-gray-400 pointer-events-none cursor-not-allowed"
                                                 : ""
@@ -441,7 +441,7 @@ const UserListing = () => {
                                             onClick={() =>
                                                 setCancelPopup(sprite)
                                             }
-                                            className="underline cursor-pointer hover:text-[#FBBB26]"
+                                            className="underline decoration-[1.5px] cursor-pointer hover:text-[#FBBB26]"
                                         >
                                             Cancel
                                         </button>
@@ -450,7 +450,7 @@ const UserListing = () => {
                             </li>
                         ))}
                     </ul>
-                    <Link to="/collection" className="underline text-[25px]">
+                    <Link to="/collection" className="w-fit underline decoration-[1.5px] text-[25px] hover:text-[#FBBB26]">
                         View your collection
                     </Link>
                 </div>
