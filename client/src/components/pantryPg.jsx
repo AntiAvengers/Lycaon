@@ -70,16 +70,16 @@ const PantryPg = () => {
             const unsubscribe = onValue(pantry_ref, (snapshot) => {
                 const player_foods = [];
                 const pantry = snapshot.val();
-                for(const food in pantry) {
+                for (const food in pantry) {
                     player_foods.push({
                         label: food,
                         src: food_SVGs[food],
-                        amt: pantry[food]
-                    })
+                        amt: pantry[food],
+                    });
                 }
                 setPlayerFoods(player_foods);
             });
-            
+
             return () => unsubscribe();
         }
     }, [connectionStatus]);
@@ -231,11 +231,12 @@ const PantryPg = () => {
                                             type="number"
                                             min="1"
                                             value={quantity}
+                                            required
                                             onWheel={(e) => e.target.blur()}
                                             onChange={(e) => {
                                                 const val = e.target.value;
                                                 if (val === "") {
-                                                    setQuantity(""); // allow empty temporarily
+                                                    setQuantity("");
                                                 } else {
                                                     const value = Math.max(
                                                         1,
@@ -285,12 +286,28 @@ const PantryPg = () => {
                         {!purchaseConfirmed && (
                             <button
                                 onClick={() => {
+                                    // purchase_food(selectedFood.label, quantity);
+                                    if (!quantity || quantity < 1) {
+                                        setError(
+                                            "Please enter a valid amount."
+                                        );
+                                        return;
+                                    }
+                                    setError(""); // Clear previous errors
                                     purchase_food(selectedFood.label, quantity);
                                 }}
-                                disabled={error || purchaseConfirmed}
+                                disabled={
+                                    !quantity ||
+                                    quantity < 1 ||
+                                    error ||
+                                    purchaseConfirmed
+                                }
                                 className={`rounded-[4px] px-[20px] py-[5px] text-[25px] transition-all duration-75 
                              ${
-                                 error || purchaseConfirmed
+                                 !quantity ||
+                                 quantity < 1 ||
+                                 error ||
+                                 purchaseConfirmed
                                      ? "bg-gray-400 text-white shadow-none cursor-not-allowed"
                                      : "bg-[#FEFAF3] text-[#273472] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                              }`}
