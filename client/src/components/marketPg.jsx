@@ -5,7 +5,6 @@ import FeaturedSprites from "./marketComp/featured-sprites";
 import AllListing from "./marketComp/all-listing";
 
 const MarketPg = () => {
-
     useEffect(() => {
         document.body.classList.add("market-bg");
         return () => {
@@ -18,9 +17,9 @@ const MarketPg = () => {
             <section className="w-[1261px] h-[460px] bg-[#FFFFFF] leading-none px-[100px] pt-[100px]">
                 <h1 className="text-[80px]">Market</h1>
                 <p className="w-[495px] text-[25px]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    maximus libero sit amet egestas accumsan. Sed massa sem,
-                    convallis et fringilla lacinia, faucibus sed augue.
+                    Step into the marketplace, where rare and radiant sprites
+                    gathered by other adventurers shimmer with possibility.
+                    Browse and trade to expand your collection with sprites.
                 </p>
             </section>
             <UserListing />

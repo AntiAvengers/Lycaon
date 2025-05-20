@@ -77,10 +77,12 @@ const AllListing = () => {
 
     useEffect(() => {
         const rankOrder = ["Littles", "Familiar", "Noble", "Elite", "Mythic"];
-    
+
         const sortFn = (a, b) => {
             if (sortBy === "price") {
-                return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
+                return sortOrder === "asc"
+                    ? a.price - b.price
+                    : b.price - a.price;
             } else if (sortBy === "rank") {
                 return sortOrder === "asc"
                     ? rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank)
@@ -88,17 +90,20 @@ const AllListing = () => {
             }
             return 0;
         };
-    
+
         if (filter === "all") {
             // No prioritization, just sort all
             setFilteredCreatures([...creaturesList].sort(sortFn));
         } else {
-            const prioritized = creaturesList.filter(c => c.rank === filter).sort(sortFn);
-            const rest = creaturesList.filter(c => c.rank !== filter).sort(sortFn);
+            const prioritized = creaturesList
+                .filter((c) => c.rank === filter)
+                .sort(sortFn);
+            const rest = creaturesList
+                .filter((c) => c.rank !== filter)
+                .sort(sortFn);
             setFilteredCreatures([...prioritized, ...rest]);
         }
     }, [creaturesList, filter, sortBy, sortOrder]);
-    
 
     const handleBuy = async (sprite) => {
         try {
@@ -226,6 +231,46 @@ const AllListing = () => {
                             <button
                                 className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
                                 onClick={() => {
+                                    setSortBy("price");
+                                    setSortOrder("asc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Price ↑
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("price");
+                                    setSortOrder("desc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Price ↓
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("rank");
+                                    setSortOrder("asc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Rank ↑
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("rank");
+                                    setSortOrder("desc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Rank ↓
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
                                     setFilter("Littles");
                                     setShowFilters(false);
                                 }}
@@ -267,46 +312,6 @@ const AllListing = () => {
                                 }}
                             >
                                 Mythic
-                            </button>
-                            <button
-                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
-                                onClick={() => {
-                                    setSortBy("price");
-                                    setSortOrder("asc");
-                                    setShowFilters(false);
-                                }}
-                            >
-                                Price ↑
-                            </button>
-                            <button
-                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
-                                onClick={() => {
-                                    setSortBy("price");
-                                    setSortOrder("desc");
-                                    setShowFilters(false);
-                                }}
-                            >
-                                Price ↓
-                            </button>
-                            <button
-                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
-                                onClick={() => {
-                                    setSortBy("rank");
-                                    setSortOrder("asc");
-                                    setShowFilters(false);
-                                }}
-                            >
-                                Rank ↑
-                            </button>
-                            <button
-                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
-                                onClick={() => {
-                                    setSortBy("rank");
-                                    setSortOrder("desc");
-                                    setShowFilters(false);
-                                }}
-                            >
-                                Rank ↓
                             </button>
                         </div>
                     )}
