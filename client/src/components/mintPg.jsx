@@ -83,7 +83,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
             ) : (
                 <div className="relative">
                     <img
-                        src="/assets/bg/minting.gif"
+                        src="/assets/bg/minting-2.gif"
                         alt="mintingGif"
                         className="absolute top-0 left-0 z-50"
                     />
