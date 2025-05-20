@@ -212,18 +212,18 @@ const FeaturedSprites = () => {
                     {featuredSprites.slice(0, 2).map((feature) => (
                         <li
                             key={feature.label}
-                            className="w-[581px] flex flex-row items-center gap-[20px]"
+                            className="w-[581px] max-w-[581px] h-[322px] flex flex-row items-center gap-[20px]"
                         >
                             <img
                                 src={feature.still}
                                 alt={feature.label}
                                 className="w-[322px] object-contain bg-[#E9E9E9]"
                             />
-                            <section className="w-[239px] flex flex-col justify-start gap-[5px] leading-none text-[#FEFAF3]">
+                            <section className="w-[239px] max-w-[239px] flex flex-col justify-start gap-[5px] leading-none text-[#FEFAF3]">
                                 <span className="text-[25px]">
                                     {feature.stage} {feature.rank}
                                 </span>
-                                <span className="text-[50px] text-wrap">
+                                <span className="text-[50px] text-wrap break-words">
                                     {feature.name}
                                 </span>
                                 <span className="flex flex-row items-center gap-[10px] text-[40px]">
@@ -236,7 +236,7 @@ const FeaturedSprites = () => {
                                 </span>
                                 <button className={
                                     disableButton
-                                        ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-none cursor-not-allowed pointer-events-none`
+                                        ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] cursor-not-allowed pointer-events-none`
                                         : `w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer`
                                 }
                                 onClick={() => handleBuy(feature)}
