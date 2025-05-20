@@ -8,10 +8,7 @@ import SHA256 from "crypto-js/sha256";
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
 
-import {
-    useCurrentWallet,
-    useSignTransaction,
-} from "@mysten/dapp-kit";
+import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
 import {
     getCreatureImage,
@@ -46,7 +43,7 @@ const AllListing = () => {
                 const users = snapshot.val();
                 const updated_creatures = [];
                 for (const key in users) {
-                    if(key !== hash && key !== '_init') {
+                    if (key !== hash && key !== "_init") {
                         for (const prop in users[key]) {
                             const { owner, rarity, type, price, stage } =
                                 users[key][prop];
@@ -120,7 +117,7 @@ const AllListing = () => {
                     body: JSON.stringify({
                         id: sprite.label,
                         price: sprite.price,
-                        owner: sprite.owner
+                        owner: sprite.owner,
                     }),
                     credentials: "include",
                 },
@@ -262,13 +259,16 @@ const AllListing = () => {
                         </div>
                     )}
 
-                    <ul className="w-full flex flex-wrap gap-x-[105px] gap-y-[50px] max-w-max">
+                    <ul className="w-full flex flex-wrap gap-x-[17px] gap-y-[50px] max-w-max">
                         {filteredCreatures.map((creature) => (
-                            <li key={creature.label} className="w-[238px]">
+                            <li
+                                key={creature.label}
+                                className="w-[238px] h-[370px]"
+                            >
                                 <img
                                     src={creature.still}
                                     alt={creature.label}
-                                    className="w-full object-contain bg-[#E9E9E9]"
+                                    className="w-full h-[237px] object-contain bg-[#E9E9E9]"
                                 />
                                 <section className="flex flex-col leading-none gap-[5px] mt-[5px] text-[#FEFAF3]">
                                     <span className="flex flex-row items-center gap-[10px] text-[25px]">
@@ -279,10 +279,10 @@ const AllListing = () => {
                                         />
                                         {creature.price}
                                     </span>
-                                    <span className="text-[20px] uppercase">
-                                        {creature.rank} {creature.stage}
+                                    <span className="text-[18px] uppercase">
+                                        {creature.stage} {creature.rank}
                                     </span>
-                                    <span className="text-[30px] text-wrap">
+                                    <span className="text-[30px] text-wrap truncate">
                                         {creature.name}
                                     </span>
                                     <button
