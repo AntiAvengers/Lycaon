@@ -125,18 +125,18 @@ const HomePg = () => {
             <div className="group fixed top-[15%] left-1/2 transform -translate-x-1/2 z-10">
                 <Link to="/puzzle">
                     <img
-                        src="/assets/icons/book.svg"
+                        src="/assets/icons/book.png"
                         alt="bookIcon"
                         className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-[15%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-[95%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Puzzle
                     </span>
                 </Link>
             </div>
 
             {/* Collection */}
-            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2">
+            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2 z-10">
                 <Link to="/collection">
                     <img
                         src="/assets/icons/statues.png"
@@ -164,21 +164,21 @@ const HomePg = () => {
             </div>
 
             {/* Pantry */}
-            <div className="group fixed left-[27%] top-[38%] transform -translate-y-1/2">
+            <div className="group fixed left-[25%] top-[50%] transform -translate-y-1/2 z-10">
                 <Link to="/pantry">
                     <img
                         src="/assets/icons/tree.png"
                         alt="treeIcon"
                         className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
                     />
-                    <span className="absolute top-[50%] left-[35%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="absolute top-[40%] left-[48%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Pantry
                     </span>
                 </Link>
             </div>
 
             {/* Fountain */}
-            <div className="group fixed top-[68%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+            <div className="group fixed top-[68%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <Link to="/fountain">
                     <img
                         src="/assets/icons/fountain.png"
