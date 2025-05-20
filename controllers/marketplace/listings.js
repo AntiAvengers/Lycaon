@@ -278,6 +278,7 @@ export const execute_buy_tx = async (req, res) => {
     sprite.on_marketplace = false;
     sprite.favorite = false;
     sprite.date_acquired = Date.now();
+    sprite.nickname= "";
 
     collections_ref.remove();
 

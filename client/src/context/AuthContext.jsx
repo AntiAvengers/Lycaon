@@ -33,56 +33,59 @@ export function AuthProvider({ children }) {
     return data.accessToken;
   }
 
-  useEffect(() => {
-    const authenticate = async () => {
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-          ? import.meta.env.VITE_DEV_URL
-          : '/';
-        const URL = API_BASE_URL + 'auth/firebase';
-        try {
-            const response = await fetchWithAuth(
-              URL, 
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    uid: uuidv4(),
-                    claims: { role: 'user' },
-                }),
+  const authenticate = async () => {
+      const auth = getAuth(app);
+      const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
+        ? import.meta.env.VITE_DEV_URL
+        : '/';
+      const URL = API_BASE_URL + 'auth/firebase';
+      try {
+          const response = await fetchWithAuth(
+            URL, 
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
               },
-              accessToken,
-              refreshAccessToken,
-              setAccessToken
-            );
+              body: JSON.stringify({
+                  uid: uuidv4(),
+                  claims: { role: 'user' },
+              }),
+            },
+            accessToken,
+            refreshAccessToken,
+            setAccessToken
+          );
 
-            const data = await response.json();
-            await signInWithCustomToken(auth, data.token);
-        } catch (error) {
-          console.error('Authentication error:', error);
-        }
-    };
+          const data = await response.json();
+          await signInWithCustomToken(auth, data.token);
+      } catch (error) {
+        console.error('Authentication error:', error);
+      }
+  };
 
-    authenticate();
+  useEffect(() => {
+    if(location.pathname !== "/") {
+      const auth = getAuth(app);
 
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(accessToken) {
+        authenticate();
+      }
+
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           console.log('Firebase: Client Connection Successful');
         } else {
-          if(accessToken) {
-            authenticate();
-          }
           console.log('Firebase: Client Connection Failed/Logged Out');
         }
-    });
+      });
 
       return unsubscribe;
-    }, [accessToken]);
+    }
+  }, [accessToken]);
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken, authenticate }}>
       {children}
     </AuthContext.Provider>
   );

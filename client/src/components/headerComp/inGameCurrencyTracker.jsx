@@ -5,11 +5,15 @@ import { ref, onValue } from "firebase/database";
 import SHA256 from "crypto-js/sha256";
 
 import { useCurrentWallet } from "@mysten/dapp-kit";
+import { useAuth } from "../../context/AuthContext";
 
 // const userWallet = { keys: 4, pages: 10, shards: 2000 };
 
 const InGameCurrencyTracker = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
+
+    //Access Token (JWT)
+    const { authenticate } = useAuth();
 
     const [open, setOpen] = useState(false); // Opens Menu for Mobile
     const menuRef = useRef(null); // Menu for Mobile
@@ -29,6 +33,12 @@ const InGameCurrencyTracker = () => {
     const handleOutsideClick = useCallback((event) => {
         if (menuRef.current && !menuRef.current.contains(event.target)) {
             setOpen(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            authenticate();
         }
     }, []);
 
@@ -78,7 +88,7 @@ const InGameCurrencyTracker = () => {
                 unsubscribe_shards();
             };
         }
-    }, [connectionStatus]);
+    }, [location.pathname, connectionStatus]);
 
     // Close dropdown when clicked outside of menu
     useEffect(() => {

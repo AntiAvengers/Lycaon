@@ -44,7 +44,7 @@ export const set_notification_as_read = async (req, res) => {
     const notifications_ref = database.ref(`notifications/${hashed}/${id}`);
     const snapshot = await notifications_ref.once("value");
     if(snapshot.exists()) {
-        notifications_ref.update({ read: true });
+        notifications_ref.update({ read: true, delete_date: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000))});
     }
     return res.status(200).json({ response: true });
 }
