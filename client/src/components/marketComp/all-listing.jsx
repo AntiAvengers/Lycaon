@@ -24,6 +24,7 @@ const AllListing = () => {
 
     const [filter, setFilter] = useState("all");
     const [showFilters, setShowFilters] = useState(false);
+    const [sortBy, setSortBy] = useState("price");
     const [sortOrder, setSortOrder] = useState("asc");
     const [creaturesList, setCreaturesList] = useState([]);
     const [filteredCreatures, setFilteredCreatures] = useState([]);
@@ -75,29 +76,29 @@ const AllListing = () => {
     }, [connectionStatus]);
 
     useEffect(() => {
-        const list = creaturesList
-            .filter((creature) => filter === "all" || creature.rank === filter)
-            .sort((a, b) =>
-                sortOrder === "asc" ? a.price - b.price : b.price - a.price
-            );
-        setFilteredCreatures(list);
-    }, [creaturesList, sortOrder, filter]);
-
-    // const filteredCreatures = creaturesList
-    //     .filter((creature) =>
-    //         filter === "all" ? true : creature.rank === filter
-    //     )
-    //     .sort((a, b) =>
-    //         sortOrder === "asc" ? a.price - b.price : b.price - a.price
-    //     );
-
-    // const filteredCreatures = useMemo(() => {
-    //     return creaturesList
-    //         .filter((creature) => filter === "all" || creature.rank === filter)
-    //         .sort((a, b) =>
-    //             sortOrder === "asc" ? a.price - b.price : b.price - a.price
-    //         );
-    // }, [filter, sortOrder]);
+        const rankOrder = ["Littles", "Familiar", "Noble", "Elite", "Mythic"];
+    
+        const sortFn = (a, b) => {
+            if (sortBy === "price") {
+                return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
+            } else if (sortBy === "rank") {
+                return sortOrder === "asc"
+                    ? rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank)
+                    : rankOrder.indexOf(b.rank) - rankOrder.indexOf(a.rank);
+            }
+            return 0;
+        };
+    
+        if (filter === "all") {
+            // No prioritization, just sort all
+            setFilteredCreatures([...creaturesList].sort(sortFn));
+        } else {
+            const prioritized = creaturesList.filter(c => c.rank === filter).sort(sortFn);
+            const rest = creaturesList.filter(c => c.rank !== filter).sort(sortFn);
+            setFilteredCreatures([...prioritized, ...rest]);
+        }
+    }, [creaturesList, filter, sortBy, sortOrder]);
+    
 
     const handleBuy = async (sprite) => {
         try {
@@ -212,9 +213,9 @@ const AllListing = () => {
                     </div>
 
                     {showFilters && (
-                        <div className="absolute top-[45px] right-0 bg-white border border-gray-300 rounded-lg shadow-md p-2 z-10 w-[150px]">
+                        <div className="absolute top-[45px] right-0 text-[#FCF4E7] bg-[#273472] rounded-[10px] shadow-md p-2 z-10 w-[150px]">
                             <button
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
                                 onClick={() => {
                                     setFilter("all");
                                     setShowFilters(false);
@@ -223,16 +224,7 @@ const AllListing = () => {
                                 All
                             </button>
                             <button
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
-                                onClick={() => {
-                                    setFilter("Elite");
-                                    setShowFilters(false);
-                                }}
-                            >
-                                Elite
-                            </button>
-                            <button
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
                                 onClick={() => {
                                     setFilter("Littles");
                                     setShowFilters(false);
@@ -241,20 +233,80 @@ const AllListing = () => {
                                 Littles
                             </button>
                             <button
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
                                 onClick={() => {
-                                    setSortOrder("asc"), setShowFilters(false);
+                                    setFilter("Familiar");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Familiar
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setFilter("Noble");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Noble
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setFilter("Elite");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Elite
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setFilter("Mythic");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Mythic
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("price");
+                                    setSortOrder("asc");
+                                    setShowFilters(false);
                                 }}
                             >
                                 Price ↑
                             </button>
                             <button
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-100"
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
                                 onClick={() => {
-                                    setSortOrder("desc"), setShowFilters(false);
+                                    setSortBy("price");
+                                    setSortOrder("desc");
+                                    setShowFilters(false);
                                 }}
                             >
                                 Price ↓
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("rank");
+                                    setSortOrder("asc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Rank ↑
+                            </button>
+                            <button
+                                className="block w-full text-left px-2 py-1 rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 cursor-pointer"
+                                onClick={() => {
+                                    setSortBy("rank");
+                                    setSortOrder("desc");
+                                    setShowFilters(false);
+                                }}
+                            >
+                                Rank ↓
                             </button>
                         </div>
                     )}
