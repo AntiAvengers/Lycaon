@@ -93,7 +93,6 @@ const FountainPg = () => {
 
     //Closes Pull Popup
     const closePullPopup = () => setPulledSprites([]);
-    // const closeErrorPopup = () => setShowError(false);
 
     //0 pages deactivates pull btns
     useEffect(() => {
@@ -158,7 +157,7 @@ const FountainPg = () => {
     return (
         <div>
             {/* Pull Area */}
-            <div className="w-[619px] h-[447px] bg-[#FFFFFF]/90 flex items-center justify-center rounded-[10px] relative">
+            <div className="w-[619px] h-[447px] 3xl:w-[700px] 3xl:h-[500px] 4xl:w-[750px] 4xl:h-[550px] 5xl:w-[800px] 5xl:h-[600px] 6xl:w-[850px] 6xl:h-[650px] bg-[#FFFFFF]/90 flex items-center justify-center rounded-[10px] relative">
                 <section className="h-[390px] flex flex-col items-center justify-center gap-[15px]">
                     <div className="flex flex-col items-center leading-none">
                         <img
@@ -173,29 +172,30 @@ const FountainPg = () => {
                                     : "0 Page"}
                             </p>
                             {pages <= 0 && (
-                                <p className="text-[25px] text-[#EA1A26]">
-                                    Play puzzles to earn pages!
+                                <p className="text-[25px] text-[#FBBB26]">
+                                    You do not have enough pages. Play some
+                                    games to earn pages!
                                 </p>
                             )}
                         </div>
                     </div>
 
-                    <p className="w-[403px] text-[25px] text-center leading-tight">
+                    <p className="w-[403px] text-[25px] text-center leading-none">
                         Each page of the Codex Bestiarum stirs forgotten sprites
                         to rise—draw them forth if you dare, but know this: to
                         pull is to wager with fate itself.
                     </p>
 
                     {/* Pulling Btns */}
-                    <div className="w-[100%] flex flex-row justify-between">
+                    <div className="w-[350px] flex flex-row justify-between">
                         <button
                             onClick={() => handlePull(1)}
                             disabled={pages < 1}
-                            className={`w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
+                            className={`w-[145px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
                                 ${
                                     showError
-                                        ? "bg-gray-400 text-gray-200 cursor-not-allowed shadow-none"
-                                        : "bg-[#4A63E4] hover:bg-[#1D329F] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                                        ? "bg-[#DADADA] text-[#140E28] cursor-not-allowed shadow-[4px_4px_0_rgba(0,0,0,0.25)]"
+                                        : "bg-[#4A63E4] hover:bg-[#1D329F] text-[#FEFAF3] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                                 }`}
                         >
                             1 Page
@@ -203,10 +203,10 @@ const FountainPg = () => {
                         <button
                             onClick={() => handlePull(10)}
                             disabled={pages < 10}
-                            className={`w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
+                            className={`w-[145px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
                                 ${
                                     showError
-                                        ? "bg-gray-400 text-gray-200 cursor-not-allowed shadow-none"
+                                        ? "bg-[#DADADA] text-[#140E28] cursor-not-allowed shadow-[4px_4px_0_rgba(0,0,0,0.25)]"
                                         : "bg-[#4A63E4] hover:bg-[#1D329F] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                                 }`}
                         >
@@ -231,13 +231,13 @@ const FountainPg = () => {
                             className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
                         <h1 className="text-[40px]">Sprite Rates</h1>
-                        <section className="h-[225px] flex flex-col items-center justify-between text-[25px]">
+                        <section className="h-[250px] flex flex-col items-center justify-between text-[25px]">
                             <p>Each sprite rarity have their own rates.</p>
                             <div>
                                 {rates.map((rate) => (
                                     <ul
                                         key={rate.name}
-                                        className="leading-[33px]"
+                                        className="leading-[40px]"
                                     >
                                         <li>
                                             {rate.name} ={" "}
@@ -273,7 +273,7 @@ const FountainPg = () => {
 
             {/* Pull Popup  */}
             {videoEnded && pulledSprites.length > 0 && (
-                <div className="w-[518px] h-[466px] max-h-[466px] overflow-y-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 inset-0 bg-[#4A63E4] z-50 rounded-[15px] p-[20px] flex flex-col items-center">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#4A63E4] z-50 rounded-[15px] p-[20px] flex flex-col items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
@@ -281,7 +281,7 @@ const FountainPg = () => {
                         className="absolute top-[15px] right-[15px] cursor-pointer w-[40px] h-[40px]"
                     />
                     {pulledSprites.length === 1 ? (
-                        <div className="h-full flex flex-col items-center justify-center gap-[25px] text-[#FFFFFF]">
+                        <div className="w-[518px] h-[466px] max-h-[466px] flex flex-col items-center justify-center gap-[25px] text-[#FFFFFF]">
                             <img
                                 src={pulledSprites[0].still}
                                 alt={pulledSprites[0].name}
@@ -306,32 +306,23 @@ const FountainPg = () => {
                             </Link>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center gap-[20px]">
-                            <div className="text-center text-[50px] leading-none">
-                                <p>Congrats!</p>
-                                <p>You have obtained . . .</p>
+                        <div className="relative w-[803px] h-[544px] flex flex-col items-center justify-center gap-[20px]">
+                            <div className="absolute top-[25px] text-center text-[50px] text-[#FEFAF3] leading-none">
+                                <p>Congrats! You have obtained . . .</p>
                             </div>
-
-                            <div className=" grid grid-cols-2 gap-4">
+                            <div className=" grid grid-cols-5 gap-[17px]">
                                 {pulledSprites.map((s) => (
-                                    <div
-                                        key={s.id}
-                                        className="flex flex-col items-center"
-                                    >
-                                        <img
-                                            src={s.still}
-                                            alt={s.name}
-                                            className="w-[80px] h-[80px]"
-                                        />
-                                        <p className="text-[20px] font-semibold">
-                                            {s.rank} {s.name}
-                                        </p>
-                                    </div>
+                                    <img
+                                        key={s.name}
+                                        src={s.still}
+                                        alt={s.name}
+                                        className="w-[132px] h-[151px] shadow-xl"
+                                    />
                                 ))}
                             </div>
                             <Link
                                 to="/collection"
-                                className="w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#273472] cursor-pointer"
+                                className="absolute bottom-[30px] w-[174px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] bg-[#FEFAF3] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none text-[#273472] cursor-pointer"
                             >
                                 View in Collection
                             </Link>

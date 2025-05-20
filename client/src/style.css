@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+    --breakpoint-3xl: 1630px;
+    --breakpoint-4xl: 1830px;
+    --breakpoint-5xl: 1960px;
+    --breakpoint-6xl: 2200px;
+  }
+
 @font-face {
     font-family: "CustomFont";
     src: url("/assets/fonts/PPNeueBit-Bold.otf") format("opentype");

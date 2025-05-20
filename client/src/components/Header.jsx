@@ -283,7 +283,7 @@ const Header = () => {
                         </button>
 
                         {notificationOpen && (
-                            <div className="absolute right-0 top-[38px] mt-[7px] w-[350px] max-w-[350px] h-[500px] max-h-[500px] overflow-y-auto bg-[#273472] rounded-b-[10px] shadow-xl z-50 text-[20px] pt-[10px] pb-[20px] px-[10px]">
+                            <div className="absolute right-0 top-[38px] mt-[7px] w-[350px] max-w-[350px] max-h-[275px] overflow-y-auto bg-[#273472] rounded-b-[10px] shadow-xl z-50 text-[20px] pt-[10px] pb-[20px] px-[10px]">
                                 {notifications.length === 0 ? (
                                     <div className="p-4 text-[#FCF4E7]">
                                         No notifications
@@ -307,7 +307,7 @@ const Header = () => {
                                                     );
                                                 }
                                             }}
-                                            className={`pr-[36px] pl-[10px] py-[10px] rounded-[10px] cursor-pointer hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] shadow-none transition-hover duration-200 text-wrap ${
+                                            className={`pr-[36px] pl-[10px] py-[10px] cursor-pointer transition-hover duration-200 text-wrap text-left ${
                                                 n.read
                                                     ? "text-[#FCF4E7]"
                                                     : "text-[#EA1A26]"
@@ -352,7 +352,7 @@ const Header = () => {
                                                 setProfile(false);
                                                 logout();
                                             }}
-                                            className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-end items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
+                                            className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex justify-start items-center pr-[20px] sm:pr-[36px] pl-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200 text-[26px] text-[#FCF4E7]"
                                         >
                                             Log Out
                                         </Link>
