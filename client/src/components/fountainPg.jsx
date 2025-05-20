@@ -161,7 +161,7 @@ const FountainPg = () => {
                 <section className="h-[390px] flex flex-col items-center justify-center gap-[15px]">
                     <div className="flex flex-col items-center leading-none">
                         <img
-                            src="/assets/icons/scroll.svg"
+                            src="/assets/icons/fountain-icon.svg"
                             alt="spritePull"
                             className="w-[100px] h-[100px]"
                         />
