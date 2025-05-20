@@ -113,6 +113,8 @@ const Header = () => {
         );
     };
 
+    const allRead = notifications.every((n) => n.read);
+
     //Logout
     const logout = async () => {
         //Delete Refresh Token
@@ -265,7 +267,7 @@ const Header = () => {
                             onClick={toggleNotificationDropdown}
                             className="rounded-[2px] shadow-[-4px_4px_0_#1A265D] cursor-pointer"
                         >
-                            {notifications.length === 0 ? (
+                            {allRead ? (
                                 <img
                                     src="/assets/icons/notification.svg"
                                     alt="noMail"
@@ -281,7 +283,7 @@ const Header = () => {
                         </button>
 
                         {notificationOpen && (
-                            <div className="absolute right-0 top-[32px] mt-[7px] w-[350px] max-w-[350px] bg-[#273472] rounded-b-[10px] shadow-xl z-50 text-[20px]">
+                            <div className="absolute right-0 top-[38px] mt-[7px] w-[350px] max-w-[350px] h-[500px] max-h-[500px] overflow-y-auto bg-[#273472] rounded-b-[10px] shadow-xl z-50 text-[20px] pt-[10px] pb-[20px] px-[10px]">
                                 {notifications.length === 0 ? (
                                     <div className="p-4 text-[#FCF4E7]">
                                         No notifications
@@ -305,7 +307,7 @@ const Header = () => {
                                                     );
                                                 }
                                             }}
-                                            className={`px-4 py-2 cursor-pointer rounded-b-[10px] hover:bg-[#1A265D] transition-colors duration-300 text-wrap ${
+                                            className={`pr-[36px] pl-[10px] py-[10px] rounded-[10px] cursor-pointer hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] shadow-none transition-hover duration-200 text-wrap ${
                                                 n.read
                                                     ? "text-[#FCF4E7]"
                                                     : "text-[#EA1A26]"

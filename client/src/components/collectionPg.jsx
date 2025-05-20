@@ -317,7 +317,7 @@ const SpritesCollectionPg = () => {
                     </section>
 
                     {/* All Sprites */}
-                    <ul className="w-[810px] h-[1050px] grid grid-cols-3 gap-[25px] overflow-y-auto px-[20px]">
+                    <ul className="w-[810px] h-[1050px] max-h-[1050px] grid grid-cols-3 gap-[25px] overflow-y-auto px-[20px]">
                         {creaturesList.map((creature, index) => (
                             <li
                                 key={creature.label}
