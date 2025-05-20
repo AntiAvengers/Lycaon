@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useConnectWallet, useCurrentWallet, useWallets, useSignPersonalMessage } from '@mysten/dapp-kit';
+import {
+    useConnectWallet,
+    useCurrentWallet,
+    useWallets,
+    useSignPersonalMessage,
+} from "@mysten/dapp-kit";
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 import AboutPg from "../aboutPg";
 
 const ConnectPg = () => {
-
     //React Navigation to different pages of our app
     const navigate = useNavigate();
 
@@ -16,7 +20,7 @@ const ConnectPg = () => {
 
     //Sui Requirements
     const wallets = useWallets();
-	const { mutate: connect } = useConnectWallet();
+    const { mutate: connect } = useConnectWallet();
     const { currentWallet, connectionStatus } = useCurrentWallet();
     const { mutate: signPersonalMessage } = useSignPersonalMessage();
 
@@ -26,27 +30,29 @@ const ConnectPg = () => {
     }, []);
 
     const Handle_Login = async (event) => {
-        const API_BASE_URL = import.meta.env.VITE_APP_MODE == 'DEVELOPMENT' 
-        ? import.meta.env.VITE_DEV_URL
-        : '/';
-        const response = await fetch(API_BASE_URL + `auth/login/`, 
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    address: currentWallet.accounts[0].address,
-                }),
-                credentials: 'include', // to include cookies
-            }
-        );
+        const API_BASE_URL =
+            import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
+                ? import.meta.env.VITE_DEV_URL
+                : "/";
+        const response = await fetch(API_BASE_URL + `auth/login/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                address: currentWallet.accounts[0].address,
+            }),
+            credentials: "include", // to include cookies
+        });
         const { UUID } = await response.json();
-        const message_to_sign = "Please sign the following randomly generated message to confirm your wallet ownership\n\n" + UUID;
+        const message_to_sign =
+            "Please sign the following randomly generated message to confirm your wallet ownership\n\n" +
+            UUID;
 
         signPersonalMessage(
-            { message: new TextEncoder().encode(message_to_sign) }, 
+            { message: new TextEncoder().encode(message_to_sign) },
             {
                 onSuccess: async (result) => {
-                    const loginResponse = await fetch(API_BASE_URL + "auth/login/verify_signature", 
+                    const loginResponse = await fetch(
+                        API_BASE_URL + "auth/login/verify_signature",
                         {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
@@ -55,9 +61,9 @@ const ConnectPg = () => {
                                 bytes: result.bytes,
                                 message: message_to_sign,
                                 UUID: UUID,
-                                signature: result.signature
+                                signature: result.signature,
                             }),
-                            credentials: 'include', // to include cookies
+                            credentials: "include", // to include cookies
                         }
                     );
 
@@ -67,59 +73,43 @@ const ConnectPg = () => {
                     const { accessToken } = await loginResponse.json();
                     setAccessToken(accessToken);
 
-                    if(loginResponse.status == 200) {
+                    if (loginResponse.status == 200) {
                         navigate("/home");
                     }
-            },
-            onError: (err) => (console.log(err))
-        });
-    }
+                },
+                onError: (err) => console.log(err),
+            }
+        );
+    };
 
     const Sui_Connect_Wallet = async (wallet) => {
-        if(!currentWallet) {
-            connect
-            (
-                { wallet }, 
-                { onSuccess: console.log('Connected Sui Wallet!') }
+        if (!currentWallet) {
+            connect(
+                { wallet },
+                { onSuccess: console.log("Connected Sui Wallet!") }
             );
         }
-    }
+    };
 
     return (
         <div className="w-full flex flex-col justify-center items-center">
             {/* Sigin Area */}
-            <section className="min-h-screen flex flex-col items-center justify-center">
-                <h1 className="text-[45px] sm:text-[80px] uppercase text-center">
-                    Welcome to Lycaon
-                </h1>
-                <span className="text-[25px] sm:text-[30px]">
-                    Game Requires a Slush - A Sui Wallet
-                </span>
-                {connectionStatus === 'connected' || connectionStatus === 'connecting' ? (
-                    <Link
-                        // to={"/home"}
-                        state={{ from: "/" }}
-                        className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
-                        onClick={Handle_Login}
-                    >
-                        <img
-                            src="assets/icons/sui-logo.svg"
-                            alt="sui-icon"
-                            className="w-[25px] h-[25px]"
-                        />
-                        <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
-                            Login
+            <section className="relative w-full h-[90vh] bg-[#ECECEC] flex items-center justify-center">
+                <div className="h-[65%] flex flex-col items-center justify-between">
+                    <h1 className="text-[80px] uppercase text-center">
+                        Welcome to Lycaon
+                    </h1>
+                    <section className="flex flex-col items-center justify center gap-[20px]">
+                        <span className="text-[25px] sm:text-[30px]">
+                            Game Requires the Slush desktop Chrome Extension
                         </span>
-                    </Link>
-                ) : (
-                <ul>
-                    {wallets.length > 0 && wallets.map((wallet) => wallet.name.toLowerCase()).includes("slush") ? wallets.map((wallet) => (
-                        <li key={wallet.name}>
+                        {connectionStatus === "connected" ||
+                        connectionStatus === "connecting" ? (
                             <Link
                                 // to={"/home"}
                                 state={{ from: "/" }}
                                 className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
-                                onClick={() => Sui_Connect_Wallet(wallet)}
+                                onClick={Handle_Login}
                             >
                                 <img
                                     src="assets/icons/sui-logo.svg"
@@ -127,35 +117,65 @@ const ConnectPg = () => {
                                     className="w-[25px] h-[25px]"
                                 />
                                 <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
-                                    Connect Sui Wallet
+                                    Login
                                 </span>
                             </Link>
-                        </li>
-                    )) : (
-                        <a 
-                            href="https://chromewebstore.google.com/detail/slush-%E2%80%94-a-sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
-                        >
-                            <img
-                                src="assets/icons/sui-logo.svg"
-                                alt="sui-icon"
-                                className="w-[25px] h-[25px]"
-                            />
-                            <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
-                                Get Slush Extension
-                            </span>
-                        </a>
-                    )}
-                </ul>
-                )
-                }
-            
+                        ) : (
+                            <ul>
+                                {wallets.length > 0 &&
+                                wallets
+                                    .map((wallet) => wallet.name.toLowerCase())
+                                    .includes("slush") ? (
+                                    wallets.map((wallet) => (
+                                        <li key={wallet.name}>
+                                            <Link
+                                                // to={"/home"}
+                                                state={{ from: "/" }}
+                                                className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
+                                                onClick={() =>
+                                                    Sui_Connect_Wallet(wallet)
+                                                }
+                                            >
+                                                <img
+                                                    src="assets/icons/sui-logo.svg"
+                                                    alt="sui-icon"
+                                                    className="w-[25px] h-[25px]"
+                                                />
+                                                <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
+                                                    Connect Sui Wallet
+                                                </span>
+                                            </Link>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <a
+                                        href="https://chromewebstore.google.com/detail/slush-%E2%80%94-a-sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-[225px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 flex flex-row justify-center items-center"
+                                    >
+                                        <img
+                                            src="assets/icons/sui-logo.svg"
+                                            alt="sui-icon"
+                                            className="w-[25px] h-[25px]"
+                                        />
+                                        <span className="text-[25px] text-[#FFFFFF] pl-[5px]">
+                                            Get Slush Extension
+                                        </span>
+                                    </a>
+                                )}
+                            </ul>
+                        )}
+                    </section>
+                    
+                </div>
+                <div className="absolute bottom-[5px] text-[20px] text-[#000000] text-center">
+                        Please note: This application does not utilize real SUI
+                        tokens and operates solely on the SUI testnet
+                        environment. All transactions and assets are for testing
+                        purposes only and hold no real-world value.
+                    </div>
             </section>
-            <div
-                className="text-[28px] text-[#FFFFFF] -mt-10 items-center"
-            >Please note: This application does not utilize real SUI tokens and operates solely on the SUI testnet environment. All transactions and assets are for testing purposes only and hold no real-world value.</div>
             {/* About Description - Photos of Game */}
             <AboutPg />
         </div>
