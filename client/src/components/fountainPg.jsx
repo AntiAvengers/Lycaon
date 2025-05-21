@@ -255,7 +255,7 @@ const FountainPg = () => {
             {showVideo && !videoEnded && (
                 <div className="fixed inset-0 bg-black z-50">
                     <video
-                        src="/assets/bg/pull-sprite.mp4"
+                        src="/assets/bg/fountain-pull.mp4"
                         autoPlay
                         onEnded={() => {
                             setVideoEnded(true);
@@ -286,7 +286,7 @@ const FountainPg = () => {
                                 <img
                                     src={pulledSprites[0].still}
                                     alt={pulledSprites[0].name}
-                                    className="w-[120px] h-[20px] mb-2"
+                                    className="w-[120px] h-[120px]"
                                 />
                             </div>
                             <div className="text-center text-[50px] leading-none">
