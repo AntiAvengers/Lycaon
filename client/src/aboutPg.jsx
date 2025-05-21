@@ -21,16 +21,16 @@ const AboutPg = () => {
                 </div>
             </section>
             {/* Game Preview */}
-            <section className="relative bg-[url('/assets/landing/game-landing.jpg')] bg-cover bg-center w-full h-[892px] max-h-[892px]">
+            <section className="relative bg-[url('/assets/landing/game-landing.jpg')] bg-cover bg-center w-full h-screen">
                 <img
                     src="/assets/landing/book-landing.png"
                     alt="book-landing"
-                    className="absolute -top-[360px]"
+                    className="absolute -top-[420px]"
                 />
                 <img
                     src="/assets/landing/game-preview.gif"
                     alt="gameGif"
-                    className="absolute bottom-[108px] left-[125px] w-[708px] h-[525px]"
+                    className="absolute bottom-[50px] left-[125px] w-[708px] h-[525px]"
                 />
             </section>
             {/* Eggs Area */}
@@ -76,7 +76,7 @@ const AboutPg = () => {
                 </div>
             </section>
             {/* Story of Game */}
-            <section className="w-full h-[680px] bg-[#E8E8E8] flex items-center pl-[172px]">
+            <section className="w-full h-[680px] bg-[#E8E8E8] flex items-center pl-[15%]">
                 <div className="w-[953px] h-[557px] flex flex-col justify-between">
                     <h1 className="text-[50px]">Read the lore</h1>
                     <div className="flex flex-row justify-between text-[25px] flex flex-row leading-none">
@@ -126,7 +126,7 @@ const AboutPg = () => {
                 </div>
             </section>
             {/* GitHub */}
-            <section className="w-full pl-[172px] py-[10px] bg-[#091031]">
+            <section className="w-full pl-[15%] py-[10px] bg-[#091031]">
                 <p className="w-auto text-[#FEFAF3] text-[25px]">
                     Created by Anti-Avengers -{" "}
                     <a
