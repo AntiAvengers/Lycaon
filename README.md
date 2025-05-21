@@ -47,6 +47,28 @@ Your littles can evolve into rarer companions!
 - Here is where you can select a little to see more details about it as well as feed it or even mint it!
 - What is minting? Minting is allowing your companion to exist as part of the Sui blockchain so that it can be sold at the Marketplace!
 
+### 🛠️ Tech Stack
+
+- **Frontend:**
+  - **ReactJS** – Core library for building responsive and dynamic user interfaces.
+  - **React Router DOM** – Declarative routing library for single-page applications.
+  - **TailwindCSS** – Utility-first CSS framework for rapid UI development, integrated with Vite.
+  - **Vite** – Lightning-fast frontend build tool and development server.
+  - **PhaserJS** – 2D game engine used for creating browser-based games.
+
+- **Backend & Services:**
+  - **NodeJS** – JavaScript runtime for executing server-side code.
+  - **Express** – Minimal Node.js framework for building RESTful APIs and handling routing.
+  - **Firebase** – Backend-as-a-Service (BaaS) for authentication, real-time database, and hosting.
+    - Includes `firebase-admin` for server-side management of users and services.
+  - **jsonwebtoken** – Library for issuing and verifying JSON Web Tokens (JWTs) for secure authentication.
+  - **node-cron** – Scheduler used for running automated backend tasks.
+  - **cookie-parser** – Middleware for parsing and managing cookies in Express apps.
+
+- **Blockchain & Web3:**
+  - **Move** – Smart contract language for secure, verifiable transactions on the Sui blockchain.
+  - **@mysten/sui** – TypeScript SDK for interacting with the Sui blockchain (wallets, transactions, on-chain queries).
+  - **@noble/ed25519** – Lightweight cryptographic library used for elliptic curve signing/verification.
 
 
 
