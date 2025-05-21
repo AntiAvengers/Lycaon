@@ -6,7 +6,13 @@ const AboutPg = () => {
                 <img
                     src="/assets/landing/arrow-down.svg"
                     alt="arrow-down"
-                    className="absolute w-auto top-[15px] left-[50%] translate-x-[-50%]"
+                    className="absolute w-auto top-[15px] left-[50%] translate-x-[-50%] animate-[float_3s_ease-in-out_infinite]"
+                    style={{
+                        animationName: "float",
+                        animationTimingFunction: "ease-in-out",
+                        animationDuration: "3s",
+                        animationIterationCount: "infinite",
+                    }}
                 />
                 <div className="absolute top-0 left-0 w-[525px] h-[235px] bg-[#140E28] text-[#FEFAF3] flex items-center justify-center">
                     <p className="w-[464px] h-[150px] text-[25px] text-start leading-none">
