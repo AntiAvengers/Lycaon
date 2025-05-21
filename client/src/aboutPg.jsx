@@ -1,13 +1,12 @@
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
 const AboutPg = () => {
     return (
         <div className="w-full h-auto bg-[##091031] flex flex-col">
             {/* Synopsis of Game */}
             <section className="relative bg-[url('/assets/landing/Lycaon-landing.jpg')] bg-center bg-no-repeat bg-contain w-[1440px] h-[830px] mx-auto">
-                <KeyboardArrowDownIcon
-                    className="absolute w-auto left-[50%] translate-x-[-50%]"
-                    sx={{ color: "white", fontSize: 60 }}
+                <img
+                    src="/assets/landing/arrow-down.svg"
+                    alt="arrow-down"
+                    className="absolute w-auto top-[15px] left-[50%] translate-x-[-50%]"
                 />
                 <div className="absolute top-0 left-0 w-[525px] h-[235px] bg-[#140E28] text-[#FEFAF3] flex items-center justify-center">
                     <p className="w-[464px] h-[150px] text-[25px] text-start leading-none">
@@ -22,33 +21,21 @@ const AboutPg = () => {
                 <img
                     src="/assets/landing/book-landing.png"
                     alt="book-landing"
-                    className="absolute bottom-[-270px] z-10"
+                    className="absolute bottom-[-315px] z-10"
                 />
             </section>
             {/* Game Preview */}
-            <section className="relative bg-[url('/assets/bg/puzzle-bg.png')] bg-center bg-no-repeat bg-contain w-[1440px] h-[892px] mx-auto">
+            <section className="relative bg-[url('/assets/landing/gameText-landing.jpg')] bg-center bg-no-repeat bg-contain w-[1440px] h-[892px] mx-auto">
                 <img
                     src="/assets/landing/game-preview.gif"
                     alt="gameGif"
-                    className="absolute bottom-[50px] left-[125px] w-[708px] h-[525px]"
+                    className="absolute bottom-[130px] left-[122px] w-[695px] h-[512px]"
                 />
                 <img
-                    src="/assets/landing/scroll-plaque.png"
+                    src="/assets/landing/scroll-plaque.jpg"
                     alt="scroll-landing"
-                    className="absolute right-[120px] top-[50%] translate-y-[-50%]"
+                    className="absolute right-[136px] top-[250px] w-[391px] h-[291px]"
                 />
-                <section className="absolute top-[50px] left-[55%] translate-x-[-50%] bg-[#140E28] w-[686px] h-[106px] rounded-[10px] flex items-center">
-                    <p className="text-[43px] text-[#FEFAF3] text-center leading-none">
-                        Embark on a quest to solve the ancient puzzles found in
-                        Codex Bestiarum.
-                    </p>
-                </section>
-                <section className="absolute bottom-[50px] right-[23%] translate-x-[50%] bg-[#140E28] w-[500px] h-[149px] rounded-[10px] flex items-center">
-                    <p className="text-[43px] text-[#FEFAF3] text-center leading-none">
-                        Each puzzle solved reveals a sacred page, fragments of
-                        the summoning scroll.
-                    </p>
-                </section>
             </section>
             {/* Eggs Area */}
             <section className="relative bg-[#3E2895] w-[1440px] h-[304px] flex items-center justify-center mx-auto">
@@ -60,14 +47,14 @@ const AboutPg = () => {
                 <img
                     src="/assets/landing/mythic-landing.png"
                     alt="eliteLanding"
-                    className="absolute left-[100px] top-[-40px] w-[290px] z-10"
+                    className="absolute left-[60px] top-[-60px] w-[380px] z-10"
                 />
                 <img
                     src="/assets/landing/elite-landing.png"
                     alt="nobleLanding"
                     className="absolute left-0 bottom-[-105px] w-[238px] z-10"
                 />
-                <p className="w-[740px] h-[149px] text-[50px] text-[#FEFAF3] text-center leading-none">
+                <p className="w-[740px] h-[149px] text-[50px] text-[#FEFAF3] text-center leading-none ml-[12px]">
                     Gather enough pages and approach the Wishing Fountain... if
                     you dare to summon the forbidden sprites eggs.
                 </p>
@@ -84,11 +71,32 @@ const AboutPg = () => {
                     alt="pearlDrag-landing"
                     className="absolute bottom-[300px] left-[50px] w-[526px] h-[526px]"
                 />
-                <div className="absolute bottom-[80px] left-[80px] w-[490px] h-[149px] bg-[#3E2895] rounded-[10px] flex items-center justify-center">
+                <div className="absolute bottom-[76px] left-[76px] w-[490px] h-[149px] bg-[#3E2895] rounded-[10px] flex items-center justify-center">
                     <p className="w-[444px] text-[50px] text-[#FEFAF3] text-center leading-none">
                         Venture into the market, where coveted sprites from
                         fellow seekers await.
                     </p>
+                </div>
+                <div className="absolute bottom-[82px] right-[449px] w-[304px] h-[335px] bg-[#273472] rounded-[20px] shadow-[10px_10px_0_rgba(0,0,0,0.25)] flex flex-col items-center justify-start text-[#FEFAF3]">
+                    <section className="w-[209px] h-[208px] bg-[#F7F7F7] rounded-[10px] flex justify-center mt-[22px]">
+                        <img
+                            src="/assets/sprites/slime.gif"
+                            alt="slime-gif"
+                            className="w-[150px] h-[200px]"
+                        />
+                    </section>
+                    <section className="flex flex-col justify-start w-[209px] h-[70px] leading-none pt-[14px]">
+                        <div className="flex flex-row items-center pb-[10px]">
+                            <img
+                                src="/assets/icons/sui-icon-bg.svg"
+                                alt="sui-icon"
+                                className="w-[17px] h-[17px] mr-[5px]"
+                            />
+                            <span className="text-[25px]">900</span>
+                        </div>
+                        <span className="text-[15px]">LITTLES</span>
+                        <span className="text-[25px]">Slime</span>
+                    </section>
                 </div>
             </section>
             {/* Story of Game */}

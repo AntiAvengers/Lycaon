@@ -94,7 +94,7 @@ const ConnectPg = () => {
     return (
         <div className="w-full flex flex-col justify-center items-center">
             {/* Sigin Area */}
-            <section className="relative w-full h-[93vh] bg-[#ECECEC] flex items-center justify-center">
+            <section className="relative w-full h-[95vh] bg-[#ECECEC] flex items-center justify-center">
                 <div className="h-[65%] flex flex-col items-center justify-between">
                     <h1 className="text-[80px] uppercase text-center">
                         Welcome to Lycaon
