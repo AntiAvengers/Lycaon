@@ -10,45 +10,44 @@ Will you decipher the riddles, summon creatures of legend, and claim the power o
 Or will you unlock a secret that should have remained lost forever?
 
 # What is Lycaon
-### Lycaon, a powerful summoner, created the Codex Bestiarum to control all beasts but was trapped inside it by a forbidden ritual. Now, the Codex tempts new readers with power, guiding them toward the same fate. Whispers say Lycaon’s spirit still waits within. Will you finish the summoning—or become its next prisoner?
+Lycaon, a powerful summoner, created the Codex Bestiarum to control all beasts but was trapped inside it by a forbidden ritual. Now, the Codex tempts new readers with power, guiding them toward the same fate. Whispers say Lycaon’s spirit still waits within. Will you finish the summoning—or become its next prisoner?
 
 # How to play
-
-### 1. Login using your Sui Wallet/Slush
-### 2. Unlock and solve daily puzzles using Keys and earn Scrolls!
-### 3. Use the scrolls to summon littles at the Fountain! Who knows which will join you??
-### 4. Each time you summon a little, you will also receives Shards!
-### 5. Check out all your littles in the Collection!
-### 6. Go to the marketplace and see which companions other playesr are selling or looking for!
+1. Login using your Sui Wallet/Slush
+2. Unlock and solve daily puzzles using Keys and earn Scrolls!
+3. Use the scrolls to summon littles at the Fountain! Who knows which will join you??
+4. Each time you summon a little, you will also receives Shards!
+5. Check out all your littles in the Collection!
+6. Go to the marketplace and see which companions other playesr are selling or looking for!
 
 
 # FAQ
 
-## What are Keys?
-### Keys are time-generated resources that allow you to unlock puzzles! Completing puzzles will earn you scrolls!
+### What are Keys?
+Keys are time-generated resources that allow you to unlock puzzles! Completing puzzles will earn you scrolls!
 
-## What are Scrolls?
-### Scrolls are what you need to summon your Littles!
+### What are Scrolls?
+Scrolls are what you need to summon your Littles!
 
-## What are Littles?
-### Companions who will stay by your side during your Lycaon journey! OR maybe you want to sell them for Sui!
+### What are Littles?
+Companions who will stay by your side during your Lycaon journey! OR maybe you want to sell them for Sui!
 
-## Sell?
-### Yes! There is a marketplace available for all users to list and sell their littles for Sui! Maybe you'll even see a rare Mythic for sale??
+### Sell?
+Yes! There is a marketplace available for all users to list and sell their littles for Sui! Maybe you'll even see a rare Mythic for sale??
 
-## What are Shards?
-### Shards are what is necessary to buy food from the Pantry to feed your littles! You earn shards every time you open an egg and little passively generate shards for you!
+### What are Shards?
+Shards are what is necessary to buy food from the Pantry to feed your littles! You earn shards every time you open an egg and little passively generate shards for you!
 
-## Why feed your Littles?
-### Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your little won't be so little anymore! :)
+### Why feed your Littles?
+Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your little won't be so little anymore! :)
 
-## What do you mean by "not so little anymore"?
-### Your littles can evolve into rarer companions!
+### What do you mean by "not so little anymore"?
+Your littles can evolve into rarer companions!
 
-## What can you do in the Collection?
-### - You can see all your littles and companions!
-### - Here is where you can select a little to see more details about it as well as feed it or even mint it!
-### - What is minting? Minting is allowing your companion to exist as part of the Sui blockchain so that it can be sold at the Marketplace!
+### What can you do in the Collection?
+- You can see all your littles and companions!
+- Here is where you can select a little to see more details about it as well as feed it or even mint it!
+- What is minting? Minting is allowing your companion to exist as part of the Sui blockchain so that it can be sold at the Marketplace!
 
 
 
