@@ -12,9 +12,9 @@ import SHA256 from "crypto-js/sha256";
 import { useCurrentWallet, useCurrentAccount } from "@mysten/dapp-kit";
 
 const audio = {
-    starter_gift: new Audio('/assets/sounds/starter_gift.mp3'),
-    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
-}
+    starter_gift: new Audio("/assets/sounds/starter_gift.mp3"),
+    menu_click: new Audio("assets/sounds/header_menu_click.mp3"),
+};
 
 const HomePg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -124,75 +124,71 @@ const HomePg = () => {
 
     return (
         <div
-            className="relative w-full h-auto max-w-[2200px]"
+            className="relative w-full h-auto"
             aria-hidden={showWelcomePopup || showNamePopup}
         >
             {/* Book (Puzzle) */}
-            <div className="group fixed top-[15%] left-1/2 transform -translate-x-1/2 z-10">
-                <Link to="/puzzle" onClick={() => audio.menu_click.play()}>
-                    <img
-                        src="/assets/icons/book.png"
-                        alt="bookIcon"
-                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
-                    />
-                    <span className="absolute top-[95%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="relative group w-[1440px] h-full mx-auto">
+                <Link
+                    className="absolute top-[-200px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer cursor-pointer z-10"
+                    to="/puzzle"
+                    onClick={() => audio.menu_click.play()}
+                >
+                    <img src="/assets/icons/book.png" alt="bookIcon" />
+                    <span className="fixed top-[30%] left-[50%] -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-15">
                         Puzzle
                     </span>
                 </Link>
             </div>
 
+            {/* Fountain */}
+            <div className="relative group w-[1440px] h-full mx-auto">
+                <Link
+                    className="absolute top-[70px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
+                    to="/fountain"
+                    onClick={() => audio.menu_click.play()}
+                >
+                    <img src="/assets/icons/fountain.png" alt="fountainIcon" />
+                    <span className="fixed bottom-[25%] left-[50%] -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-25">
+                        Fountain
+                    </span>
+                </Link>
+            </div>
+
             {/* Collection */}
-            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2">
-                <Link to="/collection" onClick={() => audio.menu_click.play()}>
-                    <img
-                        src="/assets/icons/statues.png"
-                        alt="statuesIcon"
-                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
-                    />
+            <div className="relative group w-[1440px] h-full mx-auto">
+                <Link
+                    className="absolute left-0 top-[10px] -translate-y-1/2 cursor-pointer z-20"
+                    to="/collection"
+                    onClick={() => audio.menu_click.play()}
+                >
+                    <img src="/assets/icons/statues.png" alt="statuesIcon" />
                     <span className="absolute top-1/2 left-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Collection
                     </span>
                 </Link>
             </div>
 
-            {/* Market */}
-            <div className="group fixed top-[40%] right-[0%] transform -translate-y-1/2">
-                <Link to="/market" onClick={() => audio.menu_click.play()}>
-                    <img
-                        src="/assets/icons/market.png"
-                        alt="marketIcon"
-                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
-                    />
-                    <span className="absolute top-1/2 right-[30%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        Market
-                    </span>
-                </Link>
-            </div>
-
             {/* Pantry */}
-            <div className="group fixed left-[25%] top-[50%] transform -translate-y-1/2 z-10">
-                <Link to="/pantry" onClick={() => audio.menu_click.play()}>
-                    <img
-                        src="/assets/icons/tree.png"
-                        alt="treeIcon"
-                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
-                    />
-                    <span className="absolute top-[40%] left-[48%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="relative group w-[1440px] h-full mx-auto">
+                <Link
+                    className="absolute left-[26%] top-[-49px] -translate-y-1/2 cursor-pointer"
+                    to="/pantry"
+                    onClick={() => audio.menu_click.play()}
+                >
+                    <img src="/assets/icons/tree.png" alt="treeIcon" />
+                    <span className="absolute top-[60%] left-[48%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                         Pantry
                     </span>
                 </Link>
             </div>
 
-            {/* Fountain */}
-            <div className="group fixed top-[68%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <Link to="/fountain" onClick={() => audio.menu_click.play()}>
-                    <img
-                        src="/assets/icons/fountain.png"
-                        alt="fountainIcon"
-                        className="2xl:scale-[120%] transition-transform duration-300 cursor-pointer"
-                    />
-                    <span className="absolute top-[65%] left-1/2 transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        Fountain
+            {/* Market */}
+            <div className="relative group w-[1440px] h-full mx-auto">
+                <Link className="absolute right-[-10px] top-[-138px] scale-[95%] -translate-y-1/2 curor-pointer" to="/market" onClick={() => audio.menu_click.play()}>
+                    <img src="/assets/icons/market.png" alt="marketIcon" />
+                    <span className="absolute top-[70%] right-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Market
                     </span>
                 </Link>
             </div>
