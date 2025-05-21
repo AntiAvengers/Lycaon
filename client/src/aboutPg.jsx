@@ -1,85 +1,143 @@
-const aboutImg = [
-    { text: "Obtain the sprites by solving the puzzles", width: "w-[675px]" },
-    { text: "Puzzles grant you pages", width: "w-[591px]" },
-    {
-        text: "With enough pages, make a wish at the fountain",
-        width: "w-[675px]",
-    },
-    { text: "And obtain the Sprites", width: "w-[591px]" },
-    { text: "Collect, feed, and trade your Sprites!", width: "w-[675px]" },
-];
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const AboutPg = () => {
     return (
-        <div className="w-full bg-[#FFFFFF] flex flex-col px-[100px] py-[50px] gap-[50px]">
+        <div className="w-full h-auto bg-[#FFFFFF] flex flex-col">
             {/* Synopsis of Game */}
-            <div className="w-[722px] text-[25px]">
-                Lycaon, a powerful summoner, created the Codex Bestiarum to
-                control all beasts but was trapped inside it by a forbidden
-                ritual. Now, the Codex tempts new readers with power, guiding
-                them toward the same fate. Whispers say Lycaon’s spirit still
-                waits within. Will you finish the summoning—or become its next
-                prisoner?
-            </div>
-
-            {/* Pic Section About Game */}
-            <section className="text-[37px] flex flex-col gap-[40px]">
-                {aboutImg.map((about, index) => (
-                    <div
-                        key={index}
-                        className={`flex flex-col items-center ${
-                            index % 2 === 0 ? "items-start" : "items-end"
-                        } w-full`}
-                    >
-                        <h1 className="mb-2">
-                            {about.text}
-                        </h1>
-                        <div
-                            className={`${about.width} h-[377px] border border-[#FFFFFF] bg-[#CFCFCF]`}
-                        />
-                    </div>
-                ))}
+            <section className="relative bg-[url('/assets/landing/Lycaon-landing.jpg')] bg-cover bg-center w-full h-[830px]">
+                <KeyboardArrowDownIcon
+                    className="absolute w-auto left-[50%] translate-x-[-50%]"
+                    sx={{ color: "white", fontSize: 60 }}
+                />
+                <div className="absolute top-0 left-0 w-[525px] h-[235px] bg-[#140E28] text-[#FEFAF3] flex items-center justify-center">
+                    <p className="w-[464px] h-[150px] text-[25px] text-start leading-none">
+                        Lycaon, a powerful summoner, created the Codex Bestiarum
+                        to control all beasts but was trapped inside it by a
+                        forbidden ritual. Now, the Codex tempts new readers with
+                        power, guiding them toward the same fate. Whispers say
+                        Lycaon’s spirit still waits within. Will you finish the
+                        summoning—or become its next prisoner?
+                    </p>
+                </div>
+            </section>
+            {/* Game Preview */}
+            <section className="relative bg-[url('/assets/landing/game-landing.jpg')] bg-cover bg-center w-full h-[892px] max-h-[892px]">
+                <img
+                    src="/assets/landing/book-landing.png"
+                    alt="book-landing"
+                    className="absolute -top-[360px]"
+                />
+                <img
+                    src="/assets/landing/game-preview.gif"
+                    alt="gameGif"
+                    className="absolute bottom-[108px] left-[125px] w-[708px] h-[525px]"
+                />
+            </section>
+            {/* Eggs Area */}
+            <section className="relative bg-[#140E28] w-full h-[304px] flex items-center justify-center">
+                <img
+                    src="/assets/landing/noble-landing.png"
+                    alt="nobleLanding"
+                    className="absolute left-0 top-[-150px] w-[260px] z-10"
+                />
+                <img
+                    src="/assets/landing/mythic-landing.png"
+                    alt="eliteLanding"
+                    className="absolute left-[100px] top-[-40px] w-[290px] z-10"
+                />
+                <img
+                    src="/assets/landing/elite-landing.png"
+                    alt="nobleLanding"
+                    className="absolute left-0 bottom-[-105px] w-[238px] z-10"
+                />
+                <p className="w-[740px] h-[149px] text-[50px] text-[#FEFAF3] text-center leading-none">
+                    Gather enough pages and approach the Wishing Fountain... if
+                    you dare to summon the forbidden sprites eggs.
+                </p>
+            </section>
+            {/* Fountain Area */}
+            <section className="relative bg-[url('/assets/landing/fountain-landing.jpg')] bg-cover bg-center w-full h-[1524px] min-h-[1524px]">
+                <img
+                    src="/assets/landing/pearlDragon-landing.png"
+                    alt="pearlDrag-landing"
+                    className="absolute top-[-120px] right-0 w-[758px] h-[758px]"
+                />
+                <img
+                    src="/assets/landing/wolf-landing.png"
+                    alt="pearlDrag-landing"
+                    className="absolute bottom-[300px] left-[50px] w-[526px] h-[526px]"
+                />
+                {/* <img src="" alt="" /> */}
+                <div className="absolute bottom-[80px] left-[80px] w-[490px] h-[149px] bg-[#140E28] rounded-[10px] flex items-center justify-center">
+                    <p className="w-[444px] text-[50px] text-[#FEFAF3] text-center leading-none">
+                        Venture into the market, where coveted sprites from
+                        fellow seekers await.
+                    </p>
+                </div>
             </section>
             {/* Story of Game */}
-            <section className="w-[977px]">
-                <h1 className="text-[37px]">Read the lore</h1>
-                <div className="text-[25px]">
-                    Long ago, Lycaon was a brilliant summoner who sought to
-                    catalog and control every creature that walked between
-                    worlds. His obsession led him to craft the Codex Bestiarum,
-                    a living spellbook that could summon beasts from the mundane
-                    to the divine.
-                    <div className="h-[15px]" />
-                    But in his hunger for mastery, Lycaon attempted the
-                    Forbidden Summoning—a ritual to call forth an entity beyond
-                    mortal comprehension. The spell backfired, twisting reality
-                    and sealing him within the Codex itself. His name was erased
-                    from history, his existence reduced to whispers in the
-                    margins of forgotten tomes.
-                    <div className="h-[15px]" />
-                    Scholars and warlocks who have reached the final pages of
-                    the Codex speak of a great warning, written in a tongue
-                    older than the gods themselves. It tells of a beast that
-                    even Lycaon dared not name—a summoning so vast and
-                    catastrophic that the very ink of the Codex recoils from its
-                    presence. Some believe that the Codex was never meant to be
-                    completed, that its final pages are a trap—a lure for the
-                    greedy and the foolish. And yet, the book still calls to
-                    those who would dare seek its truths.
-                    <div className="h-[15px]" />
-                    Now, the Codex shifts and tests those who dare open it,
-                    offering power to those who solve its riddles—but always
-                    guiding them toward the same fate. Some say Lycaon’s spirit
-                    lingers, watching, waiting, hoping that one day, someone
-                    will complete the final summoning and set him free, or
-                    replace him.
-                    <div className="h-[15px]" />
-                    Will you decipher the riddles, summon creatures of legend,
-                    and claim the power of the forgotten beasts?
-                    <div className="h-[15px]" />
-                    Or will you unlock a secret that should have remained lost
-                    forever?
+            <section className="w-full h-[680px] bg-[#E8E8E8] flex items-center pl-[172px]">
+                <div className="w-[953px] h-[557px] flex flex-col justify-between">
+                    <h1 className="text-[50px]">Read the lore</h1>
+                    <div className="flex flex-row justify-between text-[25px] flex flex-row leading-none">
+                        <section className="w-[438px]">
+                            Long ago, Lycaon was a brilliant summoner who sought
+                            to catalog and control every creature that walked
+                            between worlds. His obsession led him to craft the
+                            Codex Bestiarum, a living spellbook that could
+                            summon beasts from the mundane to the divine.
+                            <div className="h-[20px]" />
+                            But in his hunger for mastery, Lycaon attempted the
+                            Forbidden Summoning—a ritual to call forth an entity
+                            beyond mortal comprehension. The spell backfired,
+                            twisting reality and sealing him within the Codex
+                            itself. His name was erased from history, his
+                            existence reduced to whispers in the margins of
+                            forgotten tomes.
+                            <div className="h-[20px]" />
+                            Scholars and warlocks who have reached the final
+                            pages of the Codex speak of a great warning, written
+                            in a tongue older than the gods themselves. It tells
+                            of a beast that even Lycaon dared not name—a
+                            summoning so vast and catastrophic that the very ink
+                            of the Codex recoils from its presence.
+                        </section>
+                        <section className="w-[438px]">
+                            Some believe that the Codex was never meant to be
+                            completed, that its final pages are a trap—a lure
+                            for the greedy and the foolish. And yet, the book
+                            still calls to those who would dare seek its truths.
+                            <div className="h-[20px]" />
+                            Now, the Codex shifts and tests those who dare open
+                            it, offering power to those who solve its
+                            riddles—but always guiding them toward the same
+                            fate. Some say Lycaon’s spirit lingers, watching,
+                            waiting, hoping that one day, someone will complete
+                            the final summoning and set him free, or replace
+                            him.
+                            <div className="h-[20px]" />
+                            Will you decipher the riddles, summon creatures of
+                            legend, and claim the power of the forgotten beasts?
+                            <div className="h-[20px]" />
+                            Or will you unlock a secret that should have
+                            remained lost forever?
+                        </section>
+                    </div>
                 </div>
+            </section>
+            {/* GitHub */}
+            <section className="w-full pl-[172px] py-[10px] bg-[#091031]">
+                <p className="w-auto text-[#FEFAF3] text-[25px]">
+                    Created by Anti-Avengers -{" "}
+                    <a
+                        href="https://github.com/AntiAvengers/Lycaon"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline decoration-[1px] underline-offset-3 hover:text-[#FBBB26]"
+                    >
+                        Github Link
+                    </a>
+                </p>
             </section>
         </div>
     );
