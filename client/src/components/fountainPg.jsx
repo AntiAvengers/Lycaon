@@ -157,13 +157,13 @@ const FountainPg = () => {
     return (
         <div>
             {/* Pull Area */}
-            <div className="w-[619px] h-[447px] 3xl:w-[700px] 3xl:h-[500px] 4xl:w-[750px] 4xl:h-[550px] 5xl:w-[800px] 5xl:h-[600px] 6xl:w-[850px] 6xl:h-[650px] bg-[#FFFFFF]/90 flex items-center justify-center rounded-[10px] relative">
-                <section className="h-[390px] flex flex-col items-center justify-center gap-[15px]">
+            <div className="w-[619px] h-[447px] bg-[#FFFFFF]/90 flex items-center justify-center rounded-[10px] relative">
+                <section className="h-full flex flex-col items-center justify-evenly py-[50px]">
                     <div className="flex flex-col items-center leading-none">
                         <img
                             src="/assets/icons/fountain-icon.svg"
                             alt="spritePull"
-                            className="w-[100px] h-[100px]"
+                            className="w-[80px] h-[80px]"
                         />
                         <div className="text-center">
                             <p className="text-[80px]">
@@ -278,15 +278,17 @@ const FountainPg = () => {
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
                         onClick={closePullPopup}
-                        className="absolute top-[15px] right-[15px] cursor-pointer w-[40px] h-[40px]"
+                        className="absolute top-[15px] right-[15px] cursor-pointer w-[40px] h-[40px] z-10"
                     />
                     {pulledSprites.length === 1 ? (
                         <div className="w-[518px] h-[466px] max-h-[466px] flex flex-col items-center justify-center gap-[25px] text-[#FFFFFF]">
-                            <img
-                                src={pulledSprites[0].still}
-                                alt={pulledSprites[0].name}
-                                className="w-[160px] h-[160px] mb-2"
-                            />
+                            <div className="w-[132px] h-[151px] bg-[#FFF6E9] border-[1px] border-solid border-[#F2D8AD] drop-shadow-md/30 rounded-[20px] flex justify-center items-center">
+                                <img
+                                    src={pulledSprites[0].still}
+                                    alt={pulledSprites[0].name}
+                                    className="w-[120px] h-[20px] mb-2"
+                                />
+                            </div>
                             <div className="text-center text-[50px] leading-none">
                                 <p>Congrats!</p>
                                 <p>
@@ -312,12 +314,16 @@ const FountainPg = () => {
                             </div>
                             <div className=" grid grid-cols-5 gap-[17px]">
                                 {pulledSprites.map((s) => (
-                                    <img
+                                    <div
                                         key={s.name}
-                                        src={s.still}
-                                        alt={s.name}
-                                        className="w-[132px] h-[151px] shadow-xl"
-                                    />
+                                        className="w-[132px] h-[151px] bg-[#FFF6E9] border-[1px] border-solid border-[#F2D8AD] drop-shadow-md/30 rounded-[20px] flex justify-center items-center"
+                                    >
+                                        <img
+                                            src={s.still}
+                                            alt={s.name}
+                                            className="w-[120px] h-[120px]"
+                                        />
+                                    </div>
                                 ))}
                             </div>
                             <Link

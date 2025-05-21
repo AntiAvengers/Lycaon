@@ -316,7 +316,7 @@ const AllListing = () => {
                         </div>
                     )}
 
-                    <ul className="w-full flex flex-wrap gap-x-[17px] gap-y-[50px] max-w-max">
+                    <ul className="w-full flex flex-wrap gap-x-[105px] gap-y-[50px] max-w-max">
                         {filteredCreatures.map((creature) => (
                             <li
                                 key={creature.label}
