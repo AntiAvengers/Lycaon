@@ -7,7 +7,7 @@ Now, the Codex shifts and tests those who dare open it, offering power to those 
 Will you decipher the riddles, summon creatures of legend, and claim the power of the forgotten beasts?
 Or will you unlock a secret that should have remained lost forever?
 
-# What is Lycaon
+# What is Lycaon?
 Lycaon, a powerful summoner, created the Codex Bestiarum to control all beasts but was trapped inside it by a forbidden ritual. Now, the Codex tempts new readers with power, guiding them toward the same fate. Whispers say Lycaon’s spirit still waits within. Will you finish the summoning—or become its next prisoner?
 
 # How to play
