@@ -81,7 +81,7 @@ const SoundControl = () => {
     };
 
     return (
-        <div className="h-[45px] flex justify-start items-center mx-8">
+        <div className="h-[50px] flex justify-start items-center mx-[30px]">
             {/* Audio File */}
             <audio
                 ref={audioRef}
@@ -96,8 +96,8 @@ const SoundControl = () => {
             <div
                 onMouseEnter={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}
-                className={`bg-[#242C53] h-[26px] flex items-center rounded-[30px] px-[10px] py-[4px] gap-[10px] transition-all duration-300 overflow-hidden ${
-                    hovering ? "w-[173.3px]" : "w-[42px] justify-center"
+                className={`bg-[#242C53] h-[36px] flex items-center rounded-[30px] px-[10px] py-[4px] gap-[10px] transition-all duration-300 overflow-hidden ${
+                    hovering ? "w-[173.3px]" : "w-[52px] justify-center"
                 }`}
             >
                 {/* Mute Button */}
@@ -106,9 +106,9 @@ const SoundControl = () => {
                     className="text-[#FCF4E7] flex justify-center items-center"
                 >
                     {isMuted ? (
-                        <VolumeOffIcon sx={{ width: 26, height: 18 }} />
+                        <VolumeOffIcon sx={{ width: 26, height: 28 }} />
                     ) : (
-                        <VolumeUpIcon sx={{ width: 26, height: 18 }} />
+                        <VolumeUpIcon sx={{ width: 26, height: 28 }} />
                     )}
                 </button>
 

@@ -136,7 +136,7 @@ const HomePg = () => {
             </div>
 
             {/* Collection */}
-            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2 z-10">
+            <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2">
                 <Link to="/collection">
                     <img
                         src="/assets/icons/statues.png"

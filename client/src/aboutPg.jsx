@@ -2,9 +2,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const AboutPg = () => {
     return (
-        <div className="w-full h-auto bg-[#FFFFFF] flex flex-col">
+        <div className="w-full h-auto bg-[##091031] flex flex-col">
             {/* Synopsis of Game */}
-            <section className="relative bg-[url('/assets/landing/Lycaon-landing.jpg')] bg-cover bg-center w-full h-[830px]">
+            <section className="relative bg-[url('/assets/landing/Lycaon-landing.jpg')] bg-center bg-no-repeat bg-contain w-[1440px] h-[830px] mx-auto">
                 <KeyboardArrowDownIcon
                     className="absolute w-auto left-[50%] translate-x-[-50%]"
                     sx={{ color: "white", fontSize: 60 }}
@@ -19,22 +19,39 @@ const AboutPg = () => {
                         summoning—or become its next prisoner?
                     </p>
                 </div>
-            </section>
-            {/* Game Preview */}
-            <section className="relative bg-[url('/assets/landing/game-landing.jpg')] bg-cover bg-center w-full h-screen">
                 <img
                     src="/assets/landing/book-landing.png"
                     alt="book-landing"
-                    className="absolute -top-[420px]"
+                    className="absolute bottom-[-270px] z-10"
                 />
+            </section>
+            {/* Game Preview */}
+            <section className="relative bg-[url('/assets/bg/puzzle-bg.png')] bg-center bg-no-repeat bg-contain w-[1440px] h-[892px] mx-auto">
                 <img
                     src="/assets/landing/game-preview.gif"
                     alt="gameGif"
                     className="absolute bottom-[50px] left-[125px] w-[708px] h-[525px]"
                 />
+                <img
+                    src="/assets/landing/scroll-plaque.png"
+                    alt="scroll-landing"
+                    className="absolute right-[120px] top-[50%] translate-y-[-50%]"
+                />
+                <section className="absolute top-[50px] left-[55%] translate-x-[-50%] bg-[#140E28] w-[686px] h-[106px] rounded-[10px] flex items-center">
+                    <p className="text-[43px] text-[#FEFAF3] text-center leading-none">
+                        Embark on a quest to solve the ancient puzzles found in
+                        Codex Bestiarum.
+                    </p>
+                </section>
+                <section className="absolute bottom-[50px] right-[23%] translate-x-[50%] bg-[#140E28] w-[500px] h-[149px] rounded-[10px] flex items-center">
+                    <p className="text-[43px] text-[#FEFAF3] text-center leading-none">
+                        Each puzzle solved reveals a sacred page, fragments of
+                        the summoning scroll.
+                    </p>
+                </section>
             </section>
             {/* Eggs Area */}
-            <section className="relative bg-[#140E28] w-full h-[304px] flex items-center justify-center">
+            <section className="relative bg-[#3E2895] w-[1440px] h-[304px] flex items-center justify-center mx-auto">
                 <img
                     src="/assets/landing/noble-landing.png"
                     alt="nobleLanding"
@@ -56,7 +73,7 @@ const AboutPg = () => {
                 </p>
             </section>
             {/* Fountain Area */}
-            <section className="relative bg-[url('/assets/landing/fountain-landing.jpg')] bg-cover bg-center w-full h-[1524px] min-h-[1524px]">
+            <section className="relative bg-[url('/assets/landing/fountain-landing.jpg')] bg-center bg-no-repeat bg-contain w-[1440px] h-[1524px] mx-auto">
                 <img
                     src="/assets/landing/pearlDragon-landing.png"
                     alt="pearlDrag-landing"
@@ -67,8 +84,7 @@ const AboutPg = () => {
                     alt="pearlDrag-landing"
                     className="absolute bottom-[300px] left-[50px] w-[526px] h-[526px]"
                 />
-                {/* <img src="" alt="" /> */}
-                <div className="absolute bottom-[80px] left-[80px] w-[490px] h-[149px] bg-[#140E28] rounded-[10px] flex items-center justify-center">
+                <div className="absolute bottom-[80px] left-[80px] w-[490px] h-[149px] bg-[#3E2895] rounded-[10px] flex items-center justify-center">
                     <p className="w-[444px] text-[50px] text-[#FEFAF3] text-center leading-none">
                         Venture into the market, where coveted sprites from
                         fellow seekers await.
@@ -76,7 +92,7 @@ const AboutPg = () => {
                 </div>
             </section>
             {/* Story of Game */}
-            <section className="w-full h-[680px] bg-[#E8E8E8] flex items-center pl-[15%]">
+            <section className="w-[1440px] h-[680px] bg-[#E8E8E8] flex items-center pl-[172px] mx-auto">
                 <div className="w-[953px] h-[557px] flex flex-col justify-between">
                     <h1 className="text-[50px]">Read the lore</h1>
                     <div className="flex flex-row justify-between text-[25px] flex flex-row leading-none">
@@ -126,7 +142,7 @@ const AboutPg = () => {
                 </div>
             </section>
             {/* GitHub */}
-            <section className="w-full pl-[15%] py-[10px] bg-[#091031]">
+            <section className="w-[1440px] pl-[172px] py-[10px] bg-[#091031] mx-auto">
                 <p className="w-auto text-[#FEFAF3] text-[25px]">
                     Created by Anti-Avengers -{" "}
                     <a
