@@ -1,4 +1,4 @@
-# Lycaon
+<h1>Lycaon</h1>
 
 # Welcome to Lycaon. Embark on a quest to solve the ancient puzzles found in the Codex Beastiarum. Here's some Lore!
 Long ago, Lycaon was a brilliant summoner who sought to catalog and control every creature that walked between worlds. His obsession led him to craft the Codex Bestiarum, a living spellbook that could summon beasts from the mundane to the divine.
