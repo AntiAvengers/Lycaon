@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { database } from "../firebase/firebaseConfig";
@@ -10,6 +10,11 @@ import { useAuth } from "../context/AuthContext";
 import SHA256 from "crypto-js/sha256";
 
 import { useCurrentWallet, useCurrentAccount } from "@mysten/dapp-kit";
+
+const audio = {
+    starter_gift: new Audio('/assets/sounds/starter_gift.mp3'),
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
 
 const HomePg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -58,6 +63,7 @@ const HomePg = () => {
             refreshAccessToken,
             setAccessToken
         );
+        audio.starter_gift.play();
         setShowWelcomePopup(true);
     };
 
@@ -123,7 +129,7 @@ const HomePg = () => {
         >
             {/* Book (Puzzle) */}
             <div className="group fixed top-[15%] left-1/2 transform -translate-x-1/2 z-10">
-                <Link to="/puzzle">
+                <Link to="/puzzle" onClick={() => audio.menu_click.play()}>
                     <img
                         src="/assets/icons/book.png"
                         alt="bookIcon"
@@ -137,7 +143,7 @@ const HomePg = () => {
 
             {/* Collection */}
             <div className="group fixed left-[1%] top-[58%] transform -translate-y-1/2">
-                <Link to="/collection">
+                <Link to="/collection" onClick={() => audio.menu_click.play()}>
                     <img
                         src="/assets/icons/statues.png"
                         alt="statuesIcon"
@@ -151,7 +157,7 @@ const HomePg = () => {
 
             {/* Market */}
             <div className="group fixed top-[40%] right-[0%] transform -translate-y-1/2">
-                <Link to="/market">
+                <Link to="/market" onClick={() => audio.menu_click.play()}>
                     <img
                         src="/assets/icons/market.png"
                         alt="marketIcon"
@@ -165,7 +171,7 @@ const HomePg = () => {
 
             {/* Pantry */}
             <div className="group fixed left-[25%] top-[50%] transform -translate-y-1/2 z-10">
-                <Link to="/pantry">
+                <Link to="/pantry" onClick={() => audio.menu_click.play()}>
                     <img
                         src="/assets/icons/tree.png"
                         alt="treeIcon"
@@ -179,7 +185,7 @@ const HomePg = () => {
 
             {/* Fountain */}
             <div className="group fixed top-[68%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <Link to="/fountain">
+                <Link to="/fountain" onClick={() => audio.menu_click.play()}>
                     <img
                         src="/assets/icons/fountain.png"
                         alt="fountainIcon"

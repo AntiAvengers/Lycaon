@@ -40,7 +40,8 @@ export class Preloader extends Scene
         this.load.image('scroll', '/icons/scroll.svg')
         this.load.image('reward-bg', '/bg/reward-bg.svg')
         
-        this.load.audio('gameMusic', '/sounds/spookymagic-7050.mp3')
+        // this.load.audio('gameMusic', '/sounds/spookymagic-7050.mp3')
+        this.load.audio('gameMusic', '/sounds/ambient-fantasy-314682.mp3')
     }
 
     create ()

@@ -16,6 +16,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+    notification: new Audio('assets/sounds/header_notification.mp3')
+}
+
 const Header = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
@@ -78,6 +83,10 @@ const Header = () => {
                     notifications.sort((a, b) =>
                         a.timestamp > b.timestamp ? -1 : 1
                     );
+                    const shouldPlaySound = notifications.map(obj=>obj.read).filter(bool=>!bool).length > 0 ? true : false;
+                    if(shouldPlaySound) {
+                        audio.notification.play();
+                    }
                     setNotifications(notifications);
                 }
             );
@@ -89,8 +98,14 @@ const Header = () => {
         }
     }, [connectionStatus]);
 
+    const playMenuSound = (ignoreCurrent = false) => {
+        if(ignoreCurrent) {
+            audio.menu_click.currentTime = 0;
+        }
+        audio.menu_click.play();
+    }
+
     const handleNotification = async (id) => {
-        console.log(id);
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
@@ -133,6 +148,7 @@ const Header = () => {
 
     // Game Logo directory
     const handleHomeClick = () => {
+        playMenuSound();
         navigate("/home");
     };
 
@@ -150,18 +166,21 @@ const Header = () => {
 
     //Opens Dropdown
     const toggleDropdown = () => {
+        playMenuSound();
         setOpen((prev) => !prev);
         console.log("Dropdown menu header clicked");
     };
 
     // Opens Logout
     const toggleProfile = () => {
+        playMenuSound();
         setProfile((prev) => !prev);
         console.log("Dropdown profile header clicked");
     };
 
     //Opens Nofifications
     const toggleNotificationDropdown = () => {
+        playMenuSound();
         setNotificationOpen((prev) => !prev);
     };
 
@@ -225,7 +244,7 @@ const Header = () => {
                                         key={to}
                                         to={to}
                                         onClick={
-                                            action || (() => setOpen(false))
+                                            (action || (() => setOpen(false))) && playMenuSound()
                                         }
                                         className="w-[128px] sm:w-[235px] h-[42px] sm:h-[45px] flex items-center pl-[20px] sm:pl-[36px] pr-[10px] py-[10px] rounded-[10px] hover:bg-[#1A265D] hover:shadow-[0_-4px_0_0_rgba(0,0,0,0.45)] active:bg-[#131C46] shadow-none transition-hover duration-200"
                                     >

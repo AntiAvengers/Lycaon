@@ -80,12 +80,16 @@ const SoundControl = () => {
         }
     };
 
+    const audio_source = location.pathname == "/fountain" 
+        ? "assets/sounds/fountain_BG.mp3" 
+        : "assets/sounds/ambient-fantasy-314682.mp3";
+
     return (
         <div className="h-[50px] flex justify-start items-center mx-[30px]">
             {/* Audio File */}
             <audio
                 ref={audioRef}
-                src="assets/sounds/ambient-fantasy-314682.mp3"
+                src={audio_source}
                 preload="auto"
                 loop
                 muted={isMuted}

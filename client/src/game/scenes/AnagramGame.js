@@ -50,9 +50,15 @@ export class AnagramGame extends Scene {
 
     preload() {
         console.log("AnagramGame scene preloading");
+        this.load.audio('correct', 'assets/sounds/puzzle_correct_answer.mp3');
+        this.load.audio('error', 'assets/sounds/puzzle_error.mp3');
+        this.load.audio('timer', 'assets/sounds/puzzle_few_seconds_left.mp3');
     }
 
     create() {
+        this.correctSound = this.sound.add('correct');
+        this.errorSound = this.sound.add('error');
+        this.timerSound = this.sound.add('timer');
         // const get_letters = this.game.injected?.get_puzzle_data;
         const get_letters = this.game.injected?.AUTH_API_CALL
 
@@ -729,7 +735,9 @@ export class AnagramGame extends Scene {
                     if(result.response) {
                         this.wordList.push(enteredWord);
                         this.updateWordDisplay();
+                        this.correctSound.play();
                     } else {
+                        this.errorSound.play() 
                         this.showErrorMessage("Not a valid word");
                     }
                     this.inputText = "";
@@ -784,6 +792,9 @@ export class AnagramGame extends Scene {
             callback: () => {
                 if (this.remainingTime > 0) {
                     this.remainingTime--;
+                    if (this.remainingTime == 8) {
+                        this.timerSound.play();
+                    }
                     if (this.remainingTime <= 10) {
                         this.timerText.setColor("#EA1A26");
                     }

@@ -30,9 +30,12 @@ export class AnagramOver extends Scene {
 
     preload() {
         console.log("GameOver scene preloading");
+        this.load.audio('complete', 'assets/sounds/puzzle_complete.mp3');
     }
 
     create() {
+        this.completeSound = this.sound.add('complete');
+
         //input data from last scene
         const remainingTime = this.registry.get("remainingTime");
 
@@ -46,6 +49,7 @@ export class AnagramOver extends Scene {
                 .then(data => {
                     const { player } = data.response;
                     const { score, reward } = player;
+                    this.completeSound.play();
                     this.wordCount = this.add
                         .text(
                             this.scale.width / 2,

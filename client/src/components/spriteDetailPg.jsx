@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import { database } from "../firebase/firebaseConfig";
@@ -50,6 +50,10 @@ const food_SVGs = {
     Chicken: "/assets/foods/meat.svg",
     Steak: "/assets/foods/steak.svg",
 };
+
+const audio = {
+    feed: new Audio('assets/sounds/sprite_eat.mp3')
+}
 
 const SpritesDetailPg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -391,6 +395,7 @@ const SpritesDetailPg = () => {
             // );
 
             // Show "+X" for feeding effect
+            audio.feed.play();
             setShowAmount(`+${res.response.food_value}`);
             setTimeout(() => setShowAmount(null), 1000);
         }

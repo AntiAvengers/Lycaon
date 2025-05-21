@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
+const audio = {
+    complete: new Audio('assets/sounds/minting_complete.mp3')
+}
+
 const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
     const [isMinting, setIsMinting] = useState(false);
     const [putOnMarket, setPutOnMarket] = useState(false);
@@ -22,6 +26,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
             setIsMinting(true);
 
             setTimeout(() => {
+                audio.complete.play();
                 setIsMinting(false);
                 setDisableButton(false);
             }, 4000);
