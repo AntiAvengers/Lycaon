@@ -42,17 +42,35 @@ const AboutPg = () => {
                 <img
                     src="/assets/landing/noble-landing.png"
                     alt="nobleLanding"
-                    className="absolute left-0 top-[-150px] w-[260px] z-10"
+                    className="absolute left-0 top-[-150px] w-[260px] z-10 animate-[float_2.5s_ease-in-out_infinite]"
+                    style={{
+                        animationName: "float",
+                        animationTimingFunction: "ease-in-out",
+                        animationDuration: "2.5s",
+                        animationIterationCount: "infinite",
+                    }}
                 />
                 <img
                     src="/assets/landing/mythic-landing.png"
                     alt="eliteLanding"
-                    className="absolute left-[60px] top-[-60px] w-[380px] z-10"
+                    className="absolute left-[60px] top-[-60px] w-[380px] z-10 animate-[float_3s_ease-in-out_infinite]"
+                    style={{
+                        animationName: "float",
+                        animationTimingFunction: "ease-in-out",
+                        animationDuration: "3s",
+                        animationIterationCount: "infinite",
+                    }}
                 />
                 <img
                     src="/assets/landing/elite-landing.png"
                     alt="nobleLanding"
-                    className="absolute left-0 bottom-[-105px] w-[238px] z-10"
+                    className="absolute left-0 bottom-[-105px] w-[238px] z-10 animate-[float_2.75s_ease-in-out_infinite]"
+                    style={{
+                        animationName: "float",
+                        animationTimingFunction: "ease-in-out",
+                        animationDuration: "2.75s",
+                        animationIterationCount: "infinite",
+                    }}
                 />
                 <p className="w-[740px] h-[149px] text-[50px] text-[#FEFAF3] text-center leading-none ml-[12px]">
                     Gather enough pages and approach the Wishing Fountain... if
