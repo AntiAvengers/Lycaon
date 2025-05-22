@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 
-const FoodMeter = ({ hunger, max }) => {
+const FoodMeter = ({ hunger, max, egg }) => {
     const maxHunger = max;
     const progress = (hunger / maxHunger) * 100;
     const segmentCount = 8;
@@ -10,6 +10,12 @@ const FoodMeter = ({ hunger, max }) => {
     const borderWidth = 2;
     const lineLength = 80;
     const lineThickness = 1.5;
+
+    // Use gray colors if egg is true
+    const bgColor = egg ? "#CCCCCC" : "#FFF2D8";
+    const progressColor = egg ? "#999999" : "#FFA500";
+    const segmentColor = egg ? "#AAAAAA" : "#782E15";
+    const borderColor = egg ? "#AAAAAA" : "#782E15";
 
     return (
         <div className="absolute top-[25px] left-[25px]">
@@ -20,9 +26,10 @@ const FoodMeter = ({ hunger, max }) => {
                 alignItems="center"
                 width={size + borderWidth * 2}
                 height={size + borderWidth * 2}
-                border={`${borderWidth}px solid #782E15`}
+                border={`${borderWidth}px solid ${borderColor}`}
                 borderRadius="50%"
                 boxSizing="border-box"
+                style={{ opacity: egg ? 0.6 : 1 }}
             >
                 {/* Background circle */}
                 <CircularProgress
@@ -31,7 +38,7 @@ const FoodMeter = ({ hunger, max }) => {
                     size={size}
                     thickness={22}
                     sx={{
-                        color: "#FFF2D8",
+                        color: bgColor,
                         position: "absolute",
                     }}
                 />
@@ -43,7 +50,7 @@ const FoodMeter = ({ hunger, max }) => {
                     size={size}
                     thickness={22}
                     sx={{
-                        color: "#FFA500",
+                        color: progressColor,
                         position: "absolute",
                     }}
                 />
@@ -59,7 +66,7 @@ const FoodMeter = ({ hunger, max }) => {
                             top="49%"
                             width={`${lineLength}px`}
                             height={`${lineThickness}px`}
-                            bgcolor="#782E15"
+                            bgcolor={segmentColor}
                             sx={{
                                 transform: `rotate(${angle}deg) translateX(-50%)`,
                                 transformOrigin: "left center",
@@ -76,6 +83,7 @@ const FoodMeter = ({ hunger, max }) => {
 FoodMeter.propTypes = {
     hunger: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
+    egg: PropTypes.bool.isRequired,
 };
 
 export default FoodMeter;

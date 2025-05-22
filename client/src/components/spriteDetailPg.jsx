@@ -52,8 +52,8 @@ const food_SVGs = {
 };
 
 const audio = {
-    feed: new Audio('assets/sounds/sprite_eat.mp3')
-}
+    feed: new Audio("assets/sounds/sprite_eat.mp3"),
+};
 
 const SpritesDetailPg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -129,6 +129,7 @@ const SpritesDetailPg = () => {
                     on_marketplace,
                     can_evolve,
                     nickname,
+                    experience,
                 } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
                 const personality = Object.values(traits).filter(
@@ -141,8 +142,8 @@ const SpritesDetailPg = () => {
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     stage: stage,
-                    src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
-                    // src: "/assets/sprite-550/550x550 _noble.png",
+                    // src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    src: "/assets/sprite-550/550x550 _noble.png",
                     // src: "/assets/sprites/flame-wolf.gif",
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
@@ -150,6 +151,7 @@ const SpritesDetailPg = () => {
                     mint: minted_ID,
                     marketplace: on_marketplace,
                     evo: can_evolve,
+                    experience: experience,
                 });
                 //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
                 //Wait no it's not....this should still be false during the minting process
@@ -193,8 +195,6 @@ const SpritesDetailPg = () => {
             navigate("/marketplace");
         }
     };
-
-    // console.log(minted, market);
 
     const closeMint = () => {
         setShowMint(false);
@@ -412,7 +412,7 @@ const SpritesDetailPg = () => {
     }, []);
 
     return (
-        <div className="w-full h-[625px] flex flex-row justify-evenly items-center relative">
+        <div className="w-[1440px] h-[75vh] flex flex-row justify-evenly items-center relative">
             {/* Food Inventory */}
             <section className="flex flex-col">
                 <FoodInventory
@@ -428,8 +428,12 @@ const SpritesDetailPg = () => {
                 </Link>
             </section>
             {/* Food Meter and Sprite Gif */}
-            <section className="w-[550px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
-                <FoodMeter hunger={hunger} max={maxHunger} />
+            <section className="w-[550px] h-full w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
+                <FoodMeter
+                    hunger={hunger}
+                    max={maxHunger}
+                    egg={spriteInfo.stage === 0}
+                />
                 {showAmount && (
                     <span
                         className="absolute top-[75px] left-[150px] text-[#FFFFFF] text-[60px] font-bold"
@@ -445,8 +449,8 @@ const SpritesDetailPg = () => {
                 <img
                     src={spriteInfo && spriteInfo.src}
                     alt={spriteInfo && spriteInfo.name}
-                    // className="w-full"
-                    className="min-w-[50%]"
+                    className="w-full"
+                    // className="min-w-[50%]"
                 />
             </section>
 
@@ -463,7 +467,7 @@ const SpritesDetailPg = () => {
             )}
 
             {/* Sprite Description Box*/}
-            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
+            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[35px] px-[40px] flex flex-col justify-between items-right">
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
                 <button
                     onClick={handleMintClick}
@@ -479,7 +483,7 @@ const SpritesDetailPg = () => {
 
             <Link
                 to="/collection"
-                className="absolute right-[45px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
+                className="absolute right-[70px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
             >
                 Back to Collection
             </Link>
