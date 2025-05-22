@@ -412,7 +412,7 @@ const SpritesDetailPg = () => {
     }, []);
 
     return (
-        <div className="w-full h-[625px] flex flex-row justify-evenly items-center relative">
+        <div className="w-[1440px] h-[75vh] flex flex-row justify-evenly items-center relative">
             {/* Food Inventory */}
             <section className="flex flex-col">
                 <FoodInventory
@@ -428,7 +428,7 @@ const SpritesDetailPg = () => {
                 </Link>
             </section>
             {/* Food Meter and Sprite Gif */}
-            <section className="w-[550px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
+            <section className="w-[550px] h-full w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
                 {showAmount && (
                     <span
@@ -445,8 +445,8 @@ const SpritesDetailPg = () => {
                 <img
                     src={spriteInfo && spriteInfo.src}
                     alt={spriteInfo && spriteInfo.name}
-                    // className="w-full"
-                    className="min-w-[50%]"
+                    className="w-full"
+                    // className="min-w-[50%]"
                 />
             </section>
 
