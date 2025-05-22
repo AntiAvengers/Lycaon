@@ -138,8 +138,8 @@ const PantryPg = () => {
     }, []);
 
     return (
-        <div className="h-screen mt-[5%]" >
-            <div className="w-[1150px] h-[550px] flex flex-col justify-start gap-[35px] text-[#FFFFFF]">
+        <div className="self-start mt-[70px]" >
+            <div className="w-[1150px] h-full flex flex-col justify-start gap-[35px] text-[#FFFFFF]">
                 <h1 className="text-start text-[75px] leading-none">Pantry</h1>
                 {/* User Pantry Inventory */}
                 <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
