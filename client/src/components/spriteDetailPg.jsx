@@ -128,7 +128,8 @@ const SpritesDetailPg = () => {
                     minted_ID,
                     on_marketplace,
                     can_evolve,
-                    nickname,
+                    nickname, 
+                    experience,
                 } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
                 const personality = Object.values(traits).filter(
@@ -141,8 +142,8 @@ const SpritesDetailPg = () => {
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     stage: stage,
-                    src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
-                    // src: "/assets/sprite-550/550x550 _noble.png",
+                    // src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    src: "/assets/sprite-550/550x550 _noble.png",
                     // src: "/assets/sprites/flame-wolf.gif",
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
@@ -150,6 +151,7 @@ const SpritesDetailPg = () => {
                     mint: minted_ID,
                     marketplace: on_marketplace,
                     evo: can_evolve,
+                    experience: experience
                 });
                 //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
                 //Wait no it's not....this should still be false during the minting process
@@ -463,7 +465,7 @@ const SpritesDetailPg = () => {
             )}
 
             {/* Sprite Description Box*/}
-            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[20px] px-[30px] flex flex-col justify-around items-right">
+            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[35px] px-[40px] flex flex-col justify-between items-right">
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
                 <button
                     onClick={handleMintClick}
