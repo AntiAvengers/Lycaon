@@ -50,7 +50,7 @@ export class AnagramOver extends Scene {
                     const { player } = data.response;
                     const { score, reward } = player;
                     this.completeSound.play();
-                    this.wordCount = this.add
+                    this.wordCounts = this.add
                         .text(
                             this.scale.width / 2,
                             this.scale.height * 0.43,
@@ -72,7 +72,7 @@ export class AnagramOver extends Scene {
                             `${reward}x`,
                             {
                                 fontFamily: "CustomFont",
-                                fontSize: Math.min(this.scale.width * 0.1, 90),
+                                fontSize: Math.min(this.scale.width * 0.3, 90),
                                 color: "#ffffff",
                                 align: "center",
                                 wordWrap: { width: this.scale.width * 0.8 },
@@ -238,7 +238,7 @@ export class AnagramOver extends Scene {
         //     .setDepth(100);
 
         this.scrollIcon = this.add
-            .image(this.scale.width / 2 + 40, this.scale.height * 0.7, "scroll")
+            .image(this.scale.width / 2 + 50, this.scale.height * 0.7, "scroll")
             .setOrigin(0.5)
             .setScale(2.75)
             .setDepth(100);
@@ -443,9 +443,9 @@ export class AnagramOver extends Scene {
 
             this.rewardsText2
                 .setPosition(width / 2 - 30, height * 0.7)
-                .setFontSize(Math.min(width * 0.1, 90));
+                .setFontSize(Math.min(width * 0.3, 90));
 
-            this.scrollIcon.setPosition(width / 2 + 40, height * 0.7);
+            this.scrollIcon.setPosition(width / 2 + 50, height * 0.7);
 
             //----------------------------------------------------------
 

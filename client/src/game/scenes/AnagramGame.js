@@ -42,7 +42,7 @@ export class AnagramGame extends Scene {
     constructor() {
         super("AnagramGame");
         this.timerText = null;
-        this.remainingTime = 45;
+        this.remainingTime = 5;
         this.wordList = [];
         this.inputText = "";
         this.letters_data = [];
@@ -50,25 +50,27 @@ export class AnagramGame extends Scene {
 
     preload() {
         console.log("AnagramGame scene preloading");
-        this.load.audio('correct', 'assets/sounds/puzzle_correct_answer.mp3');
-        this.load.audio('error', 'assets/sounds/puzzle_error.mp3');
-        this.load.audio('timer', 'assets/sounds/puzzle_few_seconds_left.mp3');
+        this.load.audio("correct", "assets/sounds/puzzle_correct_answer.mp3");
+        this.load.audio("error", "assets/sounds/puzzle_error.mp3");
+        this.load.audio("timer", "assets/sounds/puzzle_few_seconds_left.mp3");
     }
 
     create() {
-        this.correctSound = this.sound.add('correct');
-        this.errorSound = this.sound.add('error');
-        this.timerSound = this.sound.add('timer');
+        this.correctSound = this.sound.add("correct");
+        this.errorSound = this.sound.add("error");
+        this.timerSound = this.sound.add("timer");
         // const get_letters = this.game.injected?.get_puzzle_data;
-        const get_letters = this.game.injected?.AUTH_API_CALL
+        const get_letters = this.game.injected?.AUTH_API_CALL;
 
         if (get_letters) {
-            get_letters('game/puzzle/')
-                .then(data => {
-                    this.letters_data = data.response.puzzle_data.map(letter => letter.toUpperCase());
+            get_letters("game/puzzle/")
+                .then((data) => {
+                    this.letters_data = data.response.puzzle_data.map(
+                        (letter) => letter.toUpperCase()
+                    );
                     this.anagramText.setText(this.letters_data.join(" "));
                 })
-                .catch(err => console.error('API call error:', err));
+                .catch((err) => console.error("API call error:", err));
         }
 
         //Main Background
@@ -447,7 +449,7 @@ export class AnagramGame extends Scene {
         //----------------------------------------------------------
 
         this.blurOverlay = this.add
-            .rectangle(0, 0, this.scale.width, this.scale.height, 0x140E28)
+            .rectangle(0, 0, this.scale.width, this.scale.height, 0x140e28)
             .setOrigin(0)
             .setDepth(199)
             .setVisible(false);
@@ -456,10 +458,10 @@ export class AnagramGame extends Scene {
         this.popupBg
             .fillStyle(0xffffff, 1)
             .fillRoundedRect(
-                this.scale.width / 2 - 250,
-                this.scale.height / 2 - 160,
-                500,
-                340,
+                this.scale.width / 2 - 275,
+                this.scale.height / 2 - 240,
+                Math.min(this.scale.width, 550),
+                Math.min(this.scale.height, 475),
                 10
             )
             .setDepth(200)
@@ -468,7 +470,7 @@ export class AnagramGame extends Scene {
         this.popupText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 - 70,
+                this.scale.height / 2 - 150,
                 "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
                     fontFamily: "CustomFont",
@@ -486,7 +488,7 @@ export class AnagramGame extends Scene {
         this.popupText2 = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 + 30,
+                this.scale.height / 2 + 90,
                 "⚠ Note: Not all words formed are valid answers.",
                 {
                     fontFamily: "CustomFont",
@@ -495,6 +497,24 @@ export class AnagramGame extends Scene {
                     align: "center",
                     wordWrap: { width: this.scale.width * 0.4 },
                     lineSpacing: 7,
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(202)
+            .setVisible(false);
+
+        this.popupText3 = this.add
+            .text(
+                this.scale.width / 2,
+                this.scale.height / 2 - 20,
+                "3+ words = 1 Page\n 6+ words = 2 Pages\n 10+ words = 3 Pages",
+                {
+                    fontFamily: "CustomFont",
+                    fontSize: Math.min(this.scale.width * 0.05, 30),
+                    color: "#000000",
+                    align: "center",
+                    wordWrap: { width: this.scale.width * 0.4 },
+                    lineSpacing: 15,
                 }
             )
             .setOrigin(0.5)
@@ -511,7 +531,7 @@ export class AnagramGame extends Scene {
             .fillStyle(0x000000, 0.3)
             .fillRoundedRect(
                 this.scale.width / 2 - 100 + 4,
-                this.scale.height / 2 + 90 + 4,
+                this.scale.height / 2 + 150 + 4,
                 resumeWidth,
                 resumeHeight,
                 5
@@ -526,7 +546,7 @@ export class AnagramGame extends Scene {
                 .fillStyle(color, 1)
                 .fillRoundedRect(
                     this.scale.width / 2 - 100 + offsetX,
-                    this.scale.height / 2 + 90 + offsetY,
+                    this.scale.height / 2 + 150 + offsetY,
                     resumeWidth,
                     resumeHeight,
                     5
@@ -539,7 +559,7 @@ export class AnagramGame extends Scene {
         this.resumeZone = this.add
             .zone(
                 this.scale.width / 2 - 100,
-                this.scale.height / 2 + 90,
+                this.scale.height / 2 + 150,
                 resumeWidth,
                 resumeHeight
             )
@@ -551,7 +571,7 @@ export class AnagramGame extends Scene {
         this.resumeText = this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height / 2 + 110,
+                this.scale.height / 2 + 170,
                 "Resume Game",
                 {
                     fontFamily: "CustomFont",
@@ -573,18 +593,18 @@ export class AnagramGame extends Scene {
 
         const handleResumeOut = () => {
             drawResumeBg(0x4a63e4); // Default color
-            this.resumeText.setY(this.scale.height / 2 + 110);
+            this.resumeText.setY(this.scale.height / 2 + 170);
         };
 
         const handleResumeDown = () => {
             drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
-            this.resumeText.setY(this.scale.height / 2 + 112); // 110 + 2
+            this.resumeText.setY(this.scale.height / 2 + 172); // 170 + 2
             this.hidePopup();
         };
 
         const handleResumeUp = () => {
             drawResumeBg(0x4a63e4); // Reset to default color
-            this.resumeText.setY(this.scale.height / 2 + 110);
+            this.resumeText.setY(this.scale.height / 2 + 170);
         };
 
         // Apply handlers to both resumeZone and resumeText
@@ -612,7 +632,7 @@ export class AnagramGame extends Scene {
             } else if (/^[a-zA-Z]$/.test(key)) {
                 if (this.inputText.length < 5) {
                     //Only letters given are allowed to be used
-                    if(this.letters_data.includes(key.toUpperCase())) {
+                    if (this.letters_data.includes(key.toUpperCase())) {
                         this.inputText += key.toUpperCase(); // Append character to inputText
                         this.updateInputField();
                     }
@@ -651,6 +671,7 @@ export class AnagramGame extends Scene {
         this.popupBg.setVisible(true);
         this.popupText.setVisible(true);
         this.popupText2.setVisible(true);
+        this.popupText3.setVisible(true);
         this.resumeShadow.setVisible(true);
         this.resumeBg.setVisible(true);
         this.resumeZone.setVisible(true);
@@ -667,6 +688,7 @@ export class AnagramGame extends Scene {
         this.popupBg.setVisible(false);
         this.popupText.setVisible(false);
         this.popupText2.setVisible(false);
+        this.popupText3.setVisible(false);
         this.resumeShadow.setVisible(false);
         this.resumeBg.setVisible(false);
         this.resumeZone.setVisible(false);
@@ -730,20 +752,20 @@ export class AnagramGame extends Scene {
         const is_valid = this.game.injected?.AUTH_API_CALL;
 
         if (is_valid) {
-            is_valid('game/puzzle/check-answer/', {answer: enteredWord})
-                .then(result => {
-                    if(result.response) {
+            is_valid("game/puzzle/check-answer/", { answer: enteredWord })
+                .then((result) => {
+                    if (result.response) {
                         this.wordList.push(enteredWord);
                         this.updateWordDisplay();
                         this.correctSound.play();
                     } else {
-                        this.errorSound.play() 
+                        this.errorSound.play();
                         this.showErrorMessage("Not a valid word");
                     }
                     this.inputText = "";
                     this.updateInputField();
                 })
-                .catch(err => console.error('API call error:', err));
+                .catch((err) => console.error("API call error:", err));
         }
     }
 
@@ -1016,23 +1038,23 @@ export class AnagramGame extends Scene {
             this.popupBg
                 .fillStyle(0xffffff, 1)
                 .fillRoundedRect(
-                    // this.scale.width / 2 - 250,
-                    // this.scale.height / 2 - 160,
-                    // 500,
-                    // 340,
                     this.scale.width / 2 - 275,
-                    this.scale.height / 2 - 160,
-                    550,
-                    340,
+                    this.scale.height / 2 - 240,
+                    Math.min(this.scale.width, 550),
+                    Math.min(this.scale.height, 475),
                     10
                 );
 
             this.popupText
-                .setPosition(width / 2, height / 2 - 70)
+                .setPosition(width / 2, height / 2 - 150)
                 .setFontSize(Math.min(width * 0.05, 30));
 
             this.popupText2
-                .setPosition(width / 2, height / 2 + 30)
+                .setPosition(width / 2, height / 2 + 90)
+                .setFontSize(Math.min(width * 0.05, 30));
+
+            this.popupText3
+                .setPosition(width / 2, height / 2 - 20)
                 .setFontSize(Math.min(width * 0.05, 30));
 
             const resumeWidth = Math.min(this.scale.width * 0.25, 200);
@@ -1043,7 +1065,7 @@ export class AnagramGame extends Scene {
                 .fillStyle(0x000000, 0.3)
                 .fillRoundedRect(
                     this.scale.width / 2 - 100 + 4,
-                    this.scale.height / 2 + 90 + 4,
+                    this.scale.height / 2 + 150 + 4,
                     resumeWidth,
                     resumeHeight,
                     5
@@ -1054,18 +1076,18 @@ export class AnagramGame extends Scene {
                 .fillStyle(0x4a63e4, 1)
                 .fillRoundedRect(
                     this.scale.width / 2 - 100,
-                    this.scale.height / 2 + 90,
+                    this.scale.height / 2 + 150,
                     resumeWidth,
                     resumeHeight,
                     5
                 );
 
             this.resumeZone
-                .setPosition(width / 2 - 100, height / 2 + 90)
+                .setPosition(width / 2 - 100, height / 2 + 150)
                 .setSize(resumeWidth, resumeHeight);
 
             this.resumeText
-                .setPosition(width / 2, height / 2 + 110)
+                .setPosition(width / 2, height / 2 + 170)
                 .setFontSize(Math.min(width * 0.05, 35));
 
             //----------------------------------------------------------

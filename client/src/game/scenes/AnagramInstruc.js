@@ -66,9 +66,9 @@ export class AnagramInstruc extends Scene {
         // Mute Btn
         if (!this.muteButton) {
             this.muteButton = this.add
-                .image(this.scale.width - 30, this.scale.height - 30, "sound")
+                .image(this.scale.width - 35, this.scale.height - 35, "sound")
                 .setOrigin(0.5)
-                .setScale(1)
+                .setScale(1.25)
                 .setInteractive()
                 .setDepth(200);
 
@@ -219,14 +219,14 @@ export class AnagramInstruc extends Scene {
             )
             .setOrigin(0.5)
             .setDepth(100);
-            
-            /* 
+
+        /* 
                 this.scale.width / 2,
                 this.scale.height / 2 + 140,
             */
 
         this.errorMessage = this.add
-            .text(this.scale.width / 2, this.scale.height * 0.58, "", {
+            .text(this.scale.width / 2, this.scale.height * 0.57, "", {
                 fontFamily: "CustomFont",
                 fontSize: Math.min(this.scale.width * 0.06, 45),
                 color: "#ff0000",
@@ -474,17 +474,19 @@ export class AnagramInstruc extends Scene {
             drawConfirmBg(0x16296c, 4, 4);
             this.confirmText.setY(this.scale.height / 2 + 252);
             // this.changeScene();
-            const use_key = this.game.injected?.AUTH_API_CALL
+            const use_key = this.game.injected?.AUTH_API_CALL;
             if (use_key) {
-                use_key('game/puzzle/use-key')
-                    .then(data => {
-                        if(data.error) {
-                            this.showErrorMessage("You don't have enough keys!");
+                use_key("game/puzzle/use-key")
+                    .then((data) => {
+                        if (data.error) {
+                            this.showErrorMessage(
+                                "You don't have enough keys!"
+                            );
                         } else {
                             this.changeScene();
                         }
                     })
-                    .catch(err => console.error('API call error:', err));
+                    .catch((err) => console.error("API call error:", err));
             }
         };
 
@@ -548,7 +550,7 @@ export class AnagramInstruc extends Scene {
                     this.tweens.add({
                         targets: this.errorMessage,
                         alpha: 0, //fade out
-                        duration: 1000,
+                        duration: 1500,
                         ease: "Power2",
                         onComplete: () => {
                             this.errorMessage.setVisible(false); // Hide it after fading
@@ -752,6 +754,43 @@ export class AnagramInstruc extends Scene {
 
             this.popupkeyIcon.setPosition(width / 2 + 30, height / 2 + 190);
 
+            // const popupWidth = 340;
+            // const popupHeight = 200;
+            // const bottomMargin = 40; // distance from bottom
+
+            // // Bottom-aligned Y
+            // const popupY = height - popupHeight - bottomMargin;
+            // const popupX = width / 2 - popupWidth / 2;
+
+            // this.popupShadow.clear();
+            // this.popupShadow
+            //     .fillStyle(0x000000, 0.3)
+            //     .fillRoundedRect(
+            //         popupX + 5,
+            //         popupY + 5,
+            //         popupWidth,
+            //         popupHeight,
+            //         10
+            //     );
+
+            // this.popupBg.clear();
+            // this.popupBg
+            //     .fillStyle(0xffffff, 1)
+            //     .fillRoundedRect(popupX, popupY, popupWidth, popupHeight, 10)
+            //     .lineStyle(2, 0x000000, 1)
+            //     .strokeRoundedRect(popupX, popupY, popupWidth, popupHeight, 10);
+
+            // // Text inside the popup
+            // this.popupText
+            //     .setPosition(width / 2, popupY + 40)
+            //     .setFontSize(Math.min(width * 0.05, 30));
+
+            // this.popupRewardText
+            //     .setPosition(width / 2 - 40, popupY + 90)
+            //     .setFontSize(Math.min(width * 0.06, 45));
+
+            // this.popupkeyIcon.setPosition(width / 2 + 30, popupY + 90);
+
             //----------------------------------------------------------
 
             const confirmWidth = Math.min(this.scale.width * 0.25, 200);
@@ -789,7 +828,11 @@ export class AnagramInstruc extends Scene {
 
             //----------------------------------------------------------
 
-            this.muteButton.setPosition(width - 30, height - 30);
+            this.errorMessage
+                .setPosition(width / 2, height * 0.57)
+                .setFontSize(Math.min(width * 0.06, 45));
+
+            this.muteButton.setPosition(width - 35, height - 35);
 
             // Update camera viewport to match the new width/height
             this.cameras.main.setViewport(0, 0, width, height);

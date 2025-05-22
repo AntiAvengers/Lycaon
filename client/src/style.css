@@ -87,11 +87,7 @@ body.collection-bg {
 }
 
 #app {
-    /* width: 100%; */
     height: 100vh;
-    /* overflow: hidden; */
-    /* justify-content: center; */
-    /* align-items: center; */
 }
 
 /* Removes spinner from number inputs */

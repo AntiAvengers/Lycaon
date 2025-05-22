@@ -64,14 +64,14 @@ const PuzzelPg = () => {
     }, []);
 
     return (
-        <div className="w-full sm:w-[1320.5px] sm:h-[648.06px] mb-[20px] flex flex-col sm:flex-row sm:mx-4 justify-center gap-[10px] sm:gap-[20px]">
+        <div className="w-[1321px] h-[648px] flex flex-row justify-center gap-[10px] sm:gap-[20px]">
             {/* Left Side of PuzzlePg - Phaser */}
             <section className="flex justify-center items-center">
                 <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             </section>
 
             {/* Right Side PuzzlePg - (Showcase + High Score + Leaderboard)  */}
-            <section className="w-auto sm:w-[441px] sm:h-[648.06px] flex flex-col justify-between items-center mx-2 mb-2 sm:m-0">
+            <section className="w-[441px] min-w-[441px] h-full flex flex-col justify-between items-center">
                 <ShowcaseBox />
                 <HighscoreBox />
                 <LeaderboardBox />
