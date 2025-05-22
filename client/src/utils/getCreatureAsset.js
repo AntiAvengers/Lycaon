@@ -1,3 +1,21 @@
+const creatureImages2 = {
+    "extra-small": {
+
+    },
+    "small": {
+
+    },
+    "medium": {
+
+    }, 
+    "large": {
+
+    },
+    "extra-large": {
+
+    }
+}
+
 const creatureImages = {
     //egg
     0: {

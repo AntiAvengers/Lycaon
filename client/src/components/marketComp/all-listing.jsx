@@ -103,7 +103,7 @@ const AllListing = () => {
                 .sort(sortFn);
             setFilteredCreatures([...prioritized, ...rest]);
         }
-    }, [creaturesList, filter, sortBy, sortOrder]);
+    }, [creaturesList, filteredCreatures, filter, sortBy, sortOrder]);
 
     const handleBuy = async (sprite) => {
         try {
@@ -234,6 +234,7 @@ const AllListing = () => {
                                     setSortBy("price");
                                     setSortOrder("asc");
                                     setShowFilters(false);
+                                    setFilter("all");
                                 }}
                             >
                                 Price ↑
@@ -244,6 +245,7 @@ const AllListing = () => {
                                     setSortBy("price");
                                     setSortOrder("desc");
                                     setShowFilters(false);
+                                    setFilter("all")
                                 }}
                             >
                                 Price ↓
@@ -254,6 +256,7 @@ const AllListing = () => {
                                     setSortBy("rank");
                                     setSortOrder("asc");
                                     setShowFilters(false);
+                                    setFilter("all");
                                 }}
                             >
                                 Rank ↑
@@ -264,6 +267,7 @@ const AllListing = () => {
                                     setSortBy("rank");
                                     setSortOrder("desc");
                                     setShowFilters(false);
+                                    setFilter("all");
                                 }}
                             >
                                 Rank ↓
