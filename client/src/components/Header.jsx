@@ -143,7 +143,7 @@ const Header = () => {
 
         //Logout of Firebase
         const auth = getAuth(app);
-        signOut(auth);
+        await signOut(auth);
     };
 
     // Game Logo directory

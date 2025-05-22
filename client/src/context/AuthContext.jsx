@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useEffect } from 'react';
 import { app } from '../firebase/firebaseConfig.js';
-import { getAuth, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 import { fetchWithAuth } from '../api/fetchWithAuth.js';
 
@@ -14,6 +14,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
+  const [firebaseStatus, setFirebaseStatus] = useState(false);
   const navigate = useNavigate();
 
   async function refreshAccessToken() {
@@ -58,15 +59,17 @@ export function AuthProvider({ children }) {
           );
 
           const data = await response.json();
+          await setPersistence(auth, browserSessionPersistence);
           await signInWithCustomToken(auth, data.token);
+          setFirebaseStatus(true);
       } catch (error) {
         console.error('Authentication error:', error);
       }
   };
 
   useEffect(() => {
+    const auth = getAuth(app);
     if(location.pathname !== "/") {
-      const auth = getAuth(app);
 
       if(accessToken) {
         authenticate();
@@ -75,8 +78,10 @@ export function AuthProvider({ children }) {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           console.log('Firebase: Client Connection Successful');
+          setFirebaseStatus(true);
         } else {
           console.log('Firebase: Client Connection Failed/Logged Out');
+          setFirebaseStatus(false)
         }
       });
 
@@ -85,7 +90,7 @@ export function AuthProvider({ children }) {
   }, [accessToken]);
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken, authenticate }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken, authenticate, firebaseStatus }}>
       {children}
     </AuthContext.Provider>
   );
