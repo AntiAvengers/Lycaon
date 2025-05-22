@@ -52,8 +52,8 @@ const food_SVGs = {
 };
 
 const audio = {
-    feed: new Audio('assets/sounds/sprite_eat.mp3')
-}
+    feed: new Audio("assets/sounds/sprite_eat.mp3"),
+};
 
 const SpritesDetailPg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -128,7 +128,7 @@ const SpritesDetailPg = () => {
                     minted_ID,
                     on_marketplace,
                     can_evolve,
-                    nickname, 
+                    nickname,
                     experience,
                 } = sprite_snapshot;
                 const details = lore[type.toLowerCase()]?.lore;
@@ -151,7 +151,7 @@ const SpritesDetailPg = () => {
                     mint: minted_ID,
                     marketplace: on_marketplace,
                     evo: can_evolve,
-                    experience: experience
+                    experience: experience,
                 });
                 //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
                 //Wait no it's not....this should still be false during the minting process
@@ -195,8 +195,6 @@ const SpritesDetailPg = () => {
             navigate("/marketplace");
         }
     };
-
-    // console.log(minted, market);
 
     const closeMint = () => {
         setShowMint(false);
@@ -431,7 +429,11 @@ const SpritesDetailPg = () => {
             </section>
             {/* Food Meter and Sprite Gif */}
             <section className="w-[550px] h-full w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
-                <FoodMeter hunger={hunger} max={maxHunger} />
+                <FoodMeter
+                    hunger={hunger}
+                    max={maxHunger}
+                    egg={spriteInfo.stage === 0}
+                />
                 {showAmount && (
                     <span
                         className="absolute top-[75px] left-[150px] text-[#FFFFFF] text-[60px] font-bold"

@@ -23,8 +23,6 @@ const SpritesInfo = ({ sprite }) => {
         setIsEditing(false);
     };
 
-    console.log("sprite info", sprite);
-
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
             const API_BASE_URL =
