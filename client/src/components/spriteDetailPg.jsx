@@ -142,6 +142,8 @@ const SpritesDetailPg = () => {
                     age: getAge(date_of_birth),
                     stage: stage,
                     src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    // src: "/assets/sprite-550/550x550 _noble.png",
+                    // src: "/assets/sprites/flame-wolf.gif",
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
                     details: details || "NO INFO FOUND",
@@ -426,7 +428,7 @@ const SpritesDetailPg = () => {
                 </Link>
             </section>
             {/* Food Meter and Sprite Gif */}
-            <section className="w-[496px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
+            <section className="w-[550px] h-[543px] w-m-[496px] h-m-[543px] p-[15px] relative flex items-end justify-center">
                 <FoodMeter hunger={hunger} max={maxHunger} />
                 {showAmount && (
                     <span
@@ -443,6 +445,7 @@ const SpritesDetailPg = () => {
                 <img
                     src={spriteInfo && spriteInfo.src}
                     alt={spriteInfo && spriteInfo.name}
+                    // className="w-full"
                     className="min-w-[50%]"
                 />
             </section>
