@@ -481,7 +481,7 @@ const SpritesDetailPg = () => {
 
             <Link
                 to="/collection"
-                className="absolute right-[45px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
+                className="absolute right-[70px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
             >
                 Back to Collection
             </Link>
