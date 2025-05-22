@@ -25,7 +25,7 @@ const Header = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
     //Access Token (JWT)
-    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+    const { accessToken, refreshAccessToken, setAccessToken, firebaseStatus, authenticate } = useAuth();
 
     const [open, setOpen] = useState(false); // menu
     const [profile, setProfile] = useState(false); //logout
@@ -42,9 +42,17 @@ const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        return async () => {
+            if(location.pathname !== "/" && accessToken) {
+                await authenticate();
+            }
+        }
+    }, [accessToken]);
+
     //Updates Notification State
     useEffect(() => {
-        if (connectionStatus == "connected") {
+        if (connectionStatus == "connected" && firebaseStatus) {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const notifications_ref = ref(database, `notifications/${hash}`);
@@ -96,7 +104,7 @@ const Header = () => {
                 notifications_unsubscribe();
             };
         }
-    }, [connectionStatus]);
+    }, [firebaseStatus, connectionStatus]);
 
     const playMenuSound = (ignoreCurrent = false) => {
         if(ignoreCurrent) {
