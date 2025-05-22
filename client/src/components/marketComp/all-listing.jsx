@@ -44,7 +44,8 @@ const AllListing = () => {
                 const users = snapshot.val();
                 const updated_creatures = [];
                 for (const key in users) {
-                    if (key !== hash && key !== "_init") {
+                    if (key !== "_init") {
+                    // if (key !== hash && key !== "_init") {
                         for (const prop in users[key]) {
                             const { owner, rarity, type, price, stage } =
                                 users[key][prop];
@@ -103,7 +104,7 @@ const AllListing = () => {
                 .sort(sortFn);
             setFilteredCreatures([...prioritized, ...rest]);
         }
-    }, [creaturesList, filteredCreatures, filter, sortBy, sortOrder]);
+    }, [creaturesList, filter, sortBy, sortOrder]);
 
     const handleBuy = async (sprite) => {
         try {

@@ -7,13 +7,11 @@ import SHA256 from "crypto-js/sha256";
 import { useCurrentWallet } from "@mysten/dapp-kit";
 import { useAuth } from "../../context/AuthContext";
 
-// const userWallet = { keys: 4, pages: 10, shards: 2000 };
-
 const InGameCurrencyTracker = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
     //Access Token (JWT)
-    const { authenticate } = useAuth();
+    const { accessToken, authenticate, firebaseStatus } = useAuth();
 
     const [open, setOpen] = useState(false); // Opens Menu for Mobile
     const menuRef = useRef(null); // Menu for Mobile
@@ -37,14 +35,16 @@ const InGameCurrencyTracker = () => {
     }, []);
 
     useEffect(() => {
-        return () => {
-            authenticate();
+        return async () => {
+            if(location.pathname !== "/" && accessToken) {
+                await authenticate();
+            }
         }
-    }, []);
+    }, [accessToken]);
 
     //Listening for changes in any of the currencies (Shards, Keys, Pages)
     useEffect(() => {
-        if (connectionStatus == "connected") {
+        if (connectionStatus == "connected" && firebaseStatus) {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const keys_ref = ref(database, `users/${hash}/keys`);
@@ -88,7 +88,8 @@ const InGameCurrencyTracker = () => {
                 unsubscribe_shards();
             };
         }
-    }, [location.pathname, connectionStatus]);
+    }, [firebaseStatus, connectionStatus]);
+    // }, [location.pathname, connectionStatus]);
 
     // Close dropdown when clicked outside of menu
     useEffect(() => {
@@ -116,7 +117,6 @@ const InGameCurrencyTracker = () => {
             {open && (
                 <ul className="absolute right-0 top-full mt-2 bg-[#273472] text-[#FCF4E7] shadow-lg rounded-lg p-[20px] space-y-2 w-[136px] md:hidden">
                     <li className="flex justify-evenly items-center text-[25px]">
-                        {/* {userWallet.keys} */}
                         {keys !== -1 ? keys : "?"}
                         <img
                             src="/assets/icons/key.svg"
@@ -126,7 +126,6 @@ const InGameCurrencyTracker = () => {
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
                         {pages !== -1 ? pages : "?"}
-                        {/* {userWallet.pages} */}
                         <img
                             src="/assets/icons/scroll.svg"
                             alt="Pages Icon"
@@ -135,7 +134,6 @@ const InGameCurrencyTracker = () => {
                     </li>
                     <li className="flex justify-evenly items-center text-[25px]">
                         {shards !== -1 ? shards : "?"}
-                        {/* {userWallet.shards} */}
                         <img
                             src="/assets/icons/shard.svg"
                             alt="Shards Icon"
