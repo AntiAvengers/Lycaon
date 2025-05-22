@@ -1,3 +1,6 @@
+# ⚠️ Note About App Loading Time
+This app is hosted on Render using the free tier, which means the server may go to sleep after periods of inactivity. If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up. This is completely normal. Thanks for your understanding!
+
 # Welcome to Lycaon! Embark on a quest to solve the ancient puzzles found in the Codex Beastiarum. Here's some Lore!
 Long ago, Lycaon was a brilliant summoner who sought to catalog and control every creature that walked between worlds. His obsession led him to craft the Codex Bestiarum, a living spellbook that could summon beasts from the mundane to the divine.
 But in his hunger for mastery, Lycaon attempted the Forbidden Summoning—a ritual to call forth an entity beyond mortal comprehension. The spell backfired, twisting reality and sealing him within the Codex itself. His name was erased from history, his existence reduced to whispers in the margins of forgotten tomes.
