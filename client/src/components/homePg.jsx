@@ -185,7 +185,11 @@ const HomePg = () => {
 
             {/* Market */}
             <div className="relative group w-[1440px] h-full mx-auto">
-                <Link className="absolute right-[-10px] top-[-138px] scale-[95%] -translate-y-1/2 curor-pointer" to="/market" onClick={() => audio.menu_click.play()}>
+                <Link
+                    className="absolute right-[-10px] top-[-138px] scale-[95%] -translate-y-1/2 curor-pointer"
+                    to="/market"
+                    onClick={() => audio.menu_click.play()}
+                >
                     <img src="/assets/icons/market.png" alt="marketIcon" />
                     <span className="absolute top-[70%] right-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Market
@@ -207,8 +211,8 @@ const HomePg = () => {
                     <p className="text-[35px] text-white leading-none">
                         What is your name?
                     </p>
-                    <p className="text-[25px] text-[#EA1A26] mb-4">
-                        &#x26A0; Name can NOT be changed, choose wisely!
+                    <p className="text-[25px] text-[#FBBB26] mb-4">
+                        &#x26A0; Name can NOT be changed, please choose wisely!
                         &#x26A0;
                     </p>
                     <input
@@ -217,14 +221,14 @@ const HomePg = () => {
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Enter your name"
-                        className="px-4 py-3 mb-4 rounded-[8px] text-[25px] text-white w-[280px] text-center outline-none focus:ring-2 focus:ring-[#FBBB26] shadow-md placeholder-gray-400"
+                        placeholder="Enter Your Name"
+                        className="px-4 py-3 mb-4 rounded-[10px] text-[25px] w-[280px] text-center bg-[#FEFAF3] outline-none focus:ring-2 focus:ring-[#FBBB26] shadow-lg/30 placeholder-gray-400"
                     />
                     <button
-                        className={`px-5 py-2 rounded text-[20px] font-bold transition ${
+                        className={`px-5 text-[25px] ${
                             playerName.trim()
-                                ? "bg-[#FBBB26] hover:bg-yellow-400 cursor-pointer"
-                                : "bg-gray-400 cursor-not-allowed"
+                                ? "w-auto h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[#000000] cursor-pointer"
+                                : "w-auto h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[#FEFAF3] shadow-none cursor-not-allowed pointer-events-none"
                         }`}
                         disabled={!playerName.trim()}
                         onClick={() => {
@@ -242,21 +246,28 @@ const HomePg = () => {
 
             {/* New User Reward Popup */}
             {showWelcomePopup && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[30px] z-50 flex flex-col justify-center items-center">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg p-[40px] z-50 flex flex-col justify-center items-center">
                     <img
                         src="/assets/icons/closeBtn.svg"
                         alt="closeBtn"
                         onClick={() => setShowWelcomePopup(false)}
                         className="absolute top-[10px] right-[10px] cursor-pointer w-[30px] h-[30px]"
                     />
-                    <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-none tracking-[1px]">
-                        <h1 className="text-[45px]">Welcome!</h1>
+                    <section className="text-[25px] text-[#FFFFFF] text-center mt-[10px] leading-tight tracking-[1px]">
+                        <h1 className="text-[50px]">Welcome!</h1>
                         <p>Thank you for playing Lycaon! 🎉</p>
                         <p>
-                            As a new player, we gifted you 4 pages and 500
-                            shards to start.
+                            As a new player, we gifted you{" "}
+                            <span className="text-[#FBBB26] uppercase">
+                                4 pages
+                            </span>{" "}
+                            and{" "}
+                            <span className="text-[#FBBB26] uppercase">
+                                500 shards
+                            </span>{" "}
+                            to start.
                         </p>
-                        <p>Go enjoy the game!!!!</p>
+                        <p>Go enjoy the game!!!</p>
                     </section>
                 </div>
             )}
