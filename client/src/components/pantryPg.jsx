@@ -138,57 +138,59 @@ const PantryPg = () => {
     }, []);
 
     return (
-        <div className="w-[1150px] h-[550px] flex flex-col justify-start gap-[35px] text-[#FFFFFF]">
-            <h1 className="text-start text-[75px] leading-none">Pantry</h1>
-            {/* User Pantry Inventory */}
-            <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
-                <ul className="w-full h-full flex flex-row items-center justify-evenly">
-                    {playerFoods.map((food) => (
-                        <li
-                            key={food.label}
-                            className="flex flex-row items-center"
-                        >
-                            <img
-                                className="w-[25px] h-[25px]"
-                                src={food.src}
-                                alt={food.label}
-                            />
-                            <span>{food.amt}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="flex items-center justify-center">
-                {/* Pantry List */}
-                <ul className="w-full flex flex-row justify-between">
-                    {foods.map((food) => (
-                        <li
-                            onClick={() => handleBuy(food)}
-                            key={food.label}
-                            className="group w-[262px] h-[262px] bg-[#FFFFFF]   rounded-[10px] outline-[5px] outline-transparent transition-outline duration-300 hover:outline-[#4A63E4] shadow-md flex flex-col justify-between"
-                        >
-                            <section className="h-[213px] flex justify-center items-center relative cursor-pointer transition-all duration-300 rounded-t-[10px] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95">
+        <div className="h-screen mt-[5%]" >
+            <div className="w-[1150px] h-[550px] flex flex-col justify-start gap-[35px] text-[#FFFFFF]">
+                <h1 className="text-start text-[75px] leading-none">Pantry</h1>
+                {/* User Pantry Inventory */}
+                <div className="w-[305px] h-[44px] bg-[#F7F7F7] rounded-[10px] text-[#000000] text-[35px]">
+                    <ul className="w-full h-full flex flex-row items-center justify-evenly">
+                        {playerFoods.map((food) => (
+                            <li
+                                key={food.label}
+                                className="flex flex-row items-center"
+                            >
                                 <img
+                                    className="w-[25px] h-[25px]"
                                     src={food.src}
                                     alt={food.label}
-                                    className="w-[147px] h-[147px] transform transition duration-300 ease-in-out group-hover:-translate-y-1"
                                 />
-                            </section>
-                            <section className="h-[49px] bg-[#4A63E4] rounded-b-[10px] flex flex-row justify-center items-center gap-[30px] text-[25px] leading-none">
-                                <div className="flex flex-row items-center gap-[5px]">
+                                <span>{food.amt}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="flex items-center justify-center">
+                    {/* Pantry List */}
+                    <ul className="w-full flex flex-row justify-between">
+                        {foods.map((food) => (
+                            <li
+                                onClick={() => handleBuy(food)}
+                                key={food.label}
+                                className="group w-[262px] h-[262px] bg-[#F7F7F7] rounded-[10px] outline-[5px] outline-transparent transition-outline duration-300 hover:outline-[#4A63E4] shadow-md flex flex-col justify-between"
+                            >
+                                <section className="h-[213px] flex justify-center items-center relative cursor-pointer transition-all duration-300 rounded-t-[10px] active:inset-shadow-sm active:inset-shadow-[#000000] active:scale-95">
                                     <img
-                                        className="w-[21px] h-[23px]"
-                                        src="/assets/icons/shard.svg"
-                                        alt="shardIcon"
+                                        src={food.src}
+                                        alt={food.label}
+                                        className="w-[147px] h-[147px] transform transition duration-300 ease-in-out group-hover:-translate-y-1"
                                     />
-                                    <span>{food.price}</span>
-                                </div>
+                                </section>
+                                <section className="h-[49px] bg-[#4A63E4] rounded-b-[10px] flex flex-row justify-center items-center gap-[30px] text-[25px] leading-none">
+                                    <div className="flex flex-row items-center gap-[5px]">
+                                        <img
+                                            className="w-[21px] h-[23px]"
+                                            src="/assets/icons/shard.svg"
+                                            alt="shardIcon"
+                                        />
+                                        <span>{food.price}</span>
+                                    </div>
 
-                                <span>{food.label}</span>
-                            </section>
-                        </li>
-                    ))}
-                </ul>
+                                    <span>{food.label}</span>
+                                </section>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
 
             {/* Purchase Popup */}
