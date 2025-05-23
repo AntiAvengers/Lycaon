@@ -1,7 +1,8 @@
 import cron from 'node-cron';
 import { database } from '../database/firebaseConfig.js';
 
-const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '0 0 * * *';
+// const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '0 0 * * *';
+const schedule = '* * * * *';
 
 //Giving players keys (every minute in development) every day at midnight
 console.log('. . . Loaded cron-job "Notifications"', `(${schedule})`);

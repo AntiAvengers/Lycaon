@@ -13,7 +13,8 @@ const __dirname = dirname(__filename);
 import { database } from '../database/firebaseConfig.js';
 
 //Giving players shards (every minute if development) every 4 hours based on sprite rarity
-const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '* */4 * * *';
+// const schedule = process.env.MODE == 'DEVELOPMENT' ? '* * * * *' : '* */4 * * *';
+const schedule = '* * * * *';
 
 const ref = JSON.parse(fs.readFileSync(path.join(__dirname, '../database/rarity.json'), 'UTF-8'));
 
