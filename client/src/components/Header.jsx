@@ -267,10 +267,7 @@ const Header = () => {
                     {/* Logo + Title */}
                     <button
                         onClick={handleHomeClick}
-                        className="flex items-center cursor-pointer"
-                        style={{
-                            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                        }}
+                        className="flex items-center cursor-pointer drop-shadow-md/25"
                     >
                         <img
                             src="/assets/logo/lycaon-logo-140x45.svg"

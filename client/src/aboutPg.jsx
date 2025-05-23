@@ -31,7 +31,7 @@ const AboutPg = () => {
                 />
             </section>
             {/* Game Preview */}
-            <section className="relative bg-[url('/assets/landing/gameText-landing.jpg')] bg-center bg-no-repeat bg-contain w-[1440px] h-[892px] mx-auto">
+            <section className="relative bg-[url('/assets/landing/game-landing.png')] bg-center bg-no-repeat bg-contain w-[1440px] h-[892px] mx-auto">
                 <img
                     src="/assets/landing/game-preview.gif"
                     alt="gameGif"
@@ -42,6 +42,14 @@ const AboutPg = () => {
                     alt="scroll-landing"
                     className="absolute right-[136px] top-[250px] w-[391px] h-[291px]"
                 />
+                <p className="absolute top-[93px] right-[305px] w-[686px] h-[106px] bg-[#3E2895] rounded-[10px] text-center text-[50px] text-[#FEFAF3] leading-none flex items-center">
+                    Embark on a quest to solve the ancient puzzles found in
+                    Codex Bestiarum
+                </p>
+                <p className="absolute bottom-[130px] right-[83px] w-[500px] h-[149px] bg-[#3E2895] rounded-[10px] text-center text-[50px] text-[#FEFAF3] leading-none flex items-center">
+                    Each puzzle solved reveals a sacred page,fragments of the
+                    summoning scroll.
+                </p>
             </section>
             {/* Eggs Area */}
             <section className="relative bg-[#3E2895] w-[1440px] h-[304px] flex items-center justify-center mx-auto">
@@ -95,12 +103,11 @@ const AboutPg = () => {
                     alt="pearlDrag-landing"
                     className="absolute bottom-[300px] left-[50px] w-[526px] h-[526px]"
                 />
-                <div className="absolute bottom-[76px] left-[76px] w-[490px] h-[149px] bg-[#3E2895] rounded-[10px] flex items-center justify-center">
-                    <p className="w-[444px] text-[50px] text-[#FEFAF3] text-center leading-none">
-                        Venture into the market, where coveted sprites from
-                        fellow seekers await.
-                    </p>
-                </div>
+                <p className="absolute bottom-[76px] left-[76px] w-[490px] h-[149px] bg-[#3E2895] rounded-[10px] flex items-center w-[444px] text-[50px] text-[#FEFAF3] text-center leading-none">
+                    Venture into the market, where coveted sprites from fellow
+                    seekers await.
+                </p>
+
                 <div className="absolute bottom-[82px] right-[449px] w-[304px] h-[335px] bg-[#273472] rounded-[20px] shadow-[10px_10px_0_rgba(0,0,0,0.25)] flex flex-col items-center justify-start text-[#FEFAF3]">
                     <section className="w-[209px] h-[208px] bg-[#F7F7F7] rounded-[10px] flex justify-center mt-[22px]">
                         <img

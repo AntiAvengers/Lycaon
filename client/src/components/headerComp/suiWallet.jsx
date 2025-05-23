@@ -57,7 +57,7 @@ const SuiWallet = () => {
             <img
                 src="/assets/icons/sui-icon-bg.svg"
                 alt="Sui Icon"
-                className="w-[24px] h-[24px] drop-shadow-sm"
+                className="w-[24px] h-[24px] drop-shadow-md/25"
             />
         </div>
     );

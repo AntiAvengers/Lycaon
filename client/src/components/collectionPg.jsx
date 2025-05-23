@@ -279,7 +279,7 @@ const SpritesCollectionPg = () => {
                     <section className="w-[755px] h-[500px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
                         {creaturesList.filter(obj => obj.favorite).length === 0 ? (
                             <div className="w-full h-full flex items-center justify-center">
-                                <p className="text-[#000000] text-[50px] font-semibold bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl">
+                                <p className="text-[#000000] text-[50px] font-semibold bg-white/20 backdrop-blur-md px-4 py-2 rounded-[20px]">
                                     Favorite a sprite to showcase your sprite!
                                 </p>
                             </div>
