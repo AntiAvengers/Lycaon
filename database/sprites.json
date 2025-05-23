@@ -1,30 +1,35 @@
 {
   "slime": {
     "type": "slime",
+    "name": ["Littles Egg", "Slime", "Big Slime"],
     "rarity": 1,
     "rarity_title": "Littles",
     "lore": "Born from magical tree sap, the slime bounces endlessly through forests. It mimics other creatures, but only manages to make silly squelching sounds."
   },
-  "FAMILIAR_PLACEHOLDER": {
-    "type": "FAMILIAR_PLACEHOLDER",
+  "cat": {
+    "type": "cat",
+    "name": ["Familiar Egg", "Kitty", "Cat"],
     "rarity": 2,
     "rarity_title": "Familiar",
-    "lore": "FAMILIAR_LORE"
+    "lore": "A sleek black cat often seen lurking near treasure chests, drawn to shiny things. It’s said to bring minor luck—mostly mischief—to those who collect it. No one’s sure where it came from, but it never blinks."
   },
   "wolf": {
     "type": "wolf",
+    "name": ["Noble Egg", "Wolfy", "Emberwolf"],
     "rarity": 3,
     "rarity_title": "Noble",
     "lore": "Born of a fallen star and the wrath of an ancient god, the wolf burns with unending flame as it prowls the scorched edges of the Blightlands. Its fire never dims, fueled by the souls of those who dare trespass its domain. Legends say its howl melts steel and summons storms of ash."
   },
-  "ELITE_PLACEHOLDER": {
-    "type": "ELITE_PLACEHOLDER",
+  "deer": {
+    "type": "deer",
+    "name": ["Elite Egg", "Glacy", "Glacielle"],
     "rarity": 4,
     "rarity_title": "Elite",
-    "lore": "ELITE_LORE"
+    "lore": "This ethereal deer glows faintly under moonlight, its antlers crowned with whispering leaves. Said to appear only in moments of great choice, it guides lost travelers with silent grace. Some believe it remembers every path ever taken."
   },
   "dragon": {
     "type": "dragon",
+    "name": ["Mythic Egg", "Lumi", "Lumnara"],
     "rarity": 5,
     "rarity_title": "Mythic",
     "lore": "Woven from the first light of the world and hidden in the ocean’s cradle, the pearl dragon is said to dream reality into being. Its opalescent scales shimmer with the memories of gods, and its song stirs the tides of time. Few have seen it and returned, their minds forever touched by visions not meant for mortals."

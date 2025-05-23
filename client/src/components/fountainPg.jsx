@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import SHA256 from "crypto-js/sha256";
 
 import { useCurrentWallet } from "@mysten/dapp-kit";
+import { getCreatureImage } from "../utils/getCreatureAsset";
 
 const FountainPg = () => {
     const [showRate, setShowRate] = useState(false);
@@ -61,19 +62,13 @@ const FountainPg = () => {
 
         const pulls = res.response.map((obj) => {
             //Better way once more we have more assets
-            const src =
-                obj.type == "slime"
-                    ? "/assets/sprites/slime-sprite.gif"
-                    : "/assets/sprites/baby-fire-wolf.png";
-
-            const still =
-                obj.type == "slime"
-                    ? "/assets/stillSprites/still-slime.svg"
-                    : "/assets/sprites/baby-fire-wolf.png";
+            const src = getCreatureImage("120", obj.type, 0);
+            const still = getCreatureImage("120", obj.type, 0);
 
             const output = {
                 id: crypto.randomUUID(),
-                name: obj.type,
+                name: obj.name,
+                type: obj.type,
                 rank: obj.rarity,
                 src: src,
                 still: still,
@@ -294,7 +289,7 @@ const FountainPg = () => {
                                 <p>
                                     You obtained a{" "}
                                     <span className="text-yellow-400">
-                                        {pulledSprites[0].rank}{" "}
+                                        {/* {pulledSprites[0].rank}{" "} */}
                                         {pulledSprites[0].name}
                                     </span>
                                     .

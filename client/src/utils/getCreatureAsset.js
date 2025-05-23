@@ -1,122 +1,147 @@
-const creatureImages2 = {
-    "extra-small": {
-
-    },
-    "small": {
+const creatureImages = {
+    "120": {
         0: {
-            slime: '/assets/sprite-152/152x152 - littles.png',
-            wolf: '/assets/sprite-152/152x152_noble.png',
-            dragon: '/assets/sprite-152/152x152_mythic.png'
+            slime: '/assets/sprite-120/Little egg 120x120.png',
+            cat: '/assets/sprite-120/Familiar Egg 120x120.png',
+            wolf: '/assets/sprite-120/Noble egg 120x120.png',
+            deer: '/assets/sprite-120/Eliteegg 120x120.png',
+            dragon: '/assets/sprite-120/Mythic egg 120x120.png',
+        }
+    },
+    "152": {
+        0: {
+            slime: '/assets/sprite-152/Little 152x152.png',
+            cat: '/assets/sprite-152/Familar 152x152.png',
+            wolf: '/assets/sprite-152/Noble 152x152.png',
+            deer: '/assets/sprite-152/Elite152x152.png',
+            dragon: '/assets/sprite-152/Mythic 152x152.png'
         },
         1: {
-            slime: '/assets/sprite-152/152x152_baby slime.png',
-            wolf: '/assets/sprite-152/152x152_baby emberwolf.png',
-            dragon: '/assets/sprite-152/152x152 baby dragon.png'
+            slime: '/assets/sprite-152/Slime 152x152.png',
+            cat: '/assets/sprite-152/kitty - 152x152 .png',
+            wolf: '/assets/sprite-152/Wolfy 152x152.png',
+            deer: '/assets/sprite-152/Glacy -152x152 .png',
+            dragon: '/assets/sprite-152/Lumi 152x152 .png'
         },
         2: {
-            slime: '/assets/sprite-152/152x152_adult slime.png',
-            wolf: '/assets/sprite-152/152x152_emberwolf.png',
-            dragon: '/assets/sprite-152/152x152_dragon.png'
+            slime: '/assets/sprite-152/Big Slime 152x152.png',
+            cat: '/assets/sprite-152/Cat - 152x152.png',
+            wolf: '/assets/sprite-152/Emberwolf 152x152.png',
+            deer: '/assets/sprite-152/Glacielle - 152x152.png',
+            dragon: '/assets/sprite-152/Luminara 152x152.png'
         } 
     },
-    "medium": {
+    "200": {
         0: {
-            slime: '/assets/sprite-238/littles egg 238x238.png',
-            wolf: '/assets/sprite-238/noble egg 238x238.png',
-            dragon: '/assets/sprite-238/mythic egg 238x238.png'
-        },
-        1: {
-            slime: '/assets/sprite-238/baby-slime-238x238.png',
-            wolf: '/assets/sprite-238/basic-emberwolf-238x238.png',
-            dragon: '/assets/sprite-238/basic-dragon-238x238.png'
-        },
-        2: {
-            slime: '/assets/sprite-238/slime-adult-238x238.png',
-            wolf: '/assets/sprite-238/emberwolf-238x238.png',
-            dragon: '/assets/sprite-238/dragon-238x238.png'
-        }
-    }, 
-    "large": {
-        1: {
-            slime: '/assets/sprite-322/baby slime 322x322.png',
-            wolf: '/assets/sprite-322/baby emberfox 322x322.png',
-            dragon: '/assets/sprite-322/baby dragon 322x322.png'
-        },
-        2: {
-            slime: '/assets/sprite-322/adult slime 322x322.png',
-            wolf: '/assets/sprite-322/emberwolf 322x322.png',
-            dragon: '/assets/sprite-322/dragon 322x322.png'
+            slime: '/assets/sprite-200/Little egg 200x200.png',
+            cat: '/assets/sprite-200/familiar 200x200.png',
+            wolf: '/assets/sprite-200/Noble egg 200x200.png',
+            deer: '/assets/sprite-200/Elite egg egg 200x200.png',
+            dragon: '/assets/sprite-200/Mythic egg 200x200.png',
         }
     },
-    "extra-large": {
+    "238": {
         0: {
-            slime: '/assets/sprite-550/550x550 _littles',
-            wolf: '/assets/sprite-550/550x550 _noble',
-            dragon: '/assets/sprite-550/550x550_mythic',
+            slime: '/assets/sprite-238/Little 238x238.png',
+            cat: '/assets/sprite-238/Familiar 238x238.png',
+            wolf: '/assets/sprite-238/Noble 238x238.png',
+            deer: '/assets/sprite-238/Elite 238x238.png',
+            dragon: '/assets/sprite-238/MYthic 238x238.png'
+        },
+        1: {
+            slime: '/assets/sprite-238/Slime 238x238.png',
+            cat: '/assets/sprite-238/Kitty 238x238.png',
+            wolf: '/assets/sprite-238/Wolfy 238x238.png',
+            deer: '/assets/sprite-238/Glacy - 238x238.png',
+            dragon: '/assets/sprite-238/Lumi 238x238.png'
+        },
+        2: {
+            slime: '/assets/sprite-238/Big Slime 238x238.png',
+            cat: '/assets/sprite-238/Cat 238x238 .png',
+            wolf: '/assets/sprite-238/Emberwolf 238x238.png',
+            deer: '/assets/sprite-238/Glacielle 238x238.png',
+            dragon: '/assets/sprite-238/Luminara 238x238.png'
+        }
+    }, 
+    "322": {
+        0: {
+            slime: '/assets/sprite-322/Little 322x322 .png',
+            cat: '/assets/sprite-322/Familiar 322x322 .png',
+            wolf: '/assets/sprite-322/Noble 322x322.png',
+            deer: '/assets/sprite-322/Elite 322x322.png',
+            dragon: '/assets/sprite-322/Mythic 322x322.png',
+        },
+        1: {
+            slime: '/assets/sprite-322/Slime 322x322.png',
+            cat: '/assets/sprite-322/Kittne 322x322.png',
+            wolf: '/assets/sprite-322/Wolfy 322x322.png',
+            deer: '/assets/sprite-322/Glacy - 322x322.png',
+            dragon: '/assets/sprite-322/Lumi 322x322.png',
+        },
+        2: {
+            slime: '/assets/sprite-322/Big slime 322x322.png',
+            cat: '/assets/sprite-322/cat 322x322.png',
+            wolf: '/assets/sprite-322/emberwolf 322x322.png',
+            deer: '/assets/sprite-322/Glacielle 322x322.png',
+            dragon: '/assets/sprite-322/Luminara322x322.png',
+        }
+    },
+    "550": {
+        0: {
+            slime: '/assets/sprite-550/Littles 550x550.png',
+            cat: '/assets/sprite-550/Familiar 550x550.png',
+            wolf: '/assets/sprite-550/Noble 550x550 .png',
+            deer: '/assets/sprite-550/Elite 550x550.png',
+            dragon: '/assets/sprite-550/Mythic 550x550.png',
+        },
+        1: {
+            slime: '/assets/sprite-550/Slime 550x550.png',
+            cat: '/assets/sprite-550/kitty - 550x550.png',
+            wolf: '/assets/sprite-550/Wolfy 550x550.png',
+            deer: '/assets/sprite-550/Glacy - 550x550.png',
+            dragon: '/assets/sprite-550/Lumi 550x550 .png',
+        },
+        2: {
+            slime: '/assets/sprite-550/Big Slime 550x550.png',
+            cat: '/assets/sprite-550/Cat - 550x550.png',
+            wolf: '/assets/sprite-550/Emberwolf 550x550.png',
+            deer: '/assets/sprite-550/Glacielle - 550x550 .png',
+            dragon: '/assets/sprite-550/Lumnara 550x550.png',
+        }
+    },
+    "GIF": {
+        0: {
+            slime: '/assets/sprite-322/Little 322x322 .png',
+            cat: '/assets/sprite-322/Familiar 322x322 .png',
+            wolf: '/assets/sprite-322/Noble 322x322.png',
+            deer: '/assets/sprite-322/Elite 322x322.png',
+            dragon: '/assets/sprite-322/Mythic 322x322.png',
+        },
+        1: {
+            slime: '/assets/sprite-gif/slime.gif',
+            cat: '/assets/sprite-322/Kittne 322x322.png',
+            wolf: '/assets/sprite-322/Wolfy 322x322.png',
+            deer: '/assets/sprite-322/Glacy - 322x322.png',
+            dragon: '/assets/sprite-322/Lumi 322x322.png',
+        },
+        2: {
+            slime: '/assets/sprite-gif/big-slime.png',
+            cat: '/assets/sprite-322/cat 322x322.png',
+            wolf: '/assets/sprite-gif/emberfang.png',
+            deer: '/assets/sprite-322/Glacielle 322x322.png',
+            dragon: '/assets/sprite-gif/luminara.png',
         }
     }
 }
 
-const creatureImages = {
-    //egg
-    0: {
-        slime: '/assets/sprites/eggs_0002.png',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    },
-    //sprite
-    1: {
-        slime: '/assets/sprites/slime-sprite.gif',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    },
-    //evolved sprite
-    2: {
-        slime: '/assets/sprites/slime-sprite.gif',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    }  
-};
-
-const creatureStillImages = {
-    //egg
-    0: {
-        slime: '/assets/stillSprites/still-slime.svg',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    },
-    //sprite
-    1: {
-        slime: '/assets/stillSprites/still-slime.svg',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    },
-    //evolved sprite
-    2: {
-        slime: '/assets/stillSprites/still-slime.svg',
-        familiar_placeholder: '/assets/sprites/eggs_0003.png',
-        noble_placeholder: '/assets/sprites/eggs_0004.png',
-        elite_placeholder: '/assets/sprites/eggs_0005.png',
-        mythic_placeholder: '/assets/sprites/eggs_0006.png'
-    }  
+export function getCreatureImage(creature_size, creature_type, stage) {
+    const size = creature_size.toString();
+    const type = creature_type.toLowerCase().trim();
+    return creatureImages[size][stage][type] || '/assets/star.png';
 }
 
-export function getCreatureImage(creature_type, stage) {
+export function getCreatureStillImage(creature_size, creature_type, stage) {
+    const size = creature_size.toString();
     const type = creature_type.toLowerCase().trim();
-    return creatureImages[stage][type] || '/assets/star.png';
-}
-
-export function getCreatureStillImage(creature_type, stage) {
-    const type = creature_type.toLowerCase().trim();
-    return creatureStillImages[stage][type] || '/assets/star.png';
+    return creatureImages[size][stage][type] || '/assets/star.png';
 }

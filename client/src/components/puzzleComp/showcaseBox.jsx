@@ -40,8 +40,11 @@ const ShowcaseBox = () => {
                 const data = snapshot.val();
                 for (const key in data) {
                     const { type, stage } = data[key];
+                    const showcase_size = 
+                        stage == 0 ? "200" 
+                        : stage == 1 ? "322" : "GIF";
                     array.push({
-                        src: getCreatureImage(type, stage),
+                        src: getCreatureImage(showcase_size, type, stage),
                         label: type,
                     });
                 }

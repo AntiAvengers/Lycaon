@@ -68,10 +68,17 @@ const SpritesCollectionPg = () => {
                         date_acquired,
                     } = collections[key];
 
+                    const showcase_size = 
+                        stage == 0 ? "200" 
+                        : stage == 1 ? "322" : "GIF";
+                    const showcase_px = showcase_size == "GIF" ? "200" : showcase_size;
+
                     const info = {
                         date_acquired: date_acquired,
-                        src: getCreatureImage(type, stage),
-                        still: getCreatureStillImage(type, stage),
+                        src: getCreatureImage("238", type, stage),
+                        still: getCreatureImage("238", type, stage),
+                        showcase_src: getCreatureImage(showcase_size, type, stage),
+                        showcase_px: showcase_px,
                         label: key, //UUID
                         to: "/collection/spriteDetail",
                         rank: rarity,
@@ -291,9 +298,11 @@ const SpritesCollectionPg = () => {
                                     .map((creature) => (
                                         <li key={creature.label}>
                                             <img
-                                                src={creature.src}
+                                                // src={creature.src}
+                                                src={creature.showcase_src}
                                                 alt={creature.label}
-                                                className="w-[200px] max-w-[200px]"
+                                                // className="w-[200px] max-w-[200px]"
+                                                className={`w-[${creature.showcase_px}] max-w-[${creature.showcase_px}]`}
                                             />
                                         </li>
                                     ))}
@@ -363,7 +372,7 @@ const SpritesCollectionPg = () => {
                                         <img
                                             src={creature.src}
                                             alt={creature.label}
-                                            className="object-contain max-h-[150px]"
+                                            className="w-[238px] max-w-[238px]"
                                         />
                                     </Link>
                                 </div>

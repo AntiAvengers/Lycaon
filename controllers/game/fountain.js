@@ -46,6 +46,7 @@ function pull_sprite() {
         nickname: "",
         favorite: false,
         type: sprite_result.type,
+        name: sprite_result.name[0],
         rarity: sprite_result.rarity_title,
         stage: 0,
         can_evolve: false,
