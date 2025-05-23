@@ -73,7 +73,7 @@ const FeaturedSprites = () => {
                             const { owner, rarity, type, price, stage } =
                                 users[key][prop];
                             const stage_to_num =
-                                stage == "Egg" ? 0 : stage == "Basic" ? 1 : 2;
+                                stage == "Egg" ? 0 : stage == "Stage 1" ? 1 : 2;
                             const r = rarity.toLowerCase();
                             console.log(r, stage_to_num, type);
                             if(r == "mythic" || r == "elite") {

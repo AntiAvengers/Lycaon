@@ -364,7 +364,7 @@ const SpritesCollectionPg = () => {
                                     `}
                                 >
                                     {/* Evolve Badge */}
-                                    {creature.evo && (
+                                    {creature.evo && !creature.marketplace && (
                                         <span className="absolute top-2 left-2 bg-[#FBBB26] text-[#000000] text-xs px-2 py-1 rounded-full z-10">
                                             Ready to Evolve
                                         </span>

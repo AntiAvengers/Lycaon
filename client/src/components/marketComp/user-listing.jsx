@@ -103,8 +103,8 @@ const UserListing = () => {
                                 stage == 0
                                     ? "Egg"
                                     : stage == 1
-                                    ? "Basic?"
-                                    : "Adult?",
+                                    ? "Stage 1"
+                                    : "Stage 2",
                             mint: minted_ID,
                             marketplace: on_marketplace,
                             evo: can_evolve,

@@ -69,13 +69,13 @@ const AllListing = () => {
                 const users = snapshot.val();
                 const updated_creatures = [];
                 for (const key in users) {
-                    if (key !== "_init") {
-                    // if (key !== hash && key !== "_init") {
+                    // if (key !== "_init") {
+                    if (key !== hash && key !== "_init") {
                         for (const prop in users[key]) {
                             const { owner, rarity, type, price, stage } =
                                 users[key][prop];
                             const stage_to_num =
-                                stage == "Egg" ? 0 : stage == "Basic" ? 1 : 2;
+                                stage == "Egg" ? 0 : stage == "Stage 1" ? 1 : 2;
                             updated_creatures.push({
                                 owner: owner,
                                 label: prop,
