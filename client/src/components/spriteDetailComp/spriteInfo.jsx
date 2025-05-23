@@ -90,8 +90,8 @@ const SpritesInfo = ({ sprite }) => {
     const getEvolveButtonText = (sprite) => {
         if (!sprite) return "";
         if (sprite.evo) return "Evolve";
-        if ((sprite.experience ?? 0) >= 28) return "Almost ready!";
-        if ((sprite.experience ?? 0) >= 14) return "Making progress!";
+        if ((sprite.experience ?? 0) >= 2) return "Almost ready!";
+        if ((sprite.experience ?? 0) >= 1) return "Making progress!";
         return "Not ready . . .";
     };
 
