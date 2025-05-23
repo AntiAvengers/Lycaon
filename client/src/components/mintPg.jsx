@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const audio = {
-    complete: new Audio('assets/sounds/minting_complete.mp3')
-}
+    complete: new Audio("assets/sounds/minting_complete.mp3"),
+};
 
 const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
     const [isMinting, setIsMinting] = useState(false);
@@ -83,7 +83,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                 <img
                     src={sprite.still}
                     alt={sprite.name}
-                    className="w-[160px] h-[160px]"
+                    className="w-[152px] h-[152px] bg-[#FEFAF3] rounded-[100%]"
                 />
             ) : (
                 <div className="relative">
@@ -95,7 +95,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                     <img
                         src={sprite.still}
                         alt={sprite.name}
-                        className="w-[160px] h-[160px] relative"
+                        className="w-[152px] h-[152px] bg-[#FEFAF3] rounded-[100%]"
                     />
                 </div>
             )}
