@@ -228,6 +228,7 @@ MintPg.propTypes = {
         still: PropTypes.string.isRequired,
         mint: PropTypes.bool.isRequired, // Indicates if sprite is minted
         marketplace: PropTypes.bool.isRequired, // Indicates if sprite is listed for sale
+        mint_src: PropTypes.string,
     }).isRequired,
     onMint: PropTypes.func.isRequired,
     onSell: PropTypes.func.isRequired,

@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 
 const FoodInventory = ({ foods, onFeed, disabled }) => {
+
+    console.log(typeof(disabled))
     return (
         <ul className="w-[263px] h-[263px] grid grid-cols-2 gap-[25px]">
             {foods.map((food) => (
@@ -44,7 +46,7 @@ const FoodInventory = ({ foods, onFeed, disabled }) => {
 FoodInventory.propTypes = {
     foods: PropTypes.array.isRequired,
     onFeed: PropTypes.func.isRequired,
-    // disabled: PropTypes.bool,
+    disabled: PropTypes.bool,
 };
 export default FoodInventory;
 
