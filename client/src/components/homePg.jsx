@@ -95,6 +95,7 @@ const HomePg = () => {
 
     // Popup for Name
     useEffect(() => {
+        document.title = "Lycaon";
         const isFirstTime = false; // Replace with actual login/new-user logic
         if (isFirstTime) {
             setShowNamePopup(true); // show first popup

@@ -89,6 +89,8 @@ const PantryPg = () => {
     }, [connectionStatus]);
 
     useEffect(() => {
+        document.title = "Lycaon";
+
         const URL = API_BASE_URL + "game/pantry/get";
 
         fetchWithAuth(

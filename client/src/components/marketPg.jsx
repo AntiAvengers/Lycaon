@@ -6,6 +6,7 @@ import AllListing from "./marketComp/all-listing";
 
 const MarketPg = () => {
     useEffect(() => {
+        document.title = "Lycaon";
         document.body.classList.add("market-bg");
         return () => {
             document.body.classList.remove("market-bg");

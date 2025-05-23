@@ -30,7 +30,7 @@ const ConnectPg = () => {
 
     //Changes the title of the web page to "Lycaon"
     useEffect(() => {
-        document.title = "Lycaon - Login";
+        document.title = "Lycaon";
     }, []);
 
     const Handle_Login = async (event) => {

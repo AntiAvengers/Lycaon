@@ -279,6 +279,8 @@ const SpritesCollectionPg = () => {
 
     //Background
     useEffect(() => {
+        document.title = "Lycaon";
+
         document.body.classList.add("collection-bg");
         return () => {
             document.body.classList.remove("collection-bg");

@@ -79,6 +79,8 @@ const SpritesDetailPg = () => {
 
     //Setting State for - All Food Values
     useEffect(() => {
+        document.title = "Lycaon";
+
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL

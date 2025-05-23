@@ -57,6 +57,8 @@ const PuzzelPg = () => {
 
     //Puzzle-Pg Background
     useEffect(() => {
+        document.title = "Lycaon";
+
         document.body.classList.add("puzzle-bg");
         return () => {
             document.body.classList.remove("puzzle-bg");
