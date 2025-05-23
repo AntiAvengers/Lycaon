@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const audio = {
     menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
+    evolve: new Audio('/assets/sounds/starter_gift.mp3')
 }
 
 const SpritesInfo = ({ sprite }) => {
@@ -62,7 +63,7 @@ const SpritesInfo = ({ sprite }) => {
     };
 
     const handleEvolution = async () => {
-        audio.menu_click.play();
+        audio.evolve.play();
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL

@@ -114,7 +114,8 @@ export const evolve_sprite = async (req, res) => {
         traits: updated_traits,
         hunger: 8,
         stage: stage + 1,
-        name: new_name
+        name: new_name,
+        evo_notify: true
     });
 
     return res.status(200).json({ response: updated_traits });

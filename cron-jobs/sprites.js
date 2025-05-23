@@ -33,7 +33,7 @@ cron.schedule(schedule, async () => {
                 const { shards } = users[user_id];
                 let shards_to_add = 0;
                 for(const index in collections[user_id]) {
-                    const { type, nickname, stage, rarity, hunger, experience, on_marketplace, minted_ID } = collections[user_id][index];
+                    const { evo_notify, type, nickname, stage, rarity, hunger, experience, on_marketplace, minted_ID } = collections[user_id][index];
                     if(((hunger > 0 && stage >= 1) || stage == 0) && !on_marketplace) {
                         if(stage > 0) {
                             shards_to_add += (300 * ref[rarity].id);
@@ -41,14 +41,14 @@ cron.schedule(schedule, async () => {
                         let new_experience = experience < 3 ? experience + 1 : experience;
                         const evolve = new_experience >= 3 && stage !== 2 ? true : false;
                         const new_hunger = stage == 0 ? hunger : (hunger - 1 < 0 ? 0 : hunger - 1);
-                        database.ref(`collections/${user_id}/${index}`)
-                            .update({ 
-                                hunger: new_hunger,
-                                experience: new_experience,
-                                can_evolve: evolve
-                            });
                         
-                        if(experience == 3) {
+                        const update_obj = {
+                            hunger: new_hunger,
+                            experience: new_experience,
+                            can_evolve: evolve
+                        };
+
+                        if(evolve && evo_notify) {
                             const notifications_ref = database.ref(`notifications/${user_id}`)
                             const notifications_snapshot = await notifications_ref.once("value");
                             const notifications_list = notifications_snapshot.val();
@@ -60,7 +60,11 @@ cron.schedule(schedule, async () => {
                                 timestamp: Date.now()
                             }
                             notifications_ref.push(notification);
+                            update_obj.evo_notify = false;
                         }
+
+                        database.ref(`collections/${user_id}/${index}`)
+                            .update(update_obj);
                     }
                 }
                 if(shards_to_add > 0) {

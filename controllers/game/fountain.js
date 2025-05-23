@@ -50,6 +50,7 @@ function pull_sprite() {
         rarity: sprite_result.rarity_title,
         stage: 0,
         can_evolve: false,
+        evo_notify: true,
         experience: 0,
         date_of_birth: Date.now(),
         date_acquired: Date.now(),
