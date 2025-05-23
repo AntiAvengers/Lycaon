@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
+
+const audio = {
+    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
+}
 
 const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
@@ -10,6 +14,10 @@ const SpritesInfo = ({ sprite }) => {
 
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+
+    useEffect(() => {
+        setName(sprite.name);
+    }, [sprite])
 
     const handleDoubleClick = () => {
         setIsEditing(true);
@@ -31,9 +39,6 @@ const SpritesInfo = ({ sprite }) => {
                     : "/";
 
             const URL = API_BASE_URL + "users/sprites/update_sprite";
-
-            console.log(sprite);
-            console.log(sprite.id, e.target.value);
 
             const request = await fetchWithAuth(
                 URL,
@@ -57,6 +62,7 @@ const SpritesInfo = ({ sprite }) => {
     };
 
     const handleEvolution = async () => {
+        audio.menu_click.play();
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
@@ -88,8 +94,6 @@ const SpritesInfo = ({ sprite }) => {
         if ((sprite.experience ?? 0) >= 14) return "Making progress!";
         return "Not ready . . .";
     };
-
-    console.log(sprite);
 
     return (
         <div className="w-[263px] h-[275px] max-h-[275px] leading-none">

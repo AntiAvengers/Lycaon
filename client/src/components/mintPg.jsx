@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const audio = {
     complete: new Audio("assets/sounds/minting_complete.mp3"),
+    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
 };
 
 const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
@@ -164,6 +165,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                             onMarket))
                 }
                 onClick={() => {
+                    audio.menu_click.play();
                     if (
                         !(minted || sprite.mint) &&
                         !(market || sprite.marketplace)

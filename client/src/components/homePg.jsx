@@ -136,11 +136,10 @@ const HomePg = () => {
             aria-hidden={showWelcomePopup || showNamePopup}
         >
             {/* Book (Puzzle) */}
-            <div className="relative group w-[1440px] h-full mx-auto">
+            <div className="relative group w-[1440px] h-full mx-auto" onClick={() => audio.menu_click.play()}>
                 <Link
                     className="absolute top-[-200px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer cursor-pointer z-10"
                     to="/puzzle"
-                    onClick={() => audio.menu_click.play()}
                 >
                     <img src="/assets/icons/book.png" alt="bookIcon" />
                     <span className="fixed top-[30%] left-[50%] -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-15">
@@ -150,11 +149,10 @@ const HomePg = () => {
             </div>
 
             {/* Fountain */}
-            <div className="relative group w-[1440px] h-full mx-auto">
+            <div className="relative group w-[1440px] h-full mx-auto" onClick={() => audio.menu_click.play()}>
                 <Link
                     className="absolute top-[90px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
                     to="/fountain"
-                    onClick={() => audio.menu_click.play()}
                 >
                     <img src="/assets/icons/fountain.png" alt="fountainIcon" />
                     <span className="fixed bottom-[25%] left-[50%] -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-25">
@@ -164,11 +162,10 @@ const HomePg = () => {
             </div>
 
             {/* Collection */}
-            <div className="relative group w-[1440px] h-full mx-auto">
+            <div className="relative group w-[1440px] h-full mx-auto" onClick={() => audio.menu_click.play()}>
                 <Link
                     className="absolute left-0 top-[10px] -translate-y-1/2 cursor-pointer z-20"
                     to="/collection"
-                    onClick={() => audio.menu_click.play()}
                 >
                     <img src="/assets/icons/statues.png" alt="statuesIcon" />
                     <span className="absolute top-1/2 left-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -178,11 +175,10 @@ const HomePg = () => {
             </div>
 
             {/* Pantry */}
-            <div className="relative group w-[1440px] h-full mx-auto z-50">
+            <div className="relative group w-[1440px] h-full mx-auto z-50" onClick={() => audio.menu_click.play()}>
                 <Link
                     className="absolute left-[26%] top-[-49px] -translate-y-1/2 cursor-pointer"
                     to="/pantry"
-                    onClick={() => audio.menu_click.play()}
                 >
                     <img src="/assets/icons/tree.png" alt="treeIcon" />
                     <span className="absolute top-[60%] left-[48%] transform -translate-x-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
@@ -192,11 +188,10 @@ const HomePg = () => {
             </div>
 
             {/* Market */}
-            <div className="relative group w-[1440px] h-full mx-auto">
+            <div className="relative group w-[1440px] h-full mx-auto" onClick={() => audio.menu_click.play()}>
                 <Link
                     className="absolute right-[-10px] top-[-138px] scale-[95%] -translate-y-1/2 curor-pointer"
                     to="/market"
-                    onClick={() => audio.menu_click.play()}
                 >
                     <img src="/assets/icons/market.png" alt="marketIcon" />
                     <span className="absolute top-[70%] right-[35%] transform -translate-y-1/2 text-[36px] bg-white px-4 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">

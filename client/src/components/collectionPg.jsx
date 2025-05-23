@@ -15,6 +15,10 @@ import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
 import { getCreatureImage } from "../utils/getCreatureAsset";
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
+
 const name = {
     slime: {
         0: "Littles Egg",
@@ -130,7 +134,6 @@ const SpritesCollectionPg = () => {
                 updated_creatures.sort((a, b) =>
                     a.date_acquired > b.date_acquired ? -1 : 1
                 );
-                console.log("GOODBYE", updated_creatures.length);
                 setCreatures(updated_creatures);
                 setIsLoading(false);
             });
@@ -141,6 +144,7 @@ const SpritesCollectionPg = () => {
 
     //Like sprites
     const handleToggleLike = async (index) => {
+        audio.menu_click.play();
         const currentLikesCount = creaturesList.filter(
             (obj) => obj.favorite
         ).length;
@@ -192,6 +196,7 @@ const SpritesCollectionPg = () => {
 
     // Cancel marketplace listing
     const handleCancelListing = async (creature) => {
+        audio.menu_click.play();
         try {
             setDisableButton(true);
             const API_BASE_URL =
@@ -418,6 +423,7 @@ const SpritesCollectionPg = () => {
                                         key={creature.to}
                                         to={creature.to}
                                         state={{ id: creature.label }}
+                                        onClick={() => audio.menu_click.play()}
                                     >
                                         <img
                                             src={creature.src}
@@ -429,7 +435,7 @@ const SpritesCollectionPg = () => {
                                 {/* Sprites Descipt */}
                                 <div className="w-full h-[80px] flex flex-col items-start justify-between bg-[#4A63E4] py-[16px] px-[20px] leading-none text-[#FFFFFF]">
                                     <p className="w-full text-[18px] uppercase leading-none truncate">
-                                        {creature.rank} {creature.name}
+                                        {creature.rank} {/* creature.name */}
                                     </p>
                                     <span className="w-full text-[25px] truncate">
                                         {creature.nickname || creature.name}

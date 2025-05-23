@@ -49,7 +49,8 @@ const food_SVGs = {
 };
 
 const audio = {
-    feed: new Audio("assets/sounds/sprite_eat.mp3"),
+    feed: new Audio("/assets/sounds/sprite_eat.mp3"),
+    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
 };
 
 const SpritesDetailPg = () => {
@@ -183,6 +184,7 @@ const SpritesDetailPg = () => {
 
     //Mint Popup btn trigger
     const handleMintClick = () => {
+        audio.menu_click.play();
         if (!minted) {
             setShowMint(true);
         } else if (minted && !market) {
@@ -193,6 +195,7 @@ const SpritesDetailPg = () => {
     };
 
     const closeMint = () => {
+        audio.menu_click.play();
         setShowMint(false);
     };
 
@@ -251,7 +254,6 @@ const SpritesDetailPg = () => {
 
         const results = await exec_mint_tx.json();
         const { rawEffects } = results.response;
-        console.log("RAW EFFECTS:", rawEffects);
 
         if (rawEffects) {
             setMinted(true);
@@ -261,14 +263,13 @@ const SpritesDetailPg = () => {
     };
 
     const handleSell = async (asking_price) => {
-        console.log("Running handleSell() on spriteDetailPg");
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
                 : "/";
         const REQUEST_URL =
             API_BASE_URL + "marketplace/listings/request_listing_tx";
-        console.log(id);
+
         const mint_tx = await fetchWithAuth(
             REQUEST_URL,
             {
@@ -283,7 +284,6 @@ const SpritesDetailPg = () => {
         );
 
         const tx = await mint_tx.json();
-        console.log(tx);
 
         if (tx.error) {
             console.error(tx.error);
@@ -331,7 +331,6 @@ const SpritesDetailPg = () => {
         const { rawEffects } = results.response;
 
         if (rawEffects) {
-            console.log("rawEffects True: for handleSell");
             reportTransactionEffects(rawEffects);
             setMarket(true);
             return true;
@@ -382,15 +381,6 @@ const SpritesDetailPg = () => {
 
                 return; // Block feeding when full
             }
-
-            // setHunger((prev) => Math.min(prev + foodValue, maxHunger));
-            // setFoods((prevFoods) =>
-            //     prevFoods.map((food) =>
-            //         food.label === foodLabel && food.amt > 0
-            //             ? { ...food, amt: food.amt - 1 }
-            //             : food
-            //     )
-            // );
 
             // Show "+X" for feeding effect
             audio.feed.play();
@@ -470,7 +460,7 @@ const SpritesDetailPg = () => {
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
                 <div className="w-full flex flex-row items-center justify-between">
                     <button
-                        onClick={handleMintClick}
+                        onClick={() => { audio.menu_click.play(); handleMintClick(); }}
                         className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FEFAF3] text-center cursor-pointer"
                     >
                         {minted
@@ -480,7 +470,7 @@ const SpritesDetailPg = () => {
                             : "Mint Sprite"}
                     </button>
                     <button
-                        onClick={handleHelp}
+                        onClick={() =>{ audio.menu_click.play(); handleHelp(); }}
                         className="w-[35px] h-[35px] text-[30px] text-[#FEFAF3] bg-[#4A63E4] rounded-[100%] flex justify-center items-center hover:bg-[#1D329F] shadow-[2px_2px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 cursor-pointer"
                     >
                         ?
@@ -516,7 +506,7 @@ const SpritesDetailPg = () => {
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"
-                            onClick={closeHelp}
+                            onClick={() => { audio.menu_click.play(); closeHelp(); }}
                             className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
                         <h1 className="text-[50px] font-bold text-center">

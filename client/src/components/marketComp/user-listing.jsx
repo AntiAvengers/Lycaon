@@ -16,7 +16,7 @@ import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 import { getCreatureImage } from "../../utils/getCreatureAsset";
 
 const audio = {
-    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
 }
 
 const name = {
@@ -454,7 +454,7 @@ const UserListing = () => {
                             </li>
                         ))}
                     </ul>
-                    <Link to="/collection" className="w-fit underline decoration-[1.5px] text-[25px] hover:text-[#FBBB26]">
+                    <Link to="/collection" className="w-fit underline decoration-[1.5px] text-[25px] hover:text-[#FBBB26]" onClick={() => audio.menu_click.play()}>
                         View your collection
                     </Link>
                 </div>
