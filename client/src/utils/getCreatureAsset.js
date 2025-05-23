@@ -125,11 +125,11 @@ const creatureImages = {
             dragon: '/assets/sprite-322/Lumi 322x322.png',
         },
         2: {
-            slime: '/assets/sprite-gif/big-slime.png',
+            slime: '/assets/sprite-gif/big-slime.gif',
             cat: '/assets/sprite-322/cat 322x322.png',
-            wolf: '/assets/sprite-gif/emberfang.png',
+            wolf: '/assets/sprite-gif/emberfang.gif',
             deer: '/assets/sprite-322/Glacielle 322x322.png',
-            dragon: '/assets/sprite-gif/luminara.png',
+            dragon: '/assets/sprite-gif/luminara.gif',
         }
     }
 }

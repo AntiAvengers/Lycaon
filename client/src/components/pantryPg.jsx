@@ -17,6 +17,10 @@ const food_SVGs = {
     Steak: "/assets/foods/steak.svg",
 };
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
+
 const PantryPg = () => {
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
@@ -116,6 +120,7 @@ const PantryPg = () => {
 
     //closes buy popup
     const closeBuy = () => {
+        audio.menu_click.play();
         setBuy(false);
         setSelectedFood(null);
         setPurchaseConfirmed(false);
@@ -124,6 +129,7 @@ const PantryPg = () => {
 
     //handles food purchased
     const handleBuy = (food) => {
+        audio.menu_click.play();
         setSelectedFood(food);
         setQuantity(1);
         setBuy(true);
@@ -296,6 +302,7 @@ const PantryPg = () => {
                                         return;
                                     }
                                     setError(""); // Clear previous errors
+                                    audio.menu_click.play();
                                     purchase_food(selectedFood.label, quantity);
                                 }}
                                 disabled={
