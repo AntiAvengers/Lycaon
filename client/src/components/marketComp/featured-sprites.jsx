@@ -8,10 +8,7 @@ import SHA256 from "crypto-js/sha256";
 import { fetchWithAuth } from "../../api/fetchWithAuth";
 import { useAuth } from "../../context/AuthContext";
 
-import {
-    useCurrentWallet,
-    useSignTransaction,
-} from "@mysten/dapp-kit";
+import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
 import { getCreatureImage } from "../../utils/getCreatureAsset";
 
@@ -19,29 +16,29 @@ const name = {
     slime: {
         0: "Littles Egg",
         1: "Slime",
-        2: "Big Slime"
+        2: "Big Slime",
     },
     cat: {
         0: "Familiar Egg",
         1: "Kitty",
-        2: "Cat"
+        2: "Cat",
     },
     wolf: {
         0: "Noble Egg",
         1: "Wolfy",
-        2: "Emberfang"
+        2: "Emberfang",
     },
     deer: {
         0: "Elite Egg",
         1: "Glacy",
-        2: "Glacielle"
+        2: "Glacielle",
     },
     dragon: {
         0: "Mythic Egg",
         1: "Lumi",
-        2: "Luminara"
-    }
-}
+        2: "Luminara",
+    },
+};
 
 const FeaturedSprites = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -67,8 +64,8 @@ const FeaturedSprites = () => {
                 const users = snapshot.val();
                 const updated_creatures = [];
                 for (const key in users) {
-                    if(key !== hash && key !== '_init') {
-                    // if(key !== '_init') {
+                    if (key !== hash && key !== "_init") {
+                        // if(key !== '_init') {
                         for (const prop in users[key]) {
                             const { owner, rarity, type, price, stage } =
                                 users[key][prop];
@@ -76,7 +73,7 @@ const FeaturedSprites = () => {
                                 stage == "Egg" ? 0 : stage == "Stage 1" ? 1 : 2;
                             const r = rarity.toLowerCase();
                             console.log(r, stage_to_num, type);
-                            if(r == "mythic" || r == "elite") {
+                            if (r == "mythic" || r == "elite") {
                                 updated_creatures.push({
                                     owner: owner,
                                     label: prop,
@@ -87,8 +84,16 @@ const FeaturedSprites = () => {
                                     stage: stage,
                                     marketplace: true,
                                     mint: true,
-                                    src: getCreatureImage("322", type, stage_to_num),
-                                    still: getCreatureImage("322", type, stage_to_num),
+                                    src: getCreatureImage(
+                                        "322",
+                                        type,
+                                        stage_to_num
+                                    ),
+                                    still: getCreatureImage(
+                                        "322",
+                                        type,
+                                        stage_to_num
+                                    ),
                                 });
                             }
                         }
@@ -120,7 +125,7 @@ const FeaturedSprites = () => {
                     body: JSON.stringify({
                         id: sprite.label,
                         price: sprite.price,
-                        owner: sprite.owner
+                        owner: sprite.owner,
                     }),
                     credentials: "include",
                 },
@@ -224,14 +229,15 @@ const FeaturedSprites = () => {
                                         alt="suiIcon"
                                         className="w-[29px]"
                                     />
-                                    {feature.price}
+                                    {Number(feature.price).toFixed(2)}
                                 </span>
-                                <button className={
-                                    disableButton
-                                        ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] cursor-not-allowed pointer-events-none`
-                                        : `w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer`
-                                }
-                                onClick={() => handleBuy(feature)}
+                                <button
+                                    className={
+                                        disableButton
+                                            ? `w-[110px] h-[35px] bg-[#808080] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] cursor-not-allowed pointer-events-none`
+                                            : `w-[110px] h-[35px] bg-[#FBBB26] rounded-[66px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#000000] cursor-pointer`
+                                    }
+                                    onClick={() => handleBuy(feature)}
                                 >
                                     Buy Now
                                 </button>

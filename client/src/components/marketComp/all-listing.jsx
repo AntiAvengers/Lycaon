@@ -16,29 +16,29 @@ const name = {
     slime: {
         0: "Littles Egg",
         1: "Slime",
-        2: "Big Slime"
+        2: "Big Slime",
     },
     cat: {
         0: "Familiar Egg",
         1: "Kitty",
-        2: "Cat"
+        2: "Cat",
     },
     wolf: {
         0: "Noble Egg",
         1: "Wolfy",
-        2: "Emberfang"
+        2: "Emberfang",
     },
     deer: {
         0: "Elite Egg",
         1: "Glacy",
-        2: "Glacielle"
+        2: "Glacielle",
     },
     dragon: {
         0: "Mythic Egg",
         1: "Lumi",
-        2: "Luminara"
-    }
-}
+        2: "Luminara",
+    },
+};
 
 const AllListing = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -86,8 +86,16 @@ const AllListing = () => {
                                 stage: stage,
                                 marketplace: true,
                                 mint: true,
-                                src: getCreatureImage("238", type, stage_to_num),
-                                still: getCreatureImage("238", type, stage_to_num),
+                                src: getCreatureImage(
+                                    "238",
+                                    type,
+                                    stage_to_num
+                                ),
+                                still: getCreatureImage(
+                                    "238",
+                                    type,
+                                    stage_to_num
+                                ),
                             });
                         }
                     }
@@ -269,7 +277,7 @@ const AllListing = () => {
                                     setSortBy("price");
                                     setSortOrder("desc");
                                     setShowFilters(false);
-                                    setFilter("all")
+                                    setFilter("all");
                                 }}
                             >
                                 Price ↓
@@ -362,7 +370,7 @@ const AllListing = () => {
                                             alt="suiIcon"
                                             className="w-[17px]"
                                         />
-                                        {creature.price}
+                                        {Number(creature.price).toFixed(2)}
                                     </span>
                                     <span className="text-[18px] uppercase">
                                         {creature.stage} {creature.rank}
