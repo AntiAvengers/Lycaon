@@ -38,8 +38,8 @@ cron.schedule(schedule, async () => {
                         if(stage > 0) {
                             shards_to_add += (300 * ref[rarity].id);
                         }
-                        let new_experience = experience < 43 ? experience + 1 : experience;
-                        const evolve = new_experience >= 42 && stage !== 2 ? true : false;
+                        let new_experience = experience < 4 ? experience + 1 : experience;
+                        const evolve = new_experience >= 3 && stage !== 2 ? true : false;
                         database.ref(`collections/${user_id}/${index}`)
                             .update({ 
                                 hunger: hunger - 1 < 0 ? 0 : hunger - 1,
@@ -47,7 +47,7 @@ cron.schedule(schedule, async () => {
                                 can_evolve: evolve
                             });
                         
-                        if(experience == 42) {
+                        if(experience == 3) {
                             const notifications_ref = database.ref(`notifications/${user_id}`)
                             const notifications_snapshot = await notifications_ref.once("value");
                             const notifications_list = notifications_snapshot.val();

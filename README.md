@@ -1,6 +1,10 @@
 # ⚠️ Note About App Loading Time
 This app is hosted on Render using the free tier, which means the server may go to sleep after periods of inactivity. If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up. This is completely normal. Thanks for your understanding!
 
+# ⚠️ Accelerated Sprite & Economy Updates
+For demo purposes, sprite hunger, sprite experience, and player currency generation are updated every minute instead of their intended multi-hour intervals.
+Additionally, while sprite evolution normally requires 7 days worth of experience, this has been reduced to just 3 experience points (3 minutes) to allow rapid progression during the demo.
+
 # Welcome to Lycaon! Embark on a quest to solve the ancient puzzles found in the Codex Beastiarum. Here's some Lore!
 Long ago, Lycaon was a brilliant summoner who sought to catalog and control every creature that walked between worlds. His obsession led him to craft the Codex Bestiarum, a living spellbook that could summon beasts from the mundane to the divine.
 But in his hunger for mastery, Lycaon attempted the Forbidden Summoning—a ritual to call forth an entity beyond mortal comprehension. The spell backfired, twisting reality and sealing him within the Codex itself. His name was erased from history, his existence reduced to whispers in the margins of forgotten tomes.
@@ -16,9 +20,9 @@ Lycaon, a powerful summoner, created the Codex Bestiarum to control all beasts b
 # How to play
 1. Login using your Sui Wallet/Slush
 2. Unlock and solve daily puzzles using Keys and earn Scrolls!
-3. Use the scrolls to summon littles at the Fountain! Who knows which will join you??
-4. Each time you summon a little, you will also receives Shards!
-5. Check out all your littles in the Collection!
+3. Use the scrolls to summon Sprites at the Fountain! Who knows which will join you??
+4. Each time you summon a Sprite, you will also receives Shards!
+5. Check out all your Sprites in the Collection!
 6. Go to the marketplace and see which companions other playesr are selling or looking for!
 
 
@@ -30,25 +34,25 @@ Keys are time-generated resources that allow you to unlock puzzles! Completing p
 ### What are Scrolls?
 Scrolls are what you need to summon your Littles!
 
-### What are Littles?
+### What are Sprites?
 Companions who will stay by your side during your Lycaon journey! OR maybe you want to sell them for Sui!
 
 ### Sell?
-Yes! There is a marketplace available for all users to list and sell their littles for Sui! Maybe you'll even see a rare Mythic for sale??
+Yes! There is a marketplace available for all users to list and sell their Sprites for Sui! Maybe you'll even see a rare Mythic for sale??
 
 ### What are Shards?
-Shards are what is necessary to buy food from the Pantry to feed your littles! You earn shards every time you open an egg and little passively generate shards for you!
+Shards are what is necessary to buy food from the Pantry to feed your Sprites! You earn shards every time you open an egg and Sprites passively generate shards for you!
 
-### Why feed your Littles?
-Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your little won't be so little anymore! :)
+### Why feed your Sprites?
+Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your Sprite will evolve into a rarer Sprite! :)
 
-### What do you mean by "not so little anymore"?
-Your littles can evolve into rarer companions!
+### What are the Sprites rarities?
+Littles, Familiars, Nobles, Elites, and Mythics!
 
 ### What can you do in the Collection?
-- You can see all your littles and companions!
-- Here is where you can select a little to see more details about it as well as feed it or even mint it!
-- What is minting? Minting is allowing your companion to exist as part of the Sui blockchain so that it can be sold at the Marketplace!
+- You can see all your Sprites!
+- Here is where you can select a Sprite to see more details about it as well as feed it or even mint it!
+- What is minting? Minting is allowing your Sprites to exist as part of the Sui blockchain so that it can be sold at the Marketplace!
 
 ### 🛠️ Tech Stack
 
