@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const audio = {
     complete: new Audio("assets/sounds/minting_complete.mp3"),
-    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
+    menu_click: new Audio("/assets/sounds/header_menu_click.mp3"),
 };
 
 const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
@@ -126,9 +126,23 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                                     type="number"
                                     min="1"
                                     value={salePrice}
-                                    onChange={(e) =>
-                                        setSalePrice(e.target.value)
-                                    }
+                                    // onChange={(e) =>
+                                    //     setSalePrice(e.target.value)
+                                    // }
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+
+                                        // Regex: numbers with optional 1 or 2 decimal places
+                                        const regex =
+                                            /^(?!0\d)\d*(\.\d{0,2})?$/;
+
+                                        if (value === "" || regex.test(value)) {
+                                            const num = parseFloat(value);
+                                            if (value === "" || num >= 1) {
+                                                setSalePrice(value);
+                                            }
+                                        }
+                                    }}
                                     placeholder="Min 1"
                                     className="no-spinner w-[50px] h-[25px] border-b-[1px] border-white outline-none bg-transparent text-end text-white"
                                 />
