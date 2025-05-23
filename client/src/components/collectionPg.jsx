@@ -29,9 +29,10 @@ const SpritesCollectionPg = () => {
     //set to [-1] because otherwise while getting info from database, it shows the "you have no sprites" part
     const [creaturesList, setCreatures] = useState([]);
 
-    const [likedList, setLikedList] = useState(
-        Array(creaturesList.length).fill(false)
-    );
+    // const [likedList, setLikedList] = useState(
+    //     Array(creaturesList.length).fill(false)
+    // );1
+    const [likedList, setLikedList] = useState([]);
 
     const [popupMessage, setPopupMessage] = useState(""); //popup for max like
     const [isFading, setIsFading] = useState(false); //fading for max like popup
@@ -76,6 +77,7 @@ const SpritesCollectionPg = () => {
                     } = collections[key];
 
                     if (favorite) {
+                        console.log(favorite);
                         updated_likes[i] = favorite;
                     }
 
@@ -90,6 +92,7 @@ const SpritesCollectionPg = () => {
                         nickname: nickname,
                         mint: minted_ID,
                         marketplace: on_marketplace,
+                        favorite: favorite
                     };
 
                     updated_creatures.push(info);
@@ -97,31 +100,44 @@ const SpritesCollectionPg = () => {
                     i++;
                 }
                 updated_creatures.sort((a,b) => a.date_acquired > b.date_acquired ? -1 : 1);
+                console.log('GOODBYE', updated_creatures.length);
                 setCreatures(updated_creatures);
                 setLikedList(updated_likes);
-                setIsLoading(false);
+                setIsLoading(false);    
             });
 
             return () => unsubscribe();
         }
-    }, [connectionStatus, currentWallet.accounts, likedList]);
+    }, [connectionStatus]);
 
     //Like sprites
     const handleToggleLike = async (index) => {
-        const updatedLikes = [...likedList];
-        const currentLikesCount = updatedLikes.filter(Boolean).length;
+        // const updatedLikes = [...likedList];
+        // const currentLikesCount = updatedLikes.filter(Boolean).length;
 
-        if (!updatedLikes[index]) {
-            if (currentLikesCount >= 3) {
-                setPopupMessage("You can only like up to 3 Sprites!");
-                setIsFading(false); // reset if re-triggered quickly
-                setTimeout(() => setIsFading(true), 1000);
-                setTimeout(() => {
-                    setPopupMessage("");
-                    setIsFading(false); // reset for next time
-                }, 2500); // Remove after fade
-                return;
-            }
+        // if (!updatedLikes[index]) {
+        //     if (currentLikesCount >= 3) {
+        //         setPopupMessage("You can only like up to 3 Sprites!");
+        //         setIsFading(false); // reset if re-triggered quickly
+        //         setTimeout(() => setIsFading(true), 1000);
+        //         setTimeout(() => {
+        //             setPopupMessage("");
+        //             setIsFading(false); // reset for next time
+        //         }, 2500); // Remove after fade
+        //         return;
+        //     }
+        // }
+
+        const currentLikesCount = creaturesList.filter(obj => obj.favorite).length;
+        if(currentLikesCount >= 3) {
+            setPopupMessage("You can only like up to 3 Sprites!");
+            setIsFading(false); // reset if re-triggered quickly
+            setTimeout(() => setIsFading(true), 1000);
+            setTimeout(() => {
+                setPopupMessage("");
+                setIsFading(false); // reset for next time
+            }, 2500); // Remove after fade
+            return;
         }
 
         const API_BASE_URL =
@@ -131,7 +147,8 @@ const SpritesCollectionPg = () => {
 
         const URL = API_BASE_URL + "users/sprites/update_sprite";
 
-        const changed = !updatedLikes[index];
+        // const changed = !updatedLikes[index];
+        const changed = !creaturesList[index].favorite;
 
         console.log(creaturesList[index].label, changed);
 
@@ -154,11 +171,11 @@ const SpritesCollectionPg = () => {
         const res = await request.json();
 
         if (res.error) {
+            console.error(res.error);
             return;
         }
-
-        updatedLikes[index] = changed;
-        setLikedList(updatedLikes);
+        // updatedLikes[index] = changed;
+        // setLikedList(updatedLikes);
     };
 
     // Cancel marketplace listing
@@ -295,7 +312,8 @@ const SpritesCollectionPg = () => {
                     <section className="w-[755px] h-[500px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
                         <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
                             {creaturesList
-                                .filter((_, idx) => likedList[idx]) // only liked
+                                // .filter((_, idx) => likedList[idx]) // only liked
+                                .filter((obj) => obj.favorite)
                                 .slice(0, 3) // up to 3
                                 .map((creature) => (
                                     <li key={creature.label}>
@@ -355,7 +373,7 @@ const SpritesCollectionPg = () => {
                                         aria-label="favorite"
                                         className="absolute top-2 right-2 cursor-pointer"
                                     >
-                                        {likedList[index] ? (
+                                        {/* {likedList[index] ? (
                                             <FavoriteIcon
                                                 style={{ color: "#EA1A26" }}
                                             />
@@ -363,7 +381,11 @@ const SpritesCollectionPg = () => {
                                             <FavoriteBorderIcon
                                                 style={{ color: "#EA1A26" }}
                                             />
-                                        )}
+                                        )} */}
+                                        {creature.favorite 
+                                            ? <FavoriteIcon style={{ color: "#EA1A26"}} />
+                                            : <FavoriteBorderIcon style={{ color: "EA1A26"}} />
+                                        }
                                     </button>
                                     {/* Spacer to push image down */}
                                     <div className="flex-grow" />
