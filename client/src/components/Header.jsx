@@ -231,10 +231,10 @@ const Header = () => {
     ];
 
     return (
-        <header className="sticky top-0 z-50 sm:h-[75px] text-[#FCF4E7] flex justify-center items-center">
-            <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-6 sm:px-[40px] flex flex-row justify-between shadow-md/40 mx-0 md:mx-[10px] sm:mx-0">
+        <header className="sticky top-0 z-50 h-[75px] text-[#FCF4E7] flex justify-center items-center">
+            <div className="w-[1255px] max-w-full h-[55px] bg-[#273472] sm:rounded-[79px] py-[10px] px-[40px] flex flex-row justify-between shadow-md/40">
                 {/* Left Section: Menu and Logo */}
-                <section className="flex flex-row justify-between items-center gap-4 sm:gap-[30px]">
+                <section className="flex flex-row justify-between items-center gap-[25px]">
                     {/* Menu */}
                     <div ref={menuRef1} className="relative">
                         <img
@@ -267,17 +267,16 @@ const Header = () => {
                     {/* Logo + Title */}
                     <button
                         onClick={handleHomeClick}
-                        className="flex items-center text-[30px] sm:text-[40px] cursor-pointer"
+                        className="flex items-center cursor-pointer"
                         style={{
                             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                         }}
                     >
                         <img
-                            src="/assets/star.png"
+                            src="/assets/logo/lycaon-logo-140x45.svg"
                             alt="Key Icon"
-                            className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] mr-[15px]"
+                            className="w-[140px] h-[45px]"
                         />
-                        Lycaon
                     </button>
                 </section>
 
