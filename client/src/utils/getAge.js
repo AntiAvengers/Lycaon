@@ -31,7 +31,7 @@ export const getAge = (timestamp) => {
     } else if(days >= 1) {
         output = `${days} day${days == 1 ? '' : 's'} old`;
     } else {
-        output = 'Less than a day old';
+        output = '< 1 day old';
     }
     return output;
 }
