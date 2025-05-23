@@ -61,7 +61,7 @@ const ShowcaseBox = () => {
                             <img
                                 src={creature.src}
                                 alt={creature.label}
-                                className="object-contain"
+                                className="w-[200px] max-w-[200px]"
                             />
                         </li>
                     ))

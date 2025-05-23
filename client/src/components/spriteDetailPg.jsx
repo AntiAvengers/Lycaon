@@ -448,7 +448,7 @@ const SpritesDetailPg = () => {
                 <img
                     src={spriteInfo && spriteInfo.src}
                     alt={spriteInfo && spriteInfo.name}
-                    className="w-[550px]"
+                    className="w-[550px] max-w-[550px]"
                 />
             </section>
 
