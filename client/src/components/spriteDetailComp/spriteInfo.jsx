@@ -10,7 +10,7 @@ const audio = {
 const SpritesInfo = ({ sprite }) => {
     const [name, setName] = useState(sprite.name);
     const [isEditing, setIsEditing] = useState(false);
-    const [disableButton, setDisableButton] = useState(false);
+    // const [disableButton, setDisableButton] = useState(false);
 
     //Access Token (JWT)
     const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
