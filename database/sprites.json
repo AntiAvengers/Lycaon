@@ -15,7 +15,7 @@
   },
   "wolf": {
     "type": "wolf",
-    "name": ["Noble Egg", "Wolfy", "Emberwolf"],
+    "name": ["Noble Egg", "Wolfy", "Emberfang"],
     "rarity": 3,
     "rarity_title": "Noble",
     "lore": "Born of a fallen star and the wrath of an ancient god, the wolf burns with unending flame as it prowls the scorched edges of the Blightlands. Its fire never dims, fueled by the souls of those who dare trespass its domain. Legends say its howl melts steel and summons storms of ash."
@@ -29,7 +29,7 @@
   },
   "dragon": {
     "type": "dragon",
-    "name": ["Mythic Egg", "Lumi", "Lumnara"],
+    "name": ["Mythic Egg", "Lumi", "Luminara"],
     "rarity": 5,
     "rarity_title": "Mythic",
     "lore": "Woven from the first light of the world and hidden in the ocean’s cradle, the pearl dragon is said to dream reality into being. Its opalescent scales shimmer with the memories of gods, and its song stirs the tides of time. Few have seen it and returned, their minds forever touched by visions not meant for mortals."

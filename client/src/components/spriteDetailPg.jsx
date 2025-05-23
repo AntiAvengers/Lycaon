@@ -11,10 +11,7 @@ import { useAuth } from "../context/AuthContext";
 
 import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import {
-    getCreatureImage,
-    getCreatureStillImage,
-} from "../utils/getCreatureAsset";
+import { getCreatureImage } from "../utils/getCreatureAsset";
 
 import FoodInventory from "./spriteDetailComp/foodInventory";
 import SpritesInfo from "./spriteDetailComp/spriteInfo";
@@ -143,9 +140,10 @@ const SpritesDetailPg = () => {
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     stage: stage,
-                    src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    src: getCreatureImage("550", type, stage), //Defaults to Star if nothing matches
                     // src: "/assets/sprite-550/550x550_adult slime.png",
-                    still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
+                    still: getCreatureImage("550", type, stage), //Defaults to Star if nothing matches
+                    mint_src: getCreatureImage("152", type, stage),
                     personality: personality,
                     details: details || "NO INFO FOUND",
                     mint: minted_ID,

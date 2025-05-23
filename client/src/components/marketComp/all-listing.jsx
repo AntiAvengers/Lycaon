@@ -10,10 +10,35 @@ import { useAuth } from "../../context/AuthContext";
 
 import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import {
-    getCreatureImage,
-    getCreatureStillImage,
-} from "../../utils/getCreatureAsset";
+import { getCreatureImage } from "../../utils/getCreatureAsset";
+
+const name = {
+    slime: {
+        0: "Littles Egg",
+        1: "Slime",
+        2: "Big Slime"
+    },
+    cat: {
+        0: "Familiar Egg",
+        1: "Kitty",
+        2: "Cat"
+    },
+    wolf: {
+        0: "Noble Egg",
+        1: "Wolfy",
+        2: "Emberfang"
+    },
+    deer: {
+        0: "Elite Egg",
+        1: "Glacy",
+        2: "Glacielle"
+    },
+    dragon: {
+        0: "Mythic Egg",
+        1: "Lumi",
+        2: "Luminara"
+    }
+}
 
 const AllListing = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
@@ -55,16 +80,14 @@ const AllListing = () => {
                                 owner: owner,
                                 label: prop,
                                 rank: rarity,
-                                name: type,
+                                name: name[type][stage_to_num],
+                                type: type,
                                 price: price,
                                 stage: stage,
                                 marketplace: true,
                                 mint: true,
-                                src: getCreatureImage(type, stage_to_num),
-                                still: getCreatureStillImage(
-                                    type,
-                                    stage_to_num
-                                ),
+                                src: getCreatureImage("238", type, stage_to_num),
+                                still: getCreatureImage("238", type, stage_to_num),
                             });
                         }
                     }
