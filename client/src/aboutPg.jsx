@@ -111,7 +111,7 @@ const AboutPg = () => {
                 <div className="absolute bottom-[82px] right-[449px] w-[304px] h-[335px] bg-[#273472] rounded-[20px] shadow-[10px_10px_0_rgba(0,0,0,0.25)] flex flex-col items-center justify-start text-[#FEFAF3]">
                     <section className="w-[209px] h-[208px] bg-[#F7F7F7] rounded-[10px] flex justify-center mt-[22px]">
                         <img
-                            src="/assets/sprites/slime.gif"
+                            src="/assets/sprite-gif/slime.gif"
                             alt="slime-gif"
                             className="w-[150px] h-[200px]"
                         />
