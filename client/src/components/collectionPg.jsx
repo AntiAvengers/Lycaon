@@ -96,7 +96,9 @@ const SpritesCollectionPg = () => {
 
                     i++;
                 }
-                updated_creatures.sort((a,b) => a.date_acquired > b.date_acquired ? -1 : 1);
+                updated_creatures.sort((a, b) =>
+                    a.date_acquired > b.date_acquired ? -1 : 1
+                );
                 setCreatures(updated_creatures);
                 setLikedList(updated_likes);
                 setIsLoading(false);
@@ -293,25 +295,33 @@ const SpritesCollectionPg = () => {
 
                     {/* Showcase - Liked Creatures */}
                     <section className="w-[755px] h-[500px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
-                        <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
-                            {creaturesList
-                                .filter((_, idx) => likedList[idx]) // only liked
-                                .slice(0, 3) // up to 3
-                                .map((creature) => (
-                                    <li key={creature.label}>
-                                        <img
-                                            src={creature.src}
-                                            alt={creature.label}
-                                            className="object-contain"
-                                        />
-                                    </li>
-                                ))}
-                        </ul>
+                        {likedList.filter(Boolean).length === 0 ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <p className="text-[#000000] text-[50px] font-semibold bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl">
+                                    Favorite a sprite to showcase your sprite!
+                                </p>
+                            </div>
+                        ) : (
+                            <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
+                                {creaturesList
+                                    .filter((_, idx) => likedList[idx]) // only liked
+                                    .slice(0, 3) // up to 3
+                                    .map((creature) => (
+                                        <li key={creature.label}>
+                                            <img
+                                                src={creature.src}
+                                                alt={creature.label}
+                                                className="object-contain"
+                                            />
+                                        </li>
+                                    ))}
+                            </ul>
+                        )}
                     </section>
 
                     {/* Sprites Count */}
                     <section className="w-[754px] flex items-center">
-                        <span className="text-[35px] ml-auto text-[#FFFFFF]">
+                        <span className="text-[35px] ml-auto text-[#FEFAF3]">
                             {creaturesList.length}/100
                         </span>
                     </section>
