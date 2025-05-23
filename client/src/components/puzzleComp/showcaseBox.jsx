@@ -40,9 +40,8 @@ const ShowcaseBox = () => {
                 const data = snapshot.val();
                 for (const key in data) {
                     const { type, stage } = data[key];
-                    const showcase_size = 
-                        stage == 0 ? "200" 
-                        : stage == 1 ? "322" : "GIF";
+                    const showcase_size =
+                        stage == 0 ? "200" : stage == 1 ? "322" : "GIF";
                     array.push({
                         src: getCreatureImage(showcase_size, type, stage),
                         label: type,
@@ -56,15 +55,16 @@ const ShowcaseBox = () => {
     }, [connectionStatus]);
 
     return (
-        <div className="w-full h-[253px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
+        <div className="w-full max-w-full h-[253px] bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom">
             <ul className="h-full flex flex-row justify-evenly items-end pb-[8px]">
                 {showcase.length > 0 ? (
-                    showcase.map((creature) => (
+                    showcase.map((creature, index) => (
                         <li key={creature.label}>
                             <img
                                 src={creature.src}
                                 alt={creature.label}
-                                className="w-[200px] max-w-[200px]"
+                                // className="w-[200px] max-w-[200px]"
+                                className={`w-[${creature.showcase_px}] max-w-[${creature.showcase_px}]`}
                             />
                         </li>
                     ))

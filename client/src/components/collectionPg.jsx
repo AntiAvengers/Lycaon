@@ -66,18 +66,27 @@ const SpritesCollectionPg = () => {
                         on_marketplace,
                         nickname,
                         date_acquired,
+                        can_evolve,
                     } = collections[key];
 
-                    const showcase_size = 
-                        stage == 0 ? "200" 
-                        : stage == 1 ? "322" : "GIF";
-                    const showcase_px = showcase_size == "GIF" ? "200" : showcase_size;
+                    const showcase_size =
+                        stage == 0
+                            ? "200"
+                            : stage == 1 && type !== "slime"
+                            ? "322"
+                            : "GIF";
+                    const showcase_px =
+                        showcase_size == "GIF" ? "200" : showcase_size;
 
                     const info = {
                         date_acquired: date_acquired,
                         src: getCreatureImage("238", type, stage),
                         still: getCreatureImage("238", type, stage),
-                        showcase_src: getCreatureImage(showcase_size, type, stage),
+                        showcase_src: getCreatureImage(
+                            showcase_size,
+                            type,
+                            stage
+                        ),
                         showcase_px: showcase_px,
                         label: key, //UUID
                         to: "/collection/spriteDetail",
@@ -86,7 +95,8 @@ const SpritesCollectionPg = () => {
                         nickname: nickname,
                         mint: minted_ID,
                         marketplace: on_marketplace,
-                        favorite: favorite
+                        favorite: favorite,
+                        evo: can_evolve,
                     };
 
                     updated_creatures.push(info);
@@ -94,9 +104,9 @@ const SpritesCollectionPg = () => {
                 updated_creatures.sort((a, b) =>
                     a.date_acquired > b.date_acquired ? -1 : 1
                 );
-                console.log('GOODBYE', updated_creatures.length);
+                console.log("GOODBYE", updated_creatures.length);
                 setCreatures(updated_creatures);
-                setIsLoading(false);    
+                setIsLoading(false);
             });
 
             return () => unsubscribe();
@@ -105,8 +115,10 @@ const SpritesCollectionPg = () => {
 
     //Like sprites
     const handleToggleLike = async (index) => {
-        const currentLikesCount = creaturesList.filter(obj => obj.favorite).length;
-        if(currentLikesCount >= 3 && !creaturesList[index].favorite) {
+        const currentLikesCount = creaturesList.filter(
+            (obj) => obj.favorite
+        ).length;
+        if (currentLikesCount >= 3 && !creaturesList[index].favorite) {
             setPopupMessage("You can only like up to 3 Sprites!");
             setIsFading(false); // reset if re-triggered quickly
             setTimeout(() => setIsFading(true), 1000);
@@ -284,14 +296,15 @@ const SpritesCollectionPg = () => {
 
                     {/* Showcase - Liked Creatures */}
                     <section className="w-[755px] h-[500px] p-1 bg-[url('/assets/bg/grassBtmShowcase.svg')] bg-no-repeat bg-contain bg-bottom flex justify-end">
-                        {creaturesList.filter(obj => obj.favorite).length === 0 ? (
+                        {creaturesList.filter((obj) => obj.favorite).length ===
+                        0 ? (
                             <div className="w-full h-full flex items-center justify-center">
-                                <p className="text-[#000000] text-[50px] font-semibold bg-white/20 backdrop-blur-md px-4 py-2 rounded-[20px]">
+                                <p className="text-[#000000] text-[50px] bg-white/20 backdrop-blur-md px-4 py-2 rounded-[20px]">
                                     Favorite a sprite to showcase your sprite!
                                 </p>
                             </div>
                         ) : (
-                            <ul className="w-full flex flex-row justify-evenly items-end pb-[10px]">
+                            <ul className="w-full max-w-[755px] flex flex-row justify-evenly items-end pb-[10px]">
                                 {creaturesList
                                     .filter((obj) => obj.favorite)
                                     .slice(0, 3) // up to 3
@@ -350,16 +363,27 @@ const SpritesCollectionPg = () => {
                                      }
                                     `}
                                 >
+                                    {/* Evolve Badge */}
+                                    {creature.evo && (
+                                        <span className="absolute top-2 left-2 bg-[#FBBB26] text-[#000000] text-xs px-2 py-1 rounded-full z-10">
+                                            Ready to Evolve
+                                        </span>
+                                    )}
                                     {/* Like Btn */}
                                     <button
                                         onClick={() => handleToggleLike(index)}
                                         aria-label="favorite"
                                         className="absolute top-2 right-2 cursor-pointer"
                                     >
-                                        {creature.favorite 
-                                            ? <FavoriteIcon style={{ color: "#EA1A26"}} />
-                                            : <FavoriteBorderIcon style={{ color: "EA1A26"}} />
-                                        }
+                                        {creature.favorite ? (
+                                            <FavoriteIcon
+                                                style={{ color: "#EA1A26" }}
+                                            />
+                                        ) : (
+                                            <FavoriteBorderIcon
+                                                style={{ color: "EA1A26" }}
+                                            />
+                                        )}
                                     </button>
                                     {/* Spacer to push image down */}
                                     <div className="flex-grow" />
