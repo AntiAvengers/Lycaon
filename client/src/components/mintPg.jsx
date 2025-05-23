@@ -94,7 +94,7 @@ const MintPg = ({ onClose, sprite, onMint, onSell, minted, market }) => {
                         className="absolute top-0 left-0 z-50"
                     />
                     <img
-                        src={sprite.still}
+                        src={sprite.mint_src}
                         alt={sprite.name}
                         className="w-[152px] h-[152px] bg-[#FEFAF3] rounded-[100%]"
                     />
