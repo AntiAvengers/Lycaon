@@ -144,7 +144,7 @@ const HomePg = () => {
             {/* Fountain */}
             <div className="relative group w-[1440px] h-full mx-auto">
                 <Link
-                    className="absolute top-[70px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
+                    className="absolute top-[90px] left-[50%] -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
                     to="/fountain"
                     onClick={() => audio.menu_click.play()}
                 >
@@ -170,7 +170,7 @@ const HomePg = () => {
             </div>
 
             {/* Pantry */}
-            <div className="relative group w-[1440px] h-full mx-auto">
+            <div className="relative group w-[1440px] h-full mx-auto z-50">
                 <Link
                     className="absolute left-[26%] top-[-49px] -translate-y-1/2 cursor-pointer"
                     to="/pantry"
