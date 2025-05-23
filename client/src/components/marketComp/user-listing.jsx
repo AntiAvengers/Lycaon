@@ -96,6 +96,7 @@ const UserListing = () => {
                             name: nickname.length > 0 ? nickname : name[type][stage],
                             src: getCreatureImage("152", type, stage),
                             still: getCreatureImage("152", type, stage),
+                            mint_src: getCreatureImage("152", type, stage),
                             label: key, //UUID
                             to: "/collection/spriteDetail",
                             rank: rarity,
@@ -202,13 +203,6 @@ const UserListing = () => {
             reportTransactionEffects(rawEffects);
             return true;
         }
-
-        // setSprites((prev) =>
-        //     prev.map((s) =>
-        //         s.label === selectedSprite.label ? { ...s, mint: true } : s
-        //     )
-        // );
-        // setSelectedSprite((prev) => ({ ...prev, mint: true }));
     };
 
     const handleSell = async (asking_price) => {
@@ -286,15 +280,6 @@ const UserListing = () => {
             // setMarket(true);
             return true;
         }
-
-        // setSprites((prev) =>
-        //     prev.map((s) =>
-        //         s.label === selectedSprite.label
-        //             ? { ...s, marketplace: true }
-        //             : s
-        //     )
-        // );
-        // setSelectedSprite((prev) => ({ ...prev, marketplace: true }));
     };
 
     // Cancel marketplace listing
@@ -372,21 +357,6 @@ const UserListing = () => {
                 setDisableButton(false);
             }
         }
-
-        // setSprites((prev) =>
-        //     prev.map((s) =>
-        //         s.label === label ? { ...s, marketplace: false } : s
-        //     )
-        // );
-
-        // // Also update selectedSprite if it's the one being canceled
-        // setSelectedSprite((prev) =>
-        //     prev && prev.label === label
-        //         ? { ...prev, marketplace: false }
-        //         : prev
-        // );
-
-        // setCancelPopup(null);
     };
 
     return (
