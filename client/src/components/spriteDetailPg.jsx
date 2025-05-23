@@ -142,9 +142,8 @@ const SpritesDetailPg = () => {
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     stage: stage,
-                    // src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
-                    src: "/assets/sprite-550/550x550 _noble.png",
-                    // src: "/assets/sprites/flame-wolf.gif",
+                    src: getCreatureImage(type, stage), //Defaults to Star if nothing matches
+                    // src: "/assets/sprite-550/550x550_adult slime.png",
                     still: getCreatureStillImage(type, stage), //Defaults to Star if nothing matches
                     personality: personality,
                     details: details || "NO INFO FOUND",
@@ -449,8 +448,7 @@ const SpritesDetailPg = () => {
                 <img
                     src={spriteInfo && spriteInfo.src}
                     alt={spriteInfo && spriteInfo.name}
-                    className="w-full"
-                    // className="min-w-[50%]"
+                    className="w-[550px]"
                 />
             </section>
 
