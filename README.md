@@ -1,7 +1,7 @@
 # ⚠️ Note About App Loading Time
 This app is hosted on Render using the free tier, which means the server may go to sleep after periods of inactivity. If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up. This is completely normal. Thanks for your understanding!
 
-⚠️ Accelerated Sprite & Economy Updates
+# ⚠️ Accelerated Sprite & Economy Updates
 For demo purposes, sprite hunger, sprite experience, and player currency generation are updated every minute instead of their intended multi-hour intervals.
 Additionally, while sprite evolution normally requires 7 days worth of experience, this has been reduced to just 3 experience points (3 minutes) to allow rapid progression during the demo.
 
