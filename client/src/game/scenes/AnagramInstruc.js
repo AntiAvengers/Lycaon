@@ -43,9 +43,11 @@ export class AnagramInstruc extends Scene {
 
     preload() {
         console.log("AnagramInstruc scene preloading");
+        this.load.audio("click", "assets/sounds/header_menu_click.mp3");
     }
 
     create() {
+        this.clickSound = this.sound.add("click");
         //Main Background
         this.background = this.add
             .image(this.scale.width / 2, this.scale.height / 2, "background")
@@ -302,6 +304,7 @@ export class AnagramInstruc extends Scene {
         };
 
         const handlePointerDown = () => {
+            this.clickSound.play();
             drawStartBg(0x16296c, 4, 4); // Pressed color + offset
             this.startText.setY(this.scale.height * 0.9 + 2);
             this.showPopup();
@@ -483,6 +486,7 @@ export class AnagramInstruc extends Scene {
                                 "You don't have enough keys!"
                             );
                         } else {
+                            this.clickSound.play();
                             this.changeScene();
                         }
                     })

@@ -13,10 +13,35 @@ import SHA256 from "crypto-js/sha256";
 
 import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
-import {
-    getCreatureImage,
-    getCreatureStillImage,
-} from "../utils/getCreatureAsset";
+import { getCreatureImage } from "../utils/getCreatureAsset";
+
+const name = {
+    slime: {
+        0: "Littles Egg",
+        1: "Slime",
+        2: "Big Slime"
+    },
+    cat: {
+        0: "Familiar Egg",
+        1: "Kitty",
+        2: "Cat"
+    },
+    wolf: {
+        0: "Noble Egg",
+        1: "Wolfy",
+        2: "Emberfang"
+    },
+    deer: {
+        0: "Elite Egg",
+        1: "Glacy",
+        2: "Glacielle"
+    },
+    dragon: {
+        0: "Mythic Egg",
+        1: "Lumi",
+        2: "Luminara"
+    }
+}
 
 const SpritesCollectionPg = () => {
     //Access Token (JWT)
@@ -91,7 +116,8 @@ const SpritesCollectionPg = () => {
                         label: key, //UUID
                         to: "/collection/spriteDetail",
                         rank: rarity,
-                        name: type,
+                        name: name[type][stage],
+                        type: type,
                         nickname: nickname,
                         mint: minted_ID,
                         marketplace: on_marketplace,

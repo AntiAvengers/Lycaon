@@ -87,7 +87,7 @@ export const evolve_sprite = async (req, res) => {
 
     const collections_ref = database.ref(`collections/${hashed}/${id}`);
     const snapshot = await collections_ref.once("value");
-    const { can_evolve, traits: sprite_traits, stage } = snapshot.val();
+    const { can_evolve, traits: sprite_traits, stage, type, name } = snapshot.val();
 
     if(!can_evolve) {
         return res.status(400).json({ error: "Sprite cannot evolve!" });
@@ -106,12 +106,15 @@ export const evolve_sprite = async (req, res) => {
         updated_traits[1] = traits[index];
     }
 
+    const new_name = stage !== 2 ? sprites[type].name[stage + 1] : name;
+
     collections_ref.update({
         can_evolve: false,
         experience: 0,
         traits: updated_traits,
         hunger: 8,
         stage: stage + 1,
+        name: new_name
     });
 
     return res.status(200).json({ response: updated_traits });

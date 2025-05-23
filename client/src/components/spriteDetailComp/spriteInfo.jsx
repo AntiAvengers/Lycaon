@@ -24,7 +24,7 @@ const SpritesInfo = ({ sprite }) => {
     };
 
     const handleKeyDown = async (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && e.target.value) {
             const API_BASE_URL =
                 import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                     ? import.meta.env.VITE_DEV_URL

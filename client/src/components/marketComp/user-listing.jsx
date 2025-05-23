@@ -15,6 +15,10 @@ import { useCurrentWallet, useSignTransaction } from "@mysten/dapp-kit";
 
 import { getCreatureImage } from "../../utils/getCreatureAsset";
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
+
 const name = {
     slime: {
         0: "Littles Egg",
@@ -128,11 +132,13 @@ const UserListing = () => {
     }, [connectionStatus]);
 
     const handleMintClick = (clickedSprite) => {
+        audio.menu_click.play();
         setSelectedSprite(clickedSprite);
         setShowMint(true);
     };
 
     const closeMint = () => {
+        audio.menu_click.play();
         setShowMint(false);
         setSelectedSprite(null);
     };
@@ -206,7 +212,6 @@ const UserListing = () => {
     };
 
     const handleSell = async (asking_price) => {
-        console.log("Running handleSell() on spriteDetailPg");
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
@@ -284,6 +289,7 @@ const UserListing = () => {
 
     // Cancel marketplace listing
     const handleCancelListing = async (label) => {
+        audio.menu_click.play();
         try {
             setDisableButton(true);
             const API_BASE_URL =
@@ -409,6 +415,7 @@ const UserListing = () => {
                                     <span className="w-full truncate" >{sprite.name}</span>
                                     <button
                                         onClick={() => {
+                                            audio.menu_click.play();
                                             if (!sprite.mint) {
                                                 handleMintClick(sprite);
                                             } else if (
@@ -434,9 +441,10 @@ const UserListing = () => {
                                     </button>
                                     {sprite.marketplace && (
                                         <button
-                                            onClick={() =>
+                                            onClick={() => {
+                                                audio.menu_click.play()
                                                 setCancelPopup(sprite)
-                                            }
+                                            }}
                                             className="underline decoration-[1.5px] cursor-pointer hover:text-[#FBBB26]"
                                         >
                                             Cancel

@@ -53,12 +53,14 @@ export class AnagramGame extends Scene {
         this.load.audio("correct", "assets/sounds/puzzle_correct_answer.mp3");
         this.load.audio("error", "assets/sounds/puzzle_error.mp3");
         this.load.audio("timer", "assets/sounds/puzzle_few_seconds_left.mp3");
+        this.load.audio("click", "assets/sounds/header_menu_click.mp3");
     }
 
     create() {
         this.correctSound = this.sound.add("correct");
         this.errorSound = this.sound.add("error");
         this.timerSound = this.sound.add("timer");
+        this.clickSound = this.sound.add("click");
         // const get_letters = this.game.injected?.get_puzzle_data;
         const get_letters = this.game.injected?.AUTH_API_CALL;
 
@@ -301,6 +303,7 @@ export class AnagramGame extends Scene {
         };
 
         const handleClearDown = () => {
+            this.clickSound.play();
             drawClearBg(0xb0b0b0, 4, 4);
             this.clearText.setY(this.scale.height * 0.85 + 2);
             if (this.inputField) {
@@ -394,6 +397,7 @@ export class AnagramGame extends Scene {
         };
 
         const handleSubmitDown = () => {
+            this.clickSound.play();
             drawSubmitBg(0x16296c, 4, 4); // Pressed color + offset
             this.submitText.setY(this.scale.height * 0.85 + 2);
             this.handleWordSubmit();
@@ -432,6 +436,7 @@ export class AnagramGame extends Scene {
 
         // Click event
         this.helpIcon.on("pointerdown", () => {
+            this.clickSound.play();
             console.log("Button clicked!");
             // Animate the button being pressed down
             this.tweens.add({
@@ -597,6 +602,7 @@ export class AnagramGame extends Scene {
         };
 
         const handleResumeDown = () => {
+            this.clickSound.play();
             drawResumeBg(0x16296c, 4, 4); // Pressed color + offset
             this.resumeText.setY(this.scale.height / 2 + 172); // 170 + 2
             this.hidePopup();
@@ -731,6 +737,7 @@ export class AnagramGame extends Scene {
         const enteredWord = this.inputText.trim();
 
         if (!/^[a-zA-Z]+$/.test(enteredWord)) {
+            this.errorSound.play();
             this.showErrorMessage("Invalid word. Use letters only.");
             this.inputText = "";
             this.updateInputField();
@@ -740,6 +747,7 @@ export class AnagramGame extends Scene {
                 (word) => word.toLowerCase() === enteredWord.toLowerCase()
             )
         ) {
+            this.errorSound.play();
             this.showErrorMessage(
                 `${enteredWord.toUpperCase()} was already answered!`
             );

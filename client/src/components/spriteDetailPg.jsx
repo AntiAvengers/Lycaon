@@ -122,6 +122,7 @@ const SpritesDetailPg = () => {
                     hunger,
                     type,
                     stage,
+                    name,
                     traits,
                     minted_ID,
                     on_marketplace,
@@ -133,15 +134,13 @@ const SpritesDetailPg = () => {
                 const personality = Object.values(traits).filter(
                     (t) => t !== "?"
                 );
-                const name = type.charAt(0).toUpperCase() + type.slice(1);
-
+                
                 setSpriteInfo({
                     id: id,
                     name: nickname.length > 0 ? nickname : name,
                     age: getAge(date_of_birth),
                     stage: stage,
                     src: getCreatureImage("550", type, stage), //Defaults to Star if nothing matches
-                    // src: "/assets/sprite-550/550x550_adult slime.png",
                     still: getCreatureImage("550", type, stage), //Defaults to Star if nothing matches
                     mint_src: getCreatureImage("152", type, stage),
                     personality: personality,
@@ -151,8 +150,7 @@ const SpritesDetailPg = () => {
                     evo: can_evolve,
                     experience: experience,
                 });
-                //The reason why the message shows up, marketplace_UUID is truthy and passed down to mintPg
-                //Wait no it's not....this should still be false during the minting process
+
                 setMarket(on_marketplace);
                 setMinted(!minted_ID ? false : true);
                 setHunger(hunger);

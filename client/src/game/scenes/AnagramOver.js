@@ -31,10 +31,12 @@ export class AnagramOver extends Scene {
     preload() {
         console.log("GameOver scene preloading");
         this.load.audio('complete', 'assets/sounds/puzzle_complete.mp3');
+        this.load.audio("click", "assets/sounds/header_menu_click.mp3");
     }
 
     create() {
         this.completeSound = this.sound.add('complete');
+        this.clickSound = this.sound.add('click');
 
         //input data from last scene
         const remainingTime = this.registry.get("remainingTime");
@@ -309,6 +311,7 @@ export class AnagramOver extends Scene {
         };
 
         const handleHomeDown = () => {
+            this.clickSound.play();
             drawHomeBg(0x16296c, 4, 4); // Pressed color + offset
             this.homeText.setY(this.scale.height * 0.91 + 2);
             window.location.href = "/home"; // Navigate to home

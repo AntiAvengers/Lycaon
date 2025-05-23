@@ -11,6 +11,10 @@ import {
 import { useAuth } from "../context/AuthContext";
 import AboutPg from "../aboutPg";
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
+
 const ConnectPg = () => {
     //React Navigation to different pages of our app
     const navigate = useNavigate();
@@ -30,6 +34,7 @@ const ConnectPg = () => {
     }, []);
 
     const Handle_Login = async (event) => {
+        audio.menu_click.play();
         const API_BASE_URL =
             import.meta.env.VITE_APP_MODE == "DEVELOPMENT"
                 ? import.meta.env.VITE_DEV_URL
@@ -83,6 +88,7 @@ const ConnectPg = () => {
     };
 
     const Sui_Connect_Wallet = async (wallet) => {
+        audio.menu_click.play();
         if (!currentWallet) {
             connect(
                 { wallet },

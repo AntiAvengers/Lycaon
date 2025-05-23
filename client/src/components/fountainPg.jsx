@@ -10,6 +10,10 @@ import SHA256 from "crypto-js/sha256";
 import { useCurrentWallet } from "@mysten/dapp-kit";
 import { getCreatureImage } from "../utils/getCreatureAsset";
 
+const audio = {
+    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
+}
+
 const FountainPg = () => {
     const [showRate, setShowRate] = useState(false);
     const [pulledSprites, setPulledSprites] = useState([]);
@@ -30,6 +34,7 @@ const FountainPg = () => {
 
     //Popup message for Pull Btns
     const handlePull = async (amount) => {
+        audio.menu_click.play();
         if (pages > 0) {
             setShowVideo(true); // show the animation
             setVideoEnded(false); // reset in case it's been set
@@ -55,13 +60,11 @@ const FountainPg = () => {
 
         const res = await request.json();
         if (res.error) {
-            // setShowError(true);
             console.log(res.error);
             return;
         }
 
         const pulls = res.response.map((obj) => {
-            //Better way once more we have more assets
             const src = getCreatureImage("120", obj.type, 0);
             const still = getCreatureImage("120", obj.type, 0);
 
@@ -78,16 +81,14 @@ const FountainPg = () => {
             return output;
         });
 
-        // const pulls = Array.from({ length: amount }, () => ({
-        //     ...sprite,
-        //     id: crypto.randomUUID(), // ensure unique key for React
-        // }));
-
         setPulledSprites(pulls);
     };
 
     //Closes Pull Popup
-    const closePullPopup = () => setPulledSprites([]);
+    const closePullPopup = () => {
+        audio.menu_click.play();
+        setPulledSprites([]);
+    }
 
     //0 pages deactivates pull btns
     useEffect(() => {
@@ -200,7 +201,7 @@ const FountainPg = () => {
                             disabled={pages < 10}
                             className={`w-[145px] h-[35px] rounded-[4px] text-[25px] text-center transition-all duration-75 px-[20px] cursor-pointer
                                 ${
-                                    showError
+                                    showError || pages < 10
                                         ? "bg-[#DADADA] text-[#140E28] cursor-not-allowed shadow-[4px_4px_0_rgba(0,0,0,0.25)]"
                                         : "bg-[#4A63E4] hover:bg-[#1D329F] text-white shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                                 }`}
