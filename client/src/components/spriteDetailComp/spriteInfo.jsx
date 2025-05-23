@@ -84,10 +84,12 @@ const SpritesInfo = ({ sprite }) => {
     const getEvolveButtonText = (sprite) => {
         if (!sprite) return "";
         if (sprite.evo) return "Evolve";
-        if ((sprite.experience ?? 0) >= 12) return "Almost ready!";
+        if ((sprite.experience ?? 0) >= 28) return "Almost ready!";
+        if ((sprite.experience ?? 0) >= 14) return "Making progress!";
         return "Not ready . . .";
     };
-    
+
+    console.log(sprite);
 
     return (
         <div className="w-[263px] h-[275px] max-h-[275px] leading-none">
@@ -124,7 +126,12 @@ const SpritesInfo = ({ sprite }) => {
                     : "No Traits Available"}
             </p>
             <section className="h-[35px] flex flex-row items-center justify-between">
-                <p className="h-[25px] text-[25px]">{sprite.age}</p>
+                {sprite.stage === 0 ? (
+                    <p className="h-[25px] text-[25px]">{sprite.age}</p>
+                ) : (
+                    <p className="h-[25px] text-[25px]">Stage {sprite.stage}</p>
+                )}
+                {/* <p className="h-[25px] text-[25px]">{sprite.age}</p> */}
                 {/* Added !sprite.mint because once a sprite is minted, it's locked in? */}
                 {sprite.stage !== 2 && (
                     <button

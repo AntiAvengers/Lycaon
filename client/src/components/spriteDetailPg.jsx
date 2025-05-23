@@ -72,6 +72,7 @@ const SpritesDetailPg = () => {
     const [foodValues, setFoodValues] = useState({});
     const [lore, setLore] = useState("");
     const [spriteInfo, setSpriteInfo] = useState(false);
+    const [helpIcon, setHelpIcon] = useState(false);
 
     const location = useLocation();
     const { id } = location.state;
@@ -410,6 +411,10 @@ const SpritesDetailPg = () => {
         };
     }, []);
 
+    //For Help Btn
+    const closeHelp = () => setHelpIcon(false);
+    const handleHelp = () => setHelpIcon(true);
+
     return (
         <div className="w-[1440px] h-[75vh] flex flex-row justify-evenly items-center relative">
             {/* Food Inventory */}
@@ -464,19 +469,27 @@ const SpritesDetailPg = () => {
                 </div>
             )}
 
-            {/* Sprite Description Box*/}
+            {/* Sprite Description Box + Mint Btn + Help Btn*/}
             <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[35px] px-[40px] flex flex-col justify-between items-right">
                 {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
-                <button
-                    onClick={handleMintClick}
-                    className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FFFFFF] text-center cursor-pointer"
-                >
-                    {minted
-                        ? market
-                            ? "View Marketplace"
-                            : "Sell on Marketplace"
-                        : "Mint Sprite"}
-                </button>
+                <div className="w-full flex flex-row items-center justify-between">
+                    <button
+                        onClick={handleMintClick}
+                        className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FEFAF3] text-center cursor-pointer"
+                    >
+                        {minted
+                            ? market
+                                ? "View Marketplace"
+                                : "Sell on Marketplace"
+                            : "Mint Sprite"}
+                    </button>
+                    <button
+                        onClick={handleHelp}
+                        className="w-[35px] h-[35px] text-[30px] text-[#FEFAF3] bg-[#4A63E4] rounded-[100%] flex justify-center items-center hover:bg-[#1D329F] shadow-[2px_2px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 cursor-pointer"
+                    >
+                        ?
+                    </button>
+                </div>
             </section>
 
             <Link
@@ -497,6 +510,84 @@ const SpritesDetailPg = () => {
                         minted={minted}
                         market={market}
                     />
+                </div>
+            )}
+
+            {/* Help Popup */}
+            {helpIcon && (
+                <div className="fixed inset-0 bg-[#140E28]/60 z-50 flex items-center justify-center">
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#273472] rounded-[10px] shadow-lg z-50 w-[650px] h-[434px] flex flex-col px-8 py-4 text-[#FEFAF3] overflow-y-auto">
+                        <img
+                            src="/assets/icons/closeBtn.svg"
+                            alt="closeBtn"
+                            onClick={closeHelp}
+                            className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
+                        />
+                        <h1 className="text-[50px] font-bold text-center">
+                            How to Take Care of Your Sprite!
+                        </h1>
+
+                        <section className="mb-4">
+                            <h2 className="text-[35px] mb-2">
+                                🍽️ Feeding
+                            </h2>
+                            <ul className="list-disc list-inside space-y-1 text-[25px]">
+                                <li>
+                                    Sprites need to be fed to grow and produce
+                                    shards.
+                                </li>
+                                <li>
+                                    If the hunger meter reaches 0, your sprite
+                                    won’t gain experience or produce shards.
+                                </li>
+                                <li>
+                                    Eggs are the only exception—they grow
+                                    naturally and do not need food.
+                                </li>
+                                <li>
+                                    Purchase food from the Pantry using shards
+                                    and feed it from your inventory.
+                                </li>
+                            </ul>
+                        </section>
+
+                        <section className="mb-4">
+                            <h2 className="text-[35px] mb-2">
+                                🌱 Evolution
+                            </h2>
+                            <ul className="list-disc list-inside space-y-1 text-[25px]">
+                                <li>
+                                    Once your egg is ready, you can hatch it to
+                                    reveal your sprite.
+                                </li>
+                                <li>
+                                    Sprites go through two growth stages: Stage
+                                    1 and Stage 2.
+                                </li>
+                                <li>
+                                    Continue feeding your sprite—its growth
+                                    status will update as it nears evolution.
+                                </li>
+                                <li>
+                                    Each evolution grants your sprite a new
+                                    trait.
+                                </li>
+                                <li>Higher stages produce more shards.</li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h2 className="text-[35px] mb-2">
+                                🪙 Minting
+                            </h2>
+                            <ul className="list-disc list-inside space-y-1 text-[25px]">
+                                <li>
+                                    You can mint your sprite to sell it on the
+                                    marketplace!
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
                 </div>
             )}
         </div>
