@@ -152,7 +152,7 @@ export const execute_listing_tx = async (req, res) => {
             const listing_obj = {
                 id: listing_object_ID,
                 owner: address,
-                price: parseInt(listing_price),
+                price: Number(parseFloat(listing_price).toFixed(2)),
                 type: sprite_type,
                 rarity: sprite_rarity,
                 stage: sprite_stage,
