@@ -133,7 +133,7 @@ export const request_mint_tx = async (req, res) => {
         }
 
         const { minted_ID, type, rarity, stage } = snapshot.val();
-        const stage_to_string = stage == 0 ? 'Egg' : stage == 1 ? 'Basic' : 'Adult';
+        const stage_to_string = stage == 0 ? 'Egg' : stage == 1 ? 'Stage 1' : 'Stage 2';
 
         if(minted_ID) {
             return res.status(400).json({ error: "Sprite is already minted!" });

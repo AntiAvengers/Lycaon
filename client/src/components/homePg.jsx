@@ -20,7 +20,7 @@ const HomePg = () => {
     const { currentWallet, connectionStatus } = useCurrentWallet();
 
     //Access Token (JWT)
-    const { accessToken, refreshAccessToken, setAccessToken } = useAuth();
+    const { accessToken, refreshAccessToken, setAccessToken, authenticate, firebaseStatus } = useAuth();
 
     const [showNamePopup, setShowNamePopup] = useState(false); //new user Name popup
     const [showWelcomePopup, setShowWelcomePopup] = useState(false); //welcome popup
@@ -31,6 +31,14 @@ const HomePg = () => {
             setPlayerProfileName(playerName);
         }
     };
+
+    useEffect(() => {
+        return async () => {
+            if(location.pathname !== "/" && accessToken) {
+                await authenticate();
+            }
+        }
+    }, [accessToken]);
 
     const setPlayerProfileName = async (name) => {
         const API_BASE_URL =
@@ -83,7 +91,7 @@ const HomePg = () => {
 
             return () => unsubscribe();
         }
-    }, [connectionStatus]);
+    }, [firebaseStatus, connectionStatus]);
 
     // Popup for Name
     useEffect(() => {
