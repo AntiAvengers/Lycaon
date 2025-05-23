@@ -44,7 +44,10 @@ Yes! There is a marketplace available for all users to list and sell their Sprit
 Shards are what is necessary to buy food from the Pantry to feed your Sprites! You earn shards every time you open an egg and Sprites passively generate shards for you!
 
 ### Why feed your Sprites?
-Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your Sprite will eolve into a rarer Sprite! :)
+Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your Sprite will evolve into a rarer Sprite! :)
+
+### What are the Sprites rarities?
+Littles, Familiars, Nobles, Elites, and Mythics!
 
 ### What can you do in the Collection?
 - You can see all your Sprites!
