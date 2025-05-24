@@ -12,8 +12,8 @@ import { useAuth } from "../context/AuthContext";
 import AboutPg from "../aboutPg";
 
 const audio = {
-    menu_click: new Audio('assets/sounds/header_menu_click.mp3'),
-}
+    menu_click: new Audio("assets/sounds/header_menu_click.mp3"),
+};
 
 const ConnectPg = () => {
     //React Navigation to different pages of our app
@@ -101,7 +101,7 @@ const ConnectPg = () => {
         <div className="w-full flex flex-col justify-center items-center">
             {/* Sigin Area */}
             <section className="relative w-full h-[95vh] bg-[#ECECEC] flex items-center justify-center">
-                <div className="h-[65%] w-[1440px] flex flex-col items-center justify-between">
+                <div className="h-[75%] w-[1440px] flex flex-col items-center justify-between">
                     <video
                         className="absolute top-0 left-0 w-full h-full object-cover"
                         src="/assets/landing/connect-video.mp4"
@@ -110,10 +110,17 @@ const ConnectPg = () => {
                         muted
                         playsInline
                     />
-                    <h1 className="text-[120px] uppercase text-center z-10 text-[#FFFFFF]">
-                        Welcome to <img className="-mt-10 item-center" src="/assets/logo/lycaon-logo-140x45.svg" />
-                    </h1>
-                    
+                    <section className="z-10 w-[566px] h-[154px] flex flex-col justify-center items-center leading-none">
+                        <h1 className="text-[80px] uppercase text-center text-[#FEFAF3] text-outline">
+                            Welcome to
+                        </h1>{" "}
+                        <img
+                            className="w-[264px] max-w-[264px]"
+                            src="/assets/logo/lycaon-logo-140x45.svg"
+                            alt="lycaonLogo"
+                        />
+                    </section>
+
                     <section className="flex flex-col items-center justify center gap-[20px] z-10">
                         <span className="text-[25px] sm:text-[30px] px-5 bg-[#4A63E4] text-[#FFFFFF]">
                             Game Requires the Slush desktop Chrome Extension
@@ -183,7 +190,7 @@ const ConnectPg = () => {
                         )}
                     </section>
                 </div>
-                <div className="absolute bottom-[5px] text-[20px] text-[#000000] text-center">
+                <div className="absolute bottom-[5px] text-[20px] text-[#FEFAF3] text-center">
                     Please note: This application does not utilize real SUI
                     tokens and operates solely on the SUI testnet environment.
                     All transactions and assets are for testing purposes only

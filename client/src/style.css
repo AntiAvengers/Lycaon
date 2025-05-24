@@ -38,7 +38,7 @@ body.home-bg {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: #091031;
+    background-color: #434F2A;
 }
 
 body.puzzle-bg {
@@ -115,5 +115,14 @@ body.collection-bg {
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
+  }
+  
+  .text-outline {
+    color: white;
+    text-shadow:
+      -3px -3px 0 #521888,  
+       3px -3px 0 #521888,
+      -3px  3px 0 #521888,
+       3px  3px 0 #521888;
   }
   

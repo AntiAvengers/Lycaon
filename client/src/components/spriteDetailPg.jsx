@@ -50,7 +50,7 @@ const food_SVGs = {
 
 const audio = {
     feed: new Audio("/assets/sounds/sprite_eat.mp3"),
-    menu_click: new Audio('/assets/sounds/header_menu_click.mp3'),
+    menu_click: new Audio("/assets/sounds/header_menu_click.mp3"),
 };
 
 const SpritesDetailPg = () => {
@@ -137,7 +137,7 @@ const SpritesDetailPg = () => {
                 const personality = Object.values(traits).filter(
                     (t) => t !== "?"
                 );
-                
+
                 setSpriteInfo({
                     id: id,
                     name: nickname.length > 0 ? nickname : name,
@@ -457,35 +457,43 @@ const SpritesDetailPg = () => {
                 </div>
             )}
 
-            {/* Sprite Description Box + Mint Btn + Help Btn*/}
-            <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[35px] px-[40px] flex flex-col justify-between items-right">
-                {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
-                <div className="w-full flex flex-row items-center justify-between">
-                    <button
-                        onClick={() => { audio.menu_click.play(); handleMintClick(); }}
-                        className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FEFAF3] text-center cursor-pointer"
-                    >
-                        {minted
-                            ? market
-                                ? "View Marketplace"
-                                : "Sell on Marketplace"
-                            : "Mint Sprite"}
-                    </button>
-                    <button
-                        onClick={() =>{ audio.menu_click.play(); handleHelp(); }}
-                        className="w-[35px] h-[35px] text-[30px] text-[#FEFAF3] bg-[#4A63E4] rounded-[100%] flex justify-center items-center hover:bg-[#1D329F] shadow-[2px_2px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 cursor-pointer"
-                    >
-                        ?
-                    </button>
-                </div>
-            </section>
+            {/* Sprite Description Box + Mint Btn + Help Btn + Back to Collection Btn*/}
+            <div className="flex flex-col">
+                <section className="w-[343px] h-[409px] bg-[#FEFAF3]/65 rounded-[10px] py-[35px] px-[40px] flex flex-col justify-between items-right">
+                    {spriteInfo && <SpritesInfo sprite={spriteInfo} />}
+                    <div className="w-full flex flex-row items-center justify-between">
+                        <button
+                            onClick={() => {
+                                audio.menu_click.play();
+                                handleMintClick();
+                            }}
+                            className="w-[189px] h-[35px] bg-[#4A63E4] hover:bg-[#1D329F] rounded-[4px] shadow-[4px_4px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 text-[25px] text-[#FEFAF3] text-center cursor-pointer"
+                        >
+                            {minted
+                                ? market
+                                    ? "View Marketplace"
+                                    : "Sell on Marketplace"
+                                : "Mint Sprite"}
+                        </button>
+                        <button
+                            onClick={() => {
+                                audio.menu_click.play();
+                                handleHelp();
+                            }}
+                            className="w-[35px] h-[35px] text-[30px] text-[#FEFAF3] bg-[#4A63E4] rounded-[100%] flex justify-center items-center hover:bg-[#1D329F] shadow-[2px_2px_0_rgba(0,0,0,0.25)] active:bg-[#1D329F] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-75 cursor-pointer"
+                        >
+                            ?
+                        </button>
+                    </div>
+                </section>
 
-            <Link
-                to="/collection"
-                className="absolute right-[70px] bottom-[0px] underline text-[25px] text-[#FFFFFF] cursor-pointer hover:text-[#FBBB26]"
-            >
-                Back to Collection
-            </Link>
+                <Link
+                    to="/collection"
+                    className="underline text-[25px] text-right text-[#FEFAF3] cursor-pointer hover:text-[#FBBB26] mt-[25px]"
+                >
+                    Back to Collection
+                </Link>
+            </div>
 
             {/* Mint Popup */}
             {showMint && (
@@ -508,7 +516,10 @@ const SpritesDetailPg = () => {
                         <img
                             src="/assets/icons/closeBtn.svg"
                             alt="closeBtn"
-                            onClick={() => { audio.menu_click.play(); closeHelp(); }}
+                            onClick={() => {
+                                audio.menu_click.play();
+                                closeHelp();
+                            }}
                             className="absolute top-[10px] right-[10px] cursor-pointer w-[40px] h-[40px]"
                         />
                         <h1 className="text-[50px] font-bold text-center">
@@ -516,9 +527,7 @@ const SpritesDetailPg = () => {
                         </h1>
 
                         <section className="mb-4">
-                            <h2 className="text-[35px] mb-2">
-                                🍽️ Feeding
-                            </h2>
+                            <h2 className="text-[35px] mb-2">🍽️ Feeding</h2>
                             <ul className="list-disc list-inside space-y-1 text-[25px]">
                                 <li>
                                     Sprites need to be fed to grow and produce
@@ -540,9 +549,7 @@ const SpritesDetailPg = () => {
                         </section>
 
                         <section className="mb-4">
-                            <h2 className="text-[35px] mb-2">
-                                🌱 Evolution
-                            </h2>
+                            <h2 className="text-[35px] mb-2">🌱 Evolution</h2>
                             <ul className="list-disc list-inside space-y-1 text-[25px]">
                                 <li>
                                     Once your egg is ready, you can hatch it to
@@ -565,9 +572,7 @@ const SpritesDetailPg = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-[35px] mb-2">
-                                🪙 Minting
-                            </h2>
+                            <h2 className="text-[35px] mb-2">🪙 Minting</h2>
                             <ul className="list-disc list-inside space-y-1 text-[25px]">
                                 <li>
                                     You can mint your sprite to sell it on the
