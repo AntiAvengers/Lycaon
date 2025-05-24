@@ -5,7 +5,7 @@ Lycaon is a daily puzzle game where your skills unlock rare sprites. Nurture the
 This app is hosted on Render using the free tier, which means the server may go to sleep after periods of inactivity. If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up. This is completely normal. Thanks for your understanding!
 
 # ⚠️ Accelerated Sprite & Economy Updates
-For demo purposes, sprite hunger, sprite experience, and player currency generation are updated every minute instead of their intended multi-hour intervals.
+For demo purposes, sprite hunger, sprite experience, and player currency generation are updated every minute instead of their intended intervals.
 Additionally, while sprite evolution normally requires 7 days' worth of experience, this has been reduced to just 3 experience points (3 minutes) to allow rapid progression during the demo.
 
 # The Lycaon lore
@@ -18,12 +18,15 @@ Will you decipher the riddles, summon creatures of legend, and claim the power o
 Or will you unlock a secret that should have remained lost forever?
 
 # How to play
-1. Login using your Sui Wallet/Slush
-2. Unlock and solve daily puzzles using Keys and earn Scrolls!
-3. Use the scrolls to summon Sprites at the Fountain! Who knows which Sprite will join you??
-4. Each time you summon a Sprite, you will also receive Shards!
-5. Check out all your Sprites in the Collection!
-6. Go to the marketplace and see which companions other players are selling or looking for!
+1. Connect & Login using your Slush wallet
+2. Navigate to our puzzle page
+3. Unlock and solve daily puzzles using Keys and earn Scrolls!
+4. Use the scrolls to summon Sprites at the Fountain! Who knows which Sprite will join you??
+5. Check out all your Sprites on the Collection Page! You can check out detailed information by clicking on them!
+6. All sprites start off as eggs. After some time you can hatch/evolve them in their respective detail page
+7. As long as your sprites are hatched, and are well fed, they will generate shards!
+8. Navigate to the Pantry to buy more food for your sprites!
+9. Go to the marketplace and see which companions other players are selling!
 
 # FAQ
 
@@ -34,16 +37,18 @@ Keys are time-generated resources that allow you to unlock puzzles! Completing p
 Scrolls are what you need to summon for Sprites.
 
 ### What are Sprites?
-Companions who will stay by your side during your Lycaon journey. OR maybe you want to sell them for Sui.
+Companions who will stay by your side during your Lycaon journey. OR maybe you want to sell them for SUI.
 
 ### Sell? Crypto??
 Yes! There is a marketplace available for all users to list and sell their Sprites for Sui! Maybe you'll even see a rare Mythic for sale??
+However to sell your sprite, you have to mint it on the blockchain first! 
 
 ### What are Shards?
-Shards are necessary to buy food from the Pantry to feed your Sprites! You earn shards every time you open an egg, and Sprites passively generate shards for you!
+Shards are necessary to buy food from the Pantry to feed your Sprites! You earn shards every time you open an egg, and Sprites passively generate shards for you! Rarer sprites will generate more shards!
 
 ### Why feed your Sprites?
 Well you don't want them to go hungry. Who knows? With a full belly, some time, and some luck, maybe your Sprite will evolve into a rarer Sprite! :)
+Sprites will also not gain experience if they are starving! (0/8 hunger meter)
 
 ### What are the Sprites' rarities?
 Littles, Familiars, Nobles, Elites, and Mythics.
