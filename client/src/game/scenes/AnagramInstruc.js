@@ -111,7 +111,7 @@ export class AnagramInstruc extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height * 0.26,
-                "Unscramble the anagram within 30 seconds! Reach a high enough score, and you might unlock more pages.",
+                "Unscramble the anagram within 45 seconds! Reach a high enough score, and you might unlock more pages.",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.06, 35),

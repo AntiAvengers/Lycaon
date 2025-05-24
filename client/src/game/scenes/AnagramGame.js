@@ -494,13 +494,13 @@ export class AnagramGame extends Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height / 2 + 90,
-                "⚠ Note: Not all words formed are valid answers.",
+                "⚠ Note: Not all words formed are valid answers. You can may use each letter as many times as you like.",
                 {
                     fontFamily: "CustomFont",
                     fontSize: Math.min(this.scale.width * 0.05, 30),
                     color: "#000000",
                     align: "center",
-                    wordWrap: { width: this.scale.width * 0.4 },
+                    wordWrap: { width: this.scale.width * 0.5 },
                     lineSpacing: 7,
                 }
             )

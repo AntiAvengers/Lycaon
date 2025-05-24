@@ -465,7 +465,7 @@ const SpritesCollectionPg = () => {
                         <img
                             src={cancelPopup.still}
                             alt={cancelPopup.label}
-                            className="object-contain w-[150px] h-[150px] max-h-[150px]"
+                            className="w-[152px] h-[152px] bg-[#FEFAF3] rounded-[100%]"
                         />
                         <section className="w-full h-[101px] bg-[#242C53] flex flex-col items-center justify-center text-[#FCF4EF] text-[25px] text-center px-4">
                             <p className="w-[90%] text-[25px] text-center">
