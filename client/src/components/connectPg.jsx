@@ -110,11 +110,12 @@ const ConnectPg = () => {
                         muted
                         playsInline
                     />
-                    <h1 className="text-[80px] uppercase text-center z-10">
-                        Welcome to Lycaon
+                    <h1 className="text-[120px] uppercase text-center z-10 text-[#FFFFFF]">
+                        Welcome to <img className="-mt-10 item-center" src="/assets/logo/lycaon-logo-140x45.svg" />
                     </h1>
+                    
                     <section className="flex flex-col items-center justify center gap-[20px] z-10">
-                        <span className="text-[25px] sm:text-[30px]">
+                        <span className="text-[25px] sm:text-[30px] px-5 bg-[#4A63E4] text-[#FFFFFF]">
                             Game Requires the Slush desktop Chrome Extension
                         </span>
                         {connectionStatus === "connected" ||
