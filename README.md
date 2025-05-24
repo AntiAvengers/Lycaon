@@ -2,7 +2,10 @@
 Lycaon is a daily puzzle game where your skills unlock rare sprites. Nurture them with care, feed them as they grow, and trade them in a thriving market — all powered by Sui crypto.
 
 # ⚠️ Note About App Loading Time
-This app is hosted on Render using the free tier, which means the server may go to sleep after periods of inactivity. If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up. This is completely normal. Thanks for your understanding!
+This app is hosted on Render (https://lycaon.onrender.com/) using the free tier, which means the server may go to sleep after periods of inactivity (approximately 5 minutes). If you see a message like "Application loading...", please be patient — it may take 10–30 seconds for the app to wake up.
+
+What could also happen is you're on the page but after 5 minutes of inactivity, the server will go to sleep while the React App is active on your browser. 
+This leads to pages that don't load and require a page refresh (F5) or navigating back to the site (https://lycaon.onrender.com/). Thanks for your understanding!
 
 # ⚠️ Accelerated Sprite & Economy Updates
 For demo purposes, sprite hunger, sprite experience, and player currency generation are updated every minute instead of their intended intervals.
