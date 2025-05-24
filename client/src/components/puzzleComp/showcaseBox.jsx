@@ -24,22 +24,18 @@ const ShowcaseBox = () => {
     const [showcase, setShowcase] = useState([]);
 
     useEffect(() => {
-        const array = [];
         if (connectionStatus == "connected") {
             const address = currentWallet.accounts[0].address;
             const hash = SHA256(address).toString();
             const collections_ref = ref(database, `collections/${hash}`);
-            const q = query(
-                collections_ref,
-                orderByChild("favorite"),
-                equalTo(true)
-            );
-            const unsubscribe = onValue(q, (snapshot) => {
+            const unsubscribe = onValue(collections_ref, (snapshot) => {
                 if (!snapshot.val()) return;
+                const array = [];
 
                 const data = snapshot.val();
                 for (const key in data) {
-                    const { type, stage } = data[key];
+                    const { type, stage, favorite } = data[key];
+                    if(!favorite) continue;
                     const showcase_size =
                         stage == 0 ? "200" : stage == 1 ? "322" : "GIF";
                     array.push({
