@@ -70,8 +70,8 @@ export const get_welcome_gift = async (req, res) => {
     }
 
     users_ref.update({
-        pages: 4, 
-        shards: 500,
+        pages: 10, 
+        shards: 10000,
     });
     
     return res.status(200).json({ response: "OK" });

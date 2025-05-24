@@ -263,11 +263,11 @@ const HomePg = () => {
                         <p>
                             As a new player, we gifted you{" "}
                             <span className="text-[#FBBB26] uppercase">
-                                4 pages
+                                10 pages
                             </span>{" "}
                             and{" "}
                             <span className="text-[#FBBB26] uppercase">
-                                500 shards
+                                10000 shards
                             </span>{" "}
                             to start.
                         </p>
