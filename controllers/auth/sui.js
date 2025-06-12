@@ -82,9 +82,9 @@ export const login = async (req, res) => {
             } :
             { 
                 address: address, 
-                client: new SuiGraphQLClient({
-                    url: `https://sui-testnet.mystenlabs.com/graphql`,
-                }),
+                // client: new SuiGraphQLClient({
+                //     url: `https://sui-testnet.mystenlabs.com/graphql`,
+                // }),
             }
         );
 
