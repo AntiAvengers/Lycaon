@@ -1,5 +1,3 @@
-<img alt="logoLycaon" src="assets/logo/lycaon-logo-140x45.svg" width="225">
-
 # Welcome to Lycaon! What is this game about?
 Lycaon is a daily puzzle game where your skills unlock rare sprites. Nurture them with care, feed them as they grow, and trade them in a thriving market — all powered by Sui crypto.
 
